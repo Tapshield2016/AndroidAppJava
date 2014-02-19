@@ -1,7 +1,28 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity" >
-
-</RelativeLayout>
+    android:layout_height="match_parent">
+    
+    <!-- The main content view -->
+    <FrameLayout
+        android:id="@+id/main_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    
+    <!-- The navigation drawer -->
+    <FrameLayout
+        android:id="@+id/main_drawer"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="#333">
+    
+        <fragment
+            android:id="@+id/main_fragment_navigation"
+            android:name="com.tapshield.android.ui.fragment.NavigationFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        
+    </FrameLayout>
+</android.support.v4.widget.DrawerLayout>
