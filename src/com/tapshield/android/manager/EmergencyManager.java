@@ -15,20 +15,14 @@ import android.util.Log;
 import com.google.android.gms.location.LocationListener;
 import com.tapshield.android.R;
 import com.tapshield.android.api.JavelinAlertManager;
-import com.tapshield.android.api.JavelinChatManager;
 import com.tapshield.android.api.JavelinClient;
-import com.tapshield.android.api.JavelinConfig;
-import com.tapshield.android.api.JavelinUserManager;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.location.LocationTracker;
 import com.tapshield.android.service.AlertIdUpdateService;
 import com.tapshield.android.service.ChatUpdateService;
-import com.tapshield.android.ui.MainActivity;
-import com.tapshield.android.ui.WarningActivity;
-import com.tapshield.android.utils.Utils;
-import com.tapshield.android.utils.Utils.GeoUtils;
-import com.tapshield.android.utils.Utils.HardwareUtils;
-import com.tapshield.android.utils.Utils.NavUtils;
+import com.tapshield.android.utils.GeoUtils;
+import com.tapshield.android.utils.HardwareUtils;
+import com.tapshield.android.utils.NetUtils;
 
 public class EmergencyManager implements LocationListener {
 	
@@ -174,7 +168,7 @@ public class EmergencyManager implements LocationListener {
 		mAgencyBoundaries = mJavelin.getUserManager().getUser().agency.getBoundaries();
 		
 		startTracker();
-		HardwareUtils.vibrateStop();
+		HardwareUtils.vibrateStop(mContext);
 
 		mAlerted = false;
 		mStatus = InternalStatus.STARTED;
@@ -204,7 +198,7 @@ public class EmergencyManager implements LocationListener {
 		
 		stopTracker();
 		
-		HardwareUtils.vibrateStop();
+		HardwareUtils.vibrateStop(mContext);
 		
 		unscheduleChatUpdater();
 		unscheduleAlertIdUpdater();
@@ -231,10 +225,6 @@ public class EmergencyManager implements LocationListener {
 	
 	public long getRemaining() {
 		return mScheduledFor - SystemClock.elapsedRealtime();
-	}
-	
-	private boolean isScheduled() {
-		return mStatus == InternalStatus.SCHEDULED;
 	}
 	
 	public boolean isRunning() {
@@ -315,11 +305,14 @@ public class EmergencyManager implements LocationListener {
 				.getInteger(R.integer.emergency_alert_id_periodic_check_max_attempts);
 		
 		if (mAlertIdUpdaterRetries >= maxRetries) {
+			/*
+			 * GO TO MAIN ACTIVITY/FRAGMENT
 			Intent main = new Intent(mContext, MainActivity.class);
 			main.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			main.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);;
 			main.putExtra(NavUtils.EXTRA_RESUMING, true);
 			mContext.startActivity(main);
+			*/
 			cancel();
 			Notifier.getInstance(mContext).notify(Notifier.NOTIFICATION_FAILED_ALERT);
 		}
@@ -345,13 +338,14 @@ public class EmergencyManager implements LocationListener {
 
 		//time and location-related flags
 		float distanceToBoundaries =
-				GeoUtils.minDistanceBetweenLocationAndEdges(mLatestLocation,mAgencyBoundaries);
+				GeoUtils.minDistanceBetweenLocationAndEdges(mLatestLocation, mAgencyBoundaries);
 		float cutoff = mContext.getResources().getInteger(R.integer.location_cutoff_meters);
 		float goodAccuracyMinimum = 
 				mContext.getResources().getInteger(R.integer.location_accuracy_good_minimum_meters);
 		
-		boolean timeAcceptable = Utils.isTimeAcceptable();
-		boolean locationInside = GeoUtils.isLocationInsideBoundaries(mContext, mLatestLocation);
+		boolean timeAcceptable = true;
+		boolean locationInside = GeoUtils.isLocationInsideBoundaries(mContext, mLatestLocation,
+				mAgencyBoundaries);
 		boolean thereIsOverhang = mLatestLocation.getAccuracy() > distanceToBoundaries;
 		boolean goodAccuracy = mLatestLocation.getAccuracy() <= goodAccuracyMinimum;
 		boolean inside = (distanceToBoundaries <= cutoff && goodAccuracy) || (distanceToBoundaries > cutoff);
@@ -422,10 +416,12 @@ public class EmergencyManager implements LocationListener {
 			
 			@Override
 			public void onFinish() {
+				/*
+				 * GO TO WARNING ACTIVITY/FRAGMENT
 				Intent warning = new Intent(mContext, WarningActivity.class);
 				warning.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 				mContext.startActivity(warning);
-				
+				*/
 				cancelRefMethod();
 			}
 		}.start();
@@ -469,7 +465,7 @@ public class EmergencyManager implements LocationListener {
 		protected Boolean doInBackground(String... names) {
 			String name = names[0];
 			long start = SystemClock.elapsedRealtime();
-			boolean reachable = Utils.isSecureServerReachable(mContext, name);
+			boolean reachable = NetUtils.isSecureServerReachable(mContext, name);
 			Log.i("tapshield-conn", "total time " + (SystemClock.elapsedRealtime() - start) + "ms");
 			return reachable;
 		}
