@@ -1,8 +1,14 @@
 package com.tapshield.android.app;
 
+import java.util.List;
+
+import com.tapshield.android.api.JavelinAlertManager.AlertListener;
+import com.tapshield.android.api.JavelinChatManager.OnNewIncomingChatMessagesListener;
 import com.tapshield.android.api.JavelinClient;
 import com.tapshield.android.api.JavelinConfig;
+import com.tapshield.android.api.JavelinMassAlertManager.OnNewMassAlertListener;
 import com.tapshield.android.api.JavelinUserManager;
+import com.tapshield.android.manager.Notifier;
 
 import android.app.Application;
 
@@ -38,5 +44,50 @@ public class TapShieldApplication extends Application {
 		
 		//refresh current agency data
 		userManager.refreshCurrentAgency();
+		
+		registerListeners();
+	}
+	
+	private void registerListeners() {
+		JavelinClient javelin = JavelinClient.getInstance(this, JAVELIN_CONFIG);
+		
+		javelin.getAlertManager().setAlertListener(new AlertListener() {
+			
+			@Override
+			public void onConnecting() {
+				Notifier.getInstance(TapShieldApplication.this).notify(Notifier.NOTIFICATION_CONNECTING);
+			}
+			
+			@Override
+			public void onCompleted() {
+				Notifier.getInstance(TapShieldApplication.this).notify(Notifier.NOTIFICATION_COMPLETED);
+			}
+			
+			@Override
+			public void onCancel() {
+				Notifier.getInstance(TapShieldApplication.this).dismissAlertRelated();
+			}
+			
+			@Override
+			public void onBackEndNotified() {
+				Notifier.getInstance(TapShieldApplication.this).notify(Notifier.NOTIFICATION_ESTABLISHED);
+			}
+		});
+		
+		javelin.getChatManager().setNewIncomingMessagesListener(new OnNewIncomingChatMessagesListener() {
+			
+			@Override
+			public void onNewIncomingChatMessages(List<String> incomingMessages) {
+				Notifier.getInstance(TapShieldApplication.this).notifyChat(incomingMessages);
+			}
+		});
+		
+		javelin.getMassAlertManager().setOnNewMassAlertListener(new OnNewMassAlertListener() {
+			
+			@Override
+			public void onNewMassAlert() {
+				Notifier.getInstance(TapShieldApplication.this).notify(Notifier.NOTIFICATION_MASS);
+			}
+		});
 	}
 }

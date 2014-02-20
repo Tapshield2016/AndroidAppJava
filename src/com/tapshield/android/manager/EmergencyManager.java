@@ -321,7 +321,7 @@ public class EmergencyManager implements LocationListener {
 			main.putExtra(NavUtils.EXTRA_RESUMING, true);
 			mContext.startActivity(main);
 			cancel();
-			JavelinNotificationManager.getInstance(mContext).notifyFailedAlertCreation();
+			Notifier.getInstance(mContext).notify(Notifier.NOTIFICATION_FAILED_ALERT);
 		}
 	}
 	
