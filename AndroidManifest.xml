@@ -85,6 +85,9 @@
         <activity
             android:name="com.tapshield.android.ui.activity.WelcomeActivity" />
         
+        <activity
+            android:name="com.tapshield.android.ui.activity.EmergencyActivity" />
+        
         <!-- SERVICES -->
         <service
             android:name="com.twilio.client.TwilioClientService"
