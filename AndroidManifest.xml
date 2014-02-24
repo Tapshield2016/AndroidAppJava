@@ -67,6 +67,7 @@
             android:value="AIzaSyCOLa7om8_AGznekq6jV6pNrCXTCj_JM3E" />
         
         <!-- ACTIVITIES -->
+       
         <!-- library application to handle image cropping -->
         <activity
             android:name="eu.janmuller.android.simplecropimage.CropImage"/>
@@ -80,6 +81,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <activity
+            android:name="com.tapshield.android.ui.activity.WelcomeActivity" />
         
         <!-- SERVICES -->
         <service
