@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Bundle;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
@@ -51,5 +52,23 @@ public class UiUtils {
 		call.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		call.setData(Uri.parse("tel:" + phoneNumber));
 		context.startActivity(call);
+	}
+	
+	public static void startActivityNoStack(Context fromContext,
+			Class<? extends Activity> toActivityClass) {
+		startActivityNoStack(fromContext, toActivityClass, null);
+	}
+	
+	public static void startActivityNoStack(Context fromContext,
+			Class<? extends Activity> toActivityClass, Bundle withExtras) {
+		
+		Intent intent = new Intent(fromContext, toActivityClass);
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+		
+		if (withExtras != null) {
+			intent.putExtras(withExtras);
+		}
+		
+		fromContext.startActivity(intent);
 	}
 }
