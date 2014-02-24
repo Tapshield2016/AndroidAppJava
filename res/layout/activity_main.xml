@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
     
     <!-- The main content view -->
-    <FrameLayout
+    <RelativeLayout
         android:id="@+id/main_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -14,9 +14,18 @@
             android:id="@+id/main_fragment_map"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </FrameLayout>
+            android:layout_height="0dp"
+            android:layout_alignParentTop="true"
+            android:layout_above="@+id/main_button" />
+        
+        <Button
+            android:id="@id/main_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Emergency"
+            android:layout_alignParentBottom="true" />
+        
+    </RelativeLayout>
     
     <!-- The navigation drawer -->
     <FrameLayout

@@ -8,6 +8,9 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.FrameLayout;
 
 import com.google.android.gms.location.LocationListener;
@@ -22,6 +25,7 @@ import com.tapshield.android.R;
 import com.tapshield.android.api.JavelinClient;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.location.LocationTracker;
+import com.tapshield.android.manager.EmergencyManager;
 import com.tapshield.android.ui.fragment.NavigationFragment.OnNavigationItemClickListener;
 import com.tapshield.android.utils.UiUtils;
 
@@ -34,7 +38,9 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 	private FrameLayout mDrawer;
 	private GoogleMap mMap;
 	private Circle mAccuracyBubble, mUser;
+	private Button mEmergency;
 	
+	private EmergencyManager mEmergencyManager;
 	private JavelinClient mJavelin;
 	private LocationTracker mTracker;
 	
@@ -49,12 +55,23 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 		mDrawer = (FrameLayout) findViewById(R.id.main_drawer);
 		mMap = ((SupportMapFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.main_fragment_map)).getMap();
+		mEmergency = (Button) findViewById(R.id.main_button);
 		
+		mEmergencyManager = EmergencyManager.getInstance(this);
 		mJavelin = JavelinClient.getInstance(this, TapShieldApplication.JAVELIN_CONFIG);
 		mTracker = LocationTracker.getInstance(this);
 		
 		ActionBar actionBar = getActionBar();
 		actionBar.setHomeButtonEnabled(true);
+		
+		mEmergency.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				mEmergencyManager.start(10000, EmergencyManager.TYPE_START_REQUESTED);
+				UiUtils.startActivityNoStack(MainActivity.this, EmergencyActivity.class);
+			}
+		});
 		
 		if (savedInstanceState != null) {
 			mResuming = savedInstanceState.getBoolean(KEY_RESUME);
@@ -90,7 +107,11 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 	protected void onPause() {
 		super.onPause();
 		mTracker.removeLocationListener(this);
-		mTracker.stop();
+		
+		//stop only if not running--it will continue if user requests an emergency
+		if (!EmergencyManager.getInstance(this).isRunning()) {
+			mTracker.stop();
+		}
 	}
 
 	@Override
