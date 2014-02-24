@@ -63,7 +63,8 @@ public class UiUtils {
 			Class<? extends Activity> toActivityClass, Bundle withExtras) {
 		
 		Intent intent = new Intent(fromContext, toActivityClass);
-		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		
 		if (withExtras != null) {
 			intent.putExtras(withExtras);
