@@ -1,13 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <FrameLayout
-        android:id="@+id/welcome_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+    <!-- place for any fragment container or swipe view
+            width=match
+            height=0dp
+            above=@+id/welcome_layout_bottom -->
     
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/welcome_layout_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true">
+        
+        <Button
+            android:id="@+id/welcome_button_login"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="login"
+            />
+        <Button
+            android:id="@+id/welcome_button_registration"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="reg"
+            />
+        
+    </LinearLayout>
+    
+</RelativeLayout>

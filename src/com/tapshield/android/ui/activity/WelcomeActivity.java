@@ -1,44 +1,41 @@
 package com.tapshield.android.ui.activity;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 
 import com.tapshield.android.R;
-import com.tapshield.android.ui.fragment.BaseFragment;
-import com.tapshield.android.ui.fragment.LoginFragment;
+import com.tapshield.android.utils.UiUtils;
 
 public class WelcomeActivity extends FragmentActivity {
 
-	private FragmentManager mFragmentManager;
+	private Button mLogin;
+	private Button mRegistration;
 	
 	@Override
 	protected void onCreate(Bundle b) {
 		super.onCreate(b);
 		setContentView(R.layout.activity_welcome);
+
+		mLogin = (Button) findViewById(R.id.welcome_button_login);
+		mRegistration = (Button) findViewById(R.id.welcome_button_registration);
 		
-		mFragmentManager = getFragmentManager();
-	}
-	
-	@Override
-	protected void onResume() {
-		super.onResume();
-		Fragment topFragment = mFragmentManager.findFragmentById(R.id.welcome_fragment);
-		boolean added = topFragment != null;
+		mLogin.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				UiUtils.startActivityNoStack(WelcomeActivity.this, LoginActivity.class);
+			}
+		});
 		
-		FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-		topFragment = new LoginFragment();
-		if (!added) {
-			fragmentTransaction.add(R.id.welcome_fragment, topFragment);
-		} else {
-			fragmentTransaction.replace(R.id.welcome_fragment, topFragment);
-		}
-		
-		fragmentTransaction.commit();
-		
-		String title = ((BaseFragment) topFragment).getTitle();
-		getActionBar().setTitle(title);
+		mRegistration.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				UiUtils.startActivityNoStack(WelcomeActivity.this, RegistrationActivity.class);
+			}
+		});
 	}
 }
