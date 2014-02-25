@@ -94,6 +94,9 @@
         <activity
             android:name="com.tapshield.android.ui.activity.EmergencyActivity" />
         
+        <activity
+            android:name="com.tapshield.android.ui.activity.OrganizationSelectionActivity" />
+        
         <!-- SERVICES -->
         <service
             android:name="com.twilio.client.TwilioClientService"
