@@ -89,6 +89,9 @@
             android:name="com.tapshield.android.ui.activity.LoginActivity" />
         
         <activity
+            android:name="com.tapshield.android.ui.activity.RegistrationActivity" />
+        
+        <activity
             android:name="com.tapshield.android.ui.activity.EmergencyActivity" />
         
         <!-- SERVICES -->
