@@ -2,7 +2,7 @@ package com.tapshield.android.ui.fragment;
 
 import android.app.Fragment;
 
-public class BaseWelcomeFragment extends Fragment {
+public class BaseFragment extends Fragment {
 
 	private String mTitle;
 	

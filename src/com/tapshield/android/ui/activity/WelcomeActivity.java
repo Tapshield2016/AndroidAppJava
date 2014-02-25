@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
 import com.tapshield.android.R;
-import com.tapshield.android.ui.fragment.BaseWelcomeFragment;
+import com.tapshield.android.ui.fragment.BaseFragment;
 import com.tapshield.android.ui.fragment.LoginFragment;
 
 public class WelcomeActivity extends FragmentActivity {
@@ -38,7 +38,7 @@ public class WelcomeActivity extends FragmentActivity {
 		
 		fragmentTransaction.commit();
 		
-		String title = ((BaseWelcomeFragment) topFragment).getTitle();
+		String title = ((BaseFragment) topFragment).getTitle();
 		getActionBar().setTitle(title);
 	}
 }

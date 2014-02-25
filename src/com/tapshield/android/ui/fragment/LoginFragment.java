@@ -19,7 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class LoginFragment extends BaseWelcomeFragment
+public class LoginFragment extends BaseFragment
 		implements OnClickListener, OnUserLogInListener, OnRequestPasswordResetListener {
 
 	private EditText mEmail;
