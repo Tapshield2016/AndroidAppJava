@@ -9,6 +9,7 @@ import com.tapshield.android.api.model.User;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.utils.UiUtils;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -53,6 +54,9 @@ public class LoginActivity extends Activity
 		mGooglePlus.setOnClickListener(this);
 		mLogin.setOnClickListener(this);
 		mForgotPassword.setOnClickListener(this);
+		
+		ActionBar actionBar = getActionBar();
+		actionBar.setTitle("login");
 	}
 
 	@Override
