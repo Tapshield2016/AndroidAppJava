@@ -13,4 +13,10 @@ public class BaseFragment extends Fragment {
 	public String getTitle() {
 		return mTitle;
 	}
+	
+	public interface OnUserActionRequestedListener {
+		void onProceed();
+		void onReturn();
+		void onAbort();
+	}
 }
