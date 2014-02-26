@@ -89,7 +89,8 @@
             android:name="com.tapshield.android.ui.activity.LoginActivity" />
         
         <activity
-            android:name="com.tapshield.android.ui.activity.RegistrationActivity" />
+            android:name="com.tapshield.android.ui.activity.RegistrationActivity"
+            android:windowSoftInputMode="adjustResize" />
         
         <activity
             android:name="com.tapshield.android.ui.activity.EmergencyActivity" />
