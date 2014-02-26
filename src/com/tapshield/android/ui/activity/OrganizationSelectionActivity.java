@@ -99,6 +99,8 @@ public class OrganizationSelectionActivity extends Activity
 					mAllLoaded = true;
 					dismissLoaderWhenFinished();
 				} else {
+					UiUtils.toastShort(OrganizationSelectionActivity.this,
+							"error retrieving list of organizations");
 					finish();
 				}
 			}
@@ -195,10 +197,16 @@ public class OrganizationSelectionActivity extends Activity
 	@Override
 	public void onLocationChanged(Location l) {
 		mTracker.stop();
+		
+		if (!mNearbyAgencies.isEmpty()) {
+			return;
+		}
+		
 		mJavelin.fetchAgenciesNearby(l.getLatitude(), l.getLongitude(), 10, new OnAgenciesFetchListener() {
 			
 			@Override
 			public void onAgenciesFetch(boolean successful, List<Agency> agencies, Throwable exception) {
+				
 				if (successful) {
 					mNearbyAgencies.clear();
 					mNearbyAgencies.addAll(agencies);
@@ -206,6 +214,8 @@ public class OrganizationSelectionActivity extends Activity
 					mNearbyLoaded = true;
 					dismissLoaderWhenFinished();
 				} else {
+					UiUtils.toastShort(OrganizationSelectionActivity.this,
+							"error retrieving list of organizations");
 					finish();
 				}
 			}
