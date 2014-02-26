@@ -21,8 +21,8 @@ public class NavigationFragment extends Fragment implements OnItemClickListener 
 
 	private ImageView mProfile;
 	private ListView mList;
-	private List<String> mListItems = new ArrayList<String>();
-	
+	private List<String> mListItems;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_navigation, container, false);
@@ -32,17 +32,22 @@ public class NavigationFragment extends Fragment implements OnItemClickListener 
 	}
 	
 	@Override
-	public void onStart() {
-		super.onStart();
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
 		
 		mProfile.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View view) {
 				onItemClick(null,  null, 100, view.getId());
 			}
 		});
+
+		if (mListItems == null) {
+			mListItems = new ArrayList<String>();
+		}
 		
+		mListItems.clear();
 		mListItems.add("Crime Data");
 		mListItems.add("Safe Circle");
 		mListItems.add("Timer");
@@ -50,7 +55,7 @@ public class NavigationFragment extends Fragment implements OnItemClickListener 
 		mListItems.add("Tutorial");
 		mListItems.add("About");
 		mListItems.add("Suggestions");
-		
+
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
 				R.layout.item_navigation, mListItems);
 		mList.setAdapter(adapter);
@@ -58,7 +63,7 @@ public class NavigationFragment extends Fragment implements OnItemClickListener 
 		mList.setSelected(true);
 		mList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 	}
-
+	
 	@Override
 	public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 		OnNavigationItemClickListener listener = (OnNavigationItemClickListener) getActivity();
