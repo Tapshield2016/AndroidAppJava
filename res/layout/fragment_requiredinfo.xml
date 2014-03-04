@@ -34,14 +34,14 @@
                     android:id="@+id/fragment_requiredinfo_edit_firstname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxLines="1"
+                    android:inputType="textPersonName|textCapWords"
                     android:hint="first name" />
 
                 <EditText
                     android:id="@+id/fragment_requiredinfo_edit_lastname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxLines="1"
+                    android:inputType="textPersonName|textCapWords"
                     android:hint="last name" />
             </LinearLayout>
         </LinearLayout>
@@ -52,7 +52,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:maxLength="4"
-            android:maxLines="1"
             android:hint="disarm code"
             android:inputType="numberPassword" />
 
