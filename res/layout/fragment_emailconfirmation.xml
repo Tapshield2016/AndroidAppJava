@@ -2,13 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+    android:layout_marginRight="@dimen/activity_horizontal_margin"
+    android:layout_marginTop="@dimen/activity_vertical_margin"
+    android:layout_marginBottom="@dimen/activity_vertical_margin"
     android:weightSum="1.0"
     android:orientation="vertical" >
     
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.4"
+        android:layout_weight="0.5"
         android:gravity="center">
         
         <EditText
@@ -28,6 +32,6 @@
         android:id="@+id/fragment_emailconfirmation_button_resend"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="resend verification sms"/>
+        android:text="resend verification email"/>
     
 </LinearLayout>
