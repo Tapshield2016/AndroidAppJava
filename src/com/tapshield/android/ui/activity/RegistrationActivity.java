@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentActivity;
 import com.tapshield.android.R;
 import com.tapshield.android.ui.fragment.BaseFragment.OnUserActionRequestedListener;
 import com.tapshield.android.ui.fragment.EmailConfirmationFragment;
+import com.tapshield.android.ui.fragment.PhoneConfirmationFragment;
 import com.tapshield.android.ui.fragment.RequiredInfoFragment;
 
 public class RegistrationActivity extends FragmentActivity
@@ -71,6 +72,8 @@ public class RegistrationActivity extends FragmentActivity
 			return new RequiredInfoFragment();
 		case 1:
 			return new EmailConfirmationFragment();
+		case 2:
+			return new PhoneConfirmationFragment();
 		default:
 			return null;
 		}
