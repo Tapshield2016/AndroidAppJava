@@ -7,6 +7,9 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 import com.tapshield.android.R;
+import com.tapshield.android.api.JavelinClient;
+import com.tapshield.android.api.JavelinUserManager;
+import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.utils.UiUtils;
 
 public class WelcomeActivity extends FragmentActivity {
@@ -37,5 +40,17 @@ public class WelcomeActivity extends FragmentActivity {
 				UiUtils.startActivityNoStack(WelcomeActivity.this, RegistrationActivity.class);
 			}
 		});
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		JavelinUserManager userManager = JavelinClient.getInstance(this,
+				TapShieldApplication.JAVELIN_CONFIG).getUserManager();
+		
+		if (userManager.isPresent()) {
+			finish();
+		}
 	}
 }
