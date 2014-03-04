@@ -34,12 +34,14 @@
                     android:id="@+id/fragment_requiredinfo_edit_firstname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:maxLines="1"
                     android:hint="first name" />
 
                 <EditText
                     android:id="@+id/fragment_requiredinfo_edit_lastname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:maxLines="1"
                     android:hint="last name" />
             </LinearLayout>
         </LinearLayout>
@@ -50,6 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:maxLength="4"
+            android:maxLines="1"
             android:hint="disarm code"
             android:inputType="numberPassword" />
 
@@ -58,14 +61,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:hint="email address"
-            android:inputType="textEmailAddress" />
+            android:maxLines="1"
+            android:inputType="textEmailAddress"
+            android:hint="email address" />
 
         <EditText
             android:id="@+id/fragment_requiredinfo_edit_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
+            android:maxLines="1"
             android:hint="password"
             android:inputType="textPassword" />
 
@@ -74,6 +79,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
+            android:maxLines="1"
             android:hint="phone number"
             android:inputType="phone" />
 

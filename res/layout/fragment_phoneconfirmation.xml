@@ -17,7 +17,9 @@
         <EditText
 	        android:id="@+id/fragment_phoneconfirmation_edit_phone"
 	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content" />
+	        android:layout_height="wrap_content"
+	        android:gravity="center"
+	        android:maxLines="1"/>
     </LinearLayout>
 
     <TextView
@@ -31,6 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:maxLength="4"
+        android:maxLines="1"
         android:gravity="center"
         android:hint="code"/>
     
