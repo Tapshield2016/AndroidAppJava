@@ -126,7 +126,19 @@ public class EmailConfirmationFragment extends BaseFragment
 			UiUtils.toastShort(getActivity(), "email verified");
 			userRequestProceed();
 		} else {
-			UiUtils.toastShort(getActivity(), "check inbox for verification email");
+			String message = new String();
+			switch (errorCode) {
+			case JavelinUserManager.CODE_ERROR_UNVERIFIED_EMAIL:
+				message = "unverified email, check your inbox";
+				break;
+			case JavelinUserManager.CODE_ERROR_WRONG_CREDENTIALS:
+				message = "error with credentials";
+				break;
+			case JavelinUserManager.CODE_ERROR_OTHER:
+				message = "unexpected error: " + e.getMessage();
+				break;
+			}
+			UiUtils.toastShort(getActivity(), message);
 		}
 	}
 	
