@@ -119,7 +119,6 @@
         </receiver>
         
         <receiver
-            android:exported="false"
             android:name="com.tapshield.android.receiver.PushMessageReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
