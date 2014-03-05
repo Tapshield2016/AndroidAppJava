@@ -98,6 +98,9 @@
         <activity
             android:name="com.tapshield.android.ui.activity.OrganizationSelectionActivity" />
         
+        <activity
+            android:name="com.tapshield.android.ui.activity.ChatActivity" />
+        
         <!-- SERVICES -->
         <service
             android:name="com.twilio.client.TwilioClientService"
