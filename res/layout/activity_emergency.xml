@@ -31,4 +31,12 @@
         android:layout_margin="15dp"
         android:text="Call" />
     
+    <Button
+        android:id="@+id/emergency_button_chat"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="15dp"
+        android:text="Chat"/>
+    
 </LinearLayout>

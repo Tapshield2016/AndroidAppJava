@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.animation.ValueAnimator;
 import android.animation.ValueAnimator.AnimatorUpdateListener;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
@@ -27,6 +28,7 @@ public class EmergencyActivity extends FragmentActivity {
 	private ProgressBar mProgressBar;
 	private EditText mDisarm;
 	private Button mCall;
+	private Button mChat;
 	
 	private TextWatcher mDisarmWatcher;
 	private ValueAnimator mProgressAnimator;
@@ -40,6 +42,7 @@ public class EmergencyActivity extends FragmentActivity {
 		mProgressBar = (ProgressBar) findViewById(R.id.emergency_progressbar);
 		mDisarm = (EditText) findViewById(R.id.emergency_edit_disarm);
 		mCall = (Button) findViewById(R.id.emergency_button_twilio);
+		mChat = (Button) findViewById(R.id.emergency_button_chat);
 		
 		mProgressBar.setMax(100);
 		
@@ -83,6 +86,15 @@ public class EmergencyActivity extends FragmentActivity {
 				} else {
 					mEmergencyManager.requestRedial();
 				}
+			}
+		});
+		
+		mChat.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent chat = new Intent(EmergencyActivity.this, ChatActivity.class);
+				startActivity(chat);
 			}
 		});
 	}
