@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -57,6 +58,10 @@ public class ChatMessageAdapter extends BaseAdapter {
 	public void setItems(List<ChatMessage> items) {
 		mItems = items;
 		notifyDataSetChanged();
+	}
+	
+	public void setItemsNoNotifyDataSetChanged(List<ChatMessage> items) {
+		mItems = items;
 	}
 	
 	private void prepare() {
@@ -122,19 +127,23 @@ public class ChatMessageAdapter extends BaseAdapter {
 			statusValue = "sending...";
 		} else {
 
+			//using gmt-approx (utc) to conver to current timezone
+			//NOTE: AWS (DDB) STORES TIMESTAMPS IN SECONDS. THUS, timestamp TIMES 1000 (s -> ms)
+			DateTime utcDateTime = new DateTime(chatMessage.timestamp * 1000, DateTimeZone.UTC);
+			DateTime currentDateTime = utcDateTime.toDateTime(DateTimeZone.getDefault());
+
 			//set "mm minutes ago..." if within an hour, otherwise, format as hh:mm (AM|PM)
 			long now = System.currentTimeMillis();
-			boolean withinHour = now < chatMessage.timestamp + AN_HOUR_MILLI;
+			boolean withinHour = now < currentDateTime.getMillis() + AN_HOUR_MILLI;
 			
 			if (withinHour) {
 				//convert different into minutes
-				int minutes = (int) ((now - chatMessage.timestamp) / (1000 * 60));
+				int minutes = (int) ((now - currentDateTime.getMillis()) / (1000 * 60));
 				//value down to 0? say 'just now' instead
 				statusValue = minutes == 0 ? "just now" : minutes + " minutes ago";
 			} else {
-				DateTime dateTime = new DateTime(chatMessage.timestamp);
 				DateTimeFormatter formatter = DateTimeFormat.forPattern("hh:mm aa");
-				statusValue = formatter.print(dateTime);
+				statusValue = formatter.print(currentDateTime);
 			}
 		}
 		
