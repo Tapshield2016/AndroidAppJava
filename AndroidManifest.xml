@@ -101,6 +101,9 @@
         <activity
             android:name="com.tapshield.android.ui.activity.ChatActivity" />
         
+        <activity
+            android:name="com.tapshield.android.ui.activity.MassAlertsActivity" />
+        
         <!-- SERVICES -->
         <service
             android:name="com.twilio.client.TwilioClientService"
