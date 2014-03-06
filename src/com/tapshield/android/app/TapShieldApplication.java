@@ -78,7 +78,13 @@ public class TapShieldApplication extends Application {
 			
 			@Override
 			public void onNewIncomingChatMessages(List<String> incomingMessages) {
-				Notifier.getInstance(TapShieldApplication.this).notifyChat(incomingMessages);
+				Notifier notifier = Notifier.getInstance(TapShieldApplication.this);
+				
+				if (incomingMessages == null) {
+					notifier.dismiss(Notifier.NOTIFICATION_CHAT);
+				} else {
+					notifier.notifyChat(incomingMessages);
+				}
 			}
 		});
 		
