@@ -5,8 +5,6 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -27,8 +25,6 @@ import com.tapshield.android.app.TapShieldApplication;
 
 public class ChatMessageAdapter extends BaseAdapter {
 
-	private static final long AN_HOUR_MILLI = 1 * 60 * 60 * 1000;
-	
 	private Context mContext;
 	private int mResource;
 	private List<ChatMessage> mItems;
@@ -126,24 +122,25 @@ public class ChatMessageAdapter extends BaseAdapter {
 		if (chatMessage.transmitting) {
 			statusValue = "sending...";
 		} else {
-
-			//using gmt-approx (utc) to conver to current timezone
+			//using gmt-approx (utc) to convert to current timezone
 			//NOTE: AWS (DDB) STORES TIMESTAMPS IN SECONDS. THUS, timestamp TIMES 1000 (s -> ms)
-			DateTime utcDateTime = new DateTime(chatMessage.timestamp * 1000, DateTimeZone.UTC);
-			DateTime currentDateTime = utcDateTime.toDateTime(DateTimeZone.getDefault());
+			long utc = chatMessage.timestamp * 1000;
+			long local = DateTimeZone.getDefault().convertUTCToLocal(utc);
+			DateTime currentDateTime = new DateTime(local);
 
 			//set "mm minutes ago..." if within an hour, otherwise, format as hh:mm (AM|PM)
 			long now = System.currentTimeMillis();
-			boolean withinHour = now < currentDateTime.getMillis() + AN_HOUR_MILLI;
 			
-			if (withinHour) {
-				//convert different into minutes
-				int minutes = (int) ((now - currentDateTime.getMillis()) / (1000 * 60));
-				//value down to 0? say 'just now' instead
-				statusValue = minutes == 0 ? "just now" : minutes + " minutes ago";
+			int diffMinutes = (int) ((now - currentDateTime.getMillis()) / (1000 * 60));
+			
+			if (diffMinutes == 0) {
+				statusValue = "just now";
+			} else if (diffMinutes == 1) {
+				statusValue = diffMinutes + " minute ago";
+			} else if (diffMinutes > 1 && diffMinutes < 60) {
+				statusValue = diffMinutes + " minutes ago";
 			} else {
-				DateTimeFormatter formatter = DateTimeFormat.forPattern("hh:mm aa");
-				statusValue = formatter.print(currentDateTime);
+				statusValue = currentDateTime.toString("hh:mm aa");
 			}
 		}
 		
