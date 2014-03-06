@@ -72,7 +72,7 @@ public class ChatActivity extends Activity implements OnNewChatMessageListener {
 	protected void onResume() {
 		super.onResume();
 		mChatManager.addOnNewChatMessageListener(this);
-		mChatManager.notifySeen();
+		mChatManager.notifySeeing();
 		refreshUi();
 		mTracker.start();
 	}
@@ -80,6 +80,7 @@ public class ChatActivity extends Activity implements OnNewChatMessageListener {
 	@Override
 	protected void onPause() {
 		super.onPause();
+		mChatManager.notifyNotSeeing();
 		mChatManager.removeOnNewChatMessageListener(this);
 		boolean alertInProgress = JavelinClient.getInstance(ChatActivity.this,
 				TapShieldApplication.JAVELIN_CONFIG).getAlertManager().isRunning();
