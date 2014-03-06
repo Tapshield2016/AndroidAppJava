@@ -1,6 +1,7 @@
 package com.tapshield.android.ui.activity;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
@@ -117,6 +118,11 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
+		
+		if (mJavelin.getUserManager().getUser().agency.displayCommandAlert) {
+			getMenuInflater().inflate(R.menu.massalerts, menu);
+		}
+		
 		return true;
 	}
 	
@@ -130,6 +136,10 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 			} else {
 				mDrawerLayout.openDrawer(mDrawer);
 			}
+			return true;
+		case R.id.action_massalerts:
+			Intent massAlerts = new Intent(MainActivity.this, MassAlertsActivity.class);
+			startActivity(massAlerts);
 			return true;
 		}
 		return false;
