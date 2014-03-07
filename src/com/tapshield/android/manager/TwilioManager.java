@@ -25,7 +25,8 @@ public class TwilioManager
 		DISABLED,
 		IDLE,
 		CONNECTING,
-		BUSY
+		BUSY,
+		FAILED
 	}
 	
 	private static final String PARAM_TO = "To";
@@ -89,6 +90,7 @@ public class TwilioManager
 	@Override
 	public void onError(Exception e) {
 		Log.e("twilio", "Error initializing Twilio", e);
+		setStatus(Status.FAILED);
 		setStatus(Status.DISABLED);
 	}
 	
@@ -106,13 +108,14 @@ public class TwilioManager
 	}
 	
 	public void call(String phoneNumber) {
-		if (getStatus() != Status.IDLE && getStatus() != Status.DISABLED) {
+		if (getStatus().equals(Status.CONNECTING) || getStatus().equals(Status.BUSY)) {
 			Log.w("twilio", "Client busy, request ignored.");
 			return;
 		}
 		
 		if (phoneNumber == null || phoneNumber.trim().length() == 0) {
 			Log.e("twilio", "Phone number is null or empty, aborting call.");
+			setStatus(Status.FAILED);
 		}
 		
 		setStatus(Status.CONNECTING);
@@ -127,6 +130,7 @@ public class TwilioManager
 	private void internalCall(String phoneNumber) {
 		if (mDevice == null) {
 			Log.e("twilio", "Device is null, aborting call");
+			setStatus(Status.FAILED);
 			return;
 		}
 
@@ -138,6 +142,7 @@ public class TwilioManager
 		
 		if (mConnection == null) {
 			Log.e("twilio", "Failed to connect");
+			setStatus(Status.FAILED);
 			setStatus(Status.IDLE);
 		}
 	}
@@ -157,6 +162,7 @@ public class TwilioManager
 			initialize();
 		} else {
 			Log.e("twilio", "Error retrieving capability token", e);
+			setStatus(Status.FAILED);
 			setStatus(Status.DISABLED);
 		}
 	}
@@ -238,6 +244,7 @@ public class TwilioManager
 	@Override
 	public void onDisconnected(Connection c, int errorCode, String errorMessage) {
 		Log.w("twilio", "Disconnected due to (" + errorCode + ")" + " " + errorMessage);
+		setStatus(Status.FAILED);
 		setStatus(Status.IDLE);
 	}
 }
