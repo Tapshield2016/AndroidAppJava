@@ -4,7 +4,12 @@ import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.animation.ValueAnimator;
 import android.animation.ValueAnimator.AnimatorUpdateListener;
+import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
@@ -32,6 +37,10 @@ public class EmergencyActivity extends FragmentActivity {
 	
 	private TextWatcher mDisarmWatcher;
 	private ValueAnimator mProgressAnimator;
+	
+	private AlertDialog mTwilioFailureDialog;
+	private BroadcastReceiver mCompletionReceiver;
+	private BroadcastReceiver mTwilioFailureReceiver;
 	
 	@Override
 	protected void onCreate(Bundle b) {
@@ -97,12 +106,40 @@ public class EmergencyActivity extends FragmentActivity {
 				startActivity(chat);
 			}
 		});
+		
+		mTwilioFailureReceiver = new BroadcastReceiver() {
+
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				promptUserForTwilioFailure();
+			}
+		};
+
+		mTwilioFailureDialog = getTwilioFailureDialog();
 	}
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
+		setProgressBarBehavior();
 		
+		promptUserForTwilioFailure();
+		IntentFilter twilioFailureFilter = new IntentFilter(EmergencyManager.ACTION_TWILIO_FAILED);
+		registerReceiver(mTwilioFailureReceiver, twilioFailureFilter);
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		mProgressAnimator.cancel();
+		
+		unregisterReceiver(mTwilioFailureReceiver);
+	}
+	
+	@Override
+	public void onBackPressed() {}
+
+	private void setProgressBarBehavior() {
 		boolean scheduledOrStarted = mEmergencyManager.isRunning();
 		
 		if (scheduledOrStarted) {
@@ -158,12 +195,46 @@ public class EmergencyActivity extends FragmentActivity {
 		}
 	}
 	
-	@Override
-	protected void onPause() {
-		super.onPause();
-		mProgressAnimator.cancel();
+	private AlertDialog getTwilioFailureDialog() {
+
+		DialogInterface.OnClickListener normalCallListener = new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				JavelinClient javelin = JavelinClient.getInstance(EmergencyActivity.this,
+						TapShieldApplication.JAVELIN_CONFIG);
+				String primaryNumber = javelin.getUserManager().getUser().agency.primaryNumber;
+				UiUtils.MakePhoneCall(EmergencyActivity.this, primaryNumber);
+			}
+		};
+
+		DialogInterface.OnClickListener retryListener = new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				mEmergencyManager.requestRedial();
+			}
+		};
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(this)
+		.setCancelable(false)
+		.setIcon(R.drawable.ic_launcher)
+		.setTitle("call failed")
+		.setMessage("attempts to connect to the dispatcher over your data connection have failed. retry again or launch a standard phone call.")
+		.setPositiveButton("standard call",
+				normalCallListener)
+				.setNeutralButton("retry",
+						retryListener)
+						.setNegativeButton("cancel", null);
+		return builder.create();
 	}
 	
-	@Override
-	public void onBackPressed() {}
+	private void promptUserForTwilioFailure() {
+		//if twilio flag failed before activity creation and user has not been prompted,
+		// show the dialog and notify emergency manager
+		if (mEmergencyManager.isTwilioFailing() && !mEmergencyManager.isTwilioFailureUserPrompted()) {
+			mTwilioFailureDialog.show();
+			mEmergencyManager.setTwilioFailureUserPrompted();
+		}
+	}
 }
