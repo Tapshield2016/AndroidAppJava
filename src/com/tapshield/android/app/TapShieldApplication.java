@@ -7,6 +7,7 @@ import com.tapshield.android.api.JavelinChatManager.OnNewIncomingChatMessagesLis
 import com.tapshield.android.api.JavelinClient;
 import com.tapshield.android.api.JavelinConfig;
 import com.tapshield.android.api.JavelinMassAlertManager.OnNewMassAlertListener;
+import com.tapshield.android.api.spotcrime.SpotCrimeConfig;
 import com.tapshield.android.api.JavelinUserManager;
 import com.tapshield.android.manager.Notifier;
 
@@ -28,6 +29,11 @@ public class TapShieldApplication extends Application {
 			.awsS3AccessKey("AKIAJHIUM7YWZW2T2YIA")
 			.awsS3SecretKey("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")
 			.awsS3Bucket("dev-media-tapshield-com")
+			.build();
+	
+	public static SpotCrimeConfig SPOTCRIME_CONFIG =
+			new SpotCrimeConfig.Builder()
+			.key("2be4edd6ebd10379d1a1eb6600747726654fc81645ecae386a9a9a440329")
 			.build();
 	
 	//public static boolean IN_APP_EMERGENCY_DIALOG_SHOWED = false;
