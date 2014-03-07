@@ -344,17 +344,17 @@ public class EmergencyManager implements LocationListener {
 				mContext.getResources().getInteger(R.integer.location_accuracy_good_minimum_meters);
 		
 		boolean timeAcceptable = true;
-		boolean locationInside = GeoUtils.isLocationInsideBoundaries(mContext, mLatestLocation,
+		boolean inside = GeoUtils.isLocationInsideBoundaries(mContext, mLatestLocation,
 				mAgencyBoundaries);
 		boolean thereIsOverhang = mLatestLocation.getAccuracy() > distanceToBoundaries;
 		boolean goodAccuracy = mLatestLocation.getAccuracy() <= goodAccuracyMinimum;
-		boolean inside = (distanceToBoundaries <= cutoff && goodAccuracy) || (distanceToBoundaries > cutoff);
+		boolean insideForCutoff = (distanceToBoundaries <= cutoff && goodAccuracy) || (distanceToBoundaries > cutoff);
 		
 		//overhang is defined by the distance past the boundaries of the accuracy bubble
 		//checks before creation of alert
 		//	if it has an extremely high chance of being outside
 		if (!created) {
-			if (!timeAcceptable || (!locationInside && !thereIsOverhang)) {
+			if (!timeAcceptable || (!inside && !thereIsOverhang)) {
 				cancelAndWarn();
 				return;
 			}
@@ -368,10 +368,11 @@ public class EmergencyManager implements LocationListener {
 		
 		//if not created yet (but requested via startNow())
 		if (!created) {
-			//create only if inside and ONE of the two:
+			//create only if inside AND insideForCutoff
+			// 'insideForCutoff' is defined as at least ONE of the two:
 			// 1. far enough of the boundaries (greater than cutoff distance), OR
 			// 2. if within cutoff distance of the boundaries, with good accuracy
-			if (inside) {
+			if (inside && insideForCutoff) {
 				callIfNotChat();
 				mJavelinAlert.create(mType, mLatestLocation);
 			} else {
