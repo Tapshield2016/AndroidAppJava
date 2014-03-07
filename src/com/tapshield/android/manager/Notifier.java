@@ -18,6 +18,7 @@ public class Notifier {
 	public static final int NOTIFICATION_COMPLETED = 50;
 	public static final int NOTIFICATION_CHAT = 60;
 	public static final int NOTIFICATION_MASS = 70;
+	public static final int NOTIFICATION_TWILIO_FAILURE = 80;
 	
 	private static Notifier mInstance;
 	private Context mContext;
@@ -138,6 +139,18 @@ public class Notifier {
 				.setAutoCancel(true)
 				.build();
 	}
+	
+	private Notification buildTwilioFailure() {
+		String text = "call failed. tap for details.";
+		String ticker = "tapshield: call failed.";
+		
+		return getCommonBuilder()
+				.setContentText(text)
+				.setTicker(ticker)
+				.setOngoing(true)
+				.setPriority(NotificationCompat.PRIORITY_MAX)
+				.build();
+	}
 
 	public void notify(int notificationId) {
 		notify(notificationId, null);
@@ -178,6 +191,9 @@ public class Notifier {
 			break;
 		case NOTIFICATION_MASS:
 			notification = buildMass();
+			break;
+		case NOTIFICATION_TWILIO_FAILURE:
+			notification = buildTwilioFailure();
 			break;
 		}
 		
