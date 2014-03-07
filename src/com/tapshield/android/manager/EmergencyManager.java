@@ -18,17 +18,20 @@ import com.tapshield.android.api.JavelinAlertManager;
 import com.tapshield.android.api.JavelinClient;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.location.LocationTracker;
+import com.tapshield.android.manager.TwilioManager.OnStatusChangeListener;
+import com.tapshield.android.manager.TwilioManager.Status;
 import com.tapshield.android.service.AlertIdUpdateService;
 import com.tapshield.android.service.ChatUpdateService;
 import com.tapshield.android.utils.GeoUtils;
 import com.tapshield.android.utils.HardwareUtils;
 import com.tapshield.android.utils.NetUtils;
 
-public class EmergencyManager implements LocationListener {
+public class EmergencyManager implements LocationListener, OnStatusChangeListener {
 	
 	public static final String ACTION_EMERGENCY = "com.tapshield.android.action.EMERGENCY";
 	public static final String ACTION_EMERGENCY_SUCCESS = "com.tapshield.android.action.EMERGENCY_SUCCESS";
 	public static final String ACTION_EMERGENCY_COMPLETE = "com.tapshield.android.action.EMERGENCY_COMPLETE";
+	public static final String ACTION_TWILIO_FAILED = "com.tapshield.android.action.TWILIO_FAILED";
 	
 	public static final String EXTRA_TYPE = "com.tapshield.android.manager.EmergencyManager.TYPE";
 	public static final int TYPE_TIMER_AUTO = 0;
@@ -55,11 +58,12 @@ public class EmergencyManager implements LocationListener {
 	private LocationTracker mTracker;
 	private Location mLatestLocation;
 	
-	private int mType, mAlertIdUpdaterRetries = 0;
+	private int mType, mAlertIdUpdaterRetries = 0, mTwilioRetries = 0, mTwilioMaxRetries;
 	private long mScheduledAt;
 	private long mScheduledFor;
 	private PendingIntent mBroadcastPendingIntent, mChatUpdaterPendingIntent, mAlertIdUpdaterPendingIntent;
-	private boolean mCompleted = false, mAlerted = false, mCheckingConnection = false;
+	private boolean mCompleted = false, mAlerted = false, mCheckingConnection = false,
+			mTwilioFailed = false, mTwilioFailurePrompt = false;
 	private List<Location> mAgencyBoundaries;
 	
 	//keeps check whether the object was just initialized or not
@@ -92,6 +96,9 @@ public class EmergencyManager implements LocationListener {
 				}
 			}
 		};
+		
+		mTwilioMaxRetries = mContext.getResources()
+				.getInteger(R.integer.emergency_twilio_number_auto_retries);
 	}
 	
 	public static EmergencyManager getInstance(Context context) {
@@ -173,6 +180,11 @@ public class EmergencyManager implements LocationListener {
 		mAlerted = false;
 		mStatus = InternalStatus.STARTED;
 
+		mTwilioFailed = false;
+		mTwilioFailurePrompt = false;
+		mTwilioRetries = 0;
+		mTwilio.addOnStatusChangeListener(this);
+		
 		handleLatestLocation();
 		
 		scheduleChatUpdater();
@@ -187,6 +199,9 @@ public class EmergencyManager implements LocationListener {
 			mAlarmManager.cancel(mBroadcastPendingIntent);
 		}
 
+		Notifier.getInstance(mContext).dismiss(Notifier.NOTIFICATION_TWILIO_FAILURE);
+		mTwilio.removeOnStatusChangeListener(this);
+		
 		mTwilio.hangUp();
 		
 		mJavelinAlert.removeOnDispatcherAlertedListener(mDispatcherAlertedListener);
@@ -390,6 +405,7 @@ public class EmergencyManager implements LocationListener {
 		//method required making the phone call only if alert is being created or is already created
 		boolean created = mJavelinAlert.isRunning();
 		if (created) {
+			mTwilioFailurePrompt = false;
 			call();
 		}
 	}
@@ -431,6 +447,39 @@ public class EmergencyManager implements LocationListener {
 	//method to be called within CountDownTimer in cancelAndWarn() to avoid clash with its cancel()
 	private void cancelRefMethod() {
 		cancel();
+	}
+	
+	public boolean isTwilioFailing() {
+		return mTwilioFailed;
+	}
+	
+	public void setTwilioFailureUserPrompted() {
+		mTwilioFailurePrompt = true;
+		Notifier.getInstance(mContext).dismiss(Notifier.NOTIFICATION_TWILIO_FAILURE);
+	}
+	
+	public boolean isTwilioFailureUserPrompted() {
+		return mTwilioFailurePrompt;
+	}
+	
+	@Override
+	public void onStatusChange(Status status) {
+		if (status.equals(TwilioManager.Status.FAILED)) {
+			
+			Log.i("twilio", "manager detecting failure retries=" + mTwilioRetries + "/" + mTwilioMaxRetries);
+			mTwilioRetries++;
+			
+			if (mTwilioRetries >= mTwilioMaxRetries) {
+				Log.i("twilio", "failure set in place, broadcasting...");
+				mTwilioFailed = true;
+				Intent twilioFailureIntent = new Intent(ACTION_TWILIO_FAILED);
+				Notifier.getInstance(mContext).notify(Notifier.NOTIFICATION_TWILIO_FAILURE);
+				mContext.sendBroadcast(twilioFailureIntent);
+			} else {
+				Log.i("twilio", "requesting redial");
+				requestRedial();
+			}
+		}
 	}
 	
 	private class ServerReacher extends AsyncTask<String, String, Boolean> {
