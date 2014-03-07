@@ -1,5 +1,9 @@
 package com.tapshield.android.ui.activity;
 
+import java.util.List;
+
+import org.joda.time.DateTime;
+
 import android.app.ActionBar;
 import android.content.Intent;
 import android.graphics.Color;
@@ -7,6 +11,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,11 +24,21 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolygonOptions;
 import com.tapshield.android.R;
 import com.tapshield.android.api.JavelinClient;
+import com.tapshield.android.api.JavelinUserManager;
+import com.tapshield.android.api.model.User;
+import com.tapshield.android.api.spotcrime.SpotCrimeClient;
+import com.tapshield.android.api.spotcrime.SpotCrimeClient.SpotCrimeCallback;
+import com.tapshield.android.api.spotcrime.SpotCrimeRequest;
+import com.tapshield.android.api.spotcrime.model.Crime;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.location.LocationTracker;
 import com.tapshield.android.manager.EmergencyManager;
@@ -46,6 +61,7 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 	private LocationTracker mTracker;
 	
 	private boolean mResuming = false;
+	private boolean mSpotCrimeDataDownloaded = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +93,9 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 		if (savedInstanceState != null) {
 			mResuming = savedInstanceState.getBoolean(KEY_RESUME);
 		}
+		
+		loadMapSettings();
+		loadAgencyBoundaries();
 	}
 	
 	@Override
@@ -119,7 +138,11 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
 		
-		if (mJavelin.getUserManager().getUser().agency.displayCommandAlert) {
+		JavelinUserManager userManager = mJavelin.getUserManager();
+		
+		if (userManager.isPresent()
+				&& userManager.getUser().agency != null
+				&& userManager.getUser().agency.displayCommandAlert) {
 			getMenuInflater().inflate(R.menu.massalerts, menu);
 		}
 		
@@ -189,6 +212,87 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 		} else {
 			mUser.setCenter(center);
 		}
+		
+		loadSpotCrimeDataAt(location.getLatitude(), location.getLongitude());
+	}
+	
+	private void loadMapSettings() {
+		UiSettings mapSettings = mMap.getUiSettings();
+		mapSettings.setRotateGesturesEnabled(false);
+		mapSettings.setTiltGesturesEnabled(false);
+		mapSettings.setScrollGesturesEnabled(false);
+		mapSettings.setZoomGesturesEnabled(false);
+	}
+	
+	private void loadAgencyBoundaries() {
+
+		JavelinUserManager userManager = mJavelin.getUserManager();
+
+		if (!userManager.isPresent()) {
+			return;
+		}
+
+		User user = userManager.getUser();
+
+		if (user.agency == null || !user.agency.hasBoundaries()) {
+			return;
+		}
+
+		PolygonOptions polygonOptions = new PolygonOptions()
+				.strokeWidth(3)
+				.strokeColor(Color.parseColor("#FF6600FF"))
+				.fillColor(Color.parseColor("#336600FF"));
+
+		for (Location l : user.agency.getBoundaries()) {
+			LatLng point = new LatLng(l.getLatitude(), l.getLongitude());
+			polygonOptions.add(point);
+		}
+		
+		mMap.addPolygon(polygonOptions);
+	}
+	
+	private void loadSpotCrimeDataAt(double latitude, double longitude) {
+		if (mSpotCrimeDataDownloaded) {
+			return;
+		}
+		mSpotCrimeDataDownloaded = true;
+		
+		long millisOfYesterday = new DateTime().minusDays(1).getMillis();
+		
+		SpotCrimeRequest request =
+				new SpotCrimeRequest(TapShieldApplication.SPOTCRIME_CONFIG,
+						latitude, longitude, 0.01f)
+				.setMaxRecords(5)
+				.setSince(millisOfYesterday)
+				.setSortBy(SpotCrimeRequest.SORT_BY_DISTANCE)
+				.setSortOrder(SpotCrimeRequest.SORT_ORDER_ASCENDING);
+		
+		SpotCrimeCallback callback = new SpotCrimeCallback() {
+			
+			@Override
+			public void onRequest(boolean ok, List<Crime> results, String errorIfNotOk) {
+				Log.i("spotcrime", "callback ok=" + ok + " results=" + (results != null) + " error=" + errorIfNotOk);
+				if (ok) {
+					if (results == null) {
+						return;
+					}
+					
+					for (Crime c : results) {
+						LatLng position = new LatLng(c.getLatitude(), c.getLongitude());
+						MarkerOptions markerOptions = new MarkerOptions()
+								.draggable(false)
+								.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+								.position(position)
+								.title(c.getType() + " " + c.getDate())
+								.snippet(c.getDescription());
+						mMap.addMarker(markerOptions);
+					}
+				}
+			}
+		};
+		
+		SpotCrimeClient spotCrime = SpotCrimeClient.getInstance(TapShieldApplication.SPOTCRIME_CONFIG);
+		spotCrime.request(request, callback);
 	}
 
 	@Override
