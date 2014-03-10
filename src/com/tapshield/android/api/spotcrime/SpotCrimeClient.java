@@ -38,6 +38,8 @@ public class SpotCrimeClient {
 
 				List<Crime> listCrimes = null;
 				
+				String error = new String();
+				
 				if (response.successful) {
 					try {
 						
@@ -50,9 +52,35 @@ public class SpotCrimeClient {
 					} catch (Exception e) {
 						listCrimes = null;
 					}
+				} else {
+					if (response.exception.getMessage().contains("errors")) {
+						try {
+							JSONObject responseObject = new JSONObject(response.exception.getMessage());
+							
+							if (!responseObject.has("errors")) {
+								throw new Exception();
+							}
+							
+							JSONArray errors = responseObject.getJSONArray("errors");
+							
+							if (errors.length() == 0) {
+								throw new Exception();
+							}
+							
+							for (int i=0; i < errors.length(); i++) {
+								if (!error.isEmpty()) {
+									error = error.concat(",");
+								}
+								
+								error = error.concat(errors.getString(i));
+							}
+						} catch (Exception e) {
+							error = response.exception.getMessage();
+						}
+					}
 				}
 				
-				callback.onRequest(response.successful, listCrimes, response.exception.getMessage());
+				callback.onRequest(response.successful, listCrimes, error);
 			}
 		};
 		
