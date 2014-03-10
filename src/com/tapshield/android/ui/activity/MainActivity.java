@@ -61,7 +61,10 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 	private LocationTracker mTracker;
 	
 	private boolean mResuming = false;
-	private boolean mSpotCrimeDataDownloaded = false;
+
+	private static final int MINIMUM_NUMBER_CRIMES = 50;
+	private long mCrimeSince = new DateTime().minusHours(1).getMillis();
+	private List<Crime> mCrimeRecords;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -212,8 +215,10 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 		} else {
 			mUser.setCenter(center);
 		}
-		
-		loadSpotCrimeDataAt(location.getLatitude(), location.getLongitude());
+
+		if (mCrimeRecords == null || mCrimeRecords.isEmpty()) {
+			loadNearbyCrimes();
+		}
 	}
 	
 	private void loadMapSettings() {
@@ -251,19 +256,11 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 		mMap.addPolygon(polygonOptions);
 	}
 	
-	private void loadSpotCrimeDataAt(double latitude, double longitude) {
-		if (mSpotCrimeDataDownloaded) {
-			return;
-		}
-		mSpotCrimeDataDownloaded = true;
-		
-		long millisOfYesterday = new DateTime().minusDays(1).getMillis();
-		
+	private void loadNearbyCrimes() {
 		SpotCrimeRequest request =
 				new SpotCrimeRequest(TapShieldApplication.SPOTCRIME_CONFIG,
-						latitude, longitude, 0.01f)
-				.setMaxRecords(5)
-				.setSince(millisOfYesterday)
+						mUser.getCenter().latitude, mUser.getCenter().longitude, 0.03f)
+				.setSince(mCrimeSince)
 				.setSortBy(SpotCrimeRequest.SORT_BY_DISTANCE)
 				.setSortOrder(SpotCrimeRequest.SORT_ORDER_ASCENDING);
 		
@@ -271,28 +268,48 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 			
 			@Override
 			public void onRequest(boolean ok, List<Crime> results, String errorIfNotOk) {
-				Log.i("spotcrime", "callback ok=" + ok + " results=" + (results != null) + " error=" + errorIfNotOk);
+				Log.i("spotcrime",
+						"callback ok=" + ok
+						+ " results=" + (results == null? results : results.size())
+						+ " error=" + errorIfNotOk
+						+ (ok ? " for=" + new DateTime(mCrimeSince) : new String()));
 				if (ok) {
 					if (results == null) {
 						return;
 					}
+
+					mCrimeRecords = results;
 					
-					for (Crime c : results) {
-						LatLng position = new LatLng(c.getLatitude(), c.getLongitude());
-						MarkerOptions markerOptions = new MarkerOptions()
-								.draggable(false)
-								.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
-								.position(position)
-								.title(c.getType() + " " + c.getDate())
-								.snippet(c.getDescription());
-						mMap.addMarker(markerOptions);
+					//broaden search parameter if less than minimum number of crimes
+					if (results.size() < MINIMUM_NUMBER_CRIMES) {
+						//starting week before previous search
+						mCrimeSince = new DateTime(mCrimeSince).minusHours(1).getMillis();
+						loadNearbyCrimes();
+						return;
 					}
+
+					addCrimeMarkers();
+				} else {
+					UiUtils.toastShort(MainActivity.this, "Error loading crimes:" + errorIfNotOk);
 				}
 			}
 		};
 		
 		SpotCrimeClient spotCrime = SpotCrimeClient.getInstance(TapShieldApplication.SPOTCRIME_CONFIG);
 		spotCrime.request(request, callback);
+	}
+	
+	private void addCrimeMarkers() {
+		for (Crime c : mCrimeRecords) {
+			LatLng position = new LatLng(c.getLatitude(), c.getLongitude());
+			MarkerOptions markerOptions = new MarkerOptions()
+					.draggable(false)
+					.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+					.position(position)
+					.title(c.getType() + " " + c.getDate())
+					.snippet(c.getDescription());
+			mMap.addMarker(markerOptions);
+		}
 	}
 
 	@Override
