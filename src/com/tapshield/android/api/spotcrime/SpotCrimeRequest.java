@@ -38,11 +38,12 @@ public class SpotCrimeRequest {
 	private String mSortBy;
 	private String mSortOrder;
 	
-	public SpotCrimeRequest(SpotCrimeConfig config, double latitude, double longitude, float radius) {
+	public SpotCrimeRequest(SpotCrimeConfig config, double latitude, double longitude,
+			float radiusInMiles) {
 		mKey = config.getKey();
 		mLatitude = latitude;
 		mLongitude = longitude;
-		mRadius = radius;
+		mRadius = radiusInMiles;
 		
 		mSince = -1;
 		mMaxRecords = -1;
