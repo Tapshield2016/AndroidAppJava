@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ts_brand_light">#50a6d2</color>
+    <color name="ts_brand_dark">#1a7dbf</color>
+    <color name="ts_gray_light">#e7e7e7</color>
+    <color name="ts_gray_dark">#838383</color>
+    <color name="ts_activity_background">#e6ebee</color>
+</resources>
