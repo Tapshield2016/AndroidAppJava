@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/actionbar_steps_vertical_padding"
+    android:paddingBottom="@dimen/actionbar_steps_vertical_padding">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        
+        <TextView
+            android:id="@+id/actionbar_steps_text"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:textColor="@color/ts_brand_light"
+            android:textStyle="bold"/>
+        
+        <com.tapshield.android.ui.view.StepIndicator
+            xmlns:pi="http://schemas.android.com/apk/res/com.tapshield.android"
+            android:id="@+id/actionbar_steps_stepindicator"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
+            android:paddingLeft="@dimen/actionbar_steps_stepindicator_horizontal_padding"
+            android:paddingRight="@dimen/actionbar_steps_stepindicator_horizontal_padding"
+            pi:colorIncomplete="@color/ts_gray_light"
+            pi:colorComplete="@color/ts_brand_light"/>
+        
+    </LinearLayout>
+</RelativeLayout>

@@ -1,32 +1,54 @@
 package com.tapshield.android.ui.activity;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.view.View;
+import android.widget.TextView;
 
 import com.tapshield.android.R;
+import com.tapshield.android.ui.fragment.BaseFragment;
 import com.tapshield.android.ui.fragment.BaseFragment.OnUserActionRequestedListener;
 import com.tapshield.android.ui.fragment.EmailConfirmationFragment;
 import com.tapshield.android.ui.fragment.PhoneConfirmationFragment;
 import com.tapshield.android.ui.fragment.RequiredInfoFragment;
+import com.tapshield.android.ui.view.StepIndicator;
 
 public class RegistrationActivity extends FragmentActivity
 		implements OnUserActionRequestedListener {
-
 	
 	private static final int mFragmentContainer = R.id.registration_container;
+
+	private TextView mStepTitle;
+	private StepIndicator mStepIndicator;
 	private FragmentManager mFragmentManager;
+	
 	private int mIndex = 0;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_registration);
+		mFragmentManager = getSupportFragmentManager();
 		
-		mFragmentManager = getFragmentManager();
+		View actionBarCustomView = getLayoutInflater().inflate(R.layout.actionbar_steps, null);
+		actionBarCustomView.setLayoutParams(new ActionBar.LayoutParams(
+				ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT));
+		
+		mStepTitle = (TextView) actionBarCustomView.findViewById(R.id.actionbar_steps_text);
+		mStepIndicator = (StepIndicator)
+				actionBarCustomView.findViewById(R.id.actionbar_steps_stepindicator);
+		
+		ActionBar actionBar = getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setDisplayShowTitleEnabled(false);
+		actionBar.setDisplayShowCustomEnabled(true);
+		actionBar.setCustomView(actionBarCustomView);
+		
 		setFragmentByIndex();
+		mStepIndicator.setNumSteps(3);
 	}
 	
 	private void setFragmentByIndex() {
@@ -42,7 +64,7 @@ public class RegistrationActivity extends FragmentActivity
 		}
 
 		//set flag to either add or replace the fragments based on what the container has
-		Fragment fragment = mFragmentManager.findFragmentById(mFragmentContainer);
+		BaseFragment fragment = (BaseFragment) mFragmentManager.findFragmentById(mFragmentContainer);
 		boolean add = fragment == null;
 		
 		fragment = instantiateFragmentByIndex();
@@ -64,19 +86,28 @@ public class RegistrationActivity extends FragmentActivity
 			transaction.replace(mFragmentContainer, fragment);
 		}
 		transaction.commit();
+		
+		mStepTitle.setText(fragment.getTitle());
+		mStepIndicator.setCurrentStep(mIndex);
 	}
 	
-	private Fragment instantiateFragmentByIndex() {
+	private BaseFragment instantiateFragmentByIndex() {
+		BaseFragment f = null;
 		switch (mIndex) {
 		case 0:
-			return new RequiredInfoFragment();
+			f = new RequiredInfoFragment();
+			f.setTitle("create account");
+			break;
 		case 1:
-			return new EmailConfirmationFragment();
+			f = new EmailConfirmationFragment();
+			f.setTitle("email verification");
+			break;
 		case 2:
-			return new PhoneConfirmationFragment();
-		default:
-			return null;
+			f = new PhoneConfirmationFragment();
+			f.setTitle("phone confirmation");
+			break;
 		}
+		return f;
 	}
 
 	/*
