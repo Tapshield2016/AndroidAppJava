@@ -1,13 +1,13 @@
 package com.tapshield.android.ui.fragment;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
 
 public class BaseFragment extends Fragment {
 
 	private String mTitle;
 	
-	protected void setTitle(String title) {
+	public void setTitle(String title) {
 		mTitle = title;
 	}
 	
