@@ -1,10 +1,13 @@
 package com.tapshield.android.ui.view;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -16,7 +19,12 @@ public class PageIndicator extends View {
 	private static final float DEFAULT_STROKE_PERCENT = 30f;
 	private static final float DEFAULT_MIN_STROKE_PERCENT = 5f;
 	private static final float DEFAULT_MAX_STROKE_PERCENT = 100f;
+	private static final long DEFAULT_ALPHA_ANIM_DURATION = 300;
 	
+	private ValueAnimator mAlphaAnimator;
+	
+	private long mAlphaLastUpdate = 0;
+	private long mAlphaDuration = DEFAULT_ALPHA_ANIM_DURATION;
 	private int mNumPages = 0;
 	private int mSelectedPage = 0;
 	private int mColor;
@@ -69,6 +77,40 @@ public class PageIndicator extends View {
 	}
 	
 	private void initialize() {
+		mAlphaAnimator = ValueAnimator.ofFloat(0.0f, 1.0f);
+		mAlphaAnimator.setDuration(mAlphaDuration);
+		mAlphaAnimator.addListener(new Animator.AnimatorListener() {
+			
+			@Override
+			public void onAnimationStart(Animator animation) {}
+			
+			@Override
+			public void onAnimationRepeat(Animator animation) {}
+			
+			@Override
+			public void onAnimationEnd(Animator animation) {
+				invalidate();
+			}
+			
+			@Override
+			public void onAnimationCancel(Animator animation) {}
+		});
+		mAlphaAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+			
+			@Override
+			public void onAnimationUpdate(ValueAnimator animation) {
+				float alpha = 255 * (Float) animation.getAnimatedValue();
+				mPaintFill.setAlpha((int) alpha);
+				
+				long now = SystemClock.uptimeMillis();
+				boolean update = (now - mAlphaLastUpdate) >= (1000/30); //limit 30 fps update
+				if(update) {
+					invalidate();
+					mAlphaLastUpdate = now;
+				}
+			}
+		});
+		
 		mPaintStroke = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaintStroke.setColor(mColor);
 		mPaintStroke.setStyle(Paint.Style.STROKE);
@@ -109,6 +151,12 @@ public class PageIndicator extends View {
 		if (mSelectedPage < 0 || mSelectedPage >= mNumPages) {
 			throw new IndexOutOfBoundsException("Selected " + mSelectedPage + " out of " + mNumPages);
 		}
+		
+		if (mAlphaAnimator.isRunning()) {
+			mAlphaAnimator.cancel();
+		}
+		
+		mAlphaAnimator.start();
 		
 		invalidate();
 		requestLayout();

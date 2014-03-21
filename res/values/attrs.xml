@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    
     <declare-styleable name="PageIndicator">
         <attr name="color" format="reference|color"/>
         <attr name="strokePercentOfDiameter" format="reference|float"/>
     </declare-styleable>
+    
+    <declare-styleable name="StepIndicator">
+        <attr name="colorIncomplete" format="reference|color"/>
+        <attr name="colorComplete" format="reference|color"/>
+    </declare-styleable>
+    
 </resources>
