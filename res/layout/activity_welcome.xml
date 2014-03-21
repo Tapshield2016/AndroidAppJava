@@ -5,33 +5,43 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <!-- place for any fragment container or swipe view
-            width=match
-            height=0dp
-            above=@+id/welcome_layout_bottom -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ts_welcome_background"
+        />
+    
+    <android.support.v4.view.ViewPager
+        android:id="@+id/welcome_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
     
     <LinearLayout
-        android:id="@+id/welcome_layout_bottom"
+        android:id="@+id/welcome_linear_indicatorskip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true">
-        
-        <Button
-            android:id="@+id/welcome_button_login"
-            android:layout_width="0dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+        <com.tapshield.android.ui.view.PageIndicator
+            xmlns:tapshield="http://schemas.android.com/apk/res/com.tapshield.android"
+            android:id="@+id/welcome_pageindicator"
+            android:layout_gravity="center"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:padding="5dp"
+            tapshield:color="@android:color/white"
+            tapshield:strokePercentOfDiameter="10"/>
+
+        <TextView
+            android:id="@+id/welcome_text_skip"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="login"
-            />
-        <Button
-            android:id="@+id/welcome_button_registration"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="reg"
-            />
+            android:gravity="right|center_vertical"
+            android:text="Skip"
+            android:textColor="@android:color/white"
+            android:textSize="24sp"/>
         
     </LinearLayout>
-    
 </RelativeLayout>
