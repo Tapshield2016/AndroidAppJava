@@ -6,5 +6,5 @@
     
     <dimen name="actionbar_steps_vertical_padding">4dp</dimen>
     <dimen name="actionbar_steps_stepindicator_horizontal_padding">50dp</dimen>
-
+    <dimen name="actionbar_steps_content_width">250dp</dimen>
 </resources>
