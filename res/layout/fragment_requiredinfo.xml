@@ -2,64 +2,17 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="6dp">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal" >
-
-            <ImageButton
-                android:id="@+id/fragment_requiredinfo_imagebutton_picture"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:layout_margin="6dp"
-                android:src="@drawable/ic_launcher" />
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="6dp"
-                android:layout_weight="1"
-                android:orientation="vertical" >
-
-                <EditText
-                    android:id="@+id/fragment_requiredinfo_edit_firstname"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPersonName|textCapWords"
-                    android:hint="first name" />
-
-                <EditText
-                    android:id="@+id/fragment_requiredinfo_edit_lastname"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPersonName|textCapWords"
-                    android:hint="last name" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <EditText
-            android:id="@+id/fragment_requiredinfo_edit_disarmcode"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:maxLength="4"
-            android:hint="disarm code"
-            android:inputType="numberPassword" />
-
         <EditText
             android:id="@+id/fragment_requiredinfo_edit_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
             android:maxLines="1"
             android:inputType="textEmailAddress"
             android:hint="email address" />
@@ -68,40 +21,25 @@
             android:id="@+id/fragment_requiredinfo_edit_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
             android:maxLines="1"
             android:hint="password"
             android:inputType="textPassword" />
 
         <EditText
+            android:id="@+id/fragment_requiredinfo_edit_passcode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLength="4"
+            android:hint="passcode"
+            android:inputType="numberPassword" />
+        
+        <EditText
             android:id="@+id/fragment_requiredinfo_edit_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
             android:maxLines="1"
             android:hint="phone number"
-            android:inputType="phone" />
-
-        <Button
-            android:id="@+id/fragment_requiredinfo_button_organization"
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:layout_marginTop="32dp"
-            android:text="organization" />
-
-        <CheckBox
-            android:id="@+id/fragment_requiredinfo_checkbox_termsconditions"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="i accept the terms and conditions..." />
-
-        <Button
-            android:id="@+id/fragment_requiredinfo_button_register"
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:layout_marginTop="6dp"
-            android:text="register" />
+            android:inputType="phone"
+            android:visibility="gone" />
     </LinearLayout>
-
 </ScrollView>

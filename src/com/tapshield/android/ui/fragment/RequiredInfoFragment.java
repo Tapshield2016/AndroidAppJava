@@ -1,18 +1,15 @@
 package com.tapshield.android.ui.fragment;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageButton;
 
 import com.tapshield.android.R;
 import com.tapshield.android.api.JavelinClient;
@@ -20,30 +17,21 @@ import com.tapshield.android.api.JavelinUserManager.OnUserSignUpListener;
 import com.tapshield.android.api.model.Agency;
 import com.tapshield.android.api.model.User;
 import com.tapshield.android.app.TapShieldApplication;
-import com.tapshield.android.ui.activity.OrganizationSelectionActivity;
 import com.tapshield.android.utils.StringUtils;
 import com.tapshield.android.utils.UiUtils;
 
-public class RequiredInfoFragment extends BaseFragment implements OnClickListener, OnUserSignUpListener {
+public class RequiredInfoFragment extends BaseFragment implements OnUserSignUpListener {
 
 	public static final String EXTRA_USER = "com.tapshield.android.extra.requiredinfofragment.user";
 	
-	private static final int REQUEST_CODE_SET_PICTURE = 1;
-	private static final int REQUEST_CODE_SET_AGENCY = 2;
-	
 	private JavelinClient mJavelin;
-	private ImageButton mPicture;
-	private EditText mFirstName;
-	private EditText mLastName;
-	private EditText mDisarmCode;
+	private EditText mPasscode;
 	private EditText mEmail;
 	private EditText mPassword;
 	private EditText mPhone;
-	private CheckBox mTermsConditions;
-	private Button mOrganization;
-	private Button mRegister;
 	private Agency mSelectedOrganization;
 	
+	private boolean mRequestPhone = false;
 	private ProgressDialog mDialogSignUp;
 	
 	private User mUser;
@@ -51,6 +39,8 @@ public class RequiredInfoFragment extends BaseFragment implements OnClickListene
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
+		
 		mJavelin = JavelinClient.getInstance(getActivity(), TapShieldApplication.JAVELIN_CONFIG);
 		
 		mDialogSignUp = new ProgressDialog(getActivity());
@@ -58,23 +48,29 @@ public class RequiredInfoFragment extends BaseFragment implements OnClickListene
 		mDialogSignUp.setMessage("please wait...");
 		mDialogSignUp.setIndeterminate(true);
 		mDialogSignUp.setCancelable(false);
+	
+		Bundle args = getArguments();
+		if (args != null) {
+			String serOrg = getArguments().getString(OrganizationSelectionFragment.EXTRA_AGENCY, null);
+			if (serOrg != null) {
+				mSelectedOrganization = Agency.deserializeFromString(serOrg);
+				mRequestPhone = mSelectedOrganization != null;
+			}
+		}
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_requiredinfo, container, false);
 		
-		mPicture = (ImageButton) view.findViewById(R.id.fragment_requiredinfo_imagebutton_picture);
-		mFirstName = (EditText) view.findViewById(R.id.fragment_requiredinfo_edit_firstname);
-		mLastName = (EditText) view.findViewById(R.id.fragment_requiredinfo_edit_lastname);
-		mDisarmCode = (EditText) view.findViewById(R.id.fragment_requiredinfo_edit_disarmcode);
 		mEmail = (EditText) view.findViewById(R.id.fragment_requiredinfo_edit_email);
 		mPassword = (EditText) view.findViewById(R.id.fragment_requiredinfo_edit_password);
+		mPasscode = (EditText) view.findViewById(R.id.fragment_requiredinfo_edit_passcode);
 		mPhone = (EditText) view.findViewById(R.id.fragment_requiredinfo_edit_phone);
-		mTermsConditions = (CheckBox)
-				view.findViewById(R.id.fragment_requiredinfo_checkbox_termsconditions);
-		mOrganization = (Button) view.findViewById(R.id.fragment_requiredinfo_button_organization);
-		mRegister = (Button) view.findViewById(R.id.fragment_requiredinfo_button_register);
+		
+		if (mRequestPhone) {
+			mPhone.setVisibility(View.VISIBLE);
+		}
 		
 		return view;
 	}
@@ -82,52 +78,41 @@ public class RequiredInfoFragment extends BaseFragment implements OnClickListene
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		mPicture.setOnClickListener(this);
-		mOrganization.setOnClickListener(this);
-		mRegister.setOnClickListener(this);
+	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+		inflater.inflate(R.menu.next, menu);
 	}
 
 	@Override
-	public void onClick(View view) {
-		switch (view.getId()) {
-		case R.id.fragment_requiredinfo_imagebutton_picture:
-			//prompt user to select or take a picture
-			break;
-		case R.id.fragment_requiredinfo_button_organization:
-			Intent agencySelector = new Intent(getActivity(), OrganizationSelectionActivity.class);
-			startActivityForResult(agencySelector, REQUEST_CODE_SET_AGENCY);
-			break;
-		case R.id.fragment_requiredinfo_button_register:
+	public boolean onOptionsItemSelected(MenuItem item) {
+		
+		switch (item.getItemId()) {
+		case R.id.action_next:
 			registerUser();
-			break;
+			return true;
 		}
+		
+		return false;
 	}
-
+	
 	private void registerUser() {
 		
-		String firstName = getTextOffEditText(mFirstName);
-		String lastName = getTextOffEditText(mLastName);
-		String disarmCode = getTextOffEditText(mDisarmCode);
+		String passcode = getTextOffEditText(mPasscode);
 		String email = getTextOffEditText(mEmail);
 		String password = getTextOffEditText(mPassword);
-		String phone = getTextOffEditText(mPhone);
+		String phone = mRequestPhone ? getTextOffEditText(mPhone) : null;
 		
-		if (!StringUtils.isNameValid(firstName)) {
-			mFirstName.setError("cannot be empty");
-		} else if (!StringUtils.isNameValid(lastName)) {
-			mLastName.setError("cannot be empty");
-		} else if (!StringUtils.isFourDigitsNoSpaceValid(disarmCode)) {
-			mDisarmCode.setError("has to have 4 digits");
-		} else if (!StringUtils.isEmailValid(email)) {
+		if (!StringUtils.isEmailValid(email)) {
 			mEmail.setError("email is not valid");
 		} else if (password.length() < 4) {
 			mPassword.setError("has to have at least 4 characters");
-		} else if (!StringUtils.isPhoneNumberValid(phone)) {
+		} else if (!StringUtils.isFourDigitsNoSpaceValid(passcode)) {
+			mPasscode.setError("has to have 4 digits");
+		} else if (mRequestPhone && !StringUtils.isPhoneNumberValid(phone)) {
 			mPhone.setError("has to have 10 digits");
-		} else if (mSelectedOrganization == null) {
-			UiUtils.toastShort(getActivity(), "you need to select an organization");
-		} else if (!mTermsConditions.isChecked()) {
-			UiUtils.toastShort(getActivity(), "you need to accept terms and conditions");
 		} else {
 			//meaning no error was found, attempt to sign up
 			mDialogSignUp.show();
@@ -139,12 +124,9 @@ public class RequiredInfoFragment extends BaseFragment implements OnClickListene
 			mUser.email = email;
 			mUser.username = mUser.email;
 			mUser.setPassword(password);
-			mUser.setDisarmCode(disarmCode);
-			mUser.firstName = firstName;
-			mUser.lastName = lastName;
 			mUser.phoneNumber = phone;
 			
-			mJavelin.getUserManager().signUp(mSelectedOrganization, email, password, phone, disarmCode, firstName, lastName, this);
+			mJavelin.getUserManager().signUp(mSelectedOrganization, email, password, phone, passcode, null, null, this);
 		}
 	}
 	
@@ -161,22 +143,6 @@ public class RequiredInfoFragment extends BaseFragment implements OnClickListene
 		return editText.getText().toString().trim();
 	}
 	
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (resultCode == Activity.RESULT_OK) {
-			switch (requestCode) {
-			case REQUEST_CODE_SET_PICTURE:
-				//set picture
-				break;
-			case REQUEST_CODE_SET_AGENCY:
-				String serializedAgency = data.getStringExtra(OrganizationSelectionActivity.EXTRA);
-				mSelectedOrganization = Agency.deserializeFromString(serializedAgency);
-				mOrganization.setText(mSelectedOrganization.name);
-				break;
-			}
-		}
-	}
-
 	@Override
 	public void onUserSignUp(boolean successful, Throwable e) {
 		mDialogSignUp.dismiss();
