@@ -1,6 +1,7 @@
 package com.tapshield.android.ui.activity;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -18,6 +19,8 @@ import com.tapshield.android.ui.view.StepIndicator;
 
 public class RegistrationActivity extends FragmentActivity
 		implements OnUserActionRequestedListener {
+	
+	public static final String EXTRA_SKIP_ORG = "com.tapshield.android.extra.skip_org";
 	
 	private static final int mFragmentContainer = R.id.registration_container;
 
@@ -46,6 +49,17 @@ public class RegistrationActivity extends FragmentActivity
 		actionBar.setDisplayShowTitleEnabled(false);
 		actionBar.setDisplayShowCustomEnabled(true);
 		actionBar.setCustomView(actionBarCustomView);
+
+		Intent i = getIntent();
+		if (i != null) {
+			Bundle e = i.getExtras();
+			if (e != null && e.containsKey(EXTRA_SKIP_ORG)) {
+				boolean skipOrg = e.getBoolean(EXTRA_SKIP_ORG, false);
+				if (skipOrg) {
+					//set index to second step
+				}
+			}
+		}
 		
 		setFragmentByIndex();
 		mStepIndicator.setNumSteps(3);
