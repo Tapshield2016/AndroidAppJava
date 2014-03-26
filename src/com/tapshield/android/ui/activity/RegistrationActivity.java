@@ -13,6 +13,7 @@ import com.tapshield.android.R;
 import com.tapshield.android.ui.fragment.BaseFragment;
 import com.tapshield.android.ui.fragment.BaseFragment.OnUserActionRequestedListener;
 import com.tapshield.android.ui.fragment.EmailConfirmationFragment;
+import com.tapshield.android.ui.fragment.OrganizationSelectionFragment;
 import com.tapshield.android.ui.fragment.PhoneConfirmationFragment;
 import com.tapshield.android.ui.fragment.RequiredInfoFragment;
 import com.tapshield.android.ui.view.StepIndicator;
@@ -22,6 +23,7 @@ public class RegistrationActivity extends FragmentActivity
 	
 	public static final String EXTRA_SKIP_ORG = "com.tapshield.android.extra.skip_org";
 	
+	private static final int NUM_FRAGMENTS = 4;
 	private static final int mFragmentContainer = R.id.registration_container;
 
 	private TextView mStepTitle;
@@ -56,13 +58,13 @@ public class RegistrationActivity extends FragmentActivity
 			if (e != null && e.containsKey(EXTRA_SKIP_ORG)) {
 				boolean skipOrg = e.getBoolean(EXTRA_SKIP_ORG, false);
 				if (skipOrg) {
-					//set index to second step
+					mIndex = 1;
 				}
 			}
 		}
 		
 		setFragmentByIndex();
-		mStepIndicator.setNumSteps(3);
+		mStepIndicator.setNumSteps(NUM_FRAGMENTS);
 	}
 	
 	private void setFragmentByIndex() {
@@ -109,16 +111,22 @@ public class RegistrationActivity extends FragmentActivity
 		BaseFragment f = null;
 		switch (mIndex) {
 		case 0:
+			f = new OrganizationSelectionFragment();
+			f.setTitle("pick your organization");
+			break;
+		case 1:
 			f = new RequiredInfoFragment();
 			f.setTitle("create account");
 			break;
-		case 1:
+		case 2:
 			f = new EmailConfirmationFragment();
 			f.setTitle("email verification");
 			break;
-		case 2:
+		case 3:
 			f = new PhoneConfirmationFragment();
 			f.setTitle("phone confirmation");
+			break;
+		case 4:
 			break;
 		}
 		return f;

@@ -3,8 +3,8 @@
     
     <item
         android:id="@+id/action_organizationselection_search"
-        android:title="show all"
-        android:showAsAction="always|collapseActionView|withText"
+        android:icon="@android:drawable/ic_menu_search"
+        android:showAsAction="always|collapseActionView"
         android:actionViewClass="android.widget.SearchView" />
 
 </menu>

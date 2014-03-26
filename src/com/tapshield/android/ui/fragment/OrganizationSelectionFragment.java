@@ -1,20 +1,21 @@
-package com.tapshield.android.ui.activity;
+package com.tapshield.android.ui.fragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
-import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MenuItem.OnActionExpandListener;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
@@ -33,10 +34,9 @@ import com.tapshield.android.location.LocationTracker;
 import com.tapshield.android.ui.adapter.AgencyListAdapter;
 import com.tapshield.android.utils.UiUtils;
 
-public class OrganizationSelectionActivity extends Activity
-		implements OnItemClickListener, LocationListener {
+public class OrganizationSelectionFragment extends BaseFragment implements OnItemClickListener, LocationListener {
 
-	public static final String EXTRA = "com.tapshield.android.extra.organizationselection.result";
+	public static final String EXTRA_AGENCY = "com.tapshield.android.extra.organizationselection.result";
 	
 	private JavelinClient mJavelin;
 	private LocationTracker mTracker;
@@ -50,31 +50,43 @@ public class OrganizationSelectionActivity extends Activity
 	private boolean mNearbyLoaded = false;
 	private boolean mAllLoaded = false;
 	private AlertDialog mLoader;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
+	}
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_organizationselection);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View root = inflater.inflate(R.layout.fragment_organizationselection, container, false);
+		mList = (ListView) root.findViewById(R.id.fragment_organizationselection_list);
+		return root;
+	}
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
 		
-		mJavelin = JavelinClient.getInstance(this, TapShieldApplication.JAVELIN_CONFIG);
-		mTracker = LocationTracker.getInstance(this);
+		mJavelin = JavelinClient.getInstance(getActivity(), TapShieldApplication.JAVELIN_CONFIG);
+		mTracker = LocationTracker.getInstance(getActivity());
 		
 		mNearbyAgencies = new ArrayList<Agency>();
 		mAllAgencies = new ArrayList<Agency>();
 		
-		mAdapter = new AgencyListAdapter(this, R.layout.item_organizationselection, mNearbyAgencies);
+		mAdapter = new AgencyListAdapter(getActivity(), R.layout.item_organizationselection,
+				mNearbyAgencies);
 		
-		TextView emptyListView = new TextView(this);
+		TextView emptyListView = new TextView(getActivity());
 		LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		emptyListView.setLayoutParams(lp);
 		emptyListView.setGravity(Gravity.CENTER);
 		
-		mList = (ListView) findViewById(R.id.organizationselection_list);
 		mList.setOnItemClickListener(this);
 		mList.setEmptyView(emptyListView);
 		mList.setAdapter(mAdapter);
 		
-		mLoader = new AlertDialog.Builder(this)
+		mLoader = new AlertDialog.Builder(getActivity())
 				.setTitle("loading agencies")
 				.setMessage("please wait...")
 				.create();
@@ -84,7 +96,7 @@ public class OrganizationSelectionActivity extends Activity
 			
 			@Override
 			public void onCancel(DialogInterface dialog) {
-				finish();
+				getActivity().finish();
 			}
 		});
 		
@@ -99,9 +111,8 @@ public class OrganizationSelectionActivity extends Activity
 					mAllLoaded = true;
 					dismissLoaderWhenFinished();
 				} else {
-					UiUtils.toastShort(OrganizationSelectionActivity.this,
-							"error retrieving list of organizations");
-					finish();
+					UiUtils.toastShort(getActivity(), "error retrieving list of organizations");
+					getActivity().finish();
 				}
 			}
 		});
@@ -110,8 +121,10 @@ public class OrganizationSelectionActivity extends Activity
 	}
 	
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.organizationselection, menu);
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+		
+		inflater.inflate(R.menu.organizationselection, menu);
 		
 		//get menu item to set listener on expansion of search widget to
 		//    toggle agency list: all and nearby
@@ -148,7 +161,6 @@ public class OrganizationSelectionActivity extends Activity
 				return true;
 			}
 		});
-		return true;
 	}
 	
 	private void setDataSet(List<Agency> dataSet) {
@@ -178,14 +190,13 @@ public class OrganizationSelectionActivity extends Activity
 			setDataSet(mQueryResultAllAgencies);
 		}
 	}
-
+	
 	@Override
-	public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
+	public void onItemClick(AdapterView<?> adapter, View v, int position, long id) {
 		Agency agencySelected = (Agency) adapter.getItemAtPosition(position);
-		Intent data = new Intent()
-				.putExtra(EXTRA, Agency.serializeToString(agencySelected));
-		setResult(Activity.RESULT_OK, data);
-		finish();
+		Bundle extras = new Bundle();
+		extras.putString(EXTRA_AGENCY, Agency.serializeToString(agencySelected));
+		userRequestProceed(extras);
 	}
 	
 	private void dismissLoaderWhenFinished() {
@@ -193,10 +204,10 @@ public class OrganizationSelectionActivity extends Activity
 			mLoader.dismiss();
 		}
 	}
-
+	
 	@Override
 	public void onLocationChanged(Location l) {
-		mTracker.stop();
+mTracker.stop();
 		
 		if (!mNearbyAgencies.isEmpty()) {
 			return;
@@ -214,9 +225,8 @@ public class OrganizationSelectionActivity extends Activity
 					mNearbyLoaded = true;
 					dismissLoaderWhenFinished();
 				} else {
-					UiUtils.toastShort(OrganizationSelectionActivity.this,
-							"error retrieving list of organizations");
-					finish();
+					UiUtils.toastShort(getActivity(), "error retrieving list of organizations");
+					getActivity().finish();
 				}
 			}
 		});
