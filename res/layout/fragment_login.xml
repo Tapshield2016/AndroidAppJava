@@ -3,12 +3,81 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     
+    <!-- logo -->
+    
     <ImageView
         android:id="@+id/fragment_login_image"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_alignParentTop="true"
-        android:layout_above="@+id/fragment_login_linear_bottom"/>
+        android:layout_above="@+id/fragment_login_linear_form"
+        android:src="@drawable/ic_launcher"
+        android:scaleType="fitCenter"
+        android:padding="20dp"/>
+    
+    <!-- form -->
+    
+    <LinearLayout
+        android:id="@id/fragment_login_linear_form"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/fragment_login_linear_bottom"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:visibility="invisible">
+        
+        <EditText
+            android:id="@+id/fragment_login_form_edit_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:hint="your email"/>
+        
+        <EditText
+            android:id="@+id/fragment_login_form_edit_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:hint="your password"/>
+        
+        <Button
+            android:id="@+id/fragment_login_form_button_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="45dp"
+            android:layout_marginRight="45dp"
+            android:text="log in"/>
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp">
+            <TextView
+                android:id="@+id/fragment_login_form_text_noaccount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="no account?"
+                android:gravity="center"
+                />
+            <TextView
+                android:id="@+id/fragment_login_form_text_forgotpassword"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="forgot password?"
+                android:gravity="center"
+                />
+        </LinearLayout>
+    </LinearLayout>
+    
+    <!-- bottom options -->
     
     <LinearLayout
         android:id="@id/fragment_login_linear_bottom"
