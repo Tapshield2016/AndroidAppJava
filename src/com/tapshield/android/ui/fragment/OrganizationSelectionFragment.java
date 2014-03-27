@@ -34,7 +34,8 @@ import com.tapshield.android.location.LocationTracker;
 import com.tapshield.android.ui.adapter.AgencyListAdapter;
 import com.tapshield.android.utils.UiUtils;
 
-public class OrganizationSelectionFragment extends BaseFragment implements OnItemClickListener, LocationListener {
+public class OrganizationSelectionFragment extends BaseFragment
+		implements OnItemClickListener, LocationListener {
 
 	public static final String EXTRA_AGENCY = "com.tapshield.android.extra.organizationselection.result";
 	
