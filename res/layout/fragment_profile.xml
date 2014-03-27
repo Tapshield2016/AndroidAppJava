@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+    android:layout_marginRight="@dimen/activity_horizontal_margin"
+    android:layout_marginTop="@dimen/activity_vertical_margin"
+    android:layout_marginBottom="@dimen/activity_vertical_margin">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+        
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="this information will help us identify you in case of emergency"/>
+        
+        <!-- card -->
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:background="@drawable/ts_background_card">
+            
+            <ImageButton
+                android:id="@+id/fragment_profile_imagebutton"
+                android:layout_width="@dimen/fragment_profile_picture"
+                android:layout_height="@dimen/fragment_profile_picture"
+                android:src="@drawable/ic_launcher"
+                android:scaleType="fitCenter"/>
+            
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center">
+                
+                <EditText
+                    android:id="@+id/fragment_profile_edit_firstname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="first name"/>
+                
+                <EditText
+                    android:id="@+id/fragment_profile_edit_lastname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="last name"/>
+            </LinearLayout>
+        </LinearLayout>
+        
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/activity_vertical_margin"
+            android:gravity="center"
+            android:text="by tapping 'finish' you agree to the terms of service and privacy policy"/>
+    </LinearLayout>
+</ScrollView>
