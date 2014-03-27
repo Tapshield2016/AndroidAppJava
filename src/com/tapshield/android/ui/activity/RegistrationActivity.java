@@ -15,6 +15,7 @@ import com.tapshield.android.ui.fragment.BaseFragment.OnUserActionRequestedListe
 import com.tapshield.android.ui.fragment.EmailConfirmationFragment;
 import com.tapshield.android.ui.fragment.OrganizationSelectionFragment;
 import com.tapshield.android.ui.fragment.PhoneConfirmationFragment;
+import com.tapshield.android.ui.fragment.ProfileFragment;
 import com.tapshield.android.ui.fragment.RequiredInfoFragment;
 import com.tapshield.android.ui.view.StepIndicator;
 
@@ -23,7 +24,7 @@ public class RegistrationActivity extends FragmentActivity
 	
 	public static final String EXTRA_SKIP_ORG = "com.tapshield.android.extra.skip_org";
 	
-	private static final int NUM_FRAGMENTS = 4;
+	private static final int NUM_FRAGMENTS = 5;
 	private static final int mFragmentContainer = R.id.registration_container;
 
 	private TextView mStepTitle;
@@ -127,6 +128,8 @@ public class RegistrationActivity extends FragmentActivity
 			f.setTitle("phone confirmation");
 			break;
 		case 4:
+			f = new ProfileFragment();
+			f.setTitle("profile");
 			break;
 		}
 		return f;
