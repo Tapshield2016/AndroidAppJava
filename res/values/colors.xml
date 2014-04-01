@@ -5,4 +5,7 @@
     <color name="ts_gray_light">#e7e7e7</color>
     <color name="ts_gray_dark">#838383</color>
     <color name="ts_activity_background">#e6ebee</color>
+    <color name="ts_navigationdrawer_background_dark">#0b618b</color>
+    <color name="ts_navigationdrawer_background_light">#549d97</color>
+    <color name="ts_item_navigation_text_color">#ffffff</color>
 </resources>
