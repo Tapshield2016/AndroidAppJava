@@ -11,4 +11,12 @@
         <attr name="colorComplete" format="reference|color"/>
     </declare-styleable>
     
+    <declare-styleable name="CircleButton">
+        <attr name="text" format="reference|string"/>
+        <attr name="textColor" format="reference|color"/>
+        <attr name="textSize" format="reference|dimension"/>
+        <attr name="background" format="reference|integer"/>
+        <attr name="icon" format="reference|integer"/>
+    </declare-styleable>
+    
 </resources>
