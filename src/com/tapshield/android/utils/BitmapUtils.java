@@ -1,11 +1,17 @@
 package com.tapshield.android.utils;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Path;
+import android.graphics.Rect;
 
 public class BitmapUtils {
 
+	public static final int CLIP_RADIUS_DEFAULT = -1;
+	
 	public static int calculateInSampleSize(
 			BitmapFactory.Options options, int reqWidth, int reqHeight) {
 		// Raw height and width of image
@@ -43,5 +49,32 @@ public class BitmapUtils {
 		// Decode bitmap with inSampleSize set
 		options.inJustDecodeBounds = false;
 		return BitmapFactory.decodeResource(res, resId, options);
+	}
+	
+	public static Bitmap clipCircle(Context context, int drawableResource, int clipRadiusPercent) {
+		Bitmap b = BitmapFactory.decodeResource(context.getResources(), drawableResource);
+		return clipCircle(b, clipRadiusPercent);
+	}
+	
+	public static Bitmap clipCircle(Bitmap bitmap, int clipRadiusPercent) {
+		int w = bitmap.getWidth();
+		int h = bitmap.getHeight();
+		float cx = (float) w/2;
+		float cy = (float) h/2;
+		int percent = clipRadiusPercent > 0 ? clipRadiusPercent : 100;
+		float r = (((float) Math.min(w, h))/2f) * ((float) percent) / 100;
+		
+		Path path = new Path();
+		path.addCircle(cx, cy, r, Path.Direction.CCW);
+		
+		Bitmap b = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+		Canvas c = new Canvas(b);
+		c.clipPath(path);
+		c.drawBitmap(
+				bitmap,
+				new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight()),
+				new Rect(0, 0, b.getWidth(), b.getHeight()),
+				null);
+		return b;
 	}
 }
