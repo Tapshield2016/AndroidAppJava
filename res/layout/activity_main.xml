@@ -1,5 +1,6 @@
 <android.support.v4.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cb="http://schemas.android.com/apk/res/com.tapshield.android"
     android:id="@+id/main_drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -14,17 +15,49 @@
             android:id="@+id/main_fragment_map"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_alignParentTop="true"
-            android:layout_above="@+id/main_button" />
+            android:layout_height="match_parent"/>
         
-        <Button
-            android:id="@id/main_button"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Emergency"
-            android:layout_alignParentBottom="true" />
-        
+            android:orientation="horizontal"
+            android:gravity="bottom"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="@dimen/activity_main_circlebutton_margin">
+            
+            <com.tapshield.android.ui.view.CircleButton
+                android:id="@+id/main_circlebutton_report"
+                android:layout_width="@dimen/circlebutton_secondary_size"
+                android:layout_height="@dimen/circlebutton_secondary_size"
+                android:layout_weight="0.3"
+                cb:background="@drawable/ts_background_circlebutton"
+                cb:icon="@android:drawable/ic_menu_add"
+                cb:text="Report"
+                cb:textColor="#fff"
+                cb:textSize="@dimen/circlebutton_secondary_text_size" />
+            
+            <com.tapshield.android.ui.view.CircleButton
+                android:id="@+id/main_circlebutton_alert"
+                android:layout_width="@dimen/circlebutton_primary_size"
+                android:layout_height="@dimen/circlebutton_primary_size"
+                android:layout_weight="0.4"
+                cb:background="@drawable/ts_background_circlebutton"
+                cb:icon="@android:drawable/ic_menu_add"
+                cb:text="Alert"
+                cb:textColor="#fff"
+                cb:textSize="@dimen/circlebutton_primary_text_size" />
+            
+            <com.tapshield.android.ui.view.CircleButton
+                android:id="@+id/main_circlebutton_chat"
+                android:layout_width="@dimen/circlebutton_secondary_size"
+                android:layout_height="@dimen/circlebutton_secondary_size"
+                android:layout_weight="0.3"
+                cb:background="@drawable/ts_background_circlebutton"
+                cb:icon="@android:drawable/ic_menu_add"
+                cb:text="Chat"
+                cb:textColor="#fff"
+                cb:textSize="@dimen/circlebutton_secondary_text_size" />
+        </LinearLayout>
     </RelativeLayout>
     
     <!-- The navigation drawer -->

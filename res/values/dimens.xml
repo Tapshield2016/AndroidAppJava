@@ -4,9 +4,13 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     
+    
+    <!-- action bar -->
     <dimen name="actionbar_steps_vertical_padding">4dp</dimen>
     <dimen name="actionbar_steps_stepindicator_horizontal_padding">50dp</dimen>
     <dimen name="actionbar_steps_content_width">250dp</dimen>
+    
+    <!-- navigation drawer -->
     
     <dimen name="fragment_profile_picture">64dp</dimen>
     <dimen name="fragment_navigation_padding">12dp</dimen>
@@ -15,4 +19,14 @@
     <dimen name="item_navigation_image">70dp</dimen>
     
     <dimen name="item_navigation_text_size">23sp</dimen>
+
+    <!-- circlebutton -->
+    
+    <dimen name="activity_main_circlebutton_margin">25dp</dimen>
+    
+    <dimen name="circlebutton_primary_size">120dp</dimen>
+    <dimen name="circlebutton_secondary_size">75dp</dimen>
+    
+    <dimen name="circlebutton_primary_text_size">20sp</dimen>
+    <dimen name="circlebutton_secondary_text_size">15sp</dimen>
 </resources>

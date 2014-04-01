@@ -43,6 +43,7 @@ import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.location.LocationTracker;
 import com.tapshield.android.manager.EmergencyManager;
 import com.tapshield.android.ui.fragment.NavigationFragment.OnNavigationItemClickListener;
+import com.tapshield.android.ui.view.CircleButton;
 import com.tapshield.android.utils.UiUtils;
 
 public class MainActivity extends FragmentActivity implements OnNavigationItemClickListener,
@@ -54,7 +55,7 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 	private FrameLayout mDrawer;
 	private GoogleMap mMap;
 	private Circle mAccuracyBubble, mUser;
-	private Button mEmergency;
+	private CircleButton mEmergency;
 	
 	private EmergencyManager mEmergencyManager;
 	private JavelinClient mJavelin;
@@ -75,7 +76,7 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 		mDrawer = (FrameLayout) findViewById(R.id.main_drawer);
 		mMap = ((SupportMapFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.main_fragment_map)).getMap();
-		mEmergency = (Button) findViewById(R.id.main_button);
+		mEmergency = (CircleButton) findViewById(R.id.main_circlebutton_alert);
 		
 		mEmergencyManager = EmergencyManager.getInstance(this);
 		mJavelin = JavelinClient.getInstance(this, TapShieldApplication.JAVELIN_CONFIG);
@@ -225,8 +226,9 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 		UiSettings mapSettings = mMap.getUiSettings();
 		mapSettings.setRotateGesturesEnabled(false);
 		mapSettings.setTiltGesturesEnabled(false);
-		mapSettings.setScrollGesturesEnabled(false);
-		mapSettings.setZoomGesturesEnabled(false);
+		mapSettings.setScrollGesturesEnabled(true);
+		mapSettings.setZoomGesturesEnabled(true);
+		mapSettings.setZoomControlsEnabled(false);
 	}
 	
 	private void loadAgencyBoundaries() {
