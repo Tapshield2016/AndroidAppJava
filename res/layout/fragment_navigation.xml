@@ -1,21 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-    
-    <ImageView
-        android:id="@+id/fragment_navigation_image"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:scaleType="centerCrop"
-        android:layout_alignParentTop="true"
-        android:src="@drawable/hidefpic"/>
+    android:layout_height="match_parent"
+    android:padding="@dimen/fragment_navigation_padding"
+    android:background="@drawable/ts_background_navigationdrawer">
     
     <ListView
         android:id="@+id/fragment_navigation_list"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@id/fragment_navigation_image"/>
-
+        android:layout_height="match_parent"/>
 </RelativeLayout>
