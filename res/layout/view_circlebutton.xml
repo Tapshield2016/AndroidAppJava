@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    <FrameLayout
+        android:id="@+id/view_circlebutton_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        
+        <com.tapshield.android.ui.view.SquareButton
+            android:id="@+id/view_circlebutton_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"/>
+    </FrameLayout>
+    
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_alignLeft="@id/view_circlebutton_frame"
+        android:layout_alignTop="@id/view_circlebutton_frame"
+        android:layout_alignRight="@id/view_circlebutton_frame"
+        android:layout_alignBottom="@id/view_circlebutton_frame"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/view_circlebutton_image"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.6"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_launcher"/>
+        
+	    <TextView
+	        android:id="@+id/view_circlebutton_text"
+	        android:layout_width="match_parent"
+	        android:layout_height="0dp"
+	        android:layout_weight="0.4"
+	        android:gravity="center_horizontal|top"
+	        android:maxLines="1"/>
+    </LinearLayout>
+</RelativeLayout>
