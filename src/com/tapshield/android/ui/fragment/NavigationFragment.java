@@ -1,6 +1,7 @@
 package com.tapshield.android.ui.fragment;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import android.app.Fragment;
@@ -16,18 +17,23 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.tapshield.android.R;
+import com.tapshield.android.ui.adapter.NavigationListAdapter;
+import com.tapshield.android.ui.adapter.NavigationListAdapter.NavigationItem;
 
 public class NavigationFragment extends Fragment implements OnItemClickListener {
 
-	private ImageView mProfile;
 	private ListView mList;
-	private List<String> mListItems;
+	private NavigationItem[] ITEMS = new NavigationItem[] {
+			new NavigationItem(0, "Profile"),
+			new NavigationItem(R.drawable.ic_launcher, "Home"),
+			new NavigationItem(android.R.drawable.ic_menu_info_details, "Notifications"),
+			new NavigationItem(android.R.drawable.ic_menu_preferences, "Settings")
+			};
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_navigation, container, false);
 		mList = (ListView) view.findViewById(R.id.fragment_navigation_list);
-		mProfile = (ImageView) view.findViewById(R.id.fragment_navigation_image);
 		return view;
 	}
 	
@@ -35,30 +41,16 @@ public class NavigationFragment extends Fragment implements OnItemClickListener 
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		
-		mProfile.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View view) {
-				onItemClick(null,  null, 100, view.getId());
-			}
-		});
-
-		if (mListItems == null) {
-			mListItems = new ArrayList<String>();
-		}
+		NavigationListAdapter adapter = new NavigationListAdapter(
+				getActivity(),
+				Arrays.asList(ITEMS),
+				R.layout.item_navigation,
+				R.id.item_navigation_image,
+				R.id.item_navigation_text);
 		
-		mListItems.clear();
-		mListItems.add("Crime Data");
-		mListItems.add("Safe Circle");
-		mListItems.add("Timer");
-		mListItems.add("Settings");
-		mListItems.add("Tutorial");
-		mListItems.add("About");
-		mListItems.add("Suggestions");
-
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-				R.layout.item_navigation, mListItems);
 		mList.setAdapter(adapter);
+		mList.setDivider(null);
+		mList.setDividerHeight(0);
 		mList.setOnItemClickListener(this);
 		mList.setSelected(true);
 		mList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
