@@ -6,9 +6,11 @@ import org.joda.time.DateTime;
 
 import android.app.ActionBar;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -16,7 +18,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.FrameLayout;
 
 import com.google.android.gms.location.LocationListener;
@@ -51,6 +52,7 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 
 	private static final String KEY_RESUME = "resuming";
 	
+	private ActionBarDrawerToggle mDrawerToggle;
 	private DrawerLayout mDrawerLayout;
 	private FrameLayout mDrawer;
 	private GoogleMap mMap;
@@ -73,6 +75,24 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 		setContentView(R.layout.activity_main);
 		
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.main_drawer_layout);
+		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer, 0, 0) {
+			@Override
+			public void onDrawerOpened(View drawerView) {
+				super.onDrawerOpened(drawerView);
+				getActionBar().setTitle("tapshield");
+				invalidateOptionsMenu();
+			}
+			
+			@Override
+			public void onDrawerClosed(View drawerView) {
+				super.onDrawerClosed(drawerView);
+				getActionBar().setTitle("home");
+				invalidateOptionsMenu();
+			}
+		};
+		mDrawerToggle.setDrawerIndicatorEnabled(true);
+		mDrawerLayout.setDrawerListener(mDrawerToggle);
+		
 		mDrawer = (FrameLayout) findViewById(R.id.main_drawer);
 		mMap = ((SupportMapFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.main_fragment_map)).getMap();
@@ -83,6 +103,7 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 		mTracker = LocationTracker.getInstance(this);
 		
 		ActionBar actionBar = getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
 		
 		mEmergency.setOnClickListener(new OnClickListener() {
@@ -101,6 +122,18 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 		loadMapSettings();
 		loadAgencyBoundaries();
 	}
+	
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+		mDrawerToggle.syncState();
+	}
+	
+	@Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
 	
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
@@ -140,8 +173,11 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.main, menu);
+		if (!mDrawerLayout.isDrawerOpen(mDrawer)) {
+			getMenuInflater().inflate(R.menu.main, menu);
+		}
 		
+		//MOVE TO NAVIGATION DRAWER
 		JavelinUserManager userManager = mJavelin.getUserManager();
 		
 		if (userManager.isPresent()
