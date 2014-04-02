@@ -17,6 +17,28 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
         
+        <!-- top left corner button -->
+        <ImageButton
+            android:id="@+id/main_imagebutton_entourage"
+            android:layout_width="@dimen/main_top_corner_buttons"
+            android:layout_height="@dimen/main_top_corner_buttons"
+            android:layout_margin="@dimen/activity_main_circlebutton_margin"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/ic_launcher"
+            android:scaleType="fitCenter"/>
+        
+        <!-- top right corner button -->
+        <ImageButton
+            android:id="@+id/main_imagebutton_locateuser"
+            android:layout_width="@dimen/main_top_corner_buttons"
+            android:layout_height="@dimen/main_top_corner_buttons"
+            android:layout_margin="@dimen/activity_main_circlebutton_margin"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_launcher"
+            android:scaleType="fitCenter"/>
+        
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -31,7 +53,7 @@
                 android:layout_height="@dimen/circlebutton_secondary_size"
                 android:layout_weight="0.3"
                 cb:background="@drawable/ts_background_circlebutton"
-                cb:icon="@android:drawable/ic_menu_add"
+                cb:icon="@drawable/ic_launcher"
                 cb:text="Report"
                 cb:textColor="#fff"
                 cb:textSize="@dimen/circlebutton_secondary_text_size" />
@@ -42,7 +64,7 @@
                 android:layout_height="@dimen/circlebutton_primary_size"
                 android:layout_weight="0.4"
                 cb:background="@drawable/ts_background_circlebutton"
-                cb:icon="@android:drawable/ic_menu_add"
+                cb:icon="@drawable/ic_launcher"
                 cb:text="Alert"
                 cb:textColor="#fff"
                 cb:textSize="@dimen/circlebutton_primary_text_size" />
@@ -53,7 +75,7 @@
                 android:layout_height="@dimen/circlebutton_secondary_size"
                 android:layout_weight="0.3"
                 cb:background="@drawable/ts_background_circlebutton"
-                cb:icon="@android:drawable/ic_menu_add"
+                cb:icon="@drawable/ic_launcher"
                 cb:text="Chat"
                 cb:textColor="#fff"
                 cb:textSize="@dimen/circlebutton_secondary_text_size" />
