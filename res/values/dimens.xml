@@ -5,6 +5,14 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     
     
+    <!-- common spacing (defined spacing to be used for both margins and padding)-->
+    <dimen name="ts_common_spacing_xxs">5dp</dimen>
+    <dimen name="ts_common_spacing_xs">10dp</dimen>
+    <dimen name="ts_common_spacing_s">15dp</dimen>
+    <dimen name="ts_common_spacing_m">20dp</dimen>
+    <dimen name="ts_common_spacing_l">30dp</dimen>
+    <dimen name="ts_common_spacing_xl">45dp</dimen>
+    
     <!-- action bar -->
     <dimen name="actionbar_steps_vertical_padding">4dp</dimen>
     <dimen name="actionbar_steps_stepindicator_horizontal_padding">50dp</dimen>
@@ -26,7 +34,14 @@
     
     <dimen name="circlebutton_primary_size">120dp</dimen>
     <dimen name="circlebutton_secondary_size">75dp</dimen>
-    
     <dimen name="circlebutton_primary_text_size">20sp</dimen>
     <dimen name="circlebutton_secondary_text_size">15sp</dimen>
+
+    <!-- top corner buttons over map -->
+    
+    <dimen name="main_top_corner_buttons">64dp</dimen>
+    
+    <!-- details activity -->
+    <dimen name="details_image_type">64dp</dimen>
+    <dimen name="details_text_type_textsize">18sp</dimen>
 </resources>
