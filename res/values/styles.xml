@@ -10,6 +10,21 @@
     
     <style name="TapShieldActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
         <item name="android:background">#ffffff</item>
+        <item name="android:titleTextStyle">@style/TapShieldActionBarTitle</item>
     </style>
     
+    <style name="TapShieldActionBarTitle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/ts_brand_light</item>
+    </style>
+    
+    <style name="TapShieldHeader" parent="@android:style/Widget.Holo.Light.TextView">
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/ts_gray_dark</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:drawableBottom">@drawable/ts_header</item>
+    </style>
 </resources>
