@@ -12,4 +12,16 @@
     <color name="ts_chat_user_text">#fff</color>
     <color name="ts_chat_other_background">#44ffffff</color>
     <color name="ts_chat_other_text">#454545</color>
+    <color name="ts_background_gradient_start">#2e3e6d</color>
+    <color name="ts_background_gradient_end">#549f9a</color>
+    <!-- all colors for countdown have 40% of opacity in hex (0.4 * 16 = 64) -->
+    <color name="ts_background_alert_countdown_blueish">#643aa1d3</color>
+    <color name="ts_background_alert_countdown_violetish">#64864abe</color>
+    <color name="ts_background_alert_countdown_redish">#64ff0000</color>
+    
+    <array name="ts_background_alert_countdown">
+        <item>@color/ts_background_alert_countdown_blueish</item>
+        <item>@color/ts_background_alert_countdown_violetish</item>
+        <item>@color/ts_background_alert_countdown_redish</item>
+    </array>
 </resources>
