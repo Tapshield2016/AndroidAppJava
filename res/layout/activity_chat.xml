@@ -34,8 +34,9 @@
         
         <ImageButton
             android:id="@+id/chat_imagebutton_send"
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:layout_height="50dp"
+            android:background="@drawable/ts_background_imagebutton"
             android:scaleType="centerInside"
             android:src="@android:drawable/ic_menu_send"/>
         
