@@ -8,7 +8,6 @@ import org.joda.time.DateTimeZone;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +21,13 @@ import com.tapshield.android.api.JavelinUtils;
 import com.tapshield.android.api.model.ChatMessage;
 import com.tapshield.android.api.model.UserProfile;
 import com.tapshield.android.app.TapShieldApplication;
+import com.tapshield.android.utils.BitmapUtils;
 
 public class ChatMessageAdapter extends BaseAdapter {
 
 	private Context mContext;
-	private int mResource;
+	private int mResourceUser;
+	private int mResourceOther;
 	private List<ChatMessage> mItems;
 	
 	private Bitmap mUserBitmap;
@@ -34,13 +35,14 @@ public class ChatMessageAdapter extends BaseAdapter {
 	
 	private LayoutInflater mLayoutInflater;
 	
-	public ChatMessageAdapter(Context context, int resource) {
-		this(context, resource, null);
+	public ChatMessageAdapter(Context context, int resourceUser, int resourceOther) {
+		this(context, resourceUser, resourceOther, null);
 	}
 	
-	public ChatMessageAdapter(Context context, int resource, List<ChatMessage> items) {
+	public ChatMessageAdapter(Context context, int resourceUser, int resourceOther, List<ChatMessage> items) {
 		mContext = context;
-		mResource = resource;
+		mResourceUser = resourceUser;
+		mResourceOther = resourceOther;
 		
 		if (items != null) {
 			mItems = items;
@@ -89,9 +91,11 @@ public class ChatMessageAdapter extends BaseAdapter {
 	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		View view = convertView;
 		
-		if (view == null) {
+		ChatMessage chatMessage = getItem(position);
+		boolean userCreated = mUserId.equals(chatMessage.senderId);
+		
+		if (convertView == null) {
 			if (mLayoutInflater == null) {
 				mLayoutInflater = LayoutInflater.from(mContext);
 				
@@ -102,22 +106,15 @@ public class ChatMessageAdapter extends BaseAdapter {
 				}
 			}
 			
-			view = mLayoutInflater.inflate(mResource, null);
+			int layoutToInflate = userCreated ? mResourceUser : mResourceOther;
+			convertView = mLayoutInflater.inflate(layoutToInflate, null);
 		}
 
-		//objects
-		ChatMessage chatMessage = getItem(position);
-		TextView message = (TextView) view.findViewById(R.id.item_chat_message_text_message);
-		TextView status = (TextView) view.findViewById(R.id.item_chat_message_text_status);
-		ImageView iconLeft = (ImageView) view.findViewById(R.id.item_chat_message_image_left);
-		ImageView iconRight = (ImageView) view.findViewById(R.id.item_chat_message_image_right);
-		boolean userCreated = mUserId.equals(chatMessage.senderId);
-
-		//values
-		int backgroundColor = Color.parseColor(userCreated ? "#7BAB92" : "#F1F1F1");
-		int messageTextColor = userCreated ? Color.WHITE : Color.DKGRAY;
-		int statusTextColor = Color.parseColor(userCreated ? "#dddddd" : "#777777");
+		TextView message = (TextView) convertView.findViewById(R.id.item_chat_message_text_message);
+		TextView status = (TextView) convertView.findViewById(R.id.item_chat_message_text_status);
+		ImageView icon = (ImageView) convertView.findViewById(R.id.item_chat_message_image);
 		
+
 		String statusValue = new String();
 		if (chatMessage.transmitting) {
 			statusValue = "sending...";
@@ -144,28 +141,20 @@ public class ChatMessageAdapter extends BaseAdapter {
 			}
 		}
 		
-		//setters
 		message.setText(chatMessage.message);
-		message.setTextColor(messageTextColor);
-		message.setBackgroundColor(backgroundColor);
-		
 		status.setText(statusValue);
-		status.setTextColor(statusTextColor);
-		status.setBackgroundColor(backgroundColor);
 		
-		iconLeft.setVisibility(userCreated ? View.INVISIBLE : View.VISIBLE);
-		iconRight.setVisibility(userCreated ? View.VISIBLE : View.INVISIBLE);
-
 		if (userCreated) {
 			if (mUserBitmap != null) {
-				iconRight.setImageBitmap(mUserBitmap);
+				Bitmap circleClipped = BitmapUtils.clipCircle(mUserBitmap, 0);
+				icon.setImageBitmap(circleClipped);
 			} else {
-				iconRight.setImageResource(R.drawable.ic_launcher);
+				icon.setImageResource(R.drawable.ic_launcher);
 			}
 		} else {
-			iconLeft.setImageResource(R.drawable.ic_launcher);
+			icon.setImageResource(R.drawable.ic_launcher);
 		}
 		
-		return view;
+		return convertView;
 	}
 }
