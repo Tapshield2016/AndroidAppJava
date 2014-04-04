@@ -44,4 +44,10 @@
     <!-- details activity -->
     <dimen name="details_image_type">64dp</dimen>
     <dimen name="details_text_type_textsize">18sp</dimen>
+    
+    <!-- chat activity -->
+    <dimen name="chat_item_margin">14dp</dimen>
+    <dimen name="item_chat_message_text_padding">10dp</dimen>
+    <dimen name="chat_item_image">55dp</dimen>
+    <dimen name="chat_item_arrow">30dp</dimen>
 </resources>
