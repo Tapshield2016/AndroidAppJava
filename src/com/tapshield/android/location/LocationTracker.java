@@ -111,6 +111,12 @@ public class LocationTracker
 			mContext.registerReceiver(mBatteryWatcher, filter);
 		}
 	}
+	
+	public Location getLastKnownLocation() {
+		return mLocationClient.isConnected() ?
+				mLocationClient.getLastLocation() :
+					null;
+	}
 
 	private void requestUpdates() {
 		if (mLocationClient.isConnected()) {
