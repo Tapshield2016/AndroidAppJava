@@ -1,7 +1,9 @@
 package com.tapshield.android.ui.activity;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -44,12 +46,16 @@ public class ChatActivity extends Activity implements OnNewChatMessageListener {
 				TapShieldApplication.JAVELIN_CONFIG).getChatManager();
 		mTracker = LocationTracker.getInstance(ChatActivity.this);
 		
+		ActionBar actionBar = getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		
 		mList = (ListView) findViewById(R.id.chat_list_messages);
 		mUserMessage = (EditText) findViewById(R.id.chat_edit_message);
 		mSend = (ImageButton) findViewById(R.id.chat_imagebutton_send);
 		
 		//mMessages = new ArrayList<ChatMessage>();
-		mAdapter = new ChatMessageAdapter(ChatActivity.this, R.layout.item_chat_message);
+		mAdapter = new ChatMessageAdapter(ChatActivity.this, R.layout.item_chat_message_user,
+				R.layout.item_chat_message_other);
 		mList.setAdapter(mAdapter);
 		
 		mSend.setOnClickListener(new View.OnClickListener() {
