@@ -8,4 +8,8 @@
     <color name="ts_navigationdrawer_background_dark">#0b618b</color>
     <color name="ts_navigationdrawer_background_light">#549d97</color>
     <color name="ts_item_navigation_text_color">#ffffff</color>
+    <color name="ts_chat_user_background">#44000000</color>
+    <color name="ts_chat_user_text">#fff</color>
+    <color name="ts_chat_other_background">#44ffffff</color>
+    <color name="ts_chat_other_text">#454545</color>
 </resources>
