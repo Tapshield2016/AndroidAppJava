@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -62,5 +63,13 @@ public class CircleButton extends RelativeLayout {
 		image.setClickable(false);
 		image.setFocusable(false);
 		image.setFocusableInTouchMode(false);
+		
+		button.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				CircleButton.this.performClick();
+			}
+		});
 	}
 }
