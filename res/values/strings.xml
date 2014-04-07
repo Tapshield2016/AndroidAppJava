@@ -2,5 +2,21 @@
 <resources>
 
     <string name="app_name">TapShield</string>
-
+    
+    
+    <!-- dialpad -->
+    <string name="ts_dialpad_message">Enter your passcode to disarm</string>
+    <string name="ts_dialpad_button_1">1</string>
+    <string name="ts_dialpad_button_2">2</string>
+    <string name="ts_dialpad_button_3">3</string>
+    <string name="ts_dialpad_button_4">4</string>
+    <string name="ts_dialpad_button_5">5</string>
+    <string name="ts_dialpad_button_6">6</string>
+    <string name="ts_dialpad_button_7">7</string>
+    <string name="ts_dialpad_button_8">8</string>
+    <string name="ts_dialpad_button_9">9</string>
+    <string name="ts_dialpad_button_0">0</string>
+    <string name="ts_dialpad_button_clear">Clear</string>
+    <string name="ts_dialpad_button_delete">Delete</string>
+    
 </resources>
