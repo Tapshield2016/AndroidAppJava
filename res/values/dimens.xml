@@ -36,6 +36,14 @@
     <dimen name="circlebutton_secondary_size">75dp</dimen>
     <dimen name="circlebutton_primary_text_size">20sp</dimen>
     <dimen name="circlebutton_secondary_text_size">15sp</dimen>
+    
+    <!-- dialpad -->
+    
+    <dimen name="dialpad_buttons_spacing">6dp</dimen>
+    <dimen name="dialpad_buttons_text_size">13sp</dimen>
+    <dimen name="dialpad_indicator_width">100dp</dimen>
+    <dimen name="dialpad_message_text_size">16sp</dimen>
+    <dimen name="dialpad_message_spacing">12dp</dimen>
 
     <!-- top corner buttons over map -->
     
