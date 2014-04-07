@@ -3,6 +3,10 @@
 
     <string name="app_name">TapShield</string>
     
+    <!-- alert -->
+    <string name="ts_alert_authorities">Authorities notified</string>
+    <string name="ts_alert_details">Add details</string>
+    <string name="ts_alert_redial">Redial</string>
     
     <!-- dialpad -->
     <string name="ts_dialpad_message">Enter your passcode to disarm</string>
