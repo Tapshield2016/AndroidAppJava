@@ -49,6 +49,12 @@
     
     <dimen name="main_top_corner_buttons">64dp</dimen>
     
+    <!-- alert activity -->
+    <dimen name="alert_imagebuttons">64dp</dimen>
+    <dimen name="alert_text_number_size">25sp</dimen>
+    <dimen name="alert_text_time_size">27sp</dimen>
+    <dimen name="alert_text_authorities_size">20sp</dimen>
+    
     <!-- details activity -->
     <dimen name="details_image_type">64dp</dimen>
     <dimen name="details_text_type_textsize">18sp</dimen>
