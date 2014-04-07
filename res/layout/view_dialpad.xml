@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ts_dialpad_message"
+        android:textColor="@color/ts_dialpad_text"
+        android:textSize="@dimen/dialpad_message_text_size"
+        android:gravity="center"
+        android:layout_margin="@dimen/dialpad_message_spacing"/>
+    
+    <com.tapshield.android.ui.view.FiniteInputIndicator
+        android:id="@+id/view_dialpad_finiteinputindicator"
+        android:layout_width="@dimen/dialpad_indicator_width"
+        android:layout_height="0dp"
+        android:layout_weight="0.2"/>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.3"
+        android:orientation="horizontal"
+        android:gravity="center">
+        
+        <com.tapshield.android.ui.view.SquareButton
+            android:id="@+id/view_dialpad_button_1"
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_margin="@dimen/dialpad_buttons_spacing"
+            android:text="@string/ts_dialpad_button_1"
+            android:textColor="@color/ts_dialpad_text"
+            android:background="@drawable/ts_button_rect"/>
+        
+        <com.tapshield.android.ui.view.SquareButton
+            android:id="@+id/view_dialpad_button_2"
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_margin="@dimen/dialpad_buttons_spacing"
+            android:text="@string/ts_dialpad_button_2"
+            android:textColor="@color/ts_dialpad_text"
+            android:background="@drawable/ts_button_rect"/>
+        
+        <com.tapshield.android.ui.view.SquareButton
+            android:id="@+id/view_dialpad_button_3"
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_margin="@dimen/dialpad_buttons_spacing"
+            android:text="@string/ts_dialpad_button_3"
+            android:textColor="@color/ts_dialpad_text"
+            android:background="@drawable/ts_button_rect"/>
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.3"
+        android:orientation="horizontal"
+        android:gravity="center">
+        
+        <com.tapshield.android.ui.view.SquareButton
+            android:id="@+id/view_dialpad_button_4"
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_margin="@dimen/dialpad_buttons_spacing"
+            android:text="@string/ts_dialpad_button_4"
+            android:textColor="@color/ts_dialpad_text"
+            android:background="@drawable/ts_button_rect"/>
+        
+        <com.tapshield.android.ui.view.SquareButton
+            android:id="@+id/view_dialpad_button_5"
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_margin="@dimen/dialpad_buttons_spacing"
+            android:text="@string/ts_dialpad_button_5"
+            android:textColor="@color/ts_dialpad_text"
+            android:background="@drawable/ts_button_rect"/>
+        
+        <com.tapshield.android.ui.view.SquareButton
+            android:id="@+id/view_dialpad_button_6"
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_margin="@dimen/dialpad_buttons_spacing"
+            android:text="@string/ts_dialpad_button_6"
+            android:textColor="@color/ts_dialpad_text"
+            android:background="@drawable/ts_button_rect"/>
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.3"
+        android:orientation="horizontal"
+        android:gravity="center">
+        
+        <com.tapshield.android.ui.view.SquareButton
+            android:id="@+id/view_dialpad_button_7"
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_margin="@dimen/dialpad_buttons_spacing"
+            android:text="@string/ts_dialpad_button_7"
+            android:textColor="@color/ts_dialpad_text"
+            android:background="@drawable/ts_button_rect"/>
+        
+        <com.tapshield.android.ui.view.SquareButton
+            android:id="@+id/view_dialpad_button_8"
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_margin="@dimen/dialpad_buttons_spacing"
+            android:text="@string/ts_dialpad_button_8"
+            android:textColor="@color/ts_dialpad_text"
+            android:background="@drawable/ts_button_rect"/>
+        
+        <com.tapshield.android.ui.view.SquareButton
+            android:id="@+id/view_dialpad_button_9"
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_margin="@dimen/dialpad_buttons_spacing"
+            android:text="@string/ts_dialpad_button_9"
+            android:textColor="@color/ts_dialpad_text"
+            android:background="@drawable/ts_button_rect"/>
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.3"
+        android:orientation="horizontal"
+        android:gravity="center">
+        
+        <com.tapshield.android.ui.view.SquareButton
+            android:id="@+id/view_dialpad_button_clear"
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_margin="@dimen/dialpad_buttons_spacing"
+            android:text="@string/ts_dialpad_button_clear"
+            android:textColor="@color/ts_dialpad_text"
+            android:textSize="@dimen/dialpad_buttons_text_size"
+            android:background="@drawable/ts_button_rect"/>
+        
+        <com.tapshield.android.ui.view.SquareButton
+            android:id="@+id/view_dialpad_button_0"
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_margin="@dimen/dialpad_buttons_spacing"
+            android:text="@string/ts_dialpad_button_0"
+            android:textColor="@color/ts_dialpad_text"
+            android:background="@drawable/ts_button_rect"/>
+        
+        <com.tapshield.android.ui.view.SquareButton
+            android:id="@+id/view_dialpad_button_delete"
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_margin="@dimen/dialpad_buttons_spacing"
+            android:text="@string/ts_dialpad_button_delete"
+            android:textColor="@color/ts_dialpad_text"
+            android:textSize="@dimen/dialpad_buttons_text_size"
+            android:background="@drawable/ts_button_rect"/>
+    </LinearLayout>
+</LinearLayout>
