@@ -15,6 +15,8 @@
     <color name="ts_background_gradient_start">#2e3e6d</color>
     <color name="ts_background_gradient_end">#549f9a</color>
     <color name="ts_dialpad_text">#ffffff</color>
+    <color name="ts_alert_text_color">#ffffff</color>
+    <color name="ts_alert_authorities_text_color">#883333</color>
     
     <!-- all colors for countdown have 40% of opacity in hex (0.4 * 16 = 64) -->
     <color name="ts_background_alert_countdown_blueish">#643aa1d3</color>
