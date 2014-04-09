@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/ts_common_spacing_m"
             android:layout_marginBottom="@dimen/ts_common_spacing_m"
-            android:text="description"
+            android:text="@string/ts_common_description"
             style="@style/TapShieldHeader"/>
         
         <TextView

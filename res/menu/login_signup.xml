@@ -3,21 +3,21 @@
 
     <item
         android:id="@+id/menu_facebook"
-        android:title="facebook"/>
+        android:title="@string/ts_menu_login_signup_facebook"/>
     
     <item
         android:id="@+id/menu_twitter"
-        android:title="twitter"/>
+        android:title="@string/ts_menu_login_signup_twitter"/>
     
     <item
         android:id="@+id/menu_googleplus"
-        android:title="google+"/>
+        android:title="@string/ts_menu_login_signup_googleplus"/>
 
     <item
         android:id="@+id/menu_linkedin"
-        android:title="linkedin"/>
+        android:title="@string/ts_menu_login_signup_linkedin"/>
     
     <item
         android:id="@+id/menu_email"
-        android:title="email"/>
+        android:title="@string/ts_menu_login_signup_email"/>
 </menu>

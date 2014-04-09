@@ -27,12 +27,12 @@
         android:id="@+id/fragment_emailconfirmation_button_complete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="complete verification"/>
+        android:text="@string/ts_fragment_emailconfirmation_complete"/>
     
     <Button
         android:id="@+id/fragment_emailconfirmation_button_resend"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="resend verification email"/>
+        android:text="@string/ts_fragment_emailconfirmation_resend"/>
     
 </LinearLayout>

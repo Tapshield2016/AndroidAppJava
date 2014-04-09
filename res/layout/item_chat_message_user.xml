@@ -15,7 +15,6 @@
 		android:id="@+id/item_chat_message_text_message"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		
 		android:layout_toLeftOf="@id/item_chat_message_image"
 		android:padding="@dimen/item_chat_message_text_padding"
 		android:textColor="@color/ts_chat_user_text"

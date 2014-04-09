@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="this information will help us identify you in case of emergency"/>
+            android:text="@string/ts_fragment_semiprofile_text_explanation"/>
         
         <!-- card -->
         
@@ -45,13 +45,13 @@
                     android:id="@+id/fragment_profile_edit_firstname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="first name"/>
+                    android:hint="@string/ts_common_firstname"/>
                 
                 <EditText
                     android:id="@+id/fragment_profile_edit_lastname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="last name"/>
+                    android:hint="@string/ts_common_lastname"/>
             </LinearLayout>
         </LinearLayout>
         
@@ -60,6 +60,6 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/activity_vertical_margin"
             android:gravity="center"
-            android:text="by tapping 'finish' you agree to the terms of service and privacy policy"/>
+            android:text="@string/ts_fragment_semiprofile_text_disclaimer"/>
     </LinearLayout>
 </ScrollView>

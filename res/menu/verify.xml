@@ -3,7 +3,7 @@
     
     <item
         android:id="@+id/action_verify"
-        android:title="verify"
+        android:title="@string/ts_menu_verify"
         android:showAsAction="always"/>
     
 </menu>

@@ -15,31 +15,31 @@
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:inputType="textEmailAddress"
-            android:hint="email address" />
+            android:hint="@string/ts_fragment_requiredinfo_edit_email_hint" />
 
         <EditText
             android:id="@+id/fragment_requiredinfo_edit_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="1"
-            android:hint="password"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:hint="@string/ts_fragment_requiredinfo_edit_password_hint"/>
 
         <EditText
             android:id="@+id/fragment_requiredinfo_edit_passcode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLength="4"
-            android:hint="passcode"
-            android:inputType="numberPassword" />
+            android:inputType="numberPassword"
+            android:hint="@string/ts_fragment_requiredinfo_edit_passcode_hint"/>
         
         <EditText
             android:id="@+id/fragment_requiredinfo_edit_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="1"
-            android:hint="phone number"
             android:inputType="phone"
+            android:hint="@string/ts_fragment_requiredinfo_edit_phone_hint"
             android:visibility="gone" />
     </LinearLayout>
 </ScrollView>

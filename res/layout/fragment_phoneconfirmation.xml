@@ -26,7 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="enter code:"/>
+        android:text="@string/ts_fragment_phoneconfirmation_text_instructions"/>
     
     <EditText
         android:id="@+id/fragment_phoneconfirmation_edit_code"
@@ -35,12 +35,12 @@
         android:gravity="center"
         android:maxLength="4"
         android:inputType="number"
-        android:hint="code"/>
+        android:hint="@string/ts_common_code"/>
     
     <Button
         android:id="@+id/fragment_phoneconfirmation_button_resend"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="re-send sms"/>
+        android:text="@string/ts_fragment_phoneconfirmation_button_resend"/>
     
 </LinearLayout>
