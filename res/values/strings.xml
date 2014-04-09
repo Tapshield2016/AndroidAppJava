@@ -3,6 +3,41 @@
 
     <string name="app_name">TapShield</string>
     
+    <!-- common -->
+    <string name="ts_common_login">Log In</string>
+    <string name="ts_common_signup">Sign Up</string>
+    <string name="ts_common_code">Code</string>
+    <string name="ts_common_firstname">First Name</string>
+    <string name="ts_common_lastname">Last Name</string>
+    <string name="ts_common_description">Description</string>
+    
+    <!-- welcome -->
+    <string name="ts_welcome_skip">Skip</string>
+    <string name="ts_welcome_noaccount">No Account?</string>
+    <string name="ts_welcome_forgotpassword">Forgot Password?</string>
+    
+    <!-- welcome fragment login -->
+    <string name="ts_welcome_fragment_login_edit_email_hint">Your Email</string>
+    <string name="ts_welcome_fragment_login_edit_password_hint">Your Password</string>
+    
+    <!-- fragment required info -->
+    <string name="ts_fragment_requiredinfo_edit_email_hint">Email Address</string>
+    <string name="ts_fragment_requiredinfo_edit_password_hint">Password</string>
+    <string name="ts_fragment_requiredinfo_edit_passcode_hint">Passcode</string>
+    <string name="ts_fragment_requiredinfo_edit_phone_hint">Phone Number</string>
+    
+    <!-- fragment email confirmation -->
+    <string name="ts_fragment_emailconfirmation_complete">Complete Verification</string>
+    <string name="ts_fragment_emailconfirmation_resend">Resend Verification Email</string>
+    
+    <!-- fragment phone confirmation -->
+    <string name="ts_fragment_phoneconfirmation_text_instructions">Please enter your code below:</string>
+    <string name="ts_fragment_phoneconfirmation_button_resend">Re-send Code</string>
+    
+    <!-- fragment semi-profile -->
+    <string name="ts_fragment_semiprofile_text_explanation">This information will help us identify you in case of emergency.</string>
+    <string name="ts_fragment_semiprofile_text_disclaimer">By tapping \'finish\' you agree to the terms of service and privacy policy.</string>
+    
     <!-- alert -->
     <string name="ts_alert_authorities">Authorities notified</string>
     <string name="ts_alert_details">Add details</string>
@@ -23,4 +58,14 @@
     <string name="ts_dialpad_button_clear">Clear</string>
     <string name="ts_dialpad_button_delete">Delete</string>
     
+    <!-- menus -->
+    <string name="ts_menu_finish">Finish</string>
+    <string name="ts_menu_login_signup_facebook">Facebook</string>
+    <string name="ts_menu_login_signup_twitter">Twitter</string>
+    <string name="ts_menu_login_signup_googleplus">Google+</string>
+    <string name="ts_menu_login_signup_linkedin">LinkedIn</string>
+    <string name="ts_menu_login_signup_email">Email</string>
+    <string name="ts_menu_yank">Yank</string>
+    <string name="ts_menu_next">Next</string>
+    <string name="ts_menu_verify">Verify</string>
 </resources>
