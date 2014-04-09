@@ -5,7 +5,6 @@ import java.util.List;
 import org.joda.time.DateTime;
 
 import android.app.ActionBar;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.location.Location;
@@ -24,14 +23,12 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.OnMapLoadedCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.tapshield.android.R;
@@ -193,16 +190,6 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 		if (!mDrawerLayout.isDrawerOpen(mDrawer)) {
 			getMenuInflater().inflate(R.menu.main, menu);
 		}
-		
-		//MOVE TO NAVIGATION DRAWER
-		JavelinUserManager userManager = mJavelin.getUserManager();
-		
-		if (userManager.isPresent()
-				&& userManager.getUser().agency != null
-				&& userManager.getUser().agency.displayCommandAlert) {
-			getMenuInflater().inflate(R.menu.massalerts, menu);
-		}
-		
 		return true;
 	}
 	
@@ -216,10 +203,6 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 			} else {
 				mDrawerLayout.openDrawer(mDrawer);
 			}
-			return true;
-		case R.id.action_massalerts:
-			Intent massAlerts = new Intent(MainActivity.this, MassAlertsActivity.class);
-			startActivity(massAlerts);
 			return true;
 		}
 		return false;
