@@ -45,6 +45,11 @@
     <dimen name="dialpad_message_text_size">16sp</dimen>
     <dimen name="dialpad_message_spacing">12dp</dimen>
 
+    <!-- fragment alert -->
+    <dimen name="ts_fragment_alert_card_text_phonenumber">18sp</dimen>
+    <dimen name="ts_fragment_alert_card_text_callduration">18sp</dimen>
+    <dimen name="ts_fragment_alert_card_text_status">18sp</dimen>
+    
     <!-- top corner buttons over map -->
     
     <dimen name="main_top_corner_buttons">64dp</dimen>
