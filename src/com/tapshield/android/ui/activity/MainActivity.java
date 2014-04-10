@@ -81,14 +81,14 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 			@Override
 			public void onDrawerOpened(View drawerView) {
 				super.onDrawerOpened(drawerView);
-				getActionBar().setTitle("tapshield");
+				getActionBar().setTitle(R.string.app_name);
 				invalidateOptionsMenu();
 			}
 			
 			@Override
 			public void onDrawerClosed(View drawerView) {
 				super.onDrawerClosed(drawerView);
-				getActionBar().setTitle("home");
+				getActionBar().setTitle(R.string.ts_home);
 				invalidateOptionsMenu();
 			}
 		};
@@ -116,7 +116,8 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 			@Override
 			public void onClick(View v) {
 				mEmergencyManager.start(10000, EmergencyManager.TYPE_START_REQUESTED);
-				UiUtils.startActivityNoStack(MainActivity.this, EmergencyActivity.class);
+				//UiUtils.startActivityNoStack(MainActivity.this, EmergencyActivity.class);
+				UiUtils.startActivityNoStack(MainActivity.this, AlertActivity.class);
 			}
 		});
 		

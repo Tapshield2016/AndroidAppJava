@@ -77,7 +77,7 @@
         
         <activity
             android:name="com.tapshield.android.ui.activity.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/ts_home" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -104,6 +104,10 @@
         
         <activity
             android:name="com.tapshield.android.ui.activity.MassAlertsActivity" />
+        
+        <activity
+            android:name="com.tapshield.android.ui.activity.AlertActivity"
+            android:theme="@style/TapShieldHoloLightTheme.Trasparent"/>
         
         <!-- SERVICES -->
         <service
