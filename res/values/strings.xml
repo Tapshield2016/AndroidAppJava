@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">TapShield</string>
+    <string name="ts_home">Home</string>
     
     <!-- common -->
     <string name="ts_common_login">Log In</string>
@@ -10,6 +11,10 @@
     <string name="ts_common_firstname">First Name</string>
     <string name="ts_common_lastname">Last Name</string>
     <string name="ts_common_description">Description</string>
+    <string name="ts_common_ok">OK</string>
+    <string name="ts_common_yes">Yes</string>
+    <string name="ts_common_no">No</string>
+    <string name="ts_common_cancel">Cancel</string>
     
     <!-- welcome -->
     <string name="ts_welcome_skip">Skip</string>
@@ -38,13 +43,33 @@
     <string name="ts_fragment_semiprofile_text_explanation">This information will help us identify you in case of emergency.</string>
     <string name="ts_fragment_semiprofile_text_disclaimer">By tapping \'finish\' you agree to the terms of service and privacy policy.</string>
     
+    <!-- main -->
+    <string name="ts_main_circlebutton_report">Report</string>
+    <string name="ts_main_circlebutton_alert">Alert</string>
+    <string name="ts_main_circlebutton_chat">Chat</string>
+    
     <!-- alert -->
     <string name="ts_alert_authorities">Authorities notified</string>
     <string name="ts_alert_details">Add details</string>
     <string name="ts_alert_redial">Redial</string>
+    <string name="ts_alert_twilio_connecting">Connecting&#8230;</string>
+    <string name="ts_alert_twilio_ended">Call Ended</string>
+    <string name="ts_alert_twilio_error">Call Failed</string>
+    
+    <!-- fragment alert -->
+    <string name="ts_fragment_alert_card_button_speaker">Speaker</string>
+    <string name="ts_fragment_alert_circlebutton_details">Details</string>
+    <string name="ts_fragment_alert_circlebutton_call">Call</string>
+    <string name="ts_fragment_alert_circlebutton_chat">Chat</string>
+    
+    <string name="ts_dialog_alert_twilio_failure_title">Call Failed</string>
+    <string name="ts_dialog_alert_twilio_failure_message">Attempts to connect to the dispatcher over your data connection have failed. Retry again or launch a standard phone call.</string>
+    <string name="ts_dialog_alert_twilio_failure_button_normalcall">Standard Call</string>
+    <string name="ts_dialog_alert_twilio_failure_button_retry">Retry</string>
     
     <!-- dialpad -->
     <string name="ts_dialpad_message">Enter your passcode to disarm</string>
+    <string name="ts_dialpad_message_error">Wrong passcode!</string>
     <string name="ts_dialpad_button_1">1</string>
     <string name="ts_dialpad_button_2">2</string>
     <string name="ts_dialpad_button_3">3</string>
@@ -68,4 +93,6 @@
     <string name="ts_menu_yank">Yank</string>
     <string name="ts_menu_next">Next</string>
     <string name="ts_menu_verify">Verify</string>
+    <string name="ts_menu_alert">Alert</string>
+    <string name="ts_menu_disarm">Disarm</string>
 </resources>
