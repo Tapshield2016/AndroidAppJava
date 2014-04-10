@@ -17,7 +17,7 @@ import android.view.View;
 public class AnimatedVerticalColorProgress extends View
 		implements AnimatorListener, AnimatorUpdateListener {
 
-	private static final long FPS = 35;
+	private static final long FPS = 30;
 	private static final long UPDATE_MILLI = 1000/FPS; 
 	
 	private Paint mPaint;
@@ -28,6 +28,9 @@ public class AnimatedVerticalColorProgress extends View
 	private ValueAnimator mAnimator;
 	private int mCurrentColor;
 	private boolean mRunning = false;
+	private boolean mAttemptedHardwareAcceleration = false;
+	
+	private Listener mListener;
 	
 	public AnimatedVerticalColorProgress(Context context, AttributeSet attrs) {
 		this(context, attrs, 0);
@@ -78,6 +81,7 @@ public class AnimatedVerticalColorProgress extends View
 	@Override
 	public void onAnimationUpdate(ValueAnimator value) {
 		mCurrentColor = (Integer) value.getAnimatedValue();
+		mPaint.setColor(mCurrentColor);
 		mHeightPercent = (int) (((float)value.getCurrentPlayTime() / (float)value.getDuration()) * 100f);
 	}
 
@@ -90,6 +94,7 @@ public class AnimatedVerticalColorProgress extends View
 	public void onAnimationEnd(Animator arg0) {
 		mRunning = false;
 		invalidate();
+		notifyListener();
 	}
 
 	@Override
@@ -109,7 +114,30 @@ public class AnimatedVerticalColorProgress extends View
 	
 	@Override
 	protected void onDraw(Canvas canvas) {
-		mPaint.setColor(mCurrentColor);
+		if (!mAttemptedHardwareAcceleration && !canvas.isHardwareAccelerated()) {
+			setLayerType(LAYER_TYPE_HARDWARE, mPaint);
+			mAttemptedHardwareAcceleration = true;
+		}
 		canvas.drawRect(mRectangle, mPaint);
+	}
+	
+	public void setListener(Listener l) {
+		mListener = l;
+	}
+	
+	public void removeListener(Listener l) {
+		if (mListener.equals(l)) {
+			mListener = null;
+		}
+	}
+	
+	private void notifyListener() {
+		if (mListener != null) {
+			mListener.onEnd();
+		}
+	}
+	
+	public static interface Listener {
+		void onEnd();
 	}
 }
