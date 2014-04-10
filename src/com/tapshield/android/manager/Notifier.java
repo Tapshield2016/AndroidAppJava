@@ -72,6 +72,7 @@ public class Notifier {
 				.setContentText("Established")
 				.setAutoCancel(false)
 				.setOngoing(true)
+				.setOnlyAlertOnce(true)
 				.build();
 	}
 	
