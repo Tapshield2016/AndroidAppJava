@@ -7,13 +7,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.tapshield.android.R;
 
 public class Dialpad extends LinearLayout implements OnClickListener {
 
-	private FiniteInputIndicator mIndicator;
+	private static final long ERROR_SHOW_MILLI = 2000;
 	
+	private FiniteInputIndicator mIndicator;
+	private TextView mMessage;
+	
+	private String mMessageContent;
 	private int mInputNumber;
 	private String mInput;
 	private int mInputCounter;
@@ -31,7 +36,9 @@ public class Dialpad extends LinearLayout implements OnClickListener {
 		mInput = new String();
 		
 		LayoutInflater.from(context).inflate(R.layout.view_dialpad, this, true);
-		
+
+		mMessage = (TextView) findViewById(R.id.view_dialpad_text_message);
+		mMessageContent = mMessage.getText().toString();
 		mIndicator = (FiniteInputIndicator) findViewById(R.id.view_dialpad_finiteinputindicator);
 		setInputNumber(mInputNumber);
 		
@@ -164,6 +171,22 @@ public class Dialpad extends LinearLayout implements OnClickListener {
 			back();
 			break;
 		}
+	}
+	
+	public void setError(int errorMessageStringResource) {
+		setError(getResources().getString(errorMessageStringResource));
+	}
+	
+	public void setError(String errorMessage) {
+		clear();
+		mMessage.setText(errorMessage);
+		mMessage.postDelayed(new Runnable() {
+			
+			@Override
+			public void run() {
+				mMessage.setText(mMessageContent);
+			}
+		}, ERROR_SHOW_MILLI);
 	}
 
 	public static interface DialpadListener {
