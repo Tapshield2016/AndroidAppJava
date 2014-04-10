@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cb="http://schemas.android.com/apk/res/com.tapshield.android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    <LinearLayout
+        android:id="@+id/fragment_alert_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="@dimen/ts_common_spacing_xxs"
+        android:layout_marginRight="@dimen/ts_common_spacing_xxs"
+        android:padding="@dimen/ts_common_spacing_xxs"
+        android:background="@drawable/ts_background_card"
+        android:visibility="gone">
+        
+        <TextView
+            android:id="@+id/fragment_alert_text_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/ts_gray_dark"
+            android:textSize="@dimen/ts_fragment_alert_card_text_phonenumber"
+            android:gravity="center"/>
+        
+        <Chronometer
+            android:id="@+id/fragment_alert_chrono"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_drawer"
+            android:textColor="@color/ts_brand_dark"
+            android:textSize="@dimen/ts_fragment_alert_card_text_callduration"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"/>
+        
+        <TextView
+            android:id="@+id/fragment_alert_text_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ts_alert_authorities"
+            android:textColor="@color/ts_alert_authorities_text_color"
+            android:textSize="@dimen/ts_fragment_alert_card_text_status"
+            android:gravity="center"
+            android:visibility="invisible"/>
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="5dp"
+            style="?android:attr/buttonBarStyle">
+            
+            <Button
+                android:id="@+id/fragment_alert_button_speaker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_drawer"
+                android:text="@string/ts_fragment_alert_card_button_speaker"
+                android:textColor="@color/ts_gray_dark"
+                android:textSize="15sp"
+                style="?android:attr/buttonBarButtonStyle"/>
+        </LinearLayout>
+    </LinearLayout>
+    
+    
+    <LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+	    android:gravity="bottom"
+	    android:layout_alignParentBottom="true"
+	    android:layout_margin="@dimen/activity_main_circlebutton_margin">
+	    
+	    <com.tapshield.android.ui.view.CircleButton
+	        android:id="@+id/fragment_alert_circlebutton_details"
+	        android:layout_width="@dimen/circlebutton_secondary_size"
+	        android:layout_height="@dimen/circlebutton_secondary_size"
+	        android:layout_weight="0.3"
+	        cb:background="@drawable/ts_background_circlebutton"
+	        cb:icon="@drawable/ic_launcher"
+	        cb:text="@string/ts_fragment_alert_circlebutton_details"
+	        cb:textColor="#fff"
+	        cb:textSize="@dimen/circlebutton_secondary_text_size" />
+	    
+	    <com.tapshield.android.ui.view.CircleButton
+	        android:id="@+id/fragment_alert_circlebutton_call"
+	        android:layout_width="@dimen/circlebutton_primary_size"
+	        android:layout_height="@dimen/circlebutton_primary_size"
+	        android:layout_weight="0.4"
+	        cb:background="@drawable/ts_background_circlebutton"
+	        cb:icon="@drawable/ic_launcher"
+	        cb:text="@string/ts_fragment_alert_circlebutton_call"
+	        cb:textColor="#fff"
+	        cb:textSize="@dimen/circlebutton_primary_text_size" />
+	    
+	    <com.tapshield.android.ui.view.CircleButton
+	        android:id="@+id/fragment_alert_circlebutton_chat"
+	        android:layout_width="@dimen/circlebutton_secondary_size"
+	        android:layout_height="@dimen/circlebutton_secondary_size"
+	        android:layout_weight="0.3"
+	        cb:background="@drawable/ts_background_circlebutton"
+	        cb:icon="@drawable/ic_launcher"
+	        cb:text="@string/ts_fragment_alert_circlebutton_chat"
+	        cb:textColor="#fff"
+	        cb:textSize="@dimen/circlebutton_secondary_text_size" />
+	</LinearLayout>
+</RelativeLayout>
