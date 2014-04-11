@@ -234,8 +234,8 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 					.center(center)
 					.radius(radius)
 					.strokeWidth(4)
-					.strokeColor(Color.parseColor("#FF009966"))
-					.fillColor(Color.parseColor("#33009966"));
+					.strokeColor(Color.parseColor("#50a6d2"))
+					.fillColor(Color.parseColor("#3350a6d2"));
 
 			mAccuracyBubble = mMap.addCircle(bubbleOptions);
 		} else {
@@ -249,7 +249,7 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 					.center(center)
 					.radius(1)
 					.strokeWidth(0)
-					.fillColor(Color.parseColor("#FF009999"));
+					.fillColor(Color.parseColor("#50a6d2"));
 			mUser = mMap.addCircle(userOptions);
 		} else {
 			mUser.setCenter(center);
