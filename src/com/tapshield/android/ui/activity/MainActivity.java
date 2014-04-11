@@ -110,6 +110,7 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
+		actionBar.setTitle(R.string.ts_home);
 		
 		mEmergency.setOnClickListener(new OnClickListener() {
 			
