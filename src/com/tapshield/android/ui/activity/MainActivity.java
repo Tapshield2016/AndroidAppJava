@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdate;
@@ -57,6 +58,8 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 	private GoogleMap mMap;
 	private Circle mAccuracyBubble;
 	private Circle mUser;
+	private ImageButton mEntourage;
+	private ImageButton mLocateMe;
 	private CircleButton mEmergency;
 	private CircleButton mChat;
 	private CircleButton mReport;
@@ -99,6 +102,8 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 		mMap = ((SupportMapFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.main_fragment_map)).getMap();
 		
+		mEntourage = (ImageButton) findViewById(R.id.main_imagebutton_entourage);
+		mLocateMe = (ImageButton) findViewById(R.id.main_imagebutton_locateuser);
 		mEmergency = (CircleButton) findViewById(R.id.main_circlebutton_alert);
 		mChat = (CircleButton) findViewById(R.id.main_circlebutton_chat);
 		mReport = (CircleButton) findViewById(R.id.main_circlebutton_report);
@@ -161,6 +166,8 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 	protected void onResume() {
 		super.onResume();
 		
+		toggleFloatingUi(true);
+		
 		boolean userPresent = mJavelin.getUserManager().isPresent();
 		
 		if (!userPresent) {
@@ -179,6 +186,9 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 	@Override
 	protected void onPause() {
 		super.onPause();
+		
+		toggleFloatingUi(false);
+		
 		mTracker.removeLocationListener(this);
 		
 		//stop only if not running--it will continue if user requests an emergency
@@ -208,6 +218,20 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 			return true;
 		}
 		return false;
+	}
+	
+	private void toggleFloatingUi(boolean toVisible) {
+		int visibility = toVisible ? View.VISIBLE : View.INVISIBLE;
+		
+		if (mEmergency.getVisibility() == visibility) {
+			return;
+		}
+		
+		mEntourage.setVisibility(visibility);
+		mLocateMe.setVisibility(visibility);
+		mReport.setVisibility(visibility);
+		mEmergency.setVisibility(visibility);
+		mChat.setVisibility(visibility);
 	}
 	
 	@Override
