@@ -28,6 +28,7 @@ import com.tapshield.android.manager.TwilioManager.OnStatusChangeListener;
 import com.tapshield.android.manager.TwilioManager.Status;
 import com.tapshield.android.ui.activity.ChatActivity;
 import com.tapshield.android.ui.view.CircleButton;
+import com.tapshield.android.utils.HardwareUtils;
 import com.tapshield.android.utils.UiUtils;
 
 public class AlertFragment extends Fragment implements OnClickListener, OnStatusChangeListener {
@@ -197,7 +198,10 @@ public class AlertFragment extends Fragment implements OnClickListener, OnStatus
 			startActivity(chat);
 			break;
 		case R.id.fragment_alert_button_speaker:
-			toggleCard();
+			boolean speakers = HardwareUtils.toggleSpeakerphone(getActivity());
+			int color = getResources().getColor(
+					speakers ? R.color.ts_brand_light : R.color.ts_alert_authorities_text_color);
+			mCardSpeaker.setTextColor(color);
 			break;
 		}
 	}
