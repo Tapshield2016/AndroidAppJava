@@ -1,6 +1,7 @@
 package com.tapshield.android.utils;
 
 import android.content.Context;
+import android.media.AudioManager;
 import android.os.Vibrator;
 import android.util.Log;
 
@@ -46,5 +47,12 @@ public class HardwareUtils {
 		if (mVibrator == null) {
 			mVibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
 		}
+	}
+	
+	public static boolean toggleSpeakerphone(Context context) {
+		AudioManager manager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+		boolean enable = !manager.isSpeakerphoneOn();
+		manager.setSpeakerphoneOn(enable);
+		return enable;
 	}
 }
