@@ -46,14 +46,14 @@ public class Notifier {
 	private NotificationCompat.Builder getCommonBuilder() {
 		return new NotificationCompat.Builder(mContext)
 				.setContentTitle("TapShield")
-				.setSmallIcon(R.drawable.ic_launcher)
+				.setSmallIcon(R.drawable.ic_stat)
 				.setDefaults(Notification.DEFAULT_ALL);
 	}
 
 	private Notification buildYank() {
 		return getCommonBuilder()
 				.setContentTitle("TapShield")
-				.setContentText("Headsets unplugged: Tap to disarm")
+				.setContentText("Yank enabled")
 				.setOngoing(true)
 				.setAutoCancel(false)
 				.build();
