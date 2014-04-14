@@ -119,6 +119,9 @@
         <service
             android:name="com.tapshield.android.service.AlertIdUpdateService"
             android:exported="false" />
+        <service
+            android:name="com.tapshield.android.service.YankService"
+            android:exported="false"/>
         
         <!-- BROADCAST RECEIVERS -->
         <receiver
