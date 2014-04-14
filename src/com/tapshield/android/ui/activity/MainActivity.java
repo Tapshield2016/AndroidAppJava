@@ -5,6 +5,8 @@ import java.util.List;
 import org.joda.time.DateTime;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.location.Location;
@@ -27,6 +29,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
@@ -43,12 +46,14 @@ import com.tapshield.android.api.spotcrime.model.Crime;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.location.LocationTracker;
 import com.tapshield.android.manager.EmergencyManager;
+import com.tapshield.android.manager.YankManager;
+import com.tapshield.android.manager.YankManager.YankListener;
 import com.tapshield.android.ui.fragment.NavigationFragment.OnNavigationItemClickListener;
 import com.tapshield.android.ui.view.CircleButton;
 import com.tapshield.android.utils.UiUtils;
 
 public class MainActivity extends FragmentActivity implements OnNavigationItemClickListener,
-		LocationListener {
+		LocationListener, YankListener {
 
 	private static final String KEY_RESUME = "resuming";
 
@@ -67,7 +72,12 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 	private EmergencyManager mEmergencyManager;
 	private JavelinClient mJavelin;
 	private LocationTracker mTracker;
+	private YankManager mYank;
 	
+	private AlertDialog mYankDialog;
+	
+	private boolean mUserScrollingMap = false;
+	private boolean mTrackUser = true;
 	private boolean mResuming = false;
 
 	private static final int MINIMUM_NUMBER_CRIMES = 50;
@@ -111,11 +121,23 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 		mEmergencyManager = EmergencyManager.getInstance(this);
 		mJavelin = JavelinClient.getInstance(this, TapShieldApplication.JAVELIN_CONFIG);
 		mTracker = LocationTracker.getInstance(this);
+		mYank = YankManager.get(this);
+		
+		mYankDialog = getYankDialog();
 		
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
 		actionBar.setTitle(R.string.ts_home);
+		
+		mLocateMe.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				mTrackUser = true;
+				moveCameraToUser();
+			}
+		});
 		
 		mEmergency.setOnClickListener(new OnClickListener() {
 			
@@ -139,6 +161,16 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 		if (savedInstanceState != null) {
 			mResuming = savedInstanceState.getBoolean(KEY_RESUME);
 		}
+		
+		mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+			
+			@Override
+			public void onCameraChange(CameraPosition position) {
+				if (mUserScrollingMap && mTrackUser) {
+					mTrackUser = false;
+				}
+			}
+		});
 		
 		loadMapSettings();
 		loadAgencyBoundaries();
@@ -166,6 +198,8 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 	protected void onResume() {
 		super.onResume();
 		
+		mYank.setListener(this);
+		
 		toggleFloatingUi(true);
 		
 		boolean userPresent = mJavelin.getUserManager().isPresent();
@@ -187,6 +221,13 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 	protected void onPause() {
 		super.onPause();
 		
+		mYank.removeListener(this);
+		
+		//disable if no headset is plugged in
+		if (mYank.isWaitingForHeadset()) {
+			mYank.setEnabled(false);
+		}
+		
 		toggleFloatingUi(false);
 		
 		mTracker.removeLocationListener(this);
@@ -200,7 +241,8 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		if (!mDrawerLayout.isDrawerOpen(mDrawer)) {
-			getMenuInflater().inflate(R.menu.main, menu);
+			int yankMenu = mYank.isEnabled() ? R.menu.yank : R.menu.yank_disabled;
+			getMenuInflater().inflate(yankMenu, menu);
 		}
 		return true;
 	}
@@ -216,8 +258,21 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 				mDrawerLayout.openDrawer(mDrawer);
 			}
 			return true;
+		case R.id.action_yank:
+			mYank.setEnabled(false);
+			break;
+		case R.id.action_yank_disabled:
+			mYank.setEnabled(true);
+			break;
 		}
 		return false;
+	}
+	
+	private void moveCameraToUser() {
+		//animate camera
+		LatLng cameraLatLng = new LatLng(mUser.getCenter().latitude, mUser.getCenter().longitude);
+		CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(cameraLatLng);
+		mMap.animateCamera(cameraUpdate);
 	}
 	
 	private void toggleFloatingUi(boolean toVisible) {
@@ -244,13 +299,15 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 		float currentZoom = mMap.getCameraPosition().zoom;
 		float newZoom = currentZoom < standardZoom ? standardZoom : currentZoom;
 
-		//animate camera
-		LatLng cameraLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-		CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(cameraLatLng, newZoom);
-		mMap.animateCamera(cameraUpdate);
-
+		LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+		if (mTrackUser) {
+			//animate camera
+			CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, newZoom);
+			mMap.animateCamera(cameraUpdate);
+		}
+		
 		//accuracy
-		LatLng center = cameraLatLng;
+		LatLng center = latLng;
 		float radius = location.getAccuracy();
 
 		if (mAccuracyBubble == null) {
@@ -376,9 +433,46 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 			mMap.addMarker(markerOptions);
 		}
 	}
+	
+	private AlertDialog getYankDialog() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this)
+				.setCancelable(true)
+				.setTitle(R.string.ts_main_dialog_yank_title)
+				.setMessage(R.string.ts_main_dialog_yank_message)
+				.setNegativeButton(R.string.ts_common_cancel, new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						mYank.setEnabled(false);
+					}
+				});
+		return builder.create();
+	}
 
 	@Override
 	public void onNavigationItemClick(int position) {
 		
+	}
+
+	//yank manager interface
+	@Override
+	public void onStatusChange(int newStatus) {
+		
+		invalidateOptionsMenu();
+		
+		switch (newStatus) {
+		case YankManager.Status.DISABLED:
+			UiUtils.toastShort(this, getString(R.string.ts_main_toast_yank_disabled));
+			break;
+		case YankManager.Status.WAITING_HEADSET:
+			mYankDialog.show();
+			break;
+		case YankManager.Status.ENABLED:
+			if (mYankDialog.isShowing()) {
+				mYankDialog.dismiss();
+			}
+			UiUtils.toastShort(this, getString(R.string.ts_main_toast_yank_enabled));
+			break;
+		}
 	}
 }
