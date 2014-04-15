@@ -1,12 +1,12 @@
 package com.tapshield.android.ui.activity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -22,6 +22,7 @@ import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.location.LocationTracker;
 import com.tapshield.android.manager.EmergencyManager;
 import com.tapshield.android.ui.adapter.ChatMessageAdapter;
+import com.tapshield.android.utils.UiUtils;
 
 public class ChatActivity extends Activity implements OnNewChatMessageListener {
 
@@ -95,6 +96,18 @@ public class ChatActivity extends Activity implements OnNewChatMessageListener {
 		}
 	}
 	
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			onBackPressed();
+			return true;
+		}
+		
+		return false;
+	}
+	
 	private void sendPressed() {
 		// if not started, do so
 		if (!mEmergencyManager.isRunning()) {
@@ -137,5 +150,11 @@ public class ChatActivity extends Activity implements OnNewChatMessageListener {
 	public void onNewChatMessage(List<ChatMessage> allMessages) {
 		mAdapter.setItemsNoNotifyDataSetChanged(allMessages);
 		refreshUi();
+	}
+	
+	@Override
+	public void onBackPressed() {
+		UiUtils.startActivityNoStack(this,
+				mEmergencyManager.isRunning() ? AlertActivity.class : MainActivity.class);
 	}
 }
