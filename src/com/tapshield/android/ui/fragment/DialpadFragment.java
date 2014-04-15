@@ -48,7 +48,25 @@ public class DialpadFragment extends Fragment implements DialpadListener {
 	@Override
 	public void onResume() {
 		super.onResume();
-		mProgress.start(6000, mProgressColors);
+
+		if (!mEmergencyManager.isRunning()) {
+			return;
+		}
+
+		long duration = mEmergencyManager.getDuration();
+		long startAt = mEmergencyManager.getElapsed();
+		mProgress.start(duration, startAt, mProgressColors);
+		
+		if (mEmergencyManager.isTransmitting()) {
+			mProgress.end();
+		}
+	}
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+		
+		mProgress.cancel();
 	}
 
 	@Override
@@ -61,6 +79,10 @@ public class DialpadFragment extends Fragment implements DialpadListener {
 		} else {
 			mDialpad.setError(R.string.ts_dialpad_message_error);
 		}
+	}
+	
+	public final void notifyAlertStarted() {
+		mProgress.end();
 	}
 
 	@Override
