@@ -17,7 +17,7 @@ import android.view.View;
 public class AnimatedVerticalColorProgress extends View
 		implements AnimatorListener, AnimatorUpdateListener {
 
-	private static final long FPS = 30;
+	private static final long FPS = 25;
 	private static final long UPDATE_MILLI = 1000/FPS; 
 	
 	private Paint mPaint;
@@ -26,8 +26,10 @@ public class AnimatedVerticalColorProgress extends View
 	
 	private Runnable mUpdater;
 	private ValueAnimator mAnimator;
+	private int[] mColors;
 	private int mCurrentColor;
 	private boolean mRunning = false;
+	private boolean mCancelled = false;
 	private boolean mAttemptedHardwareAcceleration = false;
 	
 	private Listener mListener;
@@ -41,16 +43,26 @@ public class AnimatedVerticalColorProgress extends View
 	}
 	
 	public void start(long duration, String... hexColors) {
+		start(duration, 0, hexColors);
+	}
+	
+	public void start(long duration, int[] colors) {
+		start(duration, 0, colors);
+	}
+	
+	public void start(long duration, long startAt, String... hexColors) {
 		int[] colors = new int[hexColors.length];
 		
 		for (int i = 0; i < colors.length; i++) {
 			colors[i] = Color.parseColor(hexColors[i]);
 		}
 		
-		start(duration, colors);
+		start(duration, startAt, colors);
 	}
 	
-	public void start(long duration, int[] colors) {
+	public void start(long duration, long startAt, int[] colors) {
+		mColors = colors;
+		
 		mUpdater = new Runnable() {
 			
 			@Override
@@ -61,11 +73,30 @@ public class AnimatedVerticalColorProgress extends View
 		
 		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		
-		mAnimator = ObjectAnimator.ofInt(colors).setDuration(duration);
+		mAnimator = ObjectAnimator.ofInt(mColors);
+		mAnimator.setDuration(duration);
 		mAnimator.setEvaluator(new ArgbEvaluator());
 		mAnimator.addListener(this);
 		mAnimator.addUpdateListener(this);
 		mAnimator.start();
+		
+		if (startAt > 0 && startAt <= mAnimator.getDuration()) {
+			mAnimator.setCurrentPlayTime(startAt);
+		}
+	}
+	
+	public void cancel() {
+		mAnimator.cancel();
+	}
+	
+	public void end() {
+		mAnimator.end();
+		mHeightPercent = 100;
+		update();
+	}
+	
+	private boolean wasCancelled() {
+		return mCancelled;
 	}
 	
 	private void update() {
@@ -82,19 +113,22 @@ public class AnimatedVerticalColorProgress extends View
 	public void onAnimationUpdate(ValueAnimator value) {
 		mCurrentColor = (Integer) value.getAnimatedValue();
 		mPaint.setColor(mCurrentColor);
-		mHeightPercent = (int) (((float)value.getCurrentPlayTime() / (float)value.getDuration()) * 100f);
+		mHeightPercent = ((float)value.getCurrentPlayTime() / (float)value.getDuration()) * 100f;
 	}
 
 	@Override
 	public void onAnimationCancel(Animator arg0) {
+		mCancelled = true;
 		mRunning = false;
 	}
 
 	@Override
 	public void onAnimationEnd(Animator arg0) {
-		mRunning = false;
-		invalidate();
-		notifyListener();
+		if (!wasCancelled()) {
+			mRunning = false;
+			invalidate();
+			notifyListener();
+		}
 	}
 
 	@Override
@@ -102,6 +136,7 @@ public class AnimatedVerticalColorProgress extends View
 
 	@Override
 	public void onAnimationStart(Animator arg0) {
+		mCancelled = false;
 		mRunning = true;
 		invalidate();
 		update();
