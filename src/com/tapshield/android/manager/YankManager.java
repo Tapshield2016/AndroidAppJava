@@ -7,7 +7,9 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.tapshield.android.R;
 import com.tapshield.android.service.YankService;
+import com.tapshield.android.ui.activity.AlertActivity;
 import com.tapshield.android.utils.UiUtils;
 
 public class YankManager {
@@ -149,7 +151,13 @@ public class YankManager {
 		}
 		
 		//alert and disable yank
-		UiUtils.toastShort(mContext, "Alert!");
+		long duration = (long) mContext
+				.getResources()
+				.getInteger(R.integer.timer_emergency_yank_millis);
+		EmergencyManager
+				.getInstance(mContext)
+				.start(duration, EmergencyManager.TYPE_HEADSET_UNPLUGGED);
+		UiUtils.startActivityNoStack(mContext, AlertActivity.class);
 		setEnabled(false);
 	}
 	
