@@ -2,12 +2,20 @@ package com.tapshield.android.manager;
 
 import java.util.List;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 
 import com.tapshield.android.R;
+import com.tapshield.android.ui.activity.AlertActivity;
+import com.tapshield.android.ui.activity.ChatActivity;
+import com.tapshield.android.ui.activity.MainActivity;
+import com.tapshield.android.ui.activity.MassAlertsActivity;
 
 public class Notifier {
 
@@ -53,6 +61,7 @@ public class Notifier {
 	private Notification buildYank() {
 		return getCommonBuilder()
 				.setContentText(mContext.getString(R.string.ts_notification_message_yank))
+				.setContentIntent(getPendingIntentWithBackStack(MainActivity.class))
 				.setOngoing(true)
 				.setAutoCancel(false)
 				.build();
@@ -61,6 +70,7 @@ public class Notifier {
 	private Notification buildConnecting() {
 		return getCommonBuilder()
 				.setContentText(mContext.getString(R.string.ts_notification_message_alert_connecting))
+				.setContentIntent(getPendingIntentWithBackStack(MainActivity.class, AlertActivity.class))
 				.setAutoCancel(false)
 				.setOngoing(true)
 				.build();
@@ -69,6 +79,7 @@ public class Notifier {
 	private Notification buildEstablished() {
 		return getCommonBuilder()
 				.setContentText(mContext.getString(R.string.ts_notification_message_alert_established))
+				.setContentIntent(getPendingIntentWithBackStack(MainActivity.class, AlertActivity.class))
 				.setAutoCancel(false)
 				.setOngoing(true)
 				.setOnlyAlertOnce(true)
@@ -78,6 +89,7 @@ public class Notifier {
 	private Notification buildCompleted() {
 		return getCommonBuilder()
 				.setContentText(mContext.getString(R.string.ts_notification_message_alert_completed))
+				.setContentIntent(getPendingIntentWithBackStack(MainActivity.class, AlertActivity.class))
 				.setAutoCancel(false)
 				.setOngoing(true)
 				.build();
@@ -86,6 +98,7 @@ public class Notifier {
 	private Notification buildFailedAlert() {
 		return getCommonBuilder()
 				.setContentText(mContext.getString(R.string.ts_notification_message_alert_failed))
+				.setContentIntent(getPendingIntentWithBackStack(MainActivity.class))
 				.setAutoCancel(true)
 				.build();
 	}
@@ -109,6 +122,8 @@ public class Notifier {
 				.setPriority(NotificationCompat.PRIORITY_MAX)
 				.setContentTitle(title)
 				.setContentText(content)
+				.setContentIntent(getPendingIntentWithBackStack(
+						MainActivity.class, AlertActivity.class, ChatActivity.class))
 				.setAutoCancel(true);
 
 		//set a preview of the single message (if just one)
@@ -136,6 +151,7 @@ public class Notifier {
 	private Notification buildMass() {
 		return getCommonBuilder()
 				.setContentText(mContext.getString(R.string.ts_notification_message_massalert))
+				.setContentIntent(getPendingIntentWithBackStack(MassAlertsActivity.class))
 				.setAutoCancel(true)
 				.build();
 	}
@@ -147,11 +163,24 @@ public class Notifier {
 		return getCommonBuilder()
 				.setContentText(text)
 				.setTicker(ticker)
+				.setContentIntent(getPendingIntentWithBackStack(
+						MainActivity.class, AlertActivity.class))
 				.setOngoing(true)
 				.setPriority(NotificationCompat.PRIORITY_MAX)
 				.build();
 	}
-
+	
+	private PendingIntent getPendingIntentWithBackStack(Class<? extends Activity>... activitiesClasses) {
+		TaskStackBuilder stackBuilder = TaskStackBuilder.create(mContext);
+		
+		for (Class clss : activitiesClasses) {
+			Intent intent = new Intent(mContext, clss);
+			stackBuilder.addNextIntent(intent);
+		}
+		
+		return stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+	}
+	
 	public void notify(int notificationId) {
 		notify(notificationId, null);
 	}
