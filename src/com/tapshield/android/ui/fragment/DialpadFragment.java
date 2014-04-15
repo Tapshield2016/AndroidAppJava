@@ -11,9 +11,11 @@ import com.tapshield.android.api.JavelinClient;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.manager.EmergencyManager;
 import com.tapshield.android.manager.TwilioManager;
+import com.tapshield.android.ui.activity.MainActivity;
 import com.tapshield.android.ui.view.AnimatedVerticalColorProgress;
 import com.tapshield.android.ui.view.Dialpad;
 import com.tapshield.android.ui.view.Dialpad.DialpadListener;
+import com.tapshield.android.utils.UiUtils;
 
 public class DialpadFragment extends Fragment implements DialpadListener {
 
@@ -75,7 +77,7 @@ public class DialpadFragment extends Fragment implements DialpadListener {
 		if (input.equals(mJavelin.getUserManager().getUser().getDisarmCode())) {
 			TwilioManager.getInstance(getActivity()).notifyEnd();
 			mEmergencyManager.cancel();
-			getActivity().finish();
+			UiUtils.startActivityNoStack(getActivity(), MainActivity.class);
 		} else {
 			mDialpad.setError(R.string.ts_dialpad_message_error);
 		}
