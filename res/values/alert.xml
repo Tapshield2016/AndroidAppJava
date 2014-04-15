@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="timer_emergency_requested_millis">10000</integer>
+    <integer name="timer_emergency_requested_millis">5000</integer>
+    <integer name="timer_emergency_yank_millis">10000</integer>
     <integer name="chat_periodic_check_millis">15000</integer>
     <integer name="emergency_alert_id_periodic_check_millis">10000</integer>
     <integer name="emergency_alert_id_periodic_check_max_attempts">3</integer>
