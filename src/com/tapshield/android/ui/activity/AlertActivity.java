@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import com.tapshield.android.R;
 import com.tapshield.android.manager.EmergencyManager;
 import com.tapshield.android.ui.adapter.AlertFragmentPagerAdapter;
+import com.tapshield.android.ui.fragment.DialpadFragment;
 import com.tapshield.android.ui.view.AnimatedVerticalColorProgress;
 
 public class AlertActivity extends FragmentActivity
@@ -95,6 +96,9 @@ public class AlertActivity extends FragmentActivity
 			mEmergencyManager.cancel();
 			mEmergencyManager.startNow(EmergencyManager.TYPE_START_REQUESTED);
 		}
+		
+		//also notify dialpad fragment to update indicator counting down
+		((DialpadFragment) mAdapter.getItem(0)).notifyAlertStarted();
 	}
 	
 	@Override
