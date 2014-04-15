@@ -9,8 +9,11 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 public class AlertFragmentPagerAdapter extends FragmentPagerAdapter {
 
-	//only 2 fragments, dialpad, and alert
+	//only 2 fragments, dialpad, and alert fragments
 	private static final int PAGES = 2;
+	
+	//keep reference since it it will always be a statically small number of fragments
+	private Fragment[] mFragments = new Fragment[PAGES];
 	
 	public AlertFragmentPagerAdapter(FragmentManager fm) {
 		super(fm);
@@ -19,6 +22,10 @@ public class AlertFragmentPagerAdapter extends FragmentPagerAdapter {
 	@Override
 	public Fragment getItem(int position) {
 		Fragment f = null;
+		
+		if (mFragments[position] != null) {
+			return mFragments[position];
+		}
 		
 		switch (position) {
 		case 0:
@@ -29,6 +36,7 @@ public class AlertFragmentPagerAdapter extends FragmentPagerAdapter {
 			break;
 		}
 		
+		mFragments[position] = f;
 		return f;
 	}
 
