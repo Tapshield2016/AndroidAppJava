@@ -143,7 +143,9 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 			
 			@Override
 			public void onClick(View v) {
-				mEmergencyManager.start(10000, EmergencyManager.TYPE_START_REQUESTED);
+				long duration = (long)
+						getResources().getInteger(R.integer.timer_emergency_requested_millis);
+				mEmergencyManager.start(duration, EmergencyManager.TYPE_START_REQUESTED);
 				UiUtils.startActivityNoStack(MainActivity.this, AlertActivity.class);
 			}
 		});
