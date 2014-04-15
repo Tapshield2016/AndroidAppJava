@@ -246,6 +246,10 @@ public class EmergencyManager implements LocationListener, OnStatusChangeListene
 		return (mStatus == InternalStatus.SCHEDULED || mStatus == InternalStatus.STARTED);
 	}
 	
+	public boolean isScheduled() {
+		return mStatus == InternalStatus.SCHEDULED;
+	}
+	
 	public boolean isTransmitting() {
 		return mStatus == InternalStatus.STARTED;
 	}
