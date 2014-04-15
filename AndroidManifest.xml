@@ -107,7 +107,7 @@
         
         <activity
             android:name="com.tapshield.android.ui.activity.AlertActivity"
-            android:theme="@style/TapShieldHoloLightTheme.Trasparent"/>
+            android:theme="@style/TapShieldHoloLightTheme"/>
         
         <!-- SERVICES -->
         <service
