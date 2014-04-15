@@ -45,15 +45,14 @@ public class Notifier {
 	//create a builder with common settings for all notifications (name, icon, etc.)
 	private NotificationCompat.Builder getCommonBuilder() {
 		return new NotificationCompat.Builder(mContext)
-				.setContentTitle("TapShield")
+				.setContentTitle(mContext.getString(R.string.ts_notification_title))
 				.setSmallIcon(R.drawable.ic_stat)
 				.setDefaults(Notification.DEFAULT_ALL);
 	}
 
 	private Notification buildYank() {
 		return getCommonBuilder()
-				.setContentTitle("TapShield")
-				.setContentText("Yank enabled")
+				.setContentText(mContext.getString(R.string.ts_notification_message_yank))
 				.setOngoing(true)
 				.setAutoCancel(false)
 				.build();
@@ -61,7 +60,7 @@ public class Notifier {
 	
 	private Notification buildConnecting() {
 		return getCommonBuilder()
-				.setContentText("Connecting...")
+				.setContentText(mContext.getString(R.string.ts_notification_message_alert_connecting))
 				.setAutoCancel(false)
 				.setOngoing(true)
 				.build();
@@ -69,7 +68,7 @@ public class Notifier {
 	
 	private Notification buildEstablished() {
 		return getCommonBuilder()
-				.setContentText("Established")
+				.setContentText(mContext.getString(R.string.ts_notification_message_alert_established))
 				.setAutoCancel(false)
 				.setOngoing(true)
 				.setOnlyAlertOnce(true)
@@ -78,7 +77,7 @@ public class Notifier {
 	
 	private Notification buildCompleted() {
 		return getCommonBuilder()
-				.setContentText("Completed by dispatcher")
+				.setContentText(mContext.getString(R.string.ts_notification_message_alert_completed))
 				.setAutoCancel(false)
 				.setOngoing(true)
 				.build();
@@ -86,7 +85,7 @@ public class Notifier {
 	
 	private Notification buildFailedAlert() {
 		return getCommonBuilder()
-				.setContentText("Server unreachable")
+				.setContentText(mContext.getString(R.string.ts_notification_message_alert_failed))
 				.setAutoCancel(true)
 				.build();
 	}
@@ -103,7 +102,7 @@ public class Notifier {
 		}
 
 		//override default builder settings
-		String title = "TapShield Messages";
+		String title = mContext.getString(R.string.ts_notification_title_chat);
 		String content = count == 1 ? count + " message." : count + " messages.";
 
 		NotificationCompat.Builder builder = getCommonBuilder()
@@ -121,7 +120,7 @@ public class Notifier {
 		//inbox style settings if version supports it
 		if (count > 1) {
 			NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-			String styleTitle = "TapShield Messages (" + count + ")";
+			String styleTitle = title + " (" + count + ")";
 
 			for (String message : chatMessages) {
 				inboxStyle.addLine("\"" + message + "\"");
@@ -136,14 +135,14 @@ public class Notifier {
 	
 	private Notification buildMass() {
 		return getCommonBuilder()
-				.setContentText("New mass alert")
+				.setContentText(mContext.getString(R.string.ts_notification_message_massalert))
 				.setAutoCancel(true)
 				.build();
 	}
 	
 	private Notification buildTwilioFailure() {
-		String text = "call failed. tap for details.";
-		String ticker = "tapshield: call failed.";
+		String text = mContext.getString(R.string.ts_notification_message_twilio_failed);
+		String ticker = mContext.getString(R.string.ts_notification_ticker_twilio_failed);
 		
 		return getCommonBuilder()
 				.setContentText(text)

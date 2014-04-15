@@ -99,4 +99,16 @@
     <string name="ts_menu_verify">Verify</string>
     <string name="ts_menu_alert">Alert</string>
     <string name="ts_menu_disarm">Disarm</string>
+    
+    <!-- notifications -->
+    <string name="ts_notification_title">TapShield</string>
+    <string name="ts_notification_title_chat">TapShield Messages</string>
+    <string name="ts_notification_message_yank">Yank is enabled</string>
+    <string name="ts_notification_message_alert_connecting">Connecting&#8230;</string>
+    <string name="ts_notification_message_alert_established">Established</string>
+    <string name="ts_notification_message_alert_completed">Completed by dispatcher</string>
+    <string name="ts_notification_message_alert_failed">Server unreachable</string>
+    <string name="ts_notification_message_massalert">New notification(s)</string>
+    <string name="ts_notification_message_twilio_failed">Call failed. Tap for details.</string>
+    <string name="ts_notification_ticker_twilio_failed">TapShield: Call failed</string>
 </resources>
