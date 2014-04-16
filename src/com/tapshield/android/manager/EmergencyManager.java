@@ -214,6 +214,7 @@ public class EmergencyManager implements LocationListener, OnStatusChangeListene
 		stopTracker();
 		
 		HardwareUtils.vibrateStop(mContext);
+		HardwareUtils.toggleSpeakerphone(mContext, false);
 		
 		unscheduleChatUpdater();
 		unscheduleAlertIdUpdater();
