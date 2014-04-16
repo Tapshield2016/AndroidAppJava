@@ -51,8 +51,18 @@ public class HardwareUtils {
 	
 	public static boolean toggleSpeakerphone(Context context) {
 		AudioManager manager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-		boolean enable = !manager.isSpeakerphoneOn();
-		manager.setSpeakerphoneOn(enable);
-		return enable;
+		boolean on = !manager.isSpeakerphoneOn();
+		manager.setSpeakerphoneOn(on);
+		return on;
+	}
+	
+	public static boolean toggleSpeakerphone(Context context, boolean on) {
+		AudioManager manager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+		
+		if (on != manager.isSpeakerphoneOn()) {
+			manager.setSpeakerphoneOn(on);
+		}
+		
+		return on;
 	}
 }
