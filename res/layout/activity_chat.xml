@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/ts_chat_background">
+    
+    <View
+        android:id="@+id/chat_view_alertoverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/ts_chat_alertoverlay"
+        android:visibility="gone"/>
     
     <ListView
         android:id="@+id/chat_list_messages"
@@ -20,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="#33000000"
+        android:background="@color/ts_chat_usermessage_background"
         android:orientation="horizontal">
         
         <EditText
@@ -28,8 +36,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:inputType="text"
-            android:hint="enter a message"
+            android:inputType="textCapSentences"
+            android:hint="@string/ts_chat_edit_hint"
             android:imeOptions="actionSend"/>
         
         <ImageButton
@@ -38,8 +46,6 @@
             android:layout_height="50dp"
             android:background="@drawable/ts_background_imagebutton"
             android:scaleType="centerInside"
-            android:src="@android:drawable/ic_menu_send"/>
-        
+            android:src="@drawable/ic_send"/>
     </LinearLayout>
-    
 </RelativeLayout>
