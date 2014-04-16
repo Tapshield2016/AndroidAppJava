@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,12 +37,22 @@ public class CircleButton extends RelativeLayout {
 		int textSize;
 		int textColor;
 		int icon;
+		int iconPadding;
+		int iconPaddingLeft;
+		int iconPaddingTop;
+		int iconPaddingRight;
+		int iconPaddingBottom;
 		int background;
 		
 		try {
 			text = a.getString(R.styleable.CircleButton_text);
 			textColor = a.getColor(R.styleable.CircleButton_textColor, Color.WHITE);
 			icon = a.getResourceId(R.styleable.CircleButton_icon, 0);
+			iconPadding = a.getDimensionPixelSize(R.styleable.CircleButton_iconPadding, 0);
+			iconPaddingLeft = a.getDimensionPixelSize(R.styleable.CircleButton_iconPaddingLeft, 0);
+			iconPaddingTop = a.getDimensionPixelSize(R.styleable.CircleButton_iconPaddingTop, 0);
+			iconPaddingRight = a.getDimensionPixelSize(R.styleable.CircleButton_iconPaddingRight, 0);
+			iconPaddingBottom = a.getDimensionPixelSize(R.styleable.CircleButton_iconPaddingBottom, 0);
 			textSize = (int) a.getDimension(R.styleable.CircleButton_textSize, 12);
 			background = a.getResourceId(R.styleable.CircleButton_background, 0);
 		} finally {
@@ -63,6 +72,11 @@ public class CircleButton extends RelativeLayout {
 		image.setClickable(false);
 		image.setFocusable(false);
 		image.setFocusableInTouchMode(false);
+		image.setPadding(
+				iconPaddingLeft > 0 ? iconPaddingLeft : iconPadding,
+				iconPaddingTop > 0 ? iconPaddingTop : iconPadding,
+				iconPaddingRight > 0 ? iconPaddingRight : iconPadding,
+				iconPaddingBottom > 0 ? iconPaddingBottom : iconPadding);
 		
 		button.setOnClickListener(new OnClickListener() {
 			
