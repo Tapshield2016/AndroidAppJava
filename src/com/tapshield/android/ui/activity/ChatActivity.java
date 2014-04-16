@@ -4,10 +4,15 @@ import java.util.List;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -29,6 +34,7 @@ public class ChatActivity extends Activity implements OnNewChatMessageListener {
 	private ListView mList;
 	private EditText mUserMessage;
 	private ImageButton mSend;
+	private View mAlertOverlay;
 	
 	//private List<ChatMessage> mMessages;
 	private ChatMessageAdapter mAdapter;
@@ -36,6 +42,8 @@ public class ChatActivity extends Activity implements OnNewChatMessageListener {
 	private EmergencyManager mEmergencyManager;
 	private JavelinChatManager mChatManager;
 	private LocationTracker mTracker;
+	
+	private BroadcastReceiver mSuccessfulAlertReceiver;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +61,7 @@ public class ChatActivity extends Activity implements OnNewChatMessageListener {
 		mList = (ListView) findViewById(R.id.chat_list_messages);
 		mUserMessage = (EditText) findViewById(R.id.chat_edit_message);
 		mSend = (ImageButton) findViewById(R.id.chat_imagebutton_send);
+		mAlertOverlay = findViewById(R.id.chat_view_alertoverlay);
 		
 		//mMessages = new ArrayList<ChatMessage>();
 		mAdapter = new ChatMessageAdapter(ChatActivity.this, R.layout.item_chat_message_user,
@@ -73,20 +82,36 @@ public class ChatActivity extends Activity implements OnNewChatMessageListener {
 				return true;
 			}
 		});
+		
+		mSuccessfulAlertReceiver = new BroadcastReceiver() {
+			
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				showOverlayOnAlert(true);
+			}
+		};
 	}
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
+		
 		mChatManager.addOnNewChatMessageListener(this);
 		mChatManager.notifySeeing();
 		refreshUi();
 		mTracker.start();
+		showOverlayOnAlert(false);
+		
+		IntentFilter filter = new IntentFilter(EmergencyManager.ACTION_EMERGENCY_SUCCESS);
+		registerReceiver(mSuccessfulAlertReceiver, filter);
 	}
 	
 	@Override
 	protected void onPause() {
 		super.onPause();
+		
+		unregisterReceiver(mSuccessfulAlertReceiver);
+		
 		mChatManager.notifyNotSeeing();
 		mChatManager.removeOnNewChatMessageListener(this);
 		boolean alertInProgress = JavelinClient.getInstance(ChatActivity.this,
@@ -144,6 +169,19 @@ public class ChatActivity extends Activity implements OnNewChatMessageListener {
 	
 	private void scrollToBottom() {
 		mList.setSelection(mAdapter.getCount() - 1);
+	}
+	
+	private void showOverlayOnAlert(boolean animate) {
+		if (mEmergencyManager.isRunning() && mAlertOverlay.getVisibility() != View.VISIBLE) {
+			
+			mAlertOverlay.setVisibility(View.VISIBLE);
+			
+			if (animate) {
+				AlphaAnimation alpha = new AlphaAnimation(0.0f, 1.0f);
+				alpha.setDuration(getResources().getInteger(R.integer.ts_chat_overlay_animation_milli));
+				mAlertOverlay.startAnimation(alpha);
+			}
+		}
 	}
 
 	@Override
