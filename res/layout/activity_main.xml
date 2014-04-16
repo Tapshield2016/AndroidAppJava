@@ -42,7 +42,7 @@
             android:layout_margin="@dimen/activity_main_circlebutton_margin"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
-            android:src="@drawable/ic_launcher"
+            android:src="@drawable/ts_icon_locateme"
             android:scaleType="fitCenter"
             android:background="@drawable/ts_background_card"/>
         
@@ -60,7 +60,8 @@
                 android:layout_height="@dimen/circlebutton_secondary_size"
                 android:layout_weight="0.3"
                 cb:background="@drawable/ts_background_circlebutton"
-                cb:icon="@drawable/ic_launcher"
+                cb:icon="@drawable/ts_icon_report"
+                cb:iconPaddingTop="@dimen/ts_common_spacing_xs"
                 cb:text="@string/ts_main_circlebutton_report"
                 cb:textColor="#fff"
                 cb:textSize="@dimen/circlebutton_secondary_text_size" />
@@ -71,7 +72,8 @@
                 android:layout_height="@dimen/circlebutton_primary_size"
                 android:layout_weight="0.4"
                 cb:background="@drawable/ts_background_circlebutton"
-                cb:icon="@drawable/ic_launcher"
+                cb:icon="@drawable/ts_icon_alert"
+                cb:iconPaddingTop="@dimen/ts_common_spacing_xs"
                 cb:text="@string/ts_main_circlebutton_alert"
                 cb:textColor="#fff"
                 cb:textSize="@dimen/circlebutton_primary_text_size" />
@@ -82,7 +84,8 @@
                 android:layout_height="@dimen/circlebutton_secondary_size"
                 android:layout_weight="0.3"
                 cb:background="@drawable/ts_background_circlebutton"
-                cb:icon="@drawable/ic_launcher"
+                cb:icon="@drawable/ts_icon_chat"
+                cb:iconPaddingTop="@dimen/ts_common_spacing_xs"
                 cb:text="@string/ts_main_circlebutton_chat"
                 cb:textColor="#fff"
                 cb:textSize="@dimen/circlebutton_secondary_text_size" />
