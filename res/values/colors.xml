@@ -10,13 +10,16 @@
     <color name="ts_item_navigation_text_color">#ffffff</color>
     <color name="ts_chat_user_background">#44000000</color>
     <color name="ts_chat_user_text">#fff</color>
-    <color name="ts_chat_other_background">#44ffffff</color>
+    <color name="ts_chat_other_background">#55ffffff</color>
     <color name="ts_chat_other_text">#454545</color>
+    <color name="ts_chat_status">#959595</color>
     <color name="ts_background_gradient_start">#2e3e6d</color>
     <color name="ts_background_gradient_end">#549f9a</color>
     <color name="ts_dialpad_text">#ffffff</color>
     <color name="ts_alert_text_color">#ffffff</color>
     <color name="ts_alert_authorities_text_color">#883333</color>
+    <color name="ts_chat_alertoverlay">#45e84747</color>
+    <color name="ts_chat_usermessage_background">#ffffff</color>
     
     <!-- all colors for countdown have 40% of opacity in hex (0.4 * 16 = 64) -->
     <color name="ts_background_alert_countdown_blueish">#643aa1d3</color>

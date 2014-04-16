@@ -52,6 +52,9 @@
     <string name="ts_main_toast_yank_enabled">Yank enabled</string>
     <string name="ts_main_toast_yank_disabled">Yank disabled</string>
     
+    <!-- chat -->
+    <string name="ts_chat_edit_hint">Enter a message</string>
+    
     <!-- alert -->
     <string name="ts_alert_authorities">Authorities notified</string>
     <string name="ts_alert_details">Add details</string>
