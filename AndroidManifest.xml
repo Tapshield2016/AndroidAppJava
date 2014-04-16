@@ -94,7 +94,10 @@
             android:windowSoftInputMode="adjustResize"/>
         
         <activity
-            android:name="com.tapshield.android.ui.activity.EmergencyActivity" />
+            android:name="com.tapshield.android.ui.activity.FullProfileActivity" />
+        
+        <activity
+            android:name="eu.janmuller.android.simplecropimage.CropImage" />
         
         <activity
             android:name="com.tapshield.android.ui.activity.OrganizationSelectionActivity" />
