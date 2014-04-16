@@ -17,6 +17,11 @@
         <attr name="textSize" format="reference|dimension"/>
         <attr name="background" format="reference|integer"/>
         <attr name="icon" format="reference|integer"/>
+        <attr name="iconPadding" format="reference|dimension"/>
+        <attr name="iconPaddingLeft" format="reference|dimension"/>
+        <attr name="iconPaddingTop" format="reference|dimension"/>
+        <attr name="iconPaddingRight" format="reference|dimension"/>
+        <attr name="iconPaddingBottom" format="reference|dimension"/>
     </declare-styleable>
     
 </resources>
