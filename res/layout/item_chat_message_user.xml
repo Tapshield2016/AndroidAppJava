@@ -33,5 +33,5 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/item_chat_message_text_message"
         android:gravity="center"
-        android:textColor="@color/ts_gray_dark"/>
+        android:textColor="@color/ts_chat_status"/>
 </RelativeLayout>
