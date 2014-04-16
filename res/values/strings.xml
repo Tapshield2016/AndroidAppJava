@@ -43,6 +43,22 @@
     <string name="ts_fragment_semiprofile_text_explanation">This information will help us identify you in case of emergency.</string>
     <string name="ts_fragment_semiprofile_text_disclaimer">By tapping \'finish\' you agree to the terms of service and privacy policy.</string>
     
+    <!-- full profile -->
+    <string name="ts_fullprofile_button_basic">Basic Information</string>
+    <string name="ts_fullprofile_button_contact">Contact Information</string>
+    <string name="ts_fullprofile_button_appearance">Appearance</string>
+    <string name="ts_fullprofile_button_medical">Medical Information</string>
+    <string name="ts_fullprofile_button_emergency">Emergency Contact</string>
+    <string name="ts_fullprofile_disclaimer">We will only use your personal information to assist authorities in case of emergency. The more information you provide, the easier will be to help you out!</string>
+    <string name="ts_fullprofile_dialog_pictureoptimizing_title">Please wait</string>
+    <string name="ts_fullprofile_dialog_pictureoptimizing_message">Optimizing Picture&#8230;</string>
+    <string name="ts_fullprofile_dialog_picturesource_title">New Picture</string>
+    <string name="ts_fullprofile_dialog_picturesource_message">Would you like to take a new picture, or pick one from the gallery?</string>
+    <string name="ts_fullprofile_dialog_picturesource_button_camera">Take</string>
+    <string name="ts_fullprofile_dialog_picturesource_button_gallery">Pick</string>
+    <string name="ts_fullprofile_picture_chooserintent_title">Select Picture</string>
+    <string name="ts_fullprofile_error_sdcard_absent">No SD card, the picture cannot be saved</string>
+    
     <!-- main -->
     <string name="ts_main_circlebutton_report">Report</string>
     <string name="ts_main_circlebutton_alert">Alert</string>
@@ -114,4 +130,5 @@
     <string name="ts_notification_message_massalert">New notification(s)</string>
     <string name="ts_notification_message_twilio_failed">Call failed. Tap for details.</string>
     <string name="ts_notification_ticker_twilio_failed">TapShield: Call failed</string>
+    
 </resources>

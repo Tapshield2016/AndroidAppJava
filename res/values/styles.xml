@@ -36,4 +36,14 @@
 	    <!-- <item name="android:windowNoTitle">true</item> -->
 	    <item name="android:backgroundDimEnabled">false</item>
     </style>
+    
+    <style name="TapShieldProfileButton" parent="@android:style/Widget.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">@dimen/ts_common_spacing_xxs</item>
+        <item name="android:textSize">@dimen/ts_common_text_m</item>
+        <item name="android:drawablePadding">@dimen/ts_common_spacing_s</item>
+        <item name="android:gravity">left|center_vertical</item>
+        <item name="android:background">@drawable/ts_background_imagebutton</item>
+    </style>
 </resources>
