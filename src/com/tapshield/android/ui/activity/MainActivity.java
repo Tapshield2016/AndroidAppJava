@@ -7,6 +7,7 @@ import org.joda.time.DateTime;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.location.Location;
@@ -452,7 +453,12 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 
 	@Override
 	public void onNavigationItemClick(int position) {
-		
+		switch (position) {
+		case 0:
+			Intent fullProfile = new Intent(this, FullProfileActivity.class);
+			startActivity(fullProfile);
+			break;
+		}
 	}
 
 	//yank manager interface
