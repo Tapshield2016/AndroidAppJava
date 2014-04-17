@@ -7,6 +7,7 @@ import com.tapshield.android.api.JavelinChatManager.OnNewIncomingChatMessagesLis
 import com.tapshield.android.api.JavelinClient;
 import com.tapshield.android.api.JavelinConfig;
 import com.tapshield.android.api.JavelinMassAlertManager.OnNewMassAlertListener;
+import com.tapshield.android.api.googledirections.GoogleDirectionsConfig;
 import com.tapshield.android.api.googleplaces.GooglePlacesConfig;
 import com.tapshield.android.api.spotcrime.SpotCrimeConfig;
 import com.tapshield.android.api.JavelinUserManager;
@@ -42,6 +43,11 @@ public class TapShieldApplication extends Application {
 	public static GooglePlacesConfig GOOGLEPLACES_CONFIG =
 			new GooglePlacesConfig.Builder()
 			.key("AIzaSyA5m917LQ6E-9V2tEXhLRl4nhEtbY01ny4")
+			.build();
+	
+	public static GoogleDirectionsConfig GOOGLEDIRECTIONS_CONFIG = 
+			new GoogleDirectionsConfig.Builder()
+			.key("AIzaSyDrODd9nuDCy6-UGC7JkuG85PA7gcvZS8I")
 			.build();
 	
 	//public static boolean IN_APP_EMERGENCY_DIALOG_SHOWED = false;
