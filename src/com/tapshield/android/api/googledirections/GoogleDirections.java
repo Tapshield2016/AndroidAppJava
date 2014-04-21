@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import com.tapshield.android.api.JavelinComms;
 import com.tapshield.android.api.JavelinComms.JavelinCommsCallback;
 import com.tapshield.android.api.JavelinComms.JavelinCommsRequestResponse;
+import com.tapshield.android.api.googledirections.model.Route;
 
 public class GoogleDirections {
 

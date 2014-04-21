@@ -1,4 +1,4 @@
-package com.tapshield.android.api.googledirections;
+package com.tapshield.android.api.googledirections.model;
 
 import java.util.ArrayList;
 import java.util.List;
