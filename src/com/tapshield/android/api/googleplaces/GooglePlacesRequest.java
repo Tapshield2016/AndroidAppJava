@@ -9,6 +9,7 @@ public class GooglePlacesRequest {
 	
 	private static final String PARAM_KEY = "key";
 	private static final String PARAM_LOCATION = "location";
+	private static final String PARAM_RADIUS = "radius";
 	private static final String PARAM_QUERY = "query";
 	private static final String PARAM_SENSOR = "sensor";
 	
@@ -19,6 +20,7 @@ public class GooglePlacesRequest {
 	private String mKey;
 	private String mQuery;
 	private String mLocation;
+	private int mRadius = -1;
 	private boolean mSensor = true;
 	
 	public GooglePlacesRequest(GooglePlacesConfig config, String query) {
@@ -36,12 +38,13 @@ public class GooglePlacesRequest {
 		return this;
 	}
 	
-	public GooglePlacesRequest setLocation(double latitude, double longitude) {
-		return setLocation(Double.toString(latitude), Double.toString(longitude));
+	public GooglePlacesRequest setLocation(double latitude, double longitude, int radiusMeters) {
+		return setLocation(Double.toString(latitude), Double.toString(longitude), radiusMeters);
 	}
 	
-	public GooglePlacesRequest setLocation(String latitude, String longitude) {
+	public GooglePlacesRequest setLocation(String latitude, String longitude, int radiusMeters) {
 		mLocation = latitude + "," + longitude;
+		mRadius = radiusMeters;
 		return this;
 	}
 	
@@ -56,8 +59,9 @@ public class GooglePlacesRequest {
 			suffix = addGetParam(suffix, PARAM_QUERY, mQuery);
 		}
 		
-		if (mLocation != null && !mLocation.isEmpty()) {
+		if (mLocation != null && !mLocation.isEmpty() && mRadius > 0) {
 			suffix = addGetParam(suffix, PARAM_LOCATION, mLocation);
+			suffix = addGetParam(suffix, PARAM_RADIUS, Integer.toString(mRadius));
 		}
 		
 		suffix = addGetParam(suffix, PARAM_SENSOR, Boolean.toString(mSensor));
