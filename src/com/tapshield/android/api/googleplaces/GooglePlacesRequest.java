@@ -14,7 +14,7 @@ public class GooglePlacesRequest {
 	
 	private static final String REGEX_WHITESPACES = "\\s+";
 	
-	private String mType;
+	private String mType = TYPE_SEARCH;
 	private String mOutput = OUTPUT_JSON;
 	private String mKey;
 	private String mQuery;
