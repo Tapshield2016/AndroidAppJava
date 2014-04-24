@@ -90,6 +90,10 @@
     <string name="ts_dialog_alert_twilio_failure_button_normalcall">Standard Call</string>
     <string name="ts_dialog_alert_twilio_failure_button_retry">Retry</string>
     
+    <!-- pick destination -->
+    <string name="ts_fragment_pickdestination_contact_search_hint">Filter names</string>
+    <string name="ts_fragment_pickdestination_place_search_hint">Search for places</string>
+    
     <!-- dialpad -->
     <string name="ts_dialpad_message">Enter your passcode to disarm</string>
     <string name="ts_dialpad_message_error">Wrong passcode!</string>
