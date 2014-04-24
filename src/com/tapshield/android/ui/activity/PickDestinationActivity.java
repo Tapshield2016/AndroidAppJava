@@ -23,26 +23,27 @@ public class PickDestinationActivity extends Activity implements DestinationPick
 	
 	private void setTabs() {
 		ActionBar actionBar = getActionBar();
-		
-		Tab contacts = actionBar.newTab()
-				.setIcon(R.drawable.ic_drawer)
-				.setTabListener(
-						new TabListener<ContactDestinationPickFragment>(
-								this,
-								"contacts",
-								ContactDestinationPickFragment.class));
+
 		Tab places = actionBar.newTab()
-				.setIcon(R.drawable.ic_drawer)
+				.setIcon(R.drawable.ic_pin)
 				.setTabListener(
 						new TabListener<PlaceDestinationPickFragment>(
 								this,
 								"places",
 								PlaceDestinationPickFragment.class));
 		
+		Tab contacts = actionBar.newTab()
+				.setIcon(R.drawable.ic_actionbar_people)
+				.setTabListener(
+						new TabListener<ContactDestinationPickFragment>(
+								this,
+								"contacts",
+								ContactDestinationPickFragment.class));
+		
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		actionBar.setDisplayShowTitleEnabled(true);
-		actionBar.addTab(contacts);
 		actionBar.addTab(places);
+		actionBar.addTab(contacts);
 	}
 	
 	@Override
