@@ -6,7 +6,10 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.FrameLayout;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.tapshield.android.R;
 import com.tapshield.android.manager.EmergencyManager;
 import com.tapshield.android.ui.adapter.AlertFragmentPagerAdapter;
@@ -17,6 +20,8 @@ public class AlertActivity extends FragmentActivity
 		implements AnimatedVerticalColorProgress.Listener, OnPageChangeListener {
 
 	private EmergencyManager mEmergencyManager;
+	private FrameLayout mMapFrame;
+	private GoogleMap mMap;
 	private ViewPager mPager;
 	private AlertFragmentPagerAdapter mAdapter;
 	
@@ -26,6 +31,9 @@ public class AlertActivity extends FragmentActivity
 		setContentView(R.layout.activity_alertswipe);
 		
 		mEmergencyManager = EmergencyManager.getInstance(this);
+		mMapFrame = (FrameLayout) findViewById(R.id.alert_frame);
+		mMap = ((SupportMapFragment) getSupportFragmentManager()
+				.findFragmentById(R.id.alert_fragment_map)).getMap();
 		mAdapter = new AlertFragmentPagerAdapter(getSupportFragmentManager());
 		mPager = (ViewPager) findViewById(R.id.alert_pager);
 		mPager.setAdapter(mAdapter);
@@ -77,7 +85,12 @@ public class AlertActivity extends FragmentActivity
 	public void onPageScrollStateChanged(int arg0) {}
 
 	@Override
-	public void onPageScrolled(int arg0, float arg1, int arg2) {}
+	public void onPageScrolled(int position, float offset, int offsetPixels) {
+		//assuming there will always be just 2 pages, the offset should be taking into account
+		// at position 0, and apply its offset value as opacity to the map fragment
+		float alpha = position == 0 ? offset : 1f;
+		mMapFrame.setAlpha(alpha);
+	}
 
 	@Override
 	public void onPageSelected(int position) {
