@@ -3,7 +3,8 @@
 
     <item
         android:id="@+id/action_pickdestination_search"
-        android:icon="@android:drawable/ic_menu_search"
+        android:icon="@drawable/ic_actionbar_search"
+        android:title="@string/ts_common_search"
         android:showAsAction="always|collapseActionView"
         android:actionViewClass="android.widget.SearchView" />
 </menu>
