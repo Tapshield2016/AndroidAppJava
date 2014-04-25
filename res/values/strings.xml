@@ -94,6 +94,15 @@
     <!-- pick destination -->
     <string name="ts_fragment_pickdestination_contact_search_hint">Filter names</string>
     <string name="ts_fragment_pickdestination_place_search_hint">Search for places</string>
+    <string name="ts_fragment_pickdestination_dialog_mode_title">How?</string>
+    <string name="ts_fragment_pickdestination_dialog_mode_message">How do you intend to reach your destination?</string>
+    <string name="ts_fragment_pickdestination_dialog_mode_button_driving">Driving</string>
+    <string name="ts_fragment_pickdestination_dialog_mode_button_walking">Walking</string>
+    
+    <!-- pick route -->
+    <string name="ts_pickroute_progressdialog_location_message">Getting starting point&#8230;</string>
+    <string name="ts_pickroute_progressdialog_routes_message">Getting routes&#8230;</string>
+    <string name="ts_pickroute_toast_noroute">Select a route before moving on</string>
     
     <!-- dialpad -->
     <string name="ts_dialpad_message">Enter your passcode to disarm</string>
