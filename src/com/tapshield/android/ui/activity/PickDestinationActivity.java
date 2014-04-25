@@ -3,22 +3,28 @@ package com.tapshield.android.ui.activity;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.tapshield.android.R;
+import com.tapshield.android.ui.fragment.BaseDestinationPickFragment.DestinationPickListener;
 import com.tapshield.android.ui.fragment.ContactDestinationPickFragment;
 import com.tapshield.android.ui.fragment.PlaceDestinationPickFragment;
-import com.tapshield.android.ui.fragment.BaseDestinationPickFragment.DestinationPickListener;
-import com.tapshield.android.utils.UiUtils;
 
 public class PickDestinationActivity extends Activity implements DestinationPickListener {
 
+	private AlertDialog mModeDialog;
+	private String mDestination;
+	
 	@Override
 	protected void onCreate(Bundle savedInstance) {
 		super.onCreate(savedInstance);
 		setTabs();
+		mModeDialog = getModeDialog();
 	}
 	
 	private void setTabs() {
@@ -46,9 +52,41 @@ public class PickDestinationActivity extends Activity implements DestinationPick
 		actionBar.addTab(contacts);
 	}
 	
+	private AlertDialog getModeDialog() {
+		return new AlertDialog.Builder(this)
+				.setTitle(R.string.ts_fragment_pickdestination_dialog_mode_title)
+				.setMessage(R.string.ts_fragment_pickdestination_dialog_mode_message)
+				.setPositiveButton(R.string.ts_fragment_pickdestination_dialog_mode_button_driving,
+						new DialogInterface.OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								startRouteSelection(PickRouteActivity.MODE_DRIVING, mDestination);
+							}
+						})
+				.setNeutralButton(R.string.ts_fragment_pickdestination_dialog_mode_button_walking,
+						new DialogInterface.OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								startRouteSelection(PickRouteActivity.MODE_WALKING, mDestination);
+							}
+						})
+				.setNegativeButton(R.string.ts_common_cancel, null)
+				.create();
+	}
+	
 	@Override
 	public void onDestinationPick(String destination) {
-		UiUtils.toastShort(this, destination);
+		mDestination = destination;
+		mModeDialog.show();
+	}
+	
+	private void startRouteSelection(final int mode, final String destination) {
+		Intent pickRoute = new Intent(this, PickRouteActivity.class);
+		pickRoute.putExtra(PickRouteActivity.EXTRA_MODE, mode);
+		pickRoute.putExtra(PickRouteActivity.EXTRA_DESTINATION, destination);
+		startActivity(pickRoute);
 	}
 
 	//from http://developer.android.com/guide/topics/ui/actionbar.html
