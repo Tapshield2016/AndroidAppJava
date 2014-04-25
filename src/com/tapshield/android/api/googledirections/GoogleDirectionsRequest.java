@@ -1,5 +1,7 @@
 package com.tapshield.android.api.googledirections;
 
+import com.tapshield.android.utils.StringUtils;
+
 public class GoogleDirectionsRequest {
 
 	public static final String OUTPUT_JSON = "json";
@@ -11,8 +13,6 @@ public class GoogleDirectionsRequest {
 	public static final String UNITS_IMPERIAL = "imperial";
 	public static final String UNITS_METRIC = "metric";
 
-	private static final String REGEX_WHITESPACES = "\\s+";
-	
 	private static final String PARAM_KEY = "key";
 	private static final String PARAM_ORIGIN = "origin";
 	private static final String PARAM_DESTINATION = "destination";
@@ -31,8 +31,8 @@ public class GoogleDirectionsRequest {
 	
 	public GoogleDirectionsRequest(GoogleDirectionsConfig config, String origin, String destination) {
 		mKey = config.key();
-		mOrigin = origin.trim().replaceAll(REGEX_WHITESPACES, "+");
-		mDestination = destination.trim().replaceAll(REGEX_WHITESPACES, "+");
+		mOrigin = origin.trim().replaceAll(StringUtils.REGEX_WHITESPACES, "+");
+		mDestination = destination.trim().replaceAll(StringUtils.REGEX_WHITESPACES, "+");
 	}
 	
 	public GoogleDirectionsRequest(GoogleDirectionsConfig config, double originLatitude, double originLongitude,

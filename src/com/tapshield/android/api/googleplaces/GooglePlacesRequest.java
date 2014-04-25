@@ -1,5 +1,7 @@
 package com.tapshield.android.api.googleplaces;
 
+import com.tapshield.android.utils.StringUtils;
+
 public class GooglePlacesRequest {
 
 	public static final String TYPE_SEARCH = "textsearch";
@@ -13,8 +15,6 @@ public class GooglePlacesRequest {
 	private static final String PARAM_QUERY = "query";
 	private static final String PARAM_SENSOR = "sensor";
 	
-	private static final String REGEX_WHITESPACES = "\\s+";
-	
 	private String mType = TYPE_SEARCH;
 	private String mOutput = OUTPUT_JSON;
 	private String mKey;
@@ -25,7 +25,7 @@ public class GooglePlacesRequest {
 	
 	public GooglePlacesRequest(GooglePlacesConfig config, String query) {
 		mKey = config.key();
-		mQuery = query;
+		setQuery(query);
 	}
 	
 	public GooglePlacesRequest setType(String type) {
@@ -34,7 +34,7 @@ public class GooglePlacesRequest {
 	}
 	
 	public GooglePlacesRequest setQuery(String query) {
-		mQuery = query.trim().replaceAll(REGEX_WHITESPACES, "+");
+		mQuery = query.trim().replaceAll(StringUtils.REGEX_WHITESPACES, "+");
 		return this;
 	}
 	

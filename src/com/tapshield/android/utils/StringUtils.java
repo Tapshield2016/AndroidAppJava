@@ -2,6 +2,8 @@ package com.tapshield.android.utils;
 
 public class StringUtils {
 
+	public static final String REGEX_WHITESPACES = "\\s+";
+	
 	private static final String REGEX_NAME = ".+";
 	private static final String REGEX_FOUR_DIGITS_NO_SPACES = "\\d{4}";
 	private static final String REGEX_EMAIL = "[a-zA-Z0-9_.-]+@[a-zA-Z0-9_.-]+\\.[a-z]{2,3}";
