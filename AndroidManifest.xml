@@ -21,6 +21,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
     
     <!-- extra permissions required by twilio -->
     
@@ -70,7 +71,7 @@
             android:value="AIzaSyCOLa7om8_AGznekq6jV6pNrCXTCj_JM3E" />
         
         <!-- ACTIVITIES -->
-       
+
         <!-- library application to handle image cropping -->
         <activity
             android:name="eu.janmuller.android.simplecropimage.CropImage"/>
@@ -97,9 +98,6 @@
             android:name="com.tapshield.android.ui.activity.FullProfileActivity" />
         
         <activity
-            android:name="eu.janmuller.android.simplecropimage.CropImage" />
-        
-        <activity
             android:name="com.tapshield.android.ui.activity.OrganizationSelectionActivity" />
         
         <activity
@@ -109,8 +107,13 @@
             android:name="com.tapshield.android.ui.activity.MassAlertsActivity" />
         
         <activity
-            android:name="com.tapshield.android.ui.activity.AlertActivity"
-            android:theme="@style/TapShieldHoloLightTheme"/>
+            android:name="com.tapshield.android.ui.activity.AlertActivity" />
+        
+        <activity
+           android:name="com.tapshield.android.ui.activity.PickDestinationActivity" />
+        
+       <activity
+           android:name="com.tapshield.android.ui.activity.PickRouteActivity" />
         
         <!-- SERVICES -->
         <service
