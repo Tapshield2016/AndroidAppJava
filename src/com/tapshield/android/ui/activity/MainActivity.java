@@ -131,6 +131,15 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 		actionBar.setHomeButtonEnabled(true);
 		actionBar.setTitle(R.string.ts_home);
 		
+		mEntourage.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent pick = new Intent(MainActivity.this, PickDestinationActivity.class);
+				startActivity(pick);
+			}
+		});
+		
 		mLocateMe.setOnClickListener(new OnClickListener() {
 			
 			@Override
