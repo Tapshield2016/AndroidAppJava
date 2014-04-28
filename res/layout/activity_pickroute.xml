@@ -4,9 +4,27 @@
     android:layout_height="match_parent" >
 
     <fragment
-            android:id="@+id/main_fragment_map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            class="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+		android:id="@+id/pickroute_fragment_map"
+		android:name="com.google.android.gms.maps.SupportMapFragment"
+		class="com.google.android.gms.maps.SupportMapFragment"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_alignParentTop="true"
+		android:layout_above="@+id/pickroute_pager" />
+    
+    <TextView
+        android:id="@+id/pickroute_text_warning"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/pickroute_pager"
+        android:padding="@dimen/ts_common_spacing_xxs"
+        android:textColor="@android:color/white"
+        android:background="@color/ts_entourage_pickroute_warning_background"
+        android:visibility="gone"/>
+    
+    <android.support.v4.view.ViewPager
+        android:id="@id/pickroute_pager"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ts_entourage_pickroute_routeoverview_height"
+        android:layout_alignParentBottom="true"/>
 </RelativeLayout>
