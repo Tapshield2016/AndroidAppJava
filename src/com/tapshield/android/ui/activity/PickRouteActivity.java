@@ -7,9 +7,12 @@ import android.content.DialogInterface;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdate;
@@ -26,6 +29,7 @@ import com.tapshield.android.api.googledirections.GoogleDirectionsRequest;
 import com.tapshield.android.api.googledirections.model.Route;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.location.LocationTracker;
+import com.tapshield.android.ui.adapter.RouteFragmentPagerAdapter;
 import com.tapshield.android.utils.UiUtils;
 
 public class PickRouteActivity extends FragmentActivity implements LocationListener, GoogleDirectionsListener {
@@ -44,6 +48,9 @@ public class PickRouteActivity extends FragmentActivity implements LocationListe
 	private List<Route> mRoutes;
 	private int mSelectedRoute = -1;
 	private GoogleMap mMap;
+	private TextView mWarnings;
+	private ViewPager mPager;
+	private RouteFragmentPagerAdapter mPagerAdapter;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +58,13 @@ public class PickRouteActivity extends FragmentActivity implements LocationListe
 		setContentView(R.layout.activity_pickroute);
 		
 		mMap = ((SupportMapFragment) getSupportFragmentManager()
-				.findFragmentById(R.id.main_fragment_map)).getMap();
+				.findFragmentById(R.id.pickroute_fragment_map)).getMap();
 		
+		mWarnings = (TextView) findViewById(R.id.pickroute_text_warning);
+		mPager = (ViewPager) findViewById(R.id.pickroute_pager);
+		mPagerAdapter = new RouteFragmentPagerAdapter(getSupportFragmentManager());
+		mPager.setAdapter(mPagerAdapter);
+
 		mGettingLocationDialog = getGettingLocationDialog();
 		mGettingRoutesDialog = getGettingRoutesDialog();
 		
@@ -78,6 +90,21 @@ public class PickRouteActivity extends FragmentActivity implements LocationListe
 				cancel();
 			}
 		}
+		
+		mPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+			
+			@Override
+			public void onPageSelected(int position) {
+				mSelectedRoute = position;
+				updateRoutesUi();
+			}
+			
+			@Override
+			public void onPageScrolled(int arg0, float arg1, int arg2) {}
+			
+			@Override
+			public void onPageScrollStateChanged(int arg0) {}
+		});
 	}
 	
 	@Override
@@ -186,6 +213,13 @@ public class PickRouteActivity extends FragmentActivity implements LocationListe
 		if (ok) {
 			mSelectedRoute = 0;
 			mRoutes = routes;
+			Route r = new Route("m{dmDfkuoN@MBu@\\SNGRE\\Er@A|AAj@bDXzBZ`Af@~AH`@RvALpBi@ASAuAEmCS{CUk@CODEDOAc@Cy@?wBDy@FsAF}G\\i@BuITwTVeTZmDAaCMiC[_Es@sXoFyBk@sBw@s@]aBaA{NyIgJyFuC}AcBo@gBi@oB_@mAO}@G{@E{BAeRB_N?oFIuCWeJiAgCQgBCsGBiJ@eED}KHmBDsALeBZwA`@s@XiB|@}AdA_BzAmElFiIhK_@DeC`CuBfBW@I?CAQEAW?CACIQAs@EsEMwN@uZ?gD@sDFyD@{I@yKDM@cBDoFEgCCM?_C?sKI_XFI@QLs@Ge@O{@CwC?WK}WCsDGc@I_@MUsB}BQa@I_@As@AqEAg@Ic@Oc@[w@o@iAm@i@cBaBQUKYOu@EkMCsAOgAI[m@{AaAiBwAeCY{@]o@U_@WUWQ[Kc@Ig@AOFmIHk@AUI");
+			r.setDuration(2, "2 seconds");
+			r.setSummary("TARDIS");
+			r.setWarnings(new String[]{"This route requires 1+ sonic screwdrivers"});
+			r.setCopyrights("Copyrights of The Shadow Proclamation");
+			mRoutes.add(r);
+			mPagerAdapter.setRoutes(mRoutes);
 			updateRoutesUi();
 		} else {
 			Log.e("aaa", "Error requesting routes=" + errorIfNotOk);
@@ -194,10 +228,12 @@ public class PickRouteActivity extends FragmentActivity implements LocationListe
 	
 	private void updateRoutesUi() {
 		
+		mMap.clear();
+		
 		for (int r = 0; r < mRoutes.size(); r++) {
 			
 			int color = getResources().getColor(
-					r == mSelectedRoute ? R.color.ts_brand_light : R.color.ts_gray_light);
+					r == mSelectedRoute ? R.color.ts_brand_light : R.color.ts_gray_dark);
 			
 			PolylineOptions routePoly = new PolylineOptions()
 				.color(color)
@@ -211,7 +247,28 @@ public class PickRouteActivity extends FragmentActivity implements LocationListe
 			}
 			
 			mMap.addPolyline(routePoly);
-			animateCameraBounding(list);
+			
+			if (mSelectedRoute == r) {
+				animateCameraBounding(list);
+			}
+		}
+		
+		String[] warningList =  mRoutes.get(mSelectedRoute).warnings();
+		
+		if (warningList != null && warningList.length > 0) {
+
+			String warnings = new String();
+			for (String w : warningList) {
+				if (!warnings.isEmpty()) {
+					warnings = warnings.concat(", ");
+				}
+				warnings = warnings.concat(w);
+			}
+
+			mWarnings.setText(warnings);
+			mWarnings.setVisibility(View.VISIBLE);
+		} else {
+			mWarnings.setVisibility(View.GONE);
 		}
 	}
 	
