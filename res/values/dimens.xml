@@ -70,6 +70,11 @@
     <dimen name="alert_text_time_size">27sp</dimen>
     <dimen name="alert_text_authorities_size">20sp</dimen>
     
+    <!-- entourage -->
+    <dimen name="ts_entourage_pickroute_routeoverview_height">160dp</dimen>
+    <dimen name="ts_entourage_pickroute_routeoverview_eta">30sp</dimen>
+    <dimen name="ts_entourage_pickroute_routeoverview_summary">18sp</dimen>
+    
     <!-- crime details -->
     <dimen name="details_image_type">64dp</dimen>
     <dimen name="details_text_type_textsize">18sp</dimen>
