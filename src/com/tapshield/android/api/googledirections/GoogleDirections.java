@@ -1,55 +1,59 @@
 package com.tapshield.android.api.googledirections;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.net.URL;
 
-import org.json.JSONArray;
+import javax.net.ssl.HttpsURLConnection;
 
-import com.tapshield.android.api.JavelinComms;
-import com.tapshield.android.api.JavelinComms.JavelinCommsCallback;
-import com.tapshield.android.api.JavelinComms.JavelinCommsRequestResponse;
-import com.tapshield.android.api.googledirections.model.Route;
+import android.os.AsyncTask;
+
+import com.google.gson.Gson;
+import com.tapshield.android.api.googledirections.model.GoogleDirectionsResponse;
 
 public class GoogleDirections {
 
-	private static final String JSON_ROUTES = "routes";
-	
 	public static final void request(final GoogleDirectionsRequest request,
 			final GoogleDirectionsListener l) {
 		
-		JavelinCommsCallback internalCallback = new JavelinCommsCallback() {
-			
+		new AsyncTask<Void, Void, GoogleDirectionsResponse>() {
+
 			@Override
-			public void onEnd(JavelinCommsRequestResponse response) {
-				List<Route> result = null;
-				String error = null;
+			protected GoogleDirectionsResponse doInBackground(Void... arg0) {
 				
-				if (response.successful) {
-					try {
-						result = new ArrayList<Route>();
+				GoogleDirectionsResponse response = null;
+				HttpsURLConnection connection = null;
+				try {
+					
+					URL hostname = new URL(request.url());
+					connection = (HttpsURLConnection) hostname.openConnection();
+					
+					if (connection.getResponseCode() == HttpsURLConnection.HTTP_OK) {
 						
-						JSONArray routes = response.jsonResponse.getJSONArray(JSON_ROUTES);
-						
-						for (int r = 0; r < routes.length(); r++) {
-							Route route = Route.fromJson(routes.getJSONObject(r));
-							result.add(route);
-						}
-					} catch (Exception e) {
-						result = null;
-						error = e.getMessage();
+						Gson gson = new Gson();
+						Reader reader = new InputStreamReader(connection.getInputStream());
+						response = gson.fromJson(reader, GoogleDirectionsResponse.class);
+					} else {
+						response = null;
 					}
-				} else {
-					error = response.exception.toString();
+				} catch (Exception e) {
+					response = null;
+				} finally {
+					connection.disconnect();
 				}
 				
-				l.onDirectionsRetrieval(response.successful, result, error);
+				return response;
 			}
-		};
-		
-		JavelinComms.httpGet(request.url(), null, null, null, internalCallback);
+			
+			@Override
+			protected void onPostExecute(GoogleDirectionsResponse result) {
+				super.onPostExecute(result);
+				l.onDirectionsRetrieval(result != null, result);
+			}
+		}.execute();
 	}
 	
 	public interface GoogleDirectionsListener {
-		void onDirectionsRetrieval(boolean ok, List<Route> routes, String errorIfNotOk);
+		void onDirectionsRetrieval(boolean ok, GoogleDirectionsResponse response);
 	}
 }

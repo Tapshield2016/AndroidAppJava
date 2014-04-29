@@ -19,6 +19,7 @@ public class GoogleDirectionsRequest {
 	private static final String PARAM_SENSOR = "sensor";
 	private static final String PARAM_MODE = "mode";
 	private static final String PARAM_UNITS = "units";
+	private static final String PARAM_ALTERNATIVES = "alternatives";
 	
 	private String mUrl = "https://maps.googleapis.com/maps/api/directions/";
 	private String mKey;
@@ -27,6 +28,7 @@ public class GoogleDirectionsRequest {
 	private String mDestination;
 	private String mMode = MODE_DRIVING;
 	private String mUnits = UNITS_IMPERIAL;
+	private boolean mAlternatives = false;
 	private boolean mSensor = true;
 	
 	public GoogleDirectionsRequest(GoogleDirectionsConfig config, String origin, String destination) {
@@ -49,6 +51,11 @@ public class GoogleDirectionsRequest {
 		return this;
 	}
 	
+	public GoogleDirectionsRequest setRequestAlternatives() {
+		mAlternatives = true;
+		return this;
+	}
+	
 	public String url() {
 		String url = mUrl + mOutput + "?";
 		
@@ -58,6 +65,7 @@ public class GoogleDirectionsRequest {
 		url = addGetParam(url, PARAM_SENSOR, Boolean.toString(mSensor));
 		url = addGetParam(url, PARAM_MODE, mMode);
 		url = addGetParam(url, PARAM_UNITS, mUnits);
+		url = addGetParam(url, PARAM_ALTERNATIVES, Boolean.toString(mAlternatives));
 		
 		return url;
 	}

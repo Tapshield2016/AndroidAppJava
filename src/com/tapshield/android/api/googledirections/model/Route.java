@@ -3,13 +3,130 @@ package com.tapshield.android.api.googledirections.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import android.location.Location;
+
+import com.google.gson.annotations.SerializedName;
 
 public class Route {
 
+	@SerializedName("summary")
+	private String mSummary;
+	
+	@SerializedName("warnings")
+	private List<String> mWarnings;
+
+	@SerializedName("overview_polyline")
+	private OverviewPolyline mOverview;
+	
+	@SerializedName("legs")
+	private List<Leg> mLegs;
+	
+	@SerializedName("copyrights")
+	private String mCopyrights;
+	
+	@SerializedName("bounds")
+	private Bounds mBounds;
+	
+	public String[] warnings() {
+		int len = mWarnings.size();
+		String[] warnings = new String[len];
+		for (int i = 0; i < len; i++) {
+			warnings[i] = mWarnings.get(i);
+		}
+		return warnings;
+	}
+	
+	public String summary() {
+		return mSummary;
+	}
+	
+	public String copyrights() {
+		return mCopyrights;
+	}
+	
+	//assuming only one leg is given--app not supporting waypoints
+	public long distanceValue() {
+		return mLegs.get(0).distanceValue();
+	}
+	
+	public String distanceText() {
+		return mLegs.get(0).distanceText();
+	}
+	
+	public long durationSeconds() {
+		return mLegs.get(0).durationSeconds();
+	}
+	
+	public String durationText() {
+		return mLegs.get(0).durationText();
+	}
+	
+	public double boundsSwLat() {
+		return mBounds.swLat();
+	}
+	
+	public double boundsSwLon() {
+		return mBounds.swLon();
+	}
+	
+	public double boundsNeLat() {
+		return mBounds.neLat();
+	}
+	
+	public double boundsNeLon() {
+		return mBounds.neLon();
+	}
+	
+	private String overviewPolyline() {
+		return mOverview.mPoints;
+	}
+
+	public final List<Location> decodedOverviewPolyline() {
+		List<Location> poly = new ArrayList<Location>();
+		
+		String encoded = overviewPolyline();
+		
+		int index = 0, len = encoded.length();
+		int lat = 0, lng = 0;
+		
+		while (index < len) {
+			
+			int b, shift = 0, result = 0;
+			
+			do {
+				b = encoded.charAt(index++) - 63;
+				result |= (b & 0x1f) << shift;
+				shift += 5;
+			} while (b >= 0x20);
+			
+			int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+			lat += dlat;
+			shift = 0;
+			result = 0;
+			
+			do {
+				b = encoded.charAt(index++) - 63;
+				result |= (b & 0x1f) << shift;
+				shift += 5;
+			} while (b >= 0x20);
+			
+			int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+			lng += dlng;
+			Location p = new Location(getClass().toString());
+			p.setLatitude((double) lat / 1E5);
+			p.setLongitude((double) lng / 1E5);
+			poly.add(p);
+		}
+		return poly;
+	}
+	
+	public static class OverviewPolyline {
+		@SerializedName("points")
+		private String mPoints;
+	}
+	
+	
+	/*
 	private static final String JSON_SUMMARY = "summary";
 	private static final String JSON_OVERVIEWPOLYLINE = "overview_polyline";
 	private static final String JSON_OVERVIEWPOLYLINE_POINTS = "points";
@@ -24,7 +141,6 @@ public class Route {
 	private String mDurationText;
 	private String mSummary;
 	private String mEncodedOverviewPolyline;
-	private String[] mWarnings;
 	private String mCopyrights;
 	
 	private Route() {
@@ -182,4 +298,5 @@ public class Route {
 		
 		return r;
 	}
+	*/
 }
