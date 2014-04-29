@@ -26,6 +26,7 @@ import com.tapshield.android.R;
 import com.tapshield.android.api.googledirections.GoogleDirections;
 import com.tapshield.android.api.googledirections.GoogleDirections.GoogleDirectionsListener;
 import com.tapshield.android.api.googledirections.GoogleDirectionsRequest;
+import com.tapshield.android.api.googledirections.model.GoogleDirectionsResponse;
 import com.tapshield.android.api.googledirections.model.Route;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.location.LocationTracker;
@@ -202,56 +203,49 @@ public class PickRouteActivity extends FragmentActivity implements LocationListe
 		mGettingRoutesDialog.show();
 		GoogleDirectionsRequest request = new GoogleDirectionsRequest(
 				TapShieldApplication.GOOGLEDIRECTIONS_CONFIG, mOrigin, mDestination)
-				.setMode(mMode);
+				.setMode(mMode)
+				.setRequestAlternatives();
 				
 		GoogleDirections.request(request, this);
 	}
 
 	@Override
-	public void onDirectionsRetrieval(boolean ok, List<Route> routes, String errorIfNotOk) {
+	public void onDirectionsRetrieval(boolean ok, GoogleDirectionsResponse response) {
 		mGettingRoutesDialog.dismiss();
+		
 		if (ok) {
 			mSelectedRoute = 0;
-			mRoutes = routes;
-			Route r = new Route("m{dmDfkuoN@MBu@\\SNGRE\\Er@A|AAj@bDXzBZ`Af@~AH`@RvALpBi@ASAuAEmCS{CUk@CODEDOAc@Cy@?wBDy@FsAF}G\\i@BuITwTVeTZmDAaCMiC[_Es@sXoFyBk@sBw@s@]aBaA{NyIgJyFuC}AcBo@gBi@oB_@mAO}@G{@E{BAeRB_N?oFIuCWeJiAgCQgBCsGBiJ@eED}KHmBDsALeBZwA`@s@XiB|@}AdA_BzAmElFiIhK_@DeC`CuBfBW@I?CAQEAW?CACIQAs@EsEMwN@uZ?gD@sDFyD@{I@yKDM@cBDoFEgCCM?_C?sKI_XFI@QLs@Ge@O{@CwC?WK}WCsDGc@I_@MUsB}BQa@I_@As@AqEAg@Ic@Oc@[w@o@iAm@i@cBaBQUKYOu@EkMCsAOgAI[m@{AaAiBwAeCY{@]o@U_@WUWQ[Kc@Ig@AOFmIHk@AUI");
-			r.setDuration(2, "2 seconds");
-			r.setSummary("TARDIS");
-			r.setWarnings(new String[]{"This route requires 1+ sonic screwdrivers"});
-			r.setCopyrights("Copyrights of The Shadow Proclamation");
-			mRoutes.add(r);
+			mRoutes = response.routes();
 			mPagerAdapter.setRoutes(mRoutes);
 			updateRoutesUi();
-		} else {
-			Log.e("aaa", "Error requesting routes=" + errorIfNotOk);
 		}
 	}
 	
 	private void updateRoutesUi() {
-		
+
 		mMap.clear();
+		
+		int colorSelected = getResources().getColor(R.color.ts_brand_light);
+		int colorUnselected = getResources().getColor(R.color.ts_gray_dark);
 		
 		for (int r = 0; r < mRoutes.size(); r++) {
 			
-			int color = getResources().getColor(
-					r == mSelectedRoute ? R.color.ts_brand_light : R.color.ts_gray_dark);
-			
-			PolylineOptions routePoly = new PolylineOptions()
-				.color(color)
-				.width(20);
-			
 			Route route = mRoutes.get(r);
 			
-			List<Location> list = route.decodedOverviewPolyline();
-			for (Location l : list) {
-				routePoly.add(new LatLng(l.getLatitude(), l.getLongitude()));
+			//draw unselected routes...
+			if (r != mSelectedRoute) {
+				drawRoute(route, colorUnselected);
 			}
 			
-			mMap.addPolyline(routePoly);
-			
+			//...bounds on selected route...
 			if (mSelectedRoute == r) {
-				animateCameraBounding(list);
+				animateCameraBounding(route.boundsNeLat(), route.boundsNeLon(),
+						route.boundsSwLat(), route.boundsSwLon());
 			}
 		}
+		
+		//...and draw selected so it will always overlay alternatives
+		drawRoute(mRoutes.get(mSelectedRoute), colorSelected);
 		
 		String[] warningList =  mRoutes.get(mSelectedRoute).warnings();
 		
@@ -272,37 +266,28 @@ public class PickRouteActivity extends FragmentActivity implements LocationListe
 		}
 	}
 	
-	private void animateCameraBounding(List<Location> bounds) {
-		Location first = bounds.get(0);
-		Location last = bounds.get(bounds.size() - 1);
+	private void drawRoute(Route route, int color) {
 
-		double west;
-		double north;
-		double east;
-		double south;
-		
-		if (first.getLongitude() > last.getLongitude()) {
-			east = first.getLongitude();
-			west = last.getLongitude();
-		} else {
-			west = first.getLongitude();
-			east = last.getLongitude();
+		int routeWidth = 20;
+
+		PolylineOptions routePoly = new PolylineOptions()
+				.color(color)
+				.width(routeWidth);
+
+		List<Location> list = route.decodedOverviewPolyline();
+		for (Location l : list) {
+			routePoly.add(new LatLng(l.getLatitude(), l.getLongitude()));
 		}
-		
-		if (first.getLatitude() > last.getLatitude()) {
-			north = first.getLatitude();
-			south = last.getLatitude();
-		} else {
-			south = first.getLatitude();
-			north = last.getLatitude();
-		}
-		
-		LatLng northEast = new LatLng(north, east);
-		LatLng southWest = new LatLng(south, west);
-		
-		LatLngBounds mapBounds = new LatLngBounds(southWest, northEast);
+
+		mMap.addPolyline(routePoly);
+	}
+	
+	private void animateCameraBounding(double northeastLatitude, double northeastLongitude,
+			double southwestLatitude, double southwestLongitude) {
+		LatLngBounds mapBounds = new LatLngBounds(
+				new LatLng(southwestLatitude, southwestLongitude),
+				new LatLng(northeastLatitude, northeastLongitude));
 		CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(mapBounds, 100);
-		
 		mMap.animateCamera(cameraUpdate);
 	}
 }
