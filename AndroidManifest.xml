@@ -114,6 +114,9 @@
         
        <activity
            android:name="com.tapshield.android.ui.activity.PickRouteActivity" />
+       
+       <activity
+           android:name="com.tapshield.android.ui.activity.PickArrivalContacts" />
         
         <!-- SERVICES -->
         <service
