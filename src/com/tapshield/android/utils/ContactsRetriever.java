@@ -1,5 +1,6 @@
 package com.tapshield.android.utils;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -7,8 +8,12 @@ import java.util.List;
 import java.util.Map;
 
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
@@ -23,6 +28,7 @@ public class ContactsRetriever extends AsyncTask<Integer, String, List<Contact>>
 	public static final int TYPE_EMAIL = 0x01;
 	public static final int TYPE_PHONE = 0x02;
 	public static final int TYPE_POSTAL = 0x04;
+	public static final int TYPE_PHOTO = 0x08;
 	
 	private ContentResolver mContentResolver;
 	private ContactsRetrieverListener mListener;
@@ -37,17 +43,18 @@ public class ContactsRetriever extends AsyncTask<Integer, String, List<Contact>>
 		Map<Long, Contact> contacts = new HashMap<Long, Contact>();
 
 		int type = params[0];
+		boolean includePhoto = (type & TYPE_PHOTO) > 0;
 		
 		if ((type & TYPE_EMAIL) > 0) {
-			attachContactData(contacts, TYPE_EMAIL);
+			attachContactData(contacts, TYPE_EMAIL, includePhoto);
 		}
 		
 		if ((type & TYPE_PHONE) > 0) {
-			attachContactData(contacts, TYPE_PHONE);
+			attachContactData(contacts, TYPE_PHONE, includePhoto);
 		}
 		
 		if ((type & TYPE_POSTAL) > 0) {
-			attachContactData(contacts, TYPE_POSTAL);
+			attachContactData(contacts, TYPE_POSTAL, includePhoto);
 		}
 		
 		List<Contact> results = new ArrayList<Contact>(contacts.values());
@@ -62,7 +69,8 @@ public class ContactsRetriever extends AsyncTask<Integer, String, List<Contact>>
 		}
 	}
 	
-	private void attachContactData(final Map<Long, Contact> contacts, final int type) {
+	private void attachContactData(final Map<Long, Contact> contacts, final int type,
+			boolean photoRequired) {
 
 		String data;
 		String mimeType;
@@ -121,6 +129,14 @@ public class ContactsRetriever extends AsyncTask<Integer, String, List<Contact>>
 					} else if (type == TYPE_POSTAL) {
 						c.address(dataContent);
 					}
+					
+					if (c.photo == null && photoRequired) {
+						Uri contactUri = ContentUris.withAppendedId(Contacts.CONTENT_URI, c.id());
+						c.photo(Contacts.openContactPhotoInputStream(
+								mContentResolver,
+								contactUri,
+								false));
+					}
 				}
 			} while (cursor.moveToNext());
 		}
@@ -136,6 +152,7 @@ public class ContactsRetriever extends AsyncTask<Integer, String, List<Contact>>
 		private List<String> email;
 		private List<String> phone;
 		private List<String> address;
+		private Bitmap photo;
 		
 		public Contact(long id, String name) {
 			this.id = id;
@@ -181,6 +198,16 @@ public class ContactsRetriever extends AsyncTask<Integer, String, List<Contact>>
 		public void address(String street) {
 			if (!this.address.contains(street)) {
 				this.address.add(street);
+			}
+		}
+		
+		public Bitmap photo() {
+			return photo;
+		}
+		
+		public void photo(InputStream inputStream) {
+			if (inputStream != null) {
+				photo = BitmapFactory.decodeStream(inputStream);
 			}
 		}
 		
