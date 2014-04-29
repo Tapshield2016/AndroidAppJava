@@ -104,6 +104,10 @@
     <string name="ts_pickroute_progressdialog_routes_message">Getting routes&#8230;</string>
     <string name="ts_pickroute_toast_noroute">Select a route before moving on</string>
     
+    <!-- pick arrival contacts -->
+    <string name="ts_pickarrivalcontacts_text_arrivaltime">Arrival time</string>
+    <string name="ts_pickarrivalcontacts_text_notifycontacts">Notify following contacts</string>
+    
     <!-- dialpad -->
     <string name="ts_dialpad_message">Enter your passcode to disarm</string>
     <string name="ts_dialpad_message_error">Wrong passcode!</string>
