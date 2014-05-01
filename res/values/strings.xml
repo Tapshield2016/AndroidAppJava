@@ -16,6 +16,9 @@
     <string name="ts_common_no">No</string>
     <string name="ts_common_cancel">Cancel</string>
     <string name="ts_common_search">Search</string>
+    <string name="ts_common_done">Done</string>
+    <string name="ts_common_start">Start</string>
+    <string name="ts_common_add">Add</string>
     
     <!-- welcome -->
     <string name="ts_welcome_skip">Skip</string>
@@ -107,6 +110,7 @@
     <!-- pick arrival contacts -->
     <string name="ts_pickarrivalcontacts_text_arrivaltime">Arrival time</string>
     <string name="ts_pickarrivalcontacts_text_notifycontacts">Notify following contacts</string>
+    <string name="ts_pickarrivalcontacts_text_addremove">Add/Remove</string>
     
     <!-- dialpad -->
     <string name="ts_dialpad_message">Enter your passcode to disarm</string>
