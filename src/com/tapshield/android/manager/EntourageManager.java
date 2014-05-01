@@ -129,4 +129,11 @@ public class EntourageManager {
 		EmergencyManager manager = EmergencyManager.getInstance(mContext);
 		manager.startNow(type);
 	}
+	
+	//keep track of members after:
+	//addMembers(Contact...)
+	//removeMember(Contact)
+	//messageMembers(String)
+	//Contact class must have a toJson() and fromJson() methods to serialize into preferences
+	//clear contacts on stop()
 }
