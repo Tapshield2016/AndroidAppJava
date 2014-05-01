@@ -1,6 +1,5 @@
 package com.tapshield.android.ui.adapter;
 
-import java.util.Collections;
 import java.util.List;
 
 import android.content.Context;
@@ -55,10 +54,12 @@ public class ArrivalContactAdapter extends BaseAdapter {
 		
 		//handle 'add' button at 0 or just regular contacts
 		if (position == 0) {
-			text.setText("+");
+			text.setText(R.string.ts_pickarrivalcontacts_text_addremove);
 		} else {
 			Contact c = getItem(position);
-			image.setImageBitmap(c.photo());
+			if (c.photo() != null) {
+				image.setImageBitmap(c.photo());
+			}
 			text.setText(c.name());
 		}
 		
