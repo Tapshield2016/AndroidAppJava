@@ -181,9 +181,8 @@ public class PickRouteActivity extends FragmentActivity implements LocationListe
 	private void next() {
 		//proceed only if a route has been selected
 		if (mSelectedRoute >= 0) {
-			UiUtils.toastShort(this, "Route #" + mSelectedRoute + " selected");
-			Intent arrivalContacts = new Intent(this, PickArrivalContacts.class);
-			startActivity(arrivalContacts);
+			Intent arrivalAndContacts = new Intent(this, PickArrivalContacts.class);
+			startActivity(arrivalAndContacts);
 		} else {
 			UiUtils.toastShort(this, getString(R.string.ts_pickroute_toast_noroute));
 		}
