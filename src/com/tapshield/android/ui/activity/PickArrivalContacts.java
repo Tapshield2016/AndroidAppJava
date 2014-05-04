@@ -86,6 +86,7 @@ public class PickArrivalContacts extends Activity implements ContactsRetrieverLi
 	@Override
 	public void onBackPressed() {
 		if (isSelectionFragmentShown()) {
+			addSelectedContacts();
 			hideSelectionFragment();
 			return;
 		}
