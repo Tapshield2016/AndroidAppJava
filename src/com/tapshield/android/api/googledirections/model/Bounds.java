@@ -29,9 +29,9 @@ public class Bounds {
 	public static class BoundsCoordinates {
 		
 		@SerializedName("lat")
-		private double mLat;
+		public double mLat;
 		
 		@SerializedName("lng")
-		private double mLon;
+		public double mLon;
 	}
 }

@@ -77,6 +77,22 @@ public class Route {
 		return mBounds.neLon();
 	}
 	
+	public double startLat() {
+		return mLegs.get(0).mStartLocation.mLat;
+	}
+	
+	public double startLon() {
+		return mLegs.get(0).mStartLocation.mLon;
+	}
+	
+	public double endLat() {
+		return mLegs.get(mLegs.size() - 1).mEndLocation.mLat;
+	}
+	
+	public double endLon() {
+		return mLegs.get(mLegs.size() - 1).mEndLocation.mLon;
+	}
+	
 	private String overviewPolyline() {
 		return mOverview.mPoints;
 	}
