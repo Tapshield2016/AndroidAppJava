@@ -280,7 +280,10 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 	}
 	
 	private void moveCameraToUser() {
-		//animate camera
+		if (mUser == null) {
+			return;
+		}
+		
 		LatLng cameraLatLng = new LatLng(mUser.getCenter().latitude, mUser.getCenter().longitude);
 		CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(cameraLatLng);
 		mMap.animateCamera(cameraUpdate);
