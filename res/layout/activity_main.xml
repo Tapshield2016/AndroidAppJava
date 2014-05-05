@@ -30,7 +30,7 @@
             android:layout_margin="@dimen/activity_main_circlebutton_margin"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
-            android:src="@drawable/ic_launcher"
+            android:src="@drawable/ts_icon_entourage"
             android:scaleType="fitCenter"
             android:background="@drawable/ts_background_card"/>
         
