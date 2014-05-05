@@ -3,7 +3,7 @@ package com.tapshield.android.ui.fragment;
 import android.app.ListFragment;
 import android.os.Bundle;
 
-public class BaseDestinationPickFragment extends ListFragment {
+public class BasePickDestinationFragment extends ListFragment {
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {

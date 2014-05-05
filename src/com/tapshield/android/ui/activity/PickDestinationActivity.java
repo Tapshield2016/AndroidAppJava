@@ -11,9 +11,9 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.tapshield.android.R;
-import com.tapshield.android.ui.fragment.BaseDestinationPickFragment.DestinationPickListener;
-import com.tapshield.android.ui.fragment.ContactDestinationPickFragment;
-import com.tapshield.android.ui.fragment.PlaceDestinationPickFragment;
+import com.tapshield.android.ui.fragment.BasePickDestinationFragment.DestinationPickListener;
+import com.tapshield.android.ui.fragment.PickDestinationContactFragment;
+import com.tapshield.android.ui.fragment.PickDestinationPlaceFragment;
 
 public class PickDestinationActivity extends Activity implements DestinationPickListener {
 
@@ -34,18 +34,18 @@ public class PickDestinationActivity extends Activity implements DestinationPick
 		Tab places = actionBar.newTab()
 				.setIcon(R.drawable.ic_pin)
 				.setTabListener(
-						new TabListener<PlaceDestinationPickFragment>(
+						new TabListener<PickDestinationPlaceFragment>(
 								this,
 								"places",
-								PlaceDestinationPickFragment.class));
+								PickDestinationPlaceFragment.class));
 		
 		Tab contacts = actionBar.newTab()
 				.setIcon(R.drawable.ic_actionbar_people)
 				.setTabListener(
-						new TabListener<ContactDestinationPickFragment>(
+						new TabListener<PickDestinationContactFragment>(
 								this,
 								"contacts",
-								ContactDestinationPickFragment.class));
+								PickDestinationContactFragment.class));
 		
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		actionBar.setDisplayShowTitleEnabled(true);

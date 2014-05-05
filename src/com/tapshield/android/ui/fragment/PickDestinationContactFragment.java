@@ -25,7 +25,7 @@ import com.tapshield.android.utils.ContactsRetriever;
 import com.tapshield.android.utils.ContactsRetriever.Contact;
 import com.tapshield.android.utils.ContactsRetriever.ContactsRetrieverListener;
 
-public class ContactDestinationPickFragment extends BaseDestinationPickFragment
+public class PickDestinationContactFragment extends BasePickDestinationFragment
 		implements ContactsRetrieverListener {
 
 	private List<Contact> mContacts = new ArrayList<Contact>();

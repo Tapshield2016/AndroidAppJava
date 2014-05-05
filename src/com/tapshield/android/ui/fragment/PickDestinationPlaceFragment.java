@@ -26,7 +26,7 @@ import com.tapshield.android.api.googleplaces.model.Place;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.utils.UiUtils;
 
-public class PlaceDestinationPickFragment extends BaseDestinationPickFragment
+public class PickDestinationPlaceFragment extends BasePickDestinationFragment
 		implements GooglePlacesListener {
 
 	private List<Place> mPlaces = new ArrayList<Place>();
