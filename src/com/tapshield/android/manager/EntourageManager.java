@@ -8,18 +8,27 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.location.Location;
 import android.os.SystemClock;
 import android.util.Log;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
+import com.tapshield.android.R;
 import com.tapshield.android.api.JavelinClient;
 import com.tapshield.android.api.JavelinEntourageManager;
 import com.tapshield.android.api.JavelinEntourageManager.EntourageListener;
 import com.tapshield.android.api.googledirections.model.Route;
 import com.tapshield.android.app.TapShieldApplication;
-import com.tapshield.android.receiver.EntourageReceiver;
 import com.tapshield.android.service.EntourageArrivalCheckService;
 import com.tapshield.android.ui.activity.AlertActivity;
 import com.tapshield.android.ui.activity.MainActivity;
@@ -166,7 +175,32 @@ public class EntourageManager implements EntourageListener {
 	}
 	
 	public void drawOnMap(GoogleMap m) {
-		//draw and position all entourage-specific elements in the map
+		Route r = getRoute();
+		
+		MarkerOptions destination = new MarkerOptions()
+				.icon(BitmapDescriptorFactory.fromResource(R.drawable.ts_icon_entourage_destination))
+				.anchor(0.5f, 1.0f)
+				.position(new LatLng(r.endLat(), r.endLon()));
+
+		Resources res = mContext.getResources();
+		
+		float routeWidth = (float) res.getInteger(R.integer.ts_entourage_route_width);
+		PolylineOptions route = new PolylineOptions()
+				.color(res.getColor(R.color.ts_brand_light))
+				.width(routeWidth);
+		
+		for (Location l : r.decodedOverviewPolyline()) {
+			route.add(new LatLng(l.getLatitude(), l.getLongitude()));
+		}
+		
+		m.addMarker(destination);
+		m.addPolyline(route);
+		
+		LatLngBounds bounds = new LatLngBounds(
+				new LatLng(r.boundsSwLat(), r.boundsSwLon()),
+				new LatLng(r.boundsNeLat(), r.boundsNeLon()));
+		CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 200);
+		m.moveCamera(cameraUpdate);
 	}
 	
 	public void notifyReceiverTriggered(Intent intent) {
