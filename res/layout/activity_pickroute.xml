@@ -10,17 +10,48 @@
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
 		android:layout_alignParentTop="true"
-		android:layout_above="@+id/pickroute_pager" />
+		android:layout_above="@+id/pickroute_selector" />
     
     <TextView
         android:id="@+id/pickroute_text_warning"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/pickroute_pager"
+        android:layout_above="@id/pickroute_selector"
         android:padding="@dimen/ts_common_spacing_xxs"
         android:textColor="@android:color/white"
         android:background="@color/ts_entourage_pickroute_warning_background"
         android:visibility="gone"/>
+    
+    <LinearLayout
+        android:id="@id/pickroute_selector"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_above="@+id/pickroute_pager"
+        style="?android:attr/buttonBarStyle">
+        
+        <Button
+            android:id="@+id/pickroute_button_prev"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/ts_common_spacing_s"
+            android:paddingRight="@dimen/ts_common_spacing_s"
+            android:text="@string/ts_common_prev"
+            android:gravity="left|center_vertical"
+            style="?android:attr/buttonBarButtonStyle"/>
+        
+        <Button
+            android:id="@+id/pickroute_button_next"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/ts_common_spacing_s"
+            android:paddingRight="@dimen/ts_common_spacing_s"
+            android:text="@string/ts_common_next"
+            android:gravity="right|center_vertical"
+            style="?android:attr/buttonBarButtonStyle"/>
+    </LinearLayout>
     
     <android.support.v4.view.ViewPager
         android:id="@id/pickroute_pager"

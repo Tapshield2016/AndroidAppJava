@@ -20,6 +20,8 @@
     <string name="ts_common_start">Start</string>
     <string name="ts_common_stop">Stop</string>
     <string name="ts_common_add">Add</string>
+    <string name="ts_common_prev">Prev</string>
+    <string name="ts_common_next">Next</string>
     
     <!-- welcome -->
     <string name="ts_welcome_skip">Skip</string>

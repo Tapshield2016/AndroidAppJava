@@ -9,9 +9,11 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.gms.location.LocationListener;
@@ -34,7 +36,7 @@ import com.tapshield.android.manager.EntourageManager;
 import com.tapshield.android.ui.adapter.RouteFragmentPagerAdapter;
 import com.tapshield.android.utils.UiUtils;
 
-public class PickRouteActivity extends FragmentActivity implements LocationListener, GoogleDirectionsListener {
+public class PickRouteActivity extends FragmentActivity implements LocationListener, GoogleDirectionsListener, OnPageChangeListener {
 	
 	public static final String EXTRA_MODE = "com.tapshield.android.intent.extra.route_mode";
 	public static final String EXTRA_DESTINATION = "com.tapshield.android.intent.extra.route_destination";
@@ -55,6 +57,8 @@ public class PickRouteActivity extends FragmentActivity implements LocationListe
 	private TextView mWarnings;
 	private ViewPager mPager;
 	private RouteFragmentPagerAdapter mPagerAdapter;
+	private Button mNext;
+	private Button mPrev;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +73,9 @@ public class PickRouteActivity extends FragmentActivity implements LocationListe
 		mPagerAdapter = new RouteFragmentPagerAdapter(getSupportFragmentManager());
 		mPager.setAdapter(mPagerAdapter);
 
+		mNext = (Button) findViewById(R.id.pickroute_button_next);
+		mPrev = (Button) findViewById(R.id.pickroute_button_prev);
+		
 		mGettingLocationDialog = getGettingLocationDialog();
 		mGettingRoutesDialog = getGettingRoutesDialog();
 		
@@ -99,20 +106,25 @@ public class PickRouteActivity extends FragmentActivity implements LocationListe
 			}
 		}
 		
-		mPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+		mNext.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
-			public void onPageSelected(int position) {
-				mSelectedRoute = position;
-				updateRoutesUi();
+			public void onClick(View v) {
+				mSelectedRoute++;
+				mPager.setCurrentItem(mSelectedRoute, true);
 			}
-			
-			@Override
-			public void onPageScrolled(int arg0, float arg1, int arg2) {}
-			
-			@Override
-			public void onPageScrollStateChanged(int arg0) {}
 		});
+		
+		mPrev.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				mSelectedRoute--;
+				mPager.setCurrentItem(mSelectedRoute, true);
+			}
+		});
+		
+		mPager.setOnPageChangeListener(this);
 	}
 	
 	@Override
@@ -149,6 +161,32 @@ public class PickRouteActivity extends FragmentActivity implements LocationListe
 			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public void onPageScrollStateChanged(int arg0) {}
+
+	@Override
+	public void onPageScrolled(int arg0, float arg1, int arg2) {}
+
+	@Override
+	public void onPageSelected(int position) {
+		mSelectedRoute = position;
+		
+		int numRoutes = mRoutes.size();
+		
+		if (numRoutes == 1) {
+			mNext.setVisibility(View.GONE);
+			mPrev.setVisibility(View.GONE);
+		} else {
+			boolean first = position == 0;
+			boolean last = position == numRoutes - 1;
+			
+			mNext.setVisibility(last ? View.INVISIBLE : View.VISIBLE);
+			mPrev.setVisibility(first ? View.INVISIBLE : View.VISIBLE);
+		}
+		
+		updateRoutesUi();
 	}
 	
 	private ProgressDialog getGettingLocationDialog() {
@@ -233,7 +271,7 @@ public class PickRouteActivity extends FragmentActivity implements LocationListe
 			mSelectedRoute = 0;
 			mRoutes = response.routes();
 			mPagerAdapter.setRoutes(mRoutes);
-			updateRoutesUi();
+			onPageSelected(0);
 		}
 	}
 	
