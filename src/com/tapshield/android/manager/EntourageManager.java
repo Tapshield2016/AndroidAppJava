@@ -157,6 +157,10 @@ public class EntourageManager implements EntourageListener {
 		return mSet;
 	}
 	
+	public long getStartAt() {
+		return isSet() ? mStartAt : -1;
+	}
+	
 	public Route getRoute() {
 		return mRoute;
 	}
