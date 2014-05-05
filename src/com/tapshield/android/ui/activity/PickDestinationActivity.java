@@ -32,7 +32,7 @@ public class PickDestinationActivity extends Activity implements DestinationPick
 		ActionBar actionBar = getActionBar();
 
 		Tab places = actionBar.newTab()
-				.setIcon(R.drawable.ic_pin)
+				.setIcon(R.drawable.ic_actionbar_pin)
 				.setTabListener(
 						new TabListener<PickDestinationPlaceFragment>(
 								this,
