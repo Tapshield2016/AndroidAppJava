@@ -70,20 +70,23 @@ public class EntourageManager implements EntourageListener {
 	}
 	
 	private void load() {
+		
+		Gson gson = new Gson();
+		
 		mSet = mPreferences.getBoolean(KEY_SET, false);
+		
 		if (mSet) {
-			Gson gson = new Gson();
 			mRoute = gson.fromJson(mPreferences.getString(KEY_ROUTE, null), Route.class);
 			//load startAt here, setFlags() method will set the rest with this and the route
 			mStartAt = mPreferences.getLong(KEY_START, 0);
 			setFlags(mRoute);
-			
-			if (mPreferences.contains(KEY_MEMBERS)) {
-				mMembers = gson.fromJson(mPreferences.getString(KEY_MEMBERS, null),
-						EntourageMembers.class);
-			} else {
-				mMembers = new EntourageMembers();
-			}
+		}
+		
+		if (mPreferences.contains(KEY_MEMBERS)) {
+			mMembers = gson.fromJson(mPreferences.getString(KEY_MEMBERS, null),
+					EntourageMembers.class);
+		} else {
+			mMembers = new EntourageMembers();
 		}
 	}
 	
@@ -174,13 +177,23 @@ public class EntourageManager implements EntourageListener {
 	
 	public void addMembers(Contact... contacts) {
 		
+		if (contacts == null || contacts.length == 0) {
+			return;
+		}
+		
 		mMembers.members().clear();
 		
 		for (Contact c : contacts) {
 			EntourageMember m = new EntourageMember();
 			m.name(c.name());
-			m.email(c.email().get(0));
-			m.phone(c.phone().get(0));
+			
+			if (!c.email().isEmpty()) {
+				m.email(c.email().get(0));
+			}
+			
+			if (!c.phone().isEmpty()) {
+				m.phone(c.phone().get(0));
+			}
 			
 			mMembers.members.add(m);
 		}
