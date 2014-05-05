@@ -30,6 +30,7 @@ import com.tapshield.android.api.googledirections.model.GoogleDirectionsResponse
 import com.tapshield.android.api.googledirections.model.Route;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.location.LocationTracker;
+import com.tapshield.android.manager.EntourageManager;
 import com.tapshield.android.ui.adapter.RouteFragmentPagerAdapter;
 import com.tapshield.android.utils.UiUtils;
 
@@ -181,6 +182,11 @@ public class PickRouteActivity extends FragmentActivity implements LocationListe
 	private void next() {
 		//proceed only if a route has been selected
 		if (mSelectedRoute >= 0) {
+			//use the setter/getter for temporary route to hold it for following activities
+			EntourageManager
+					.get(this)
+					.setTemporaryRoute(
+							mRoutes.get(mSelectedRoute));
 			Intent arrivalAndContacts = new Intent(this, PickArrivalContacts.class);
 			startActivity(arrivalAndContacts);
 		} else {
