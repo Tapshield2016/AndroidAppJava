@@ -131,8 +131,19 @@
         <service
             android:name="com.tapshield.android.service.YankService"
             android:exported="false"/>
+        <service
+            android:name="com.tapshield.android.service.EntourageArrivalCheckService"
+            android:exported="false"/>
         
         <!-- BROADCAST RECEIVERS -->
+        <receiver
+            android:exported="false"
+            android:name="com.tapshield.android.receiver.EntourageArrivalCheckReceiver">
+            <intent-filter>
+                <action android:name="com.tapshield.android.action.ENTOURAGE_ARRIVAL_CHECK"/>
+            </intent-filter>
+        </receiver>
+        
         <receiver
             android:exported="false"
             android:name="com.tapshield.android.receiver.EmergencyReceiver">
