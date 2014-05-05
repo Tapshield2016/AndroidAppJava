@@ -4,15 +4,12 @@ import android.app.Service;
 import android.content.Intent;
 import android.location.Location;
 import android.os.IBinder;
+import android.util.Log;
 
 import com.google.android.gms.location.LocationListener;
-import com.tapshield.android.R;
 import com.tapshield.android.location.LocationTracker;
-import com.tapshield.android.manager.EmergencyManager;
 import com.tapshield.android.manager.EntourageManager;
 import com.tapshield.android.manager.EntourageManager.Listener;
-import com.tapshield.android.ui.activity.AlertActivity;
-import com.tapshield.android.ui.activity.MainActivity;
 
 public class EntourageArrivalCheckService extends Service implements LocationListener, Listener {
 
@@ -29,6 +26,7 @@ public class EntourageArrivalCheckService extends Service implements LocationLis
 	
 	@Override
 	public void onCreate() {
+		Log.i("aaa", "eacs create");
 		super.onCreate();
 		mTracker = LocationTracker.getInstance(this);
 		mTracker.addLocationListener(this);
@@ -42,39 +40,33 @@ public class EntourageArrivalCheckService extends Service implements LocationLis
 	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+		Log.i("aaa", "eacs start");
+		mEntourage.stop();
 		mTracker.start();
 		return START_STICKY;
 	}
 
 	@Override
 	public void onLocationChanged(Location location) {
-		if (location.getAccuracy() <= ACCURACY_MINIMUM
-				&& location.distanceTo(mDestination) >= DISTANCE_MINIMUM_FOR_ALERT) {
-			report();
-			EmergencyManager
-					.getInstance(this)
-					.start(getResources().getInteger(R.integer.timer_emergency_requested_millis),
-							EmergencyManager.TYPE_START_REQUESTED);
-			
-			Intent home = new Intent(this, MainActivity.class);
-			home.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			
-			Intent alert = new Intent(this, AlertActivity.class);
-			alert.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			alert.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		Log.i("aaa", "eacs location changed w acc=" + location.getAccuracy());
+		
+		if (location.getAccuracy() <= ACCURACY_MINIMUM) {
 
-			Intent[] fullAlert = new Intent[] {home, alert};
+			mTracker.removeLocationListener(this);
+			mTracker.stop();
 			
-			startActivities(fullAlert);
+			if (location != null && mDestination != null) {
+				float distance = location.distanceTo(mDestination);
+				
+				Log.i("aaa", "eacs distance=" + distance + " min=" + DISTANCE_MINIMUM_FOR_ALERT);
+
+				if (distance >= DISTANCE_MINIMUM_FOR_ALERT) {
+					mEntourage.addListener(this);
+					mEntourage.messageMembers("User has not reached their destination at the estimated time of arrival.");
+					mEntourage.notifyUserMissedETA();
+				}
+			}
 		}
-	}
-	
-	private void report() {
-		mTracker.removeLocationListener(this);
-		mTracker.stop();
-		mEntourage.addListener(this);
-		mEntourage.messageMembers("User has not reached their destination at the estimated time of arrival.");
 	}
 	
 	@Override
