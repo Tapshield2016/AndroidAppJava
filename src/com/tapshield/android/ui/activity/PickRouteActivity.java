@@ -284,7 +284,7 @@ public class PickRouteActivity extends FragmentActivity implements LocationListe
 	
 	private void drawRoute(Route route, int color) {
 
-		int routeWidth = 20;
+		int routeWidth = getResources().getInteger(R.integer.ts_entourage_route_width);
 
 		PolylineOptions routePoly = new PolylineOptions()
 				.color(color)
