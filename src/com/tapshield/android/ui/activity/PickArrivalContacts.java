@@ -18,8 +18,10 @@ import android.widget.GridView;
 import android.widget.ListView;
 
 import com.tapshield.android.R;
+import com.tapshield.android.manager.EntourageManager;
 import com.tapshield.android.ui.adapter.ArrivalContactAdapter;
 import com.tapshield.android.utils.ContactsRetriever;
+import com.tapshield.android.utils.UiUtils;
 import com.tapshield.android.utils.ContactsRetriever.Contact;
 import com.tapshield.android.utils.ContactsRetriever.ContactsRetrieverListener;
 
@@ -77,7 +79,7 @@ public class PickArrivalContacts extends Activity implements ContactsRetrieverLi
 			addSelectedContacts();
 			return true;
 		case R.id.action_start:
-			
+			startEntourage();
 			return true;
 		}
 		return false;
@@ -112,6 +114,14 @@ public class PickArrivalContacts extends Activity implements ContactsRetrieverLi
 		mContacts.addAll(contacts);
 
 		passContactsToSelectionFragment();
+	}
+	
+	private void startEntourage() {
+		Contact[] chosenArray = mChosen.toArray(new Contact[mChosen.size()]);
+
+		EntourageManager entourage = EntourageManager.get(this);
+		entourage.start(entourage.getTemporaryRoute(), chosenArray);
+		UiUtils.startActivityNoStack(this, MainActivity.class);
 	}
 	
 	private void passContactsToSelectionFragment() {
