@@ -3,8 +3,6 @@ package com.tapshield.android.ui.activity;
 import java.util.List;
 
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.DateTimeFormatterBuilder;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -31,6 +29,7 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMapLoadedCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -41,7 +40,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.tapshield.android.R;
-import com.tapshield.android.R.menu;
 import com.tapshield.android.api.JavelinClient;
 import com.tapshield.android.api.JavelinUserManager;
 import com.tapshield.android.api.googledirections.model.Route;
@@ -61,13 +59,14 @@ import com.tapshield.android.ui.view.CircleButton;
 import com.tapshield.android.utils.UiUtils;
 
 public class MainActivity extends FragmentActivity implements OnNavigationItemClickListener,
-		LocationListener, YankListener {
+		LocationListener, YankListener, OnMapLoadedCallback {
 
 	private static final String KEY_RESUME = "resuming";
 
 	private ActionBarDrawerToggle mDrawerToggle;
 	private DrawerLayout mDrawerLayout;
 	private FrameLayout mDrawer;
+	private Location mUserLocation;
 	private GoogleMap mMap;
 	private Circle mAccuracyBubble;
 	private Circle mUser;
@@ -84,10 +83,12 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 	private EntourageManager mEntourageManager;
 	
 	private AlertDialog mYankDialog;
-	
+
+	private boolean mMapLoaded = false;
 	private boolean mUserScrollingMap = false;
 	private boolean mTrackUser = true;
 	private boolean mResuming = false;
+	private boolean mSpotCrimeError = false;
 
 	private static final int MINIMUM_NUMBER_CRIMES = 50;
 	private long mCrimeSince = new DateTime().minusHours(1).getMillis();
@@ -97,6 +98,10 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		if (savedInstanceState != null) {
+			mResuming = savedInstanceState.getBoolean(KEY_RESUME);
+		}
 		
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.main_drawer_layout);
 		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer, 0, 0) {
@@ -120,6 +125,7 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 		mDrawer = (FrameLayout) findViewById(R.id.main_drawer);
 		mMap = ((SupportMapFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.main_fragment_map)).getMap();
+		mMap.setOnMapLoadedCallback(this);
 		
 		mEntourage = (ImageButton) findViewById(R.id.main_imagebutton_entourage);
 		mLocateMe = (ImageButton) findViewById(R.id.main_imagebutton_locateuser);
@@ -152,7 +158,7 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 			@Override
 			public void onClick(View v) {
 				mTrackUser = true;
-				moveCameraToUser();
+				moveCameraToUser(true);
 			}
 		});
 		
@@ -175,10 +181,13 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 			}
 		});
 		
-		
-		if (savedInstanceState != null) {
-			mResuming = savedInstanceState.getBoolean(KEY_RESUME);
-		}
+		mReport.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+			}
+		});
 		
 		mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
 			
@@ -189,9 +198,6 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 				}
 			}
 		});
-		
-		loadMapSettings();
-		loadAgencyBoundaries();
 	}
 	
 	@Override
@@ -218,8 +224,6 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 		
 		mYank.setListener(this);
 		
-		toggleFloatingUi(true);
-		
 		boolean userPresent = mJavelin.getUserManager().isPresent();
 		
 		if (!userPresent) {
@@ -233,8 +237,6 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 		}
 		mTracker.start();
 		mTracker.addLocationListener(this);
-		
-		setUiBasedOnEntourage();
 	}
 	
 	@Override
@@ -247,8 +249,6 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 		if (mYank.isWaitingForHeadset()) {
 			mYank.setEnabled(false);
 		}
-		
-		toggleFloatingUi(false);
 		
 		mTracker.removeLocationListener(this);
 		
@@ -288,18 +288,40 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 		return false;
 	}
 	
-	private void moveCameraToUser() {
-		if (mUser == null) {
+	@Override
+	public void onMapLoaded() {
+		mMapLoaded = true;
+		loadMapSettings();
+		loadAgencyBoundaries();
+		loadNearbyCrimes(false);
+		loadOnEntourage();
+	}
+	
+	private void moveCameraToUser(boolean animate) {
+		if (mUserLocation == null) {
 			return;
 		}
 		
-		LatLng cameraLatLng = new LatLng(mUser.getCenter().latitude, mUser.getCenter().longitude);
-		CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(cameraLatLng);
-		mMap.animateCamera(cameraUpdate);
+		float maxZoom = mMap.getMaxZoomLevel();
+		float standardZoom = 18;
+		if (standardZoom > maxZoom) {
+			standardZoom = maxZoom;
+		}
+		float currentZoom = mMap.getCameraPosition().zoom;
+		float newZoom = currentZoom < standardZoom ? standardZoom : currentZoom;
+		
+		LatLng cameraLatLng = new LatLng(mUserLocation.getLatitude(), mUserLocation.getLongitude());
+		CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(cameraLatLng, newZoom);
+		
+		if (animate) {
+			mMap.animateCamera(cameraUpdate);
+		} else {
+			mMap.moveCamera(cameraUpdate);
+		}
 	}
 	
-	private void setUiBasedOnEntourage() {
-		
+	private void loadOnEntourage() {
+
 		boolean entourageSet = mEntourageManager.isSet();
 		
 		ActionBar actionBar = getActionBar();
@@ -307,7 +329,7 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 		actionBar.setHomeButtonEnabled(!entourageSet);
 		actionBar.setTitle(R.string.ts_home);
 		actionBar.setDisplayShowTitleEnabled(!entourageSet);
-		actionBar.setDisplayShowCustomEnabled(true);
+		actionBar.setDisplayShowCustomEnabled(entourageSet);
 
 		//set custom view with entourage-related information
 		if (entourageSet) {
@@ -329,73 +351,18 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 			eta.setText(etaString);
 			
 			actionBar.setCustomView(entourageActionBarView);
+			
+			//allow entourage to handle the map, user can tap 'locate me' if needed
+			mTrackUser = false;
+			mEntourageManager.drawOnMap(mMap);
 		}
-	}
-	
-	private void toggleFloatingUi(boolean toVisible) {
-		int visibility = toVisible ? View.VISIBLE : View.INVISIBLE;
-		
-		if (mEmergency.getVisibility() == visibility) {
-			return;
-		}
-		
-		mEntourage.setVisibility(visibility);
-		mLocateMe.setVisibility(visibility);
-		mReport.setVisibility(visibility);
-		mEmergency.setVisibility(visibility);
-		mChat.setVisibility(visibility);
 	}
 	
 	@Override
 	public void onLocationChanged(Location location) {
-		float maxZoom = mMap.getMaxZoomLevel();
-		float standardZoom = 18;
-		if (standardZoom > maxZoom) {
-			standardZoom = maxZoom;
-		}
-		float currentZoom = mMap.getCameraPosition().zoom;
-		float newZoom = currentZoom < standardZoom ? standardZoom : currentZoom;
-
-		LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-		if (mTrackUser) {
-			//animate camera
-			CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, newZoom);
-			mMap.animateCamera(cameraUpdate);
-		}
-		
-		//accuracy
-		LatLng center = latLng;
-		float radius = location.getAccuracy();
-
-		if (mAccuracyBubble == null) {
-			CircleOptions bubbleOptions = new CircleOptions()
-					.center(center)
-					.radius(radius)
-					.strokeWidth(4)
-					.strokeColor(Color.parseColor("#50a6d2"))
-					.fillColor(Color.parseColor("#3350a6d2"));
-
-			mAccuracyBubble = mMap.addCircle(bubbleOptions);
-		} else {
-			mAccuracyBubble.setCenter(center);
-			mAccuracyBubble.setRadius(radius);
-		}
-		
-		//user
-		if (mUser == null) {
-			CircleOptions userOptions = new CircleOptions()
-					.center(center)
-					.radius(1)
-					.strokeWidth(0)
-					.fillColor(Color.parseColor("#50a6d2"));
-			mUser = mMap.addCircle(userOptions);
-		} else {
-			mUser.setCenter(center);
-		}
-
-		if (mCrimeRecords == null || mCrimeRecords.isEmpty()) {
-			loadNearbyCrimes();
-		}
+		mUserLocation = location;
+		drawUser();
+		loadNearbyCrimes(false);
 	}
 	
 	private void loadMapSettings() {
@@ -435,10 +402,22 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 		mMap.addPolygon(polygonOptions);
 	}
 	
-	private void loadNearbyCrimes() {
+	private void loadNearbyCrimes(boolean broaderSearch) {
+		//stop here if map is not loaded yet or there was an error
+		if (!mMapLoaded || mSpotCrimeError || mUserLocation == null) {
+			return;
+		}
+		
+		//since this method can be called recursively check for this flag and
+		//	return if a broader search is not requested with a non-null list
+		//	this way onLocationChanged method is not requesting this one more than once
+		if (!broaderSearch && mCrimeRecords != null) {
+			return;
+		}
+		
 		SpotCrimeRequest request =
 				new SpotCrimeRequest(TapShieldApplication.SPOTCRIME_CONFIG,
-						mUser.getCenter().latitude, mUser.getCenter().longitude, 0.03f)
+						mUserLocation.getLatitude(), mUserLocation.getLongitude(), 0.03f)
 				.setSince(mCrimeSince)
 				.setSortBy(SpotCrimeRequest.SORT_BY_DISTANCE)
 				.setSortOrder(SpotCrimeRequest.SORT_ORDER_ASCENDING);
@@ -463,7 +442,7 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 					if (results.size() < MINIMUM_NUMBER_CRIMES) {
 						//starting week before previous search
 						mCrimeSince = new DateTime(mCrimeSince).minusHours(1).getMillis();
-						loadNearbyCrimes();
+						loadNearbyCrimes(true);
 						return;
 					}
 
@@ -488,6 +467,44 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 					.title(c.getType() + " " + c.getDate())
 					.snippet(c.getDescription());
 			mMap.addMarker(markerOptions);
+		}
+	}
+	
+	private void drawUser() {
+		LatLng where = new LatLng(mUserLocation.getLatitude(), mUserLocation.getLongitude());
+		
+		//accuracy
+		float radius = mUserLocation.getAccuracy();
+
+		if (mAccuracyBubble == null) {
+			CircleOptions bubbleOptions = new CircleOptions()
+					.center(where)
+					.radius(radius)
+					.strokeWidth(4)
+					.strokeColor(Color.parseColor("#50a6d2"))
+					.fillColor(Color.parseColor("#3350a6d2"));
+
+			mAccuracyBubble = mMap.addCircle(bubbleOptions);
+		} else {
+			mAccuracyBubble.setCenter(where);
+			mAccuracyBubble.setRadius(radius);
+		}
+		
+		//user
+		if (mUser == null) {
+			CircleOptions userOptions = new CircleOptions()
+					.center(where)
+					.radius(1)
+					.strokeWidth(0)
+					.fillColor(Color.parseColor("#50a6d2"));
+			mUser = mMap.addCircle(userOptions);
+		} else {
+			mUser.setCenter(where);
+		}
+		
+		if (mTrackUser) {
+			//do not animate if it is just resuming
+			moveCameraToUser(!mResuming);
 		}
 	}
 	
