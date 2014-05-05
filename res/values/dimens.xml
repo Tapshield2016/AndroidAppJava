@@ -78,6 +78,7 @@
     <dimen name="ts_entourage_pickroute_routeoverview_summary">18sp</dimen>
     <dimen name="ts_entourage_pickarrivalcontacts_text">18sp</dimen>
     <dimen name="ts_entourage_pickarrivalcontacts_image">110dp</dimen>
+    <integer name="ts_entourage_route_width">20</integer>
     
     <!-- crime details -->
     <dimen name="details_image_type">64dp</dimen>
