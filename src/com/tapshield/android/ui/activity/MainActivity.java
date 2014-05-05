@@ -331,6 +331,11 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 		actionBar.setDisplayShowTitleEnabled(!entourageSet);
 		actionBar.setDisplayShowCustomEnabled(entourageSet);
 
+		int drawerLockMode = entourageSet ?
+				DrawerLayout.LOCK_MODE_LOCKED_CLOSED :
+						DrawerLayout.LOCK_MODE_UNLOCKED;
+		mDrawerLayout.setDrawerLockMode(drawerLockMode);
+		
 		//set custom view with entourage-related information
 		if (entourageSet) {
 			View entourageActionBarView = getLayoutInflater().inflate(R.layout.actionbar_main_entourage, null);
