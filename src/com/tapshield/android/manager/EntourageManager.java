@@ -21,6 +21,8 @@ import com.tapshield.android.api.googledirections.model.Route;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.receiver.EntourageReceiver;
 import com.tapshield.android.service.EntourageArrivalCheckService;
+import com.tapshield.android.ui.activity.AlertActivity;
+import com.tapshield.android.ui.activity.MainActivity;
 import com.tapshield.android.utils.ContactsRetriever.Contact;
 
 
@@ -66,6 +68,7 @@ public class EntourageManager implements EntourageListener {
 				.getEntourageManager();
 		mPreferences = mContext.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
 		mAlarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+		mListeners = new ArrayList<Listener>();
 		load();
 	}
 	
@@ -167,10 +170,25 @@ public class EntourageManager implements EntourageListener {
 		
 		Intent entourageArrivalCheckService = new Intent(mContext, EntourageArrivalCheckService.class);
 		mContext.startService(entourageArrivalCheckService);
+	}
+	
+	public void notifyUserMissedETA() {
 		
-		int type = intent.getIntExtra(EmergencyManager.EXTRA_TYPE, EmergencyManager.TYPE_START_REQUESTED);
+		Log.i("aaa", "notifyUserMissedETA");
+		
 		EmergencyManager manager = EmergencyManager.getInstance(mContext);
-		manager.startNow(type);
+		manager.startNow(EmergencyManager.TYPE_START_REQUESTED);
+		
+		
+		Intent home = new Intent(mContext, MainActivity.class)
+				.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		
+		Intent alert = new Intent(mContext, AlertActivity.class)
+				.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+		Intent[] stack = new Intent[] {home, alert};
+		
+		mContext.startActivities(stack);
 	}
 	
 	public void setMembers(Contact... contacts) {}
