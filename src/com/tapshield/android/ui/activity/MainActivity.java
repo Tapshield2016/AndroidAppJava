@@ -3,8 +3,11 @@ package com.tapshield.android.ui.activity;
 import java.util.List;
 
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.DateTimeFormatterBuilder;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,6 +25,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdate;
@@ -37,8 +41,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.tapshield.android.R;
+import com.tapshield.android.R.menu;
 import com.tapshield.android.api.JavelinClient;
 import com.tapshield.android.api.JavelinUserManager;
+import com.tapshield.android.api.googledirections.model.Route;
 import com.tapshield.android.api.model.User;
 import com.tapshield.android.api.spotcrime.SpotCrimeClient;
 import com.tapshield.android.api.spotcrime.SpotCrimeClient.SpotCrimeCallback;
@@ -47,6 +53,7 @@ import com.tapshield.android.api.spotcrime.model.Crime;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.location.LocationTracker;
 import com.tapshield.android.manager.EmergencyManager;
+import com.tapshield.android.manager.EntourageManager;
 import com.tapshield.android.manager.YankManager;
 import com.tapshield.android.manager.YankManager.YankListener;
 import com.tapshield.android.ui.fragment.NavigationFragment.OnNavigationItemClickListener;
@@ -74,6 +81,7 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 	private JavelinClient mJavelin;
 	private LocationTracker mTracker;
 	private YankManager mYank;
+	private EntourageManager mEntourageManager;
 	
 	private AlertDialog mYankDialog;
 	
@@ -123,20 +131,19 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 		mJavelin = JavelinClient.getInstance(this, TapShieldApplication.JAVELIN_CONFIG);
 		mTracker = LocationTracker.getInstance(this);
 		mYank = YankManager.get(this);
+		mEntourageManager = EntourageManager.get(this);
 		
 		mYankDialog = getYankDialog();
-		
-		ActionBar actionBar = getActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.setHomeButtonEnabled(true);
-		actionBar.setTitle(R.string.ts_home);
 		
 		mEntourage.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				Intent pick = new Intent(MainActivity.this, PickDestinationActivity.class);
-				startActivity(pick);
+				//Skip selection activities if Entourage is already set (running)
+				Class<? extends Activity> clss = EntourageManager.get(MainActivity.this).isSet() ?
+						PickArrivalContacts.class : PickDestinationActivity.class;
+				Intent activity = new Intent(MainActivity.this, clss);
+				startActivity(activity);
 			}
 		});
 		
@@ -226,6 +233,8 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 		}
 		mTracker.start();
 		mTracker.addLocationListener(this);
+		
+		setUiBasedOnEntourage();
 	}
 	
 	@Override
@@ -287,6 +296,40 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 		LatLng cameraLatLng = new LatLng(mUser.getCenter().latitude, mUser.getCenter().longitude);
 		CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(cameraLatLng);
 		mMap.animateCamera(cameraUpdate);
+	}
+	
+	private void setUiBasedOnEntourage() {
+		
+		boolean entourageSet = mEntourageManager.isSet();
+		
+		ActionBar actionBar = getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(!entourageSet);
+		actionBar.setHomeButtonEnabled(!entourageSet);
+		actionBar.setTitle(R.string.ts_home);
+		actionBar.setDisplayShowTitleEnabled(!entourageSet);
+		actionBar.setDisplayShowCustomEnabled(true);
+
+		//set custom view with entourage-related information
+		if (entourageSet) {
+			View entourageActionBarView = getLayoutInflater().inflate(R.layout.actionbar_main_entourage, null);
+			
+			Route r = mEntourageManager.getRoute();
+			
+			String destinationString = r.destinationName() != null ? r.destinationName() : r.endAddress();
+
+			long etaMilli = mEntourageManager.getStartAt() + (r.durationSeconds() * 1000);
+			String etaString = new DateTime(etaMilli).toString();
+			
+			TextView destination = (TextView)
+					entourageActionBarView.findViewById(R.id.actionbar_main_entourage_text_destination);
+			TextView eta = (TextView)
+					entourageActionBarView.findViewById(R.id.actionbar_main_entourage_text_eta);
+			
+			destination.setText(destinationString);
+			eta.setText(etaString);
+			
+			actionBar.setCustomView(entourageActionBarView);
+		}
 	}
 	
 	private void toggleFloatingUi(boolean toVisible) {
