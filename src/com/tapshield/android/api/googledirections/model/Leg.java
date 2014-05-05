@@ -1,7 +1,6 @@
 package com.tapshield.android.api.googledirections.model;
 
 import com.google.gson.annotations.SerializedName;
-import com.tapshield.android.R.menu;
 import com.tapshield.android.api.googledirections.model.Bounds.BoundsCoordinates;
 
 public class Leg {
@@ -17,6 +16,20 @@ public class Leg {
 	
 	@SerializedName("end_location")
 	BoundsCoordinates mEndLocation;
+	
+	@SerializedName("start_address")
+	String mStartAddress;
+	
+	@SerializedName("end_address")
+	String mEndAddress;
+	
+	public String startAddress() {
+		return mStartAddress;
+	}
+	
+	public String endAddress() {
+		return mEndAddress;
+	}
 	
 	public long distanceValue() {
 		return mDistance.mValue;

@@ -9,6 +9,9 @@ import com.google.gson.annotations.SerializedName;
 
 public class Route {
 
+	@SerializedName("destinationName")
+	private String mDestinationName;
+	
 	@SerializedName("summary")
 	private String mSummary;
 	
@@ -36,12 +39,28 @@ public class Route {
 		return warnings;
 	}
 	
+	public String destinationName() {
+		return mDestinationName;
+	}
+	
+	public void destinationName(String destinationName) {
+		mDestinationName = destinationName;
+	}
+	
 	public String summary() {
 		return mSummary;
 	}
 	
 	public String copyrights() {
 		return mCopyrights;
+	}
+	
+	public String startAddress() {
+		return mLegs.get(0).startAddress();
+	}
+	
+	public String endAddress() {
+		return mLegs.get(mLegs.size() - 1).endAddress();
 	}
 	
 	//assuming only one leg is given--app not supporting waypoints
