@@ -117,7 +117,11 @@ public class PickArrivalContacts extends Activity implements ContactsRetrieverLi
 	}
 	
 	private void startEntourage() {
-		Contact[] chosenArray = mChosen.toArray(new Contact[mChosen.size()]);
+		Contact[] chosenArray = new Contact[mChosen.size()];
+		
+		for (int i = 0; i < mChosen.size(); i++) {
+			chosenArray[i] = mChosen.get(i);
+		}
 
 		EntourageManager entourage = EntourageManager.get(this);
 		entourage.start(entourage.getTemporaryRoute(), chosenArray);
