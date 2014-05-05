@@ -4,7 +4,6 @@ import android.app.Service;
 import android.content.Intent;
 import android.location.Location;
 import android.os.IBinder;
-import android.util.Log;
 
 import com.google.android.gms.location.LocationListener;
 import com.tapshield.android.location.LocationTracker;
@@ -26,7 +25,6 @@ public class EntourageArrivalCheckService extends Service implements LocationLis
 	
 	@Override
 	public void onCreate() {
-		Log.i("aaa", "eacs create");
 		super.onCreate();
 		mTracker = LocationTracker.getInstance(this);
 		mTracker.addLocationListener(this);
@@ -40,7 +38,6 @@ public class EntourageArrivalCheckService extends Service implements LocationLis
 	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		Log.i("aaa", "eacs start");
 		mEntourage.stop();
 		mTracker.start();
 		return START_STICKY;
@@ -48,17 +45,15 @@ public class EntourageArrivalCheckService extends Service implements LocationLis
 
 	@Override
 	public void onLocationChanged(Location location) {
-		Log.i("aaa", "eacs location changed w acc=" + location.getAccuracy());
 		
 		if (location.getAccuracy() <= ACCURACY_MINIMUM) {
 
 			mTracker.removeLocationListener(this);
 			mTracker.stop();
-			
+
 			if (location != null && mDestination != null) {
 				float distance = location.distanceTo(mDestination);
 				
-				Log.i("aaa", "eacs distance=" + distance + " min=" + DISTANCE_MINIMUM_FOR_ALERT);
 
 				if (distance >= DISTANCE_MINIMUM_FOR_ALERT) {
 					mEntourage.addListener(this);
