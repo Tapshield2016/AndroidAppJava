@@ -18,6 +18,7 @@
     <string name="ts_common_search">Search</string>
     <string name="ts_common_done">Done</string>
     <string name="ts_common_start">Start</string>
+    <string name="ts_common_stop">Stop</string>
     <string name="ts_common_add">Add</string>
     
     <!-- welcome -->
