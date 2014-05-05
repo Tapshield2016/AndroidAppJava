@@ -27,6 +27,7 @@ import com.tapshield.android.utils.ContactsRetriever.ContactsRetrieverListener;
 
 public class PickArrivalContacts extends Activity implements ContactsRetrieverListener, OnItemClickListener {
 
+	private EntourageManager mEntourage;
 	private GridView mGrid;
 	private ArrivalContactAdapter mAdapter;
 	private ContactSelectionFragment mSelectionFragment;
@@ -39,6 +40,8 @@ public class PickArrivalContacts extends Activity implements ContactsRetrieverLi
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_pickarrivalcontacts);
 
+		mEntourage = EntourageManager.get(this);
+		
 		mAdapter = new ArrivalContactAdapter(this, mChosen, R.layout.item_arrivalcontact);
 		
 		mGrid = (GridView) findViewById(R.id.pickarrivalcontacts_grid);
@@ -67,7 +70,14 @@ public class PickArrivalContacts extends Activity implements ContactsRetrieverLi
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean shown = isSelectionFragmentShown();
 		
-		int menuResource = shown ? R.menu.done : R.menu.start;
+		int menuResource = R.menu.start;
+		
+		if (shown) {
+			menuResource = R.menu.done;
+		} else if (mEntourage.isSet()) {
+			menuResource = R.menu.stop;
+		}
+		
 		getMenuInflater().inflate(menuResource, menu);
 		return true;
 	}
@@ -80,6 +90,10 @@ public class PickArrivalContacts extends Activity implements ContactsRetrieverLi
 			return true;
 		case R.id.action_start:
 			startEntourage();
+			return true;
+		case R.id.action_stop:
+			mEntourage.stop();
+			UiUtils.startActivityNoStack(this, MainActivity.class);
 			return true;
 		}
 		return false;
@@ -123,8 +137,8 @@ public class PickArrivalContacts extends Activity implements ContactsRetrieverLi
 			chosenArray[i] = mChosen.get(i);
 		}
 
-		EntourageManager entourage = EntourageManager.get(this);
-		entourage.start(entourage.getTemporaryRoute(), chosenArray);
+		
+		mEntourage.start(mEntourage.getTemporaryRoute(), chosenArray);
 		UiUtils.startActivityNoStack(this, MainActivity.class);
 	}
 	
