@@ -9,11 +9,13 @@ import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import com.tapshield.android.R;
 import com.tapshield.android.ui.fragment.BasePickDestinationFragment.DestinationPickListener;
 import com.tapshield.android.ui.fragment.PickDestinationContactFragment;
 import com.tapshield.android.ui.fragment.PickDestinationPlaceFragment;
+import com.tapshield.android.utils.UiUtils;
 
 public class PickDestinationActivity extends Activity implements DestinationPickListener {
 
@@ -24,8 +26,24 @@ public class PickDestinationActivity extends Activity implements DestinationPick
 	@Override
 	protected void onCreate(Bundle savedInstance) {
 		super.onCreate(savedInstance);
+		
+		ActionBar actionBar = getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		
 		setTabs();
 		mModeDialog = getModeDialog();
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			UiUtils.startActivityNoStack(this, MainActivity.class);
+			return true;
+		}
+		
+		return false;
 	}
 	
 	private void setTabs() {

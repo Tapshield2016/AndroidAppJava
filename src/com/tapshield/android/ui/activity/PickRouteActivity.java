@@ -2,6 +2,7 @@ package com.tapshield.android.ui.activity;
 
 import java.util.List;
 
+import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -64,6 +66,9 @@ public class PickRouteActivity extends FragmentActivity implements LocationListe
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_pickroute);
+		
+		ActionBar actionBar = getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
 		
 		mMap = ((SupportMapFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.pickroute_fragment_map)).getMap();
@@ -158,6 +163,9 @@ public class PickRouteActivity extends FragmentActivity implements LocationListe
 		switch (item.getItemId()) {
 		case R.id.action_next:
 			next();
+			return true;
+		case android.R.id.home:
+			UiUtils.startActivityNoStack(this, MainActivity.class);
 			return true;
 		}
 		return false;

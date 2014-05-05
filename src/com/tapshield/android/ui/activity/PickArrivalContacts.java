@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ListFragment;
 import android.os.Bundle;
@@ -40,6 +41,9 @@ public class PickArrivalContacts extends Activity implements ContactsRetrieverLi
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_pickarrivalcontacts);
 
+		ActionBar actionBar = getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		
 		mEntourage = EntourageManager.get(this);
 		
 		mAdapter = new ArrivalContactAdapter(this, mChosen, R.layout.item_arrivalcontact);
@@ -93,6 +97,9 @@ public class PickArrivalContacts extends Activity implements ContactsRetrieverLi
 			return true;
 		case R.id.action_stop:
 			mEntourage.stop();
+			UiUtils.startActivityNoStack(this, MainActivity.class);
+			return true;
+		case android.R.id.home:
 			UiUtils.startActivityNoStack(this, MainActivity.class);
 			return true;
 		}
