@@ -112,7 +112,7 @@ public class EntourageManager implements EntourageListener {
 	}
 	
 	private PendingIntent getPendingIntent() {
-		Intent receiver = new Intent(mContext, EntourageReceiver.class);
+		Intent receiver = new Intent(ACTION_ENTOURAGE_ARRIVAL_CHECK);
 		PendingIntent operation = PendingIntent.getBroadcast(mContext, 1, receiver, 0);
 		return operation;
 	}
