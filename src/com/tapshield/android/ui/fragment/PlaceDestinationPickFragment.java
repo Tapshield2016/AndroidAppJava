@@ -109,7 +109,7 @@ public class PlaceDestinationPickFragment extends BaseDestinationPickFragment
 			mPlaces.addAll(places);
 			mAdapter.notifyDataSetChanged();
 		} else {
-			UiUtils.toastShort(getActivity(), "Error loading results :(");
+			UiUtils.toastShort(getActivity(), "Error loading results");
 			Log.e("aaa", "error loading places results=" + errorIfNotOk);
 		}
 	}
@@ -117,7 +117,7 @@ public class PlaceDestinationPickFragment extends BaseDestinationPickFragment
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		Place p = mAdapter.getItem(position);
-		destinationPicked(p.latitude() + "," + p.longitude());
+		destinationPicked(p.latitude() + "," + p.longitude(), p.name());
 	}
 	
 	private class PlaceAdapter extends BaseAdapter {

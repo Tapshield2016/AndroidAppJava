@@ -31,6 +31,7 @@ public class ContactDestinationPickFragment extends BaseDestinationPickFragment
 	private List<Contact> mContacts = new ArrayList<Contact>();
 	private ContactAdapter mAdapter;
 	private MenuItem mSearch;
+	private String mOptionalDestinationName;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -109,8 +110,10 @@ public class ContactDestinationPickFragment extends BaseDestinationPickFragment
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		//get contact and prompt the user to pick one if 2+ are available, otherwise, pick destination
 		Contact c = mAdapter.getItem(position);
+		mOptionalDestinationName = c.name();
+		
 		if (c.address().size() == 1) {
-			destinationPicked(c.address().get(0));
+			destinationPicked(c.address().get(0), mOptionalDestinationName);
 		} else {
 			String[] options = new String[c.address().size()];
 			for (int a = 0; a < options.length; a++) {
@@ -129,7 +132,7 @@ public class ContactDestinationPickFragment extends BaseDestinationPickFragment
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						Log.i("aaa", "selected=" + options[which]);
-						destinationPicked(options[which]);
+						destinationPicked(options[which], mOptionalDestinationName);
 					}
 				})
 				.create()

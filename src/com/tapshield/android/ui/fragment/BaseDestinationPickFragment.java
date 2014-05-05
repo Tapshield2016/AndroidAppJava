@@ -11,12 +11,12 @@ public class BaseDestinationPickFragment extends ListFragment {
 		getListView().setDivider(null);
 	}
 	
-	protected final void destinationPicked(final String destination) {
-		((DestinationPickListener) getActivity()).onDestinationPick(destination);
+	protected final void destinationPicked(final String destination, String optionalDestinationName) {
+		((DestinationPickListener) getActivity()).onDestinationPick(destination, optionalDestinationName);
 	}
 	
 	public interface DestinationPickListener {
-		void onDestinationPick(String destination);
+		void onDestinationPick(String destination, String optionalDestinationName);
 	}
 }
 

@@ -38,6 +38,7 @@ public class PickRouteActivity extends FragmentActivity implements LocationListe
 	
 	public static final String EXTRA_MODE = "com.tapshield.android.intent.extra.route_mode";
 	public static final String EXTRA_DESTINATION = "com.tapshield.android.intent.extra.route_destination";
+	public static final String EXTRA_DESTIONATION_NAME = "com.tapshield.android.intent.extra.route_destination_name";
 	public static final int MODE_DRIVING = 0;
 	public static final int MODE_WALKING = 1;
 	
@@ -45,6 +46,7 @@ public class PickRouteActivity extends FragmentActivity implements LocationListe
 	private String mOrigin;
 	private String mDestination;
 	private String mMode;
+	private String mOptionalDestinationName;
 	private ProgressDialog mGettingLocationDialog;
 	private ProgressDialog mGettingRoutesDialog;
 	private List<Route> mRoutes;
@@ -80,6 +82,10 @@ public class PickRouteActivity extends FragmentActivity implements LocationListe
 				cancel();
 				return;
 			}
+			
+			
+			mOptionalDestinationName = extras.containsKey(EXTRA_DESTIONATION_NAME) ?
+					extras.getString(EXTRA_DESTIONATION_NAME) : null;
 
 			mDestination = extras.getString(EXTRA_DESTINATION);
 			int mode = extras.getInt(EXTRA_MODE);
@@ -183,10 +189,13 @@ public class PickRouteActivity extends FragmentActivity implements LocationListe
 		//proceed only if a route has been selected
 		if (mSelectedRoute >= 0) {
 			//use the setter/getter for temporary route to hold it for following activities
+			Route r = mRoutes.get(mSelectedRoute);
+			r.destinationName(mOptionalDestinationName);
+			
 			EntourageManager
 					.get(this)
 					.setTemporaryRoute(
-							mRoutes.get(mSelectedRoute));
+							r);
 			Intent arrivalAndContacts = new Intent(this, PickArrivalContacts.class);
 			startActivity(arrivalAndContacts);
 		} else {

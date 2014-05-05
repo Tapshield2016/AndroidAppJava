@@ -19,6 +19,7 @@ public class PickDestinationActivity extends Activity implements DestinationPick
 
 	private AlertDialog mModeDialog;
 	private String mDestination;
+	private String mOptionalDestinationName;
 	
 	@Override
 	protected void onCreate(Bundle savedInstance) {
@@ -77,8 +78,9 @@ public class PickDestinationActivity extends Activity implements DestinationPick
 	}
 	
 	@Override
-	public void onDestinationPick(String destination) {
+	public void onDestinationPick(String destination, String optionalDestinationName) {
 		mDestination = destination;
+		mOptionalDestinationName = optionalDestinationName;
 		mModeDialog.show();
 	}
 	
@@ -86,6 +88,7 @@ public class PickDestinationActivity extends Activity implements DestinationPick
 		Intent pickRoute = new Intent(this, PickRouteActivity.class);
 		pickRoute.putExtra(PickRouteActivity.EXTRA_MODE, mode);
 		pickRoute.putExtra(PickRouteActivity.EXTRA_DESTINATION, destination);
+		pickRoute.putExtra(PickRouteActivity.EXTRA_DESTIONATION_NAME, mOptionalDestinationName);
 		startActivity(pickRoute);
 	}
 
