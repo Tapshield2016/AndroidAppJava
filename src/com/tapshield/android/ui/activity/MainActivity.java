@@ -468,7 +468,7 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 			String type = c.getType();
 			
 			//for the time being, ignore type 'other.' thus, if (type != other)
-			if (!type.equals(SpotCrimeUtils.TYPE_OTHER)) {
+			if (!type.equals(SpotCrimeClient.TYPE_OTHER)) {
 				int markerDrawableResource = SpotCrimeUtils.getMarkerResourceOfType(type);
 				
 				LatLng position = new LatLng(c.getLatitude(), c.getLongitude());
