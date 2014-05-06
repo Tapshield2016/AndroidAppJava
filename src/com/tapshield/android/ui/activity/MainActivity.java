@@ -54,6 +54,7 @@ import com.tapshield.android.manager.EmergencyManager;
 import com.tapshield.android.manager.EntourageManager;
 import com.tapshield.android.manager.YankManager;
 import com.tapshield.android.manager.YankManager.YankListener;
+import com.tapshield.android.ui.adapter.CrimeInfoWindowAdapter;
 import com.tapshield.android.ui.fragment.NavigationFragment.OnNavigationItemClickListener;
 import com.tapshield.android.ui.view.CircleButton;
 import com.tapshield.android.utils.SpotCrimeUtils;
@@ -127,6 +128,7 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 		mMap = ((SupportMapFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.main_fragment_map)).getMap();
 		mMap.setOnMapLoadedCallback(this);
+		mMap.setInfoWindowAdapter(new CrimeInfoWindowAdapter(this));
 		
 		mEntourage = (ImageButton) findViewById(R.id.main_imagebutton_entourage);
 		mLocateMe = (ImageButton) findViewById(R.id.main_imagebutton_locateuser);
@@ -477,8 +479,8 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 						.icon(BitmapDescriptorFactory.fromResource(markerDrawableResource))
 						.anchor(0.5f, 1.0f)
 						.position(position)
-						.title(c.getType() + " " + c.getDate())
-						.snippet(c.getDescription());
+						.title(c.getType())
+						.snippet(c.getDate() + CrimeInfoWindowAdapter.SEPARATOR + c.getAddress());
 				mMap.addMarker(markerOptions);
 			}
 		}
