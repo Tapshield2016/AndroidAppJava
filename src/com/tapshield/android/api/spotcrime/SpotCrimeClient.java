@@ -13,6 +13,16 @@ import com.tapshield.android.api.spotcrime.model.Crime;
 
 public class SpotCrimeClient {
 
+	public static final String TYPE_ARREST = "arrest";
+	public static final String TYPE_ARSON = "arson";
+	public static final String TYPE_ASSAULT = "assault";
+	public static final String TYPE_BURGLARY = "burglary";
+	public static final String TYPE_OTHER = "other";
+	public static final String TYPE_ROBBERY = "robbery";
+	public static final String TYPE_SHOOTING = "shooting";
+	public static final String TYPE_THEFT = "theft";
+	public static final String TYPE_VANDALISM = "vandalism";
+	
 	private static SpotCrimeClient mInstance;
 	
 	private SpotCrimeConfig mConfig;
