@@ -37,7 +37,7 @@ public class TapShieldApplication extends Application {
 	
 	public static SpotCrimeConfig SPOTCRIME_CONFIG =
 			new SpotCrimeConfig.Builder()
-			.key("2be4edd6ebd10379d1a1eb6600747726654fc81645ecae386a9a9a440329")
+			.key("246c313f9889be187cfbca0c3f5a09f9e4a5d8224edbf86ad795c72b0561")
 			.build();
 	
 	public static GooglePlacesConfig GOOGLEPLACES_CONFIG =
