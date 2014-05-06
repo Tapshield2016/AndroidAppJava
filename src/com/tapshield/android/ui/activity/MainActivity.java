@@ -56,6 +56,7 @@ import com.tapshield.android.manager.YankManager;
 import com.tapshield.android.manager.YankManager.YankListener;
 import com.tapshield.android.ui.fragment.NavigationFragment.OnNavigationItemClickListener;
 import com.tapshield.android.ui.view.CircleButton;
+import com.tapshield.android.utils.SpotCrimeUtils;
 import com.tapshield.android.utils.UiUtils;
 
 public class MainActivity extends FragmentActivity implements OnNavigationItemClickListener,
@@ -464,14 +465,22 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 	
 	private void addCrimeMarkers() {
 		for (Crime c : mCrimeRecords) {
-			LatLng position = new LatLng(c.getLatitude(), c.getLongitude());
-			MarkerOptions markerOptions = new MarkerOptions()
-					.draggable(false)
-					.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
-					.position(position)
-					.title(c.getType() + " " + c.getDate())
-					.snippet(c.getDescription());
-			mMap.addMarker(markerOptions);
+			String type = c.getType();
+			
+			//for the time being, ignore type 'other.' thus, if (type != other)
+			if (!type.equals(SpotCrimeUtils.TYPE_OTHER)) {
+				int markerDrawableResource = SpotCrimeUtils.getMarkerResourceOfType(type);
+				
+				LatLng position = new LatLng(c.getLatitude(), c.getLongitude());
+				MarkerOptions markerOptions = new MarkerOptions()
+						.draggable(false)
+						.icon(BitmapDescriptorFactory.fromResource(markerDrawableResource))
+						.anchor(0.5f, 1.0f)
+						.position(position)
+						.title(c.getType() + " " + c.getDate())
+						.snippet(c.getDescription());
+				mMap.addMarker(markerOptions);
+			}
 		}
 	}
 	
