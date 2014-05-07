@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.joda.time.Duration;
+import org.joda.time.format.PeriodFormatter;
+import org.joda.time.format.PeriodFormatterBuilder;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ListFragment;
@@ -17,16 +21,21 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.TextView;
 
 import com.tapshield.android.R;
 import com.tapshield.android.manager.EntourageManager;
 import com.tapshield.android.ui.adapter.ArrivalContactAdapter;
+import com.tapshield.android.ui.view.CircleSeekBar;
 import com.tapshield.android.utils.ContactsRetriever;
-import com.tapshield.android.utils.UiUtils;
 import com.tapshield.android.utils.ContactsRetriever.Contact;
 import com.tapshield.android.utils.ContactsRetriever.ContactsRetrieverListener;
+import com.tapshield.android.utils.UiUtils;
 
-public class PickArrivalContacts extends Activity implements ContactsRetrieverListener, OnItemClickListener {
+public class PickArrivalContacts extends Activity
+		implements ContactsRetrieverListener, OnItemClickListener, OnSeekBarChangeListener {
 
 	private EntourageManager mEntourage;
 	private GridView mGrid;
@@ -35,6 +44,12 @@ public class PickArrivalContacts extends Activity implements ContactsRetrieverLi
 	private boolean mSelectionFragmentShown = false;
 	private List<Contact> mContacts = new ArrayList<Contact>();
 	private List<Contact> mChosen = new ArrayList<Contact>();
+	
+	private CircleSeekBar mEtaKnob;
+	private TextView mEtaText;
+	private long mEta;
+	private long mEtaMilli;
+	private long mEtaMilliPerStep;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +60,8 @@ public class PickArrivalContacts extends Activity implements ContactsRetrieverLi
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		
 		mEntourage = EntourageManager.get(this);
+		mEtaKnob = (CircleSeekBar) findViewById(R.id.pickarrivalcontacts_circleseekbar);
+		mEtaText = (TextView) findViewById(R.id.pickarrivalcontacts_text_eta);
 		
 		mAdapter = new ArrivalContactAdapter(this, mChosen, R.layout.item_arrivalcontact);
 		
@@ -58,6 +75,11 @@ public class PickArrivalContacts extends Activity implements ContactsRetrieverLi
 			
 			mSelectionFragmentShown = mSelectionFragment != null;
 		}
+		
+		mEtaKnob.setOnSeekBarChangeListener(this);
+		mEta = mEtaMilli = mEntourage.getTemporaryRoute().durationSeconds() * 1000;
+		mEtaMilliPerStep = 2 * mEtaMilli / mEtaKnob.getMax(); //times 2 to go up to double the eta
+		updateEta();
 	}
 	
 	@Override
@@ -123,6 +145,35 @@ public class PickArrivalContacts extends Activity implements ContactsRetrieverLi
 			showSelectionFragment();
 			passContactsToSelectionFragment();
 		}
+	}
+	
+	@Override
+	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+		mEta = progress * mEtaMilliPerStep;
+		updateEta();
+	}
+
+	@Override
+	public void onStartTrackingTouch(SeekBar arg0) {}
+
+	@Override
+	public void onStopTrackingTouch(SeekBar arg0) {}
+	
+	private void updateEta() {
+		Duration eta = new Duration(mEta);
+		
+		PeriodFormatter formatter = new PeriodFormatterBuilder()
+				.printZeroAlways()
+				.minimumPrintedDigits(2)
+				.appendHours()
+				.appendSuffix(":")
+				.appendMinutes()
+				.appendSuffix(":")
+				.appendSeconds()
+				.toFormatter();
+		String formatted = formatter.print(eta.toPeriod());
+		
+		mEtaText.setText(formatted);
 	}
 	
 	@Override
