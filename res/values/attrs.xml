@@ -24,4 +24,13 @@
         <attr name="iconPaddingBottom" format="reference|dimension"/>
     </declare-styleable>
     
+    <declare-styleable name="CircleSeekBar">
+        <attr name="colorBar" format="reference|color"/>
+        <attr name="colorHandle" format="reference|color"/>
+        <attr name="colorProgress" format="reference|color"/>
+        <attr name="sizeBar" format="reference|dimension"/>
+        <attr name="sizeHandle" format="reference|dimension"/>
+        <attr name="sizeProgress" format="reference|dimension"/>
+    </declare-styleable>
+    
 </resources>
