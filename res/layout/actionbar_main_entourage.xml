@@ -15,7 +15,9 @@
             android:layout_weight="0.6"
             android:gravity="center"
             android:textSize="@dimen/actionbar_main_entourage_primary"
-            android:textColor="@color/ts_brand_dark"/>
+            android:textColor="@color/ts_brand_dark"
+            android:maxLines="1"
+            android:ellipsize="end"/>
         
         <TextView
             android:id="@+id/actionbar_main_entourage_text_eta"
