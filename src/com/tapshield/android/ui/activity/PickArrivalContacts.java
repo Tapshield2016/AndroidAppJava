@@ -26,6 +26,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
 import com.tapshield.android.R;
+import com.tapshield.android.api.googledirections.model.Route;
 import com.tapshield.android.manager.EntourageManager;
 import com.tapshield.android.ui.adapter.ArrivalContactAdapter;
 import com.tapshield.android.ui.view.CircleSeekBar;
@@ -50,6 +51,7 @@ public class PickArrivalContacts extends Activity
 	private long mEta;
 	private long mEtaMilli;
 	private long mEtaMilliPerStep;
+	private Route mRoute;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +78,10 @@ public class PickArrivalContacts extends Activity
 			mSelectionFragmentShown = mSelectionFragment != null;
 		}
 		
+		mRoute = mEntourage.isSet() ? mEntourage.getRoute() : mEntourage.getTemporaryRoute();
+		
 		mEtaKnob.setOnSeekBarChangeListener(this);
-		mEta = mEtaMilli = mEntourage.getTemporaryRoute().durationSeconds() * 1000;
+		mEta = mEtaMilli = mRoute.durationSeconds() * 1000;
 		mEtaMilliPerStep = 2 * mEtaMilli / mEtaKnob.getMax(); //times 2 to go up to double the eta
 		updateEta();
 	}
@@ -149,7 +153,7 @@ public class PickArrivalContacts extends Activity
 	
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-		mEta = progress * mEtaMilliPerStep;
+		mEta = (progress + 1) * mEtaMilliPerStep;
 		updateEta();
 	}
 
@@ -195,8 +199,9 @@ public class PickArrivalContacts extends Activity
 			chosenArray[i] = mChosen.get(i);
 		}
 
+		long etaSeconds = mEta/1000;
 		
-		mEntourage.start(mEntourage.getTemporaryRoute(), chosenArray);
+		mEntourage.start(mRoute, etaSeconds, chosenArray);
 		UiUtils.startActivityNoStack(this, MainActivity.class);
 	}
 	
