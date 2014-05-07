@@ -1,7 +1,9 @@
 package com.tapshield.android.ui.view;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.SystemClock;
@@ -17,6 +19,12 @@ public class CircleSeekBar extends SeekBar {
 	private int mFps = 60;
 	private long mInvalidateFrequency;
 	private long mInvalidatedAt = 0;
+	private int mColorBar;
+	private int mColorHandle;
+	private int mColorProgress;
+	private int mSizeBar;
+	private int mSizeHandle;
+	private int mSizeProgress;
 	private Paint mPaintBar;
 	private Paint mPaintHandle;
 	private Paint mPaintBackgroundArc;
@@ -31,11 +39,11 @@ public class CircleSeekBar extends SeekBar {
 	private boolean mAllowDrag = false;
 	private float mTouchX;
 	private float mTouchY;
-	private float mHandleRadius = 80;
 	private float mHandleX;
 	private float mHandleY;
 	private float mBackgroundArc = 0;
 	private RectF mBackgroundRect;
+	private float mStepAngle = 0;
 	
 	public CircleSeekBar(Context context) {
 		this(context, null);
@@ -43,23 +51,42 @@ public class CircleSeekBar extends SeekBar {
 	
 	public CircleSeekBar(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		
+		TypedArray a = context.getTheme().obtainStyledAttributes(
+				attrs,
+				R.styleable.CircleSeekBar,
+				0, 0);
+		
+		try {
+			mColorBar = a.getColor(R.styleable.CircleSeekBar_colorBar, Color.DKGRAY);
+			mColorHandle = a.getColor(R.styleable.CircleSeekBar_colorHandle, Color.WHITE);
+			mColorProgress = a.getColor(R.styleable.CircleSeekBar_colorProgress, Color.DKGRAY);
+			
+			mSizeBar = a.getDimensionPixelSize(R.styleable.CircleSeekBar_sizeBar, 0);
+			mSizeHandle = a.getDimensionPixelSize(R.styleable.CircleSeekBar_sizeHandle, 0);
+			mSizeProgress = a.getDimensionPixelSize(R.styleable.CircleSeekBar_sizeProgress, 0);
+		} finally {
+			a.recycle();
+		}
+		
 		configPaint();
 		configFps();
+		measureStepAngle(getMax());
 	}
 	
 	private void configPaint() {
 		mPaintBar = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaintBar.setStyle(Paint.Style.STROKE);
-		mPaintBar.setColor(getContext().getResources().getColor(R.color.ts_brand_dark));
-		mPaintBar.setStrokeWidth(45);
+		mPaintBar.setColor(mColorBar);
+		mPaintBar.setStrokeWidth(mSizeBar);
 		
 		mPaintHandle = new Paint(Paint.ANTI_ALIAS_FLAG);
-		mPaintHandle.setColor(getContext().getResources().getColor(R.color.ts_brand_light));
+		mPaintHandle.setColor(mColorHandle);
 		
 		mPaintBackgroundArc = new Paint(Paint.ANTI_ALIAS_FLAG);
-		mPaintBackgroundArc.setColor(getContext().getResources().getColor(R.color.ts_alert_text_color));
 		mPaintBackgroundArc.setStyle(Paint.Style.STROKE);
-		mPaintBackgroundArc.setStrokeWidth(45);
+		mPaintBackgroundArc.setColor(mColorProgress);
+		mPaintBackgroundArc.setStrokeWidth(mSizeProgress);
 	}
 	
 	public void setFps(int newFps) {
@@ -71,21 +98,6 @@ public class CircleSeekBar extends SeekBar {
 		mInvalidateFrequency = (long) 1000 / (long) mFps;
 	}
 	
-	private void invalidateLimited() {
-		long now = SystemClock.elapsedRealtime();
-
-		if (now >= mInvalidatedAt + mInvalidateFrequency) {
-			mInvalidatedAt = now;
-			invalidate();
-		}
-	}
-	
-	@Override
-	public void invalidate() {
-		updateValues();
-		super.invalidate();
-	}
-
 	@Override
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
 		
@@ -101,9 +113,6 @@ public class CircleSeekBar extends SeekBar {
 		mCy = mOffsetVertical + (mDimension / 2);
 		
 		mRadius = mDimension / 2;
-	
-		mHandleX = mCx;
-		mHandleY = mCy;
 		
 		mBackgroundRect = new RectF(
 				mOffsetHorizontal,
@@ -111,14 +120,26 @@ public class CircleSeekBar extends SeekBar {
 				mOffsetHorizontal + mDimension,
 				mOffsetVertical + mDimension);
 		
+		setProgress(getProgress());
 		super.onSizeChanged(w, h, oldw, oldh);
+	}
+
+	private boolean invalidateFpsLimited() {
+		long now = SystemClock.elapsedRealtime();
+
+		if (now >= mInvalidatedAt + mInvalidateFrequency) {
+			mInvalidatedAt = now;
+			invalidate();
+			return true;
+		}
+		return false;
 	}
 	
 	@Override
 	protected synchronized void onDraw(Canvas canvas) {
 		canvas.drawCircle(mCx, mCy, mRadius, mPaintBar);
 		canvas.drawArc(mBackgroundRect, -90, mBackgroundArc, false, mPaintBackgroundArc);
-		canvas.drawCircle(mHandleX, mHandleY, mHandleRadius, mPaintHandle);
+		canvas.drawCircle(mHandleX, mHandleY, mSizeHandle, mPaintHandle);
 	}
 	
 	@Override
@@ -129,22 +150,22 @@ public class CircleSeekBar extends SeekBar {
 		
 		switch (event.getAction()) {
 		case MotionEvent.ACTION_DOWN:
-			mAllowDrag = mTouchX <= mHandleX + mHandleRadius && mTouchX >= mHandleX - mHandleRadius
-					&& mTouchY <= mHandleY + mHandleRadius && mTouchY >= mHandleY - mHandleRadius;
+			mAllowDrag = mTouchX <= mHandleX + mSizeHandle && mTouchX >= mHandleX - mSizeHandle
+					&& mTouchY <= mHandleY + mSizeHandle && mTouchY >= mHandleY - mSizeHandle;
 			
 			if (mAllowDrag) {
-				invalidate();
+				snap();
 			}
 			break;
 		case MotionEvent.ACTION_MOVE:
-			if (mAllowDrag) {
-				invalidateLimited();
+			if (mAllowDrag && invalidateFpsLimited()) {
+				snap();
 			}
 			break;
 		case MotionEvent.ACTION_UP:
 			if (mAllowDrag) {
 				mAllowDrag = false;
-				invalidate();
+				snap();
 			}
 			break;
 		}
@@ -152,15 +173,56 @@ public class CircleSeekBar extends SeekBar {
 		return true;
 	}
 	
-	private void updateValues() {
+	@Override
+	public synchronized void setProgress(int progress) {
+		snapHandleToProgress(progress);
+		super.setProgress(progress);
+	}
+	
+	@Override
+	public synchronized void setMax(int max) {
+		measureStepAngle(max);
+		super.setMax(max);
+	}
+	
+	private void measureStepAngle(int max) {
+		mStepAngle = 360 / max;
+	}
+	
+	private void snap() {
 		double dx = mTouchX - mCx;
 		double dy = mCy - mTouchY;
 		double angleRadians = Math.atan2(dy, dx);
 		double angle = angleRadians * 180 / Math.PI;
+		float angleFromY = getAngleFromYAxisClockwise(angle);
 		
+		int snappedStep = getSnappedStepWithAngle(angleFromY);
+		int step = getProgress();
+		if (snappedStep != step) {
+			setProgress(snappedStep);
+		}
+	}
+	
+	private void snapHandleToProgress(int step) {
+		float angleFromY = (mStepAngle / 2) + (mStepAngle * step);
+
+		//reverse process of getAngleFromYAxisClockwise()
+		float anglePreRadians = 0;
+		if (angleFromY > 270) {
+			anglePreRadians = 360 - angleFromY + 90;
+		} else if (angleFromY > 90) {
+			anglePreRadians = (-1) * (angleFromY - 90);
+		} else {
+			anglePreRadians = 90 - angleFromY;
+		}
+		
+		double angleRadians = (double) anglePreRadians * Math.PI / 180d;
 		mHandleX = mCx + (mRadius * (float) Math.cos(angleRadians));
 		mHandleY = mCy - (mRadius * (float) Math.sin(angleRadians));
-		
+		mBackgroundArc = angleFromY;
+	}
+	
+	private float getAngleFromYAxisClockwise(double angleFromYAxis) {
 		/*
 		 * the angle variable holds the value [0, 180] positive or negative
 		 * defined by the x axis in quadrant 1, going up, positive, going down, negative.
@@ -176,14 +238,16 @@ public class CircleSeekBar extends SeekBar {
 		 * 
 		 */
 		
-		Log.i("aaa", "angle=" + angle);
-		
-		if (angle < 0) {
-			mBackgroundArc = 90 + (float) Math.abs(angle);
-		} else if (angle > 90) {
-			mBackgroundArc = 360 - (float) (angle - 90);
+		if (angleFromYAxis < 0) {
+			return 90 + (float) Math.abs(angleFromYAxis);
+		} else if (angleFromYAxis > 90) {
+			return 360 - (float) (angleFromYAxis - 90);
 		} else {
-			mBackgroundArc = 90 - (float) angle;
+			return 90 - (float) angleFromYAxis;
 		}
+	}
+	
+	private int getSnappedStepWithAngle(double angleFromYAxis) {
+		return (int) (angleFromYAxis / mStepAngle);
 	}
 }
