@@ -347,8 +347,8 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 			
 			String destinationString = r.destinationName() != null ? r.destinationName() : r.endAddress();
 
-			long etaMilli = mEntourageManager.getStartAt() + (r.durationSeconds() * 1000);
-			String etaString = new DateTime(etaMilli).toString();
+			long etaMilli = mEntourageManager.getStartAt() + mEntourageManager.getDurationMilli();
+			String etaString = new DateTime(etaMilli).toString("MMM dd hh:mm aa");
 			
 			TextView destination = (TextView)
 					entourageActionBarView.findViewById(R.id.actionbar_main_entourage_text_destination);
