@@ -20,20 +20,33 @@
 	        android:text="@string/ts_pickarrivalcontacts_text_arrivaltime"
 	        android:textSize="@dimen/ts_entourage_pickarrivalcontacts_text"/>
 	    
-        <com.tapshield.android.ui.view.CircleSeekBar
-            android:id="@+id/pickarrivalcontacts_circleseekbar"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.4"
-            android:padding="@dimen/ts_common_spacing_xs"
-            android:max="21"
-            android:progress="11"
-            csb:colorBar="@color/ts_brand_dark"
-            csb:colorHandle="@android:color/white"
-            csb:colorProgress="@color/ts_brand_light"
-            csb:sizeBar="14dp"
-            csb:sizeProgress="17dp"
-            csb:sizeHandle="20dp"/>
+            android:layout_weight="0.4">
+            
+            <com.tapshield.android.ui.view.CircleSeekBar
+	            android:id="@+id/pickarrivalcontacts_circleseekbar"
+	            android:layout_width="match_parent"
+	            android:layout_height="match_parent"
+	            android:padding="@dimen/ts_common_spacing_m"
+	            android:max="21"
+	            android:progress="10"
+	            csb:colorBar="@color/ts_brand_dark"
+	            csb:colorHandle="@android:color/white"
+	            csb:colorProgress="@color/ts_brand_light"
+	            csb:sizeBar="14dp"
+	            csb:sizeProgress="17dp"
+	            csb:sizeHandle="20dp"/>
+            
+            <TextView
+                android:id="@+id/pickarrivalcontacts_text_eta"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textSize="@dimen/ts_common_text_l"
+                android:textColor="@android:color/white"/>
+        </FrameLayout>
 	    
 	    <TextView
 	        android:layout_width="match_parent"
