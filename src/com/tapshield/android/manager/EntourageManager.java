@@ -43,6 +43,7 @@ public class EntourageManager implements EntourageListener {
 	private static final String KEY_SET = "com.tapshield.android.preferences.key.set";
 	private static final String KEY_ROUTE = "com.tapshield.android.preferences.key.route";
 	private static final String KEY_START = "com.tapshield.android.preferences.key.startat";
+	private static final String KEY_DURATION = "com.tapshield.android.preferences.key.duration";
 	private static final String KEY_MEMBERS = "com.tapshield.android.preferences.key.members";
 	
 	private static final String KEY_ROUTE_TEMP = "com.tapshield.android.preferences.key.route_temp";
@@ -58,6 +59,7 @@ public class EntourageManager implements EntourageListener {
 	private AlarmManager mAlarmManager;
 	private Route mRoute;
 	private long mStartAt;
+	private long mDuration;
 	private boolean mSet;
 	private int mMembersAdditionIndex = 0;
 	private int mMemberAdditionRetry = 0;
@@ -91,6 +93,7 @@ public class EntourageManager implements EntourageListener {
 			mRoute = gson.fromJson(mPreferences.getString(KEY_ROUTE, null), Route.class);
 			//load startAt here, setFlags() method will set the rest with this and the route
 			mStartAt = mPreferences.getLong(KEY_START, 0);
+			mDuration = mPreferences.getLong(KEY_DURATION, 0);
 			setFlags(mRoute);
 		}
 		
@@ -108,6 +111,7 @@ public class EntourageManager implements EntourageListener {
 		editor.putBoolean(KEY_SET, mSet);
 		editor.putString(KEY_ROUTE, gson.toJson(mRoute));
 		editor.putLong(KEY_START, mStartAt);
+		editor.putLong(KEY_DURATION, mDuration);
 		editor.putString(KEY_MEMBERS, gson.toJson(mMembers));
 		editor.apply();
 	}
@@ -130,17 +134,26 @@ public class EntourageManager implements EntourageListener {
 	}
 	
 	public void start(Route r, Contact... contacts) {
+		start(r, -1, contacts);
+	}
+	
+	public void start(Route r, long wantedDurationSeconds, Contact... contacts) {
 		if (isSet()) {
 			return;
 		}
-
+		
+		Log.i("aaa", "start r.name=" + r.destinationName());
+		
+		long durationSeconds =
+				wantedDurationSeconds >= 0 ? wantedDurationSeconds : r.durationSeconds();
+		
 		addMembers(contacts);
 		//preset startAt here, setFlags() method will set the rest with this and the route
 		mStartAt = System.currentTimeMillis();
 		setFlags(r);
-		long durationMilli = mRoute.durationSeconds() * 1000;
-		long extraBuffer = (long) (durationMilli * ARRIVE_BUFFER_FACTOR);
-		scheduleAlertIn(durationMilli + extraBuffer);
+		mDuration = durationSeconds * 1000;
+		long extraBuffer = (long) (mDuration * ARRIVE_BUFFER_FACTOR);
+		scheduleAlertIn(mDuration + extraBuffer);
 		save();
 	}
 	
@@ -168,6 +181,10 @@ public class EntourageManager implements EntourageListener {
 	
 	public long getStartAt() {
 		return isSet() ? mStartAt : -1;
+	}
+	
+	public long getDurationMilli() {
+		return isSet() ? mDuration : -1;
 	}
 	
 	public Route getRoute() {
@@ -315,6 +332,9 @@ public class EntourageManager implements EntourageListener {
 	}
 	
 	public void setTemporaryRoute(Route r) {
+		
+		Log.i("aaa", "settemp r.name=" + r.destinationName());
+		
 		Gson gson = new Gson();
 		
 		SharedPreferences.Editor editor = mPreferences.edit();
