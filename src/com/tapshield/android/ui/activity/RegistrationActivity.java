@@ -182,6 +182,21 @@ public class RegistrationActivity extends FragmentActivity
 	@Override
 	public void onProceed(Bundle extras) {
 		mIndex++;
+		
+		//if phone confirmation should be shown but no agency/organization is related to the user
+		// then skip to profile fragment for partial information
+		if (mIndex == 3) {
+			boolean skipPhoneConfirmation = !JavelinClient
+					.getInstance(this, TapShieldApplication.JAVELIN_CONFIG)
+					.getUserManager()
+					.getUser()
+					.belongsToAgency();
+			
+			if (skipPhoneConfirmation) {
+				mIndex++;
+			}
+		}
+		
 		setFragmentByIndex(extras);
 	}
 	
