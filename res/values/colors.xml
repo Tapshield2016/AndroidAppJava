@@ -21,6 +21,7 @@
     <color name="ts_chat_alertoverlay">#45e84747</color>
     <color name="ts_chat_usermessage_background">#ffffff</color>
     <color name="ts_entourage_pickroute_warning_background">#bbFFBF00</color>
+    <color name="ts_welcome_loginform_edittext_hint">#cccccc</color>
     
     <!-- all colors for countdown have 40% of opacity in hex (0.4 * 16 = 64) -->
     <color name="ts_background_alert_countdown_blueish">#643aa1d3</color>

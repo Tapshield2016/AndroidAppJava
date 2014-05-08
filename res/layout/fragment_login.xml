@@ -33,7 +33,8 @@
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:inputType="textEmailAddress"
-            android:hint="@string/ts_welcome_fragment_login_edit_email_hint"/>
+            android:hint="@string/ts_welcome_fragment_login_edit_email_hint"
+            android:textColorHint="@color/ts_welcome_loginform_edittext_hint"/>
         
         <EditText
             android:id="@+id/fragment_login_form_edit_password"
@@ -42,7 +43,8 @@
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:inputType="textPassword"
-            android:hint="@string/ts_welcome_fragment_login_edit_password_hint"/>
+            android:hint="@string/ts_welcome_fragment_login_edit_password_hint"
+            android:textColorHint="@color/ts_welcome_loginform_edittext_hint"/>
         
         <Button
             android:id="@+id/fragment_login_form_button_login"
