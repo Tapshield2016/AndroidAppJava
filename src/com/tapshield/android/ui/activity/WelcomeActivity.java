@@ -42,7 +42,7 @@ public class WelcomeActivity extends FragmentActivity {
 				mPageIndicator.setSelectedPage(position);
 				//show if not last, since it could have been hidden
 				if (position < mPagerAdapter.getCount() - 1
-						&& mIndicatorAndSkip.getVisibility() == View.GONE) {
+						&& mIndicatorAndSkip.getVisibility() == View.INVISIBLE) {
 					mIndicatorAndSkip.setVisibility(View.VISIBLE);
 				}
 			}
@@ -54,10 +54,10 @@ public class WelcomeActivity extends FragmentActivity {
 				if (position >= mPagerAdapter.getCount() - 2
 						&& offset >= INDICATOR_SKIP_HIDE_OFFSET
 						&& mIndicatorAndSkip.getVisibility() == View.VISIBLE) {
-					mIndicatorAndSkip.setVisibility(View.GONE);
+					mIndicatorAndSkip.setVisibility(View.INVISIBLE);
 				} else if (position <= mPagerAdapter.getCount() - 2
 						&& offset < INDICATOR_SKIP_HIDE_OFFSET
-						&& mIndicatorAndSkip.getVisibility() == View.GONE) {
+						&& mIndicatorAndSkip.getVisibility() == View.INVISIBLE) {
 					mIndicatorAndSkip.setVisibility(View.VISIBLE);
 				}
 			}

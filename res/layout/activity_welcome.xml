@@ -9,14 +9,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/ts_welcome_background"
-        />
+        android:src="@drawable/ts_welcome_background"/>
     
     <android.support.v4.view.ViewPager
         android:id="@+id/welcome_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-    
+
     <LinearLayout
         android:id="@+id/welcome_linear_indicatorskip"
         android:layout_width="match_parent"
@@ -28,11 +27,11 @@
             xmlns:tapshield="http://schemas.android.com/apk/res/com.tapshield.android"
             android:id="@+id/welcome_pageindicator"
             android:layout_gravity="center"
-            android:layout_width="100dp"
+            android:layout_width="150dp"
             android:layout_height="50dp"
             android:padding="5dp"
             tapshield:color="@android:color/white"
-            tapshield:strokePercentOfDiameter="10"/>
+            tapshield:strokePercentOfDiameter="14"/>
 
         <TextView
             android:id="@+id/welcome_text_skip"
@@ -43,6 +42,5 @@
             android:textColor="@android:color/white"
             android:textSize="@dimen/ts_welcome_skip_text"
             android:padding="@dimen/ts_common_spacing_m"/>
-        
     </LinearLayout>
 </RelativeLayout>
