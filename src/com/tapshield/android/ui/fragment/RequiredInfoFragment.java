@@ -124,6 +124,7 @@ public class RequiredInfoFragment extends BaseFragment implements OnUserSignUpLi
 			mUser.email = email;
 			mUser.username = mUser.email;
 			mUser.setPassword(password);
+			mUser.setDisarmCode(passcode);
 			mUser.phoneNumber = phone;
 			
 			mJavelin.getUserManager().signUp(mSelectedOrganization, email, password, phone, passcode, null, null, this);
