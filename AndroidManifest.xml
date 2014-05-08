@@ -78,7 +78,9 @@
         
         <activity
             android:name="com.tapshield.android.ui.activity.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -88,35 +90,53 @@
         
         <activity
             android:name="com.tapshield.android.ui.activity.WelcomeActivity"
-            android:theme="@android:style/Theme.Holo"/>
+            android:theme="@android:style/Theme.Holo"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
         
         <activity
             android:name="com.tapshield.android.ui.activity.RegistrationActivity"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
         
         <activity
-            android:name="com.tapshield.android.ui.activity.FullProfileActivity" />
+            android:name="com.tapshield.android.ui.activity.FullProfileActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
         
         <activity
-            android:name="com.tapshield.android.ui.activity.OrganizationSelectionActivity" />
+            android:name="com.tapshield.android.ui.activity.OrganizationSelectionActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
         
         <activity
             android:name="com.tapshield.android.ui.activity.ChatActivity" />
         
         <activity
-            android:name="com.tapshield.android.ui.activity.MassAlertsActivity" />
+            android:name="com.tapshield.android.ui.activity.MassAlertsActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
         
         <activity
-            android:name="com.tapshield.android.ui.activity.AlertActivity" />
+            android:name="com.tapshield.android.ui.activity.AlertActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
         
         <activity
-           android:name="com.tapshield.android.ui.activity.PickDestinationActivity" />
+            android:name="com.tapshield.android.ui.activity.PickDestinationActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
         
        <activity
-           android:name="com.tapshield.android.ui.activity.PickRouteActivity" />
+            android:name="com.tapshield.android.ui.activity.PickRouteActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
        
        <activity
-           android:name="com.tapshield.android.ui.activity.PickArrivalContacts" />
+            android:name="com.tapshield.android.ui.activity.PickArrivalContacts"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
         
         <!-- SERVICES -->
         <service
