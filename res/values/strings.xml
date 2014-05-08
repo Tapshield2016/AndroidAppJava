@@ -37,6 +37,16 @@
     <!-- welcome fragment login -->
     <string name="ts_welcome_fragment_login_edit_email_hint">Your Email</string>
     <string name="ts_welcome_fragment_login_edit_password_hint">Your Password</string>
+    <string name="ts_welcome_fragment_login_dialog_loggingin_title">Logging in</string>
+    <string name="ts_welcome_fragment_login_dialog_loggingin_message">Please wait&#8230;</string>
+    <string name="ts_welcome_fragment_login_dialog_orgbelonging_message">Do you belong to an organization that uses TapShield?</string>
+    <string name="ts_welcome_fragment_login_toast_passwordreset_emailinvalid">Please enter email in the field before requesting password reset</string>
+    <string name="ts_welcome_fragment_login_toast_passwordreset_ok">Password reset email sent. Check your inbox!</string>
+    <string name="ts_welcome_fragment_login_toast_login_emailinvalid">Invalid email</string>
+    <string name="ts_welcome_fragment_login_toast_login_passwordinvalid">Invalid password</string>
+    <string name="ts_welcome_fragment_login_toast_login_error_default">Error logging in. please try again later or contact support</string>
+    <string name="ts_welcome_fragment_login_toast_login_error_badcredentials">Wrong login combination!</string>
+    <string name="ts_welcome_fragment_login_toast_login_error_emailunverified">You need to verify your email before logging in!</string>
     
     <!-- fragment required info -->
     <string name="ts_fragment_requiredinfo_edit_email_hint">Email Address</string>

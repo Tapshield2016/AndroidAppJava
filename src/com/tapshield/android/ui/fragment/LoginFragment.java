@@ -84,8 +84,8 @@ public class LoginFragment extends BaseFragment implements OnClickListener, OnMe
 	
 	private ProgressDialog getLoggingDialog() {
 		ProgressDialog d = new ProgressDialog(getActivity());
-		d.setTitle("logging in");
-		d.setMessage("please wait...");
+		d.setTitle(R.string.ts_welcome_fragment_login_dialog_loggingin_title);
+		d.setMessage(getActivity().getString(R.string.ts_welcome_fragment_login_dialog_loggingin_message));
 		d.setIndeterminate(true);
 		d.setCancelable(false);
 		return d;
@@ -93,15 +93,15 @@ public class LoginFragment extends BaseFragment implements OnClickListener, OnMe
 	
 	private AlertDialog getOrgQuestionDialog() {
 		AlertDialog.Builder b = new AlertDialog.Builder(getActivity())
-				.setMessage("do you belong to an organization that uses tapshield?")
-				.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+				.setMessage(getActivity().getString(R.string.ts_welcome_fragment_login_dialog_orgbelonging_message))
+				.setPositiveButton(R.string.ts_common_yes, new DialogInterface.OnClickListener() {
 					
 					@Override
 					public void onClick(DialogInterface arg0, int arg1) {
 						startRegistration(false);
 					}
 				})
-				.setNegativeButton("no", new DialogInterface.OnClickListener() {
+				.setNegativeButton(R.string.ts_common_no, new DialogInterface.OnClickListener() {
 					
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
@@ -168,8 +168,8 @@ public class LoginFragment extends BaseFragment implements OnClickListener, OnMe
 		String email = mEmail.getText().toString().trim();
 		
 		if (email == null || email.isEmpty() || !StringUtils.isEmailValid(email)) {
-			UiUtils.toastLong(getActivity(),
-					"please enter email in the field before requesting password reset");
+			UiUtils.toastLong(getActivity(), getActivity().getString(
+					R.string.ts_welcome_fragment_login_toast_passwordreset_emailinvalid));
 			return;
 		}
 		
@@ -177,7 +177,9 @@ public class LoginFragment extends BaseFragment implements OnClickListener, OnMe
 			
 			@Override
 			public void onRequestPasswordReset(boolean successful, Throwable e) {
-				String m = successful ? "check your inbox" : "error:" + e.getMessage();
+				String m = successful ? getActivity().getString(
+						R.string.ts_welcome_fragment_login_toast_passwordreset_ok) :
+						"Error:" + e.getMessage();
 				UiUtils.toastLong(getActivity(), m);
 			}
 		});
@@ -194,12 +196,14 @@ public class LoginFragment extends BaseFragment implements OnClickListener, OnMe
 		String password = mPassword.getText().toString().trim();
 		
 		if (email == null || email.isEmpty() || !StringUtils.isEmailValid(email)) {
-			UiUtils.toastShort(getActivity(), "invalid email");
+			UiUtils.toastShort(getActivity(), getActivity().getString(
+					R.string.ts_welcome_fragment_login_toast_login_emailinvalid));
 			return;
 		}
 		
 		if (password == null || password.isEmpty()) {
-			UiUtils.toastShort(getActivity(), "invalid password");
+			UiUtils.toastShort(getActivity(), getActivity().getString(
+					R.string.ts_welcome_fragment_login_toast_login_passwordinvalid));
 			return;
 		}
 		
@@ -213,13 +217,16 @@ public class LoginFragment extends BaseFragment implements OnClickListener, OnMe
 		if (successful) {
 			getActivity().finish();
 		} else {
-			String m = "error logging in. please try again later or contact support";
+			int messageRes = R.string.ts_welcome_fragment_login_toast_login_error_default;
+			
 			if (errorCode == JavelinUserManager.CODE_ERROR_WRONG_CREDENTIALS) {
-				m = "wrong login combination";
+				messageRes = R.string.ts_welcome_fragment_login_toast_login_error_badcredentials;
 			} else if (errorCode == JavelinUserManager.CODE_ERROR_UNVERIFIED_EMAIL) {
-				m = "you need to verify your email before logging in";
+				messageRes = R.string.ts_welcome_fragment_login_toast_login_error_emailunverified;
 			}
-			UiUtils.toastLong(getActivity(), m);
+			
+			String message = getActivity().getString(messageRes);
+			UiUtils.toastLong(getActivity(), message);
 		}
 	}
 }
