@@ -11,8 +11,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.tapshield.android.R;
 import com.tapshield.android.api.model.UserProfile;
+import com.tapshield.android.ui.fragment.NavigationFragment;
 import com.tapshield.android.utils.BitmapUtils;
 
 public class NavigationListAdapter extends BaseAdapter {
@@ -58,36 +58,34 @@ public class NavigationListAdapter extends BaseAdapter {
 		ImageView image = (ImageView) convertView.findViewById(mIconImageViewId);
 		
 		text.setText(item.getTitle());
+		image.setImageResource(item.getIconResource());
 		
-		//for first item, set circle-clipped profile picture if available
-		if (position == 0) {
-			if (UserProfile.hasPicture(mContext)) {
-				Bitmap clippedBitmap = BitmapUtils.clipCircle(UserProfile.getPicture(mContext),
-						BitmapUtils.CLIP_RADIUS_DEFAULT);
-				image.setImageBitmap(clippedBitmap);
-			} else {
-				//set default
-				//image.setImageResource(R.drawable.ts_navigation_profile_picture_default);
-				image.setImageResource(R.drawable.ic_launcher);
-			}
-		} else {
-			image.setImageResource(item.getIconResource());
+		if (item.getId() == NavigationFragment.NAV_ID_PROFILE && UserProfile.hasPicture(mContext)) {
+			Bitmap clippedBitmap = BitmapUtils.clipCircle(UserProfile.getPicture(mContext),
+					BitmapUtils.CLIP_RADIUS_DEFAULT);
+			image.setImageBitmap(clippedBitmap);
 		}
 		
 		return convertView;
 	}
 	
 	public static class NavigationItem {
+		private int id = -1;
 		private int icon = 0;
 		private String title;
 		
-		public NavigationItem(int iconResource, int titleResource, Context context) {
-			this(iconResource, context.getResources().getString(titleResource));
+		public NavigationItem(int id, int iconResource, int titleResource, Context context) {
+			this(id, iconResource, context.getResources().getString(titleResource));
 		}
 		
-		public NavigationItem(int iconResource, String title) {
+		public NavigationItem(int id, int iconResource, String title) {
+			this.id = id;
 			this.icon = iconResource;
 			this.title = title;
+		}
+		
+		public int getId() {
+			return id;
 		}
 		
 		public int getIconResource() {

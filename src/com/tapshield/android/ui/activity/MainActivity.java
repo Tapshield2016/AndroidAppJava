@@ -35,7 +35,6 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
@@ -55,6 +54,8 @@ import com.tapshield.android.manager.EntourageManager;
 import com.tapshield.android.manager.YankManager;
 import com.tapshield.android.manager.YankManager.YankListener;
 import com.tapshield.android.ui.adapter.CrimeInfoWindowAdapter;
+import com.tapshield.android.ui.adapter.NavigationListAdapter.NavigationItem;
+import com.tapshield.android.ui.fragment.NavigationFragment;
 import com.tapshield.android.ui.fragment.NavigationFragment.OnNavigationItemClickListener;
 import com.tapshield.android.ui.view.CircleButton;
 import com.tapshield.android.utils.MapUtils;
@@ -513,13 +514,28 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 	}
 
 	@Override
-	public void onNavigationItemClick(int position) {
-		switch (position) {
-		case 0:
-			Intent fullProfile = new Intent(this, FullProfileActivity.class);
-			startActivity(fullProfile);
+	public void onNavigationItemClick(NavigationItem navItem) {
+		
+		Intent newActivity = null;
+		
+		switch (navItem.getId()) {
+		case NavigationFragment.NAV_ID_PROFILE:
+			newActivity = new Intent(this, FullProfileActivity.class);
 			break;
+		case NavigationFragment.NAV_ID_NOTIFICATION:
+			newActivity = new Intent(this, MassAlertsActivity.class);
+			break;
+		case NavigationFragment.NAV_ID_HOME:
+		case NavigationFragment.NAV_ID_HELP:
+		case NavigationFragment.NAV_ID_SETTINGS:
+		case NavigationFragment.NAV_ID_ABOUT:
 		}
+
+		if (newActivity != null) {
+			startActivity(newActivity);
+		}
+		
+		mDrawerLayout.closeDrawers();
 	}
 
 	//yank manager interface

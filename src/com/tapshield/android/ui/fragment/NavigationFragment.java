@@ -1,19 +1,14 @@
 package com.tapshield.android.ui.fragment;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.tapshield.android.R;
@@ -22,12 +17,18 @@ import com.tapshield.android.ui.adapter.NavigationListAdapter.NavigationItem;
 
 public class NavigationFragment extends Fragment implements OnItemClickListener {
 
+	public static final int NAV_ID_PROFILE = 0;
+	public static final int NAV_ID_HOME = 1;
+	public static final int NAV_ID_NOTIFICATION = 2;
+	public static final int NAV_ID_SETTINGS = 3;
+	public static final int NAV_ID_HELP = 4;
+	public static final int NAV_ID_ABOUT = 5;
+	
 	private ListView mList;
-	private NavigationItem[] ITEMS = new NavigationItem[] {
-			new NavigationItem(0, "Profile"),
-			new NavigationItem(R.drawable.ic_launcher, "Home"),
-			new NavigationItem(android.R.drawable.ic_menu_info_details, "Notifications"),
-			new NavigationItem(android.R.drawable.ic_menu_preferences, "Settings")
+	public NavigationItem[] ITEMS = new NavigationItem[] {
+			new NavigationItem(NAV_ID_PROFILE, R.drawable.ts_icon_nav_profile, "Profile"),
+			new NavigationItem(NAV_ID_HOME, R.drawable.ts_icon_nav_home, "Home"),
+			new NavigationItem(NAV_ID_NOTIFICATION, R.drawable.ts_icon_nav_notifications, "Notifications")
 			};
 
 	@Override
@@ -52,17 +53,15 @@ public class NavigationFragment extends Fragment implements OnItemClickListener 
 		mList.setDivider(null);
 		mList.setDividerHeight(0);
 		mList.setOnItemClickListener(this);
-		mList.setSelected(true);
-		mList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 	}
 	
 	@Override
 	public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 		OnNavigationItemClickListener listener = (OnNavigationItemClickListener) getActivity();
-		listener.onNavigationItemClick(position);
+		listener.onNavigationItemClick(ITEMS[position]);
 	}
 	
 	public interface OnNavigationItemClickListener {
-		void onNavigationItemClick(int position);
+		void onNavigationItemClick(NavigationItem navigationItem);
 	}
 }
