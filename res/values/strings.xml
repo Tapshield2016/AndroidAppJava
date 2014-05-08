@@ -48,6 +48,13 @@
     <string name="ts_welcome_fragment_login_toast_login_error_badcredentials">Wrong login combination!</string>
     <string name="ts_welcome_fragment_login_toast_login_error_emailunverified">You need to verify your email before logging in!</string>
     
+    <!-- registration -->
+    <string name="ts_registration_actionbar_title_pickorg">Pick your organization</string>
+    <string name="ts_registration_actionbar_title_createaccount">Create account</string>
+    <string name="ts_registration_actionbar_title_emailverification">Email verification</string>
+    <string name="ts_registration_actionbar_title_phoneconfirmation">Phone confirmation</string>
+    <string name="ts_registration_actionbar_title_profile">Profile</string>
+    
     <!-- fragment required info -->
     <string name="ts_fragment_requiredinfo_edit_email_hint">Email Address</string>
     <string name="ts_fragment_requiredinfo_edit_password_hint">Password</string>

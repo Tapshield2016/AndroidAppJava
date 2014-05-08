@@ -113,23 +113,23 @@ public class RegistrationActivity extends FragmentActivity
 		switch (mIndex) {
 		case 0:
 			f = new OrganizationSelectionFragment();
-			f.setTitle("pick your organization");
+			f.setTitle(getString(R.string.ts_registration_actionbar_title_pickorg));
 			break;
 		case 1:
 			f = new RequiredInfoFragment();
-			f.setTitle("create account");
+			f.setTitle(getString(R.string.ts_registration_actionbar_title_createaccount));
 			break;
 		case 2:
 			f = new EmailConfirmationFragment();
-			f.setTitle("email verification");
+			f.setTitle(getString(R.string.ts_registration_actionbar_title_emailverification));
 			break;
 		case 3:
 			f = new PhoneConfirmationFragment();
-			f.setTitle("phone confirmation");
+			f.setTitle(getString(R.string.ts_registration_actionbar_title_phoneconfirmation));
 			break;
 		case 4:
 			f = new ProfileFragment();
-			f.setTitle("profile");
+			f.setTitle(getString(R.string.ts_registration_actionbar_title_profile));
 			break;
 		}
 		return f;
