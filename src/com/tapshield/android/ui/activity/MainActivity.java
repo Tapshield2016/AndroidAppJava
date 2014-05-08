@@ -57,6 +57,7 @@ import com.tapshield.android.manager.YankManager.YankListener;
 import com.tapshield.android.ui.adapter.CrimeInfoWindowAdapter;
 import com.tapshield.android.ui.fragment.NavigationFragment.OnNavigationItemClickListener;
 import com.tapshield.android.ui.view.CircleButton;
+import com.tapshield.android.utils.MapUtils;
 import com.tapshield.android.utils.SpotCrimeUtils;
 import com.tapshield.android.utils.UiUtils;
 
@@ -487,36 +488,8 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 	}
 	
 	private void drawUser() {
-		LatLng where = new LatLng(mUserLocation.getLatitude(), mUserLocation.getLongitude());
-		
-		//accuracy
-		float radius = mUserLocation.getAccuracy();
-
-		if (mAccuracyBubble == null) {
-			CircleOptions bubbleOptions = new CircleOptions()
-					.center(where)
-					.radius(radius)
-					.strokeWidth(4)
-					.strokeColor(Color.parseColor("#50a6d2"))
-					.fillColor(Color.parseColor("#3350a6d2"));
-
-			mAccuracyBubble = mMap.addCircle(bubbleOptions);
-		} else {
-			mAccuracyBubble.setCenter(where);
-			mAccuracyBubble.setRadius(radius);
-		}
-		
-		//user
-		if (mUser == null) {
-			CircleOptions userOptions = new CircleOptions()
-					.center(where)
-					.radius(1)
-					.strokeWidth(0)
-					.fillColor(Color.parseColor("#50a6d2"));
-			mUser = mMap.addCircle(userOptions);
-		} else {
-			mUser.setCenter(where);
-		}
+		MapUtils.displayUserPositionWithAccuracy(this, mMap, mUserLocation.getLatitude(),
+				mUserLocation.getLongitude(), mUserLocation.getAccuracy());
 		
 		if (mTrackUser) {
 			//do not animate if it is just resuming
