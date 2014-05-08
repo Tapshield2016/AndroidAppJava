@@ -54,6 +54,8 @@
     <string name="ts_registration_actionbar_title_emailverification">Email verification</string>
     <string name="ts_registration_actionbar_title_phoneconfirmation">Phone confirmation</string>
     <string name="ts_registration_actionbar_title_profile">Profile</string>
+    <string name="ts_registration_dialog_cancel_aftercreation_message">You are past the point of creating the account. Would you like to start over?</string>
+    <string name="ts_registration_dialog_cancel_simple_message">Are you sure you want to start over?</string>
     
     <!-- fragment required info -->
     <string name="ts_fragment_requiredinfo_edit_email_hint">Email Address</string>

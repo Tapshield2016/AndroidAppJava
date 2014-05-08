@@ -1,15 +1,21 @@
 package com.tapshield.android.ui.activity;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import com.tapshield.android.R;
+import com.tapshield.android.api.JavelinClient;
+import com.tapshield.android.api.JavelinUserManager;
+import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.ui.fragment.BaseFragment;
 import com.tapshield.android.ui.fragment.BaseFragment.OnUserActionRequestedListener;
 import com.tapshield.android.ui.fragment.EmailConfirmationFragment;
@@ -66,6 +72,38 @@ public class RegistrationActivity extends FragmentActivity
 		
 		setFragmentByIndex();
 		mStepIndicator.setNumSteps(NUM_FRAGMENTS);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			promptToCancel();
+			return true;
+		}
+		return false;
+	}
+	
+	private AlertDialog getCancelDialog(final int messageResource) {
+		return new AlertDialog.Builder(this)
+				.setMessage(getString(messageResource))
+				.setCancelable(true)
+				.setPositiveButton(R.string.ts_common_yes, new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						JavelinClient.getInstance(RegistrationActivity.this,
+								TapShieldApplication.JAVELIN_CONFIG)
+								.getUserManager()
+								.logOut(new JavelinUserManager.OnUserLogOutListener() {
+									@Override
+									public void onUserLogOut(boolean successful, Throwable e) {}
+								});
+						finish();
+					}
+				})
+				.setNegativeButton(R.string.ts_common_no, null)
+				.create();
 	}
 	
 	private void setFragmentByIndex() {
@@ -149,6 +187,11 @@ public class RegistrationActivity extends FragmentActivity
 	
 	@Override
 	public void onReturn() {
+		if (mIndex >= 2) {
+			promptToCancel();
+			return;
+		}
+		
 		mIndex--;
 		setFragmentByIndex();
 	}
@@ -156,5 +199,16 @@ public class RegistrationActivity extends FragmentActivity
 	@Override
 	public void onBackPressed() {
 		onReturn();
+	}
+	
+	private void promptToCancel() {
+		
+		int messageResource = R.string.ts_registration_dialog_cancel_simple_message;
+		
+		if (mIndex >= 2) {
+			messageResource = R.string.ts_registration_dialog_cancel_aftercreation_message;
+		}
+		
+		getCancelDialog(messageResource).show();
 	}
 }
