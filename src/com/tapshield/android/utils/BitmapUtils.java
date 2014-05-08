@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Path;
 import android.graphics.Rect;
 
@@ -76,5 +77,25 @@ public class BitmapUtils {
 				new Rect(0, 0, b.getWidth(), b.getHeight()),
 				null);
 		return b;
+	}
+	public static Bitmap resizeBitmap(Bitmap bitmap, int maximumDimension, boolean scaleUpIfSmaller) {
+		int width = bitmap.getWidth();
+		int height = bitmap.getHeight();
+		float newScale;
+		
+		if (Math.max(width, height) <= maximumDimension && !scaleUpIfSmaller) {
+			return bitmap;
+		}
+		
+		if (width > height) {
+			newScale = (float)maximumDimension / (float)width;
+		} else {
+			newScale = (float)maximumDimension / (float)height;
+		}
+		
+		Matrix matrix = new Matrix();
+		matrix.postScale(newScale, newScale);
+		
+		return Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
 	}
 }
