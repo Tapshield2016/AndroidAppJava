@@ -2,8 +2,10 @@ package com.tapshield.android.ui.activity;
 
 import java.util.List;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.tapshield.android.R;
@@ -12,7 +14,9 @@ import com.tapshield.android.api.JavelinMassAlertManager;
 import com.tapshield.android.api.JavelinMassAlertManager.OnMassAlertUpdateListener;
 import com.tapshield.android.api.model.MassAlert;
 import com.tapshield.android.app.TapShieldApplication;
+import com.tapshield.android.manager.EmergencyManager;
 import com.tapshield.android.ui.adapter.MassAlertAdapter;
+import com.tapshield.android.utils.UiUtils;
 
 public class MassAlertsActivity extends Activity implements OnMassAlertUpdateListener {
 
@@ -26,6 +30,9 @@ public class MassAlertsActivity extends Activity implements OnMassAlertUpdateLis
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_massalerts);
 
+		ActionBar actionBar = getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		
 		mManager = JavelinClient.getInstance(MassAlertsActivity.this,
 				TapShieldApplication.JAVELIN_CONFIG).getMassAlertManager();
 		
@@ -57,6 +64,25 @@ public class MassAlertsActivity extends Activity implements OnMassAlertUpdateLis
 	protected void onPause() {
 		mManager.removeOnMassAlertUpdateListener(this);
 		super.onPause();
+	}
+	
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			onBackPressed();
+			return true;
+		}
+		
+		return false;
+	}
+	
+	@Override
+	public void onBackPressed() {
+		EmergencyManager emergencyManager = EmergencyManager.getInstance(this);
+		UiUtils.startActivityNoStack(this,
+				emergencyManager.isRunning() ? AlertActivity.class : MainActivity.class);
 	}
 
 	@Override
