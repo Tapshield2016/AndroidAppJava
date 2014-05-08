@@ -11,6 +11,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.tapshield.android.R;
+import com.tapshield.android.api.JavelinClient;
+import com.tapshield.android.api.JavelinUserManager;
+import com.tapshield.android.api.model.User;
+import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.ui.activity.MainActivity;
 import com.tapshield.android.utils.UiUtils;
 
@@ -71,10 +75,25 @@ public class ProfileFragment extends BaseFragment {
 	}
 	
 	private void saveUserInformation() {
-		//make it a requirement?
 		String firstName = mFirstName.getText().toString().trim();
 		String lastName = mLastName.getText().toString().trim();
 		
-		//save data into instance of JavelinUserManager via JavelinClient 
+		if (!firstName.isEmpty() || !lastName.isEmpty()) {
+			JavelinUserManager userManager = JavelinClient
+					.getInstance(getActivity(), TapShieldApplication.JAVELIN_CONFIG)
+					.getUserManager();
+			
+			User user = userManager.getUser();
+			
+			if (!firstName.isEmpty()) {
+				user.firstName = firstName;
+			}
+			
+			if (!lastName.isEmpty()) {
+				user.lastName = lastName;
+			}
+			
+			userManager.setUser(user);
+		}
 	}
 }
