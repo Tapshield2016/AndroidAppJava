@@ -64,6 +64,7 @@
                 cb:iconPaddingTop="@dimen/ts_common_spacing_xs"
                 cb:text="@string/ts_main_circlebutton_report"
                 cb:textColor="#fff"
+                cb:textColorStateList="@color/ts_circlebutton_text"
                 cb:textSize="@dimen/circlebutton_secondary_text_size" />
             
             <com.tapshield.android.ui.view.CircleButton
@@ -76,6 +77,7 @@
                 cb:iconPaddingTop="@dimen/ts_common_spacing_xs"
                 cb:text="@string/ts_main_circlebutton_alert"
                 cb:textColor="#fff"
+                cb:textColorStateList="@color/ts_circlebutton_text"
                 cb:textSize="@dimen/circlebutton_primary_text_size" />
             
             <com.tapshield.android.ui.view.CircleButton
@@ -88,6 +90,7 @@
                 cb:iconPaddingTop="@dimen/ts_common_spacing_xs"
                 cb:text="@string/ts_main_circlebutton_chat"
                 cb:textColor="#fff"
+                cb:textColorStateList="@color/ts_circlebutton_text"
                 cb:textSize="@dimen/circlebutton_secondary_text_size" />
         </LinearLayout>
     </RelativeLayout>

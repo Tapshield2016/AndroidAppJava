@@ -16,6 +16,9 @@ import com.tapshield.android.R;
 
 public class CircleButton extends RelativeLayout {
 
+	private Button mButton;
+	private TextView mLabel;
+	
 	public CircleButton(Context context) {
 		this(context, null);
 	}
@@ -24,8 +27,8 @@ public class CircleButton extends RelativeLayout {
 		super(context, attrs);
 
 		LayoutInflater.from(context).inflate(R.layout.view_circlebutton, this, true);
-		Button button = (Button) findViewById(R.id.view_circlebutton_button);
-		TextView label = (TextView) findViewById(R.id.view_circlebutton_text);
+		mButton = (Button) findViewById(R.id.view_circlebutton_button);
+		mLabel = (TextView) findViewById(R.id.view_circlebutton_text);
 		ImageView image = (ImageView) findViewById(R.id.view_circlebutton_image);
 
 		TypedArray a = context.getTheme().obtainStyledAttributes(
@@ -36,6 +39,7 @@ public class CircleButton extends RelativeLayout {
 		String text;
 		int textSize;
 		int textColor;
+		int textColorStateList;
 		int icon;
 		int iconPadding;
 		int iconPaddingLeft;
@@ -47,6 +51,7 @@ public class CircleButton extends RelativeLayout {
 		try {
 			text = a.getString(R.styleable.CircleButton_text);
 			textColor = a.getColor(R.styleable.CircleButton_textColor, Color.WHITE);
+			textColorStateList = a.getResourceId(R.styleable.CircleButton_textColorStateList, 0);
 			icon = a.getResourceId(R.styleable.CircleButton_icon, 0);
 			iconPadding = a.getDimensionPixelSize(R.styleable.CircleButton_iconPadding, 0);
 			iconPaddingLeft = a.getDimensionPixelSize(R.styleable.CircleButton_iconPaddingLeft, 0);
@@ -59,15 +64,16 @@ public class CircleButton extends RelativeLayout {
 			a.recycle();
 		}
 		
-		label.setText(text);
-		label.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
-		label.setTextColor(textColor);
+		mLabel.setText(text);
+		mLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
+		mLabel.setTextColor(textColor);
+		mLabel.setTextColor(getResources().getColorStateList(textColorStateList));
 		image.setImageResource(icon);
-		button.setBackgroundResource(background);
+		mButton.setBackgroundResource(background);
 		
-		label.setClickable(false);
-		label.setFocusable(false);
-		label.setFocusableInTouchMode(false);
+		mLabel.setClickable(false);
+		mLabel.setFocusable(false);
+		mLabel.setFocusableInTouchMode(false);
 		
 		image.setClickable(false);
 		image.setFocusable(false);
@@ -78,12 +84,19 @@ public class CircleButton extends RelativeLayout {
 				iconPaddingRight > 0 ? iconPaddingRight : iconPadding,
 				iconPaddingBottom > 0 ? iconPaddingBottom : iconPadding);
 		
-		button.setOnClickListener(new OnClickListener() {
+		mButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				CircleButton.this.performClick();
 			}
 		});
+	}
+	
+	@Override
+	public void setEnabled(boolean enabled) {
+		super.setEnabled(enabled);
+		mButton.setEnabled(enabled);
+		mLabel.setEnabled(enabled);
 	}
 }
