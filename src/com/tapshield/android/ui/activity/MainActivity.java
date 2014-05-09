@@ -34,7 +34,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
@@ -72,8 +71,6 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 	private FrameLayout mDrawer;
 	private Location mUserLocation;
 	private GoogleMap mMap;
-	private Circle mAccuracyBubble;
-	private Circle mUser;
 	private ImageButton mEntourage;
 	private ImageButton mLocateMe;
 	private CircleButton mEmergency;
@@ -93,6 +90,7 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 	private boolean mTrackUser = true;
 	private boolean mResuming = false;
 	private boolean mSpotCrimeError = false;
+	private boolean mUserBelongsToAgency = false;
 
 	private static final int MINIMUM_NUMBER_CRIMES = 50;
 	private long mCrimeSince = new DateTime().minusHours(1).getMillis();
@@ -171,10 +169,18 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 			
 			@Override
 			public void onClick(View v) {
-				long duration = (long)
-						getResources().getInteger(R.integer.timer_emergency_requested_millis);
-				mEmergencyManager.start(duration, EmergencyManager.TYPE_START_REQUESTED);
-				UiUtils.startActivityNoStack(MainActivity.this, AlertActivity.class);
+				
+				if (mUserBelongsToAgency) {
+				
+					long duration = (long)
+							getResources().getInteger(R.integer.timer_emergency_requested_millis);
+					mEmergencyManager.start(duration, EmergencyManager.TYPE_START_REQUESTED);
+					UiUtils.startActivityNoStack(MainActivity.this, AlertActivity.class);
+				} else {
+					
+					String defaultEmergencyNumber = getString(R.string.ts_no_org_emergency_number);
+					UiUtils.MakePhoneCall(MainActivity.this, defaultEmergencyNumber);
+				}
 			}
 		});
 		
@@ -229,7 +235,8 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 		
 		mYank.setListener(this);
 		
-		boolean userPresent = mJavelin.getUserManager().isPresent();
+		JavelinUserManager userManager = mJavelin.getUserManager();
+		boolean userPresent = userManager.isPresent();
 		
 		if (!userPresent) {
 			if (mResuming) {
@@ -239,7 +246,14 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 				mResuming = true;
 				UiUtils.startActivityNoStack(this, WelcomeActivity.class);
 			}
+		} else {
+			mUserBelongsToAgency = userManager.getUser().belongsToAgency();
+			
+			if (!mUserBelongsToAgency) {
+				mChat.setEnabled(false);
+			}
 		}
+		
 		mTracker.start();
 		mTracker.addLocationListener(this);
 	}
