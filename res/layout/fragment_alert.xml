@@ -81,6 +81,7 @@
 	        cb:icon="@drawable/ic_launcher"
 	        cb:text="@string/ts_fragment_alert_circlebutton_details"
 	        cb:textColor="#fff"
+	        cb:textColorStateList="@color/ts_circlebutton_text"
 	        cb:textSize="@dimen/circlebutton_secondary_text_size" />
 	    
 	    <com.tapshield.android.ui.view.CircleButton
@@ -92,6 +93,7 @@
 	        cb:icon="@drawable/ic_launcher"
 	        cb:text="@string/ts_fragment_alert_circlebutton_call"
 	        cb:textColor="#fff"
+	        cb:textColorStateList="@color/ts_circlebutton_text"
 	        cb:textSize="@dimen/circlebutton_primary_text_size" />
 	    
 	    <com.tapshield.android.ui.view.CircleButton
@@ -103,6 +105,7 @@
 	        cb:icon="@drawable/ic_launcher"
 	        cb:text="@string/ts_fragment_alert_circlebutton_chat"
 	        cb:textColor="#fff"
+	        cb:textColorStateList="@color/ts_circlebutton_text"
 	        cb:textSize="@dimen/circlebutton_secondary_text_size" />
 	</LinearLayout>
 </RelativeLayout>
