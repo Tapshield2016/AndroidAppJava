@@ -4,6 +4,8 @@
     <string name="app_name">TapShield</string>
     <string name="ts_home">Home</string>
     
+    <string name="ts_no_org_emergency_number">911</string>
+    
     <!-- common -->
     <string name="ts_common_login">Log In</string>
     <string name="ts_common_signup">Sign Up</string>
