@@ -93,7 +93,8 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 	private boolean mUserBelongsToAgency = false;
 
 	private static final int MINIMUM_NUMBER_CRIMES = 50;
-	private long mCrimeSince = new DateTime().minusHours(1).getMillis();
+	private long mCrimeSince = new DateTime().minusHours(5).getMillis();
+	private float mCrimeRadius = 0.03f;
 	private List<Crime> mCrimeRecords;
 	
 	@Override
@@ -435,13 +436,13 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 		//since this method can be called recursively check for this flag and
 		//	return if a broader search is not requested with a non-null list
 		//	this way onLocationChanged method is not requesting this one more than once
-		if (!broaderSearch && mCrimeRecords != null) {
+		if (broaderSearch && mCrimeRecords == null) {
 			return;
 		}
 		
 		SpotCrimeRequest request =
 				new SpotCrimeRequest(TapShieldApplication.SPOTCRIME_CONFIG,
-						mUserLocation.getLatitude(), mUserLocation.getLongitude(), 0.03f)
+						mUserLocation.getLatitude(), mUserLocation.getLongitude(), mCrimeRadius)
 				.setSince(mCrimeSince)
 				.setSortBy(SpotCrimeRequest.SORT_BY_DISTANCE)
 				.setSortOrder(SpotCrimeRequest.SORT_ORDER_ASCENDING);
@@ -454,7 +455,7 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 						"callback ok=" + ok
 						+ " results=" + (results == null? results : results.size())
 						+ " error=" + errorIfNotOk
-						+ (ok ? " for=" + new DateTime(mCrimeSince) : new String()));
+						+ (ok ? " for=" + new DateTime(mCrimeSince) + " " + mCrimeRadius + "mi" : new String()));
 				if (ok) {
 					if (results == null) {
 						return;
@@ -464,8 +465,7 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 					
 					//broaden search parameter if less than minimum number of crimes
 					if (results.size() < MINIMUM_NUMBER_CRIMES) {
-						//starting week before previous search
-						mCrimeSince = new DateTime(mCrimeSince).minusHours(1).getMillis();
+						broadenCrimeRetrievalCriteria();
 						loadNearbyCrimes(true);
 						return;
 					}
@@ -500,6 +500,11 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 				mMap.addMarker(markerOptions);
 			}
 		}
+	}
+	
+	private void broadenCrimeRetrievalCriteria() {
+		mCrimeSince = new DateTime(mCrimeSince).minusHours(5).getMillis();
+		mCrimeRadius += 0.005;
 	}
 	
 	private void drawUser() {
