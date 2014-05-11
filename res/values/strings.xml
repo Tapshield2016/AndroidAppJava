@@ -69,6 +69,8 @@
     <!-- fragment email confirmation -->
     <string name="ts_fragment_emailconfirmation_complete">Complete Verification</string>
     <string name="ts_fragment_emailconfirmation_resend">Resend Verification Email</string>
+    <string name="ts_fragment_emailconfirmation_instruction_top">We\'ve sent a verification email to:</string>
+    <string name="ts_fragment_emailconfirmation_instruction_bottom">Head to your inbox and follow the instructions from there.</string>
     
     <!-- fragment phone confirmation -->
     <string name="ts_fragment_phoneconfirmation_text_instructions">Please enter your code below:</string>

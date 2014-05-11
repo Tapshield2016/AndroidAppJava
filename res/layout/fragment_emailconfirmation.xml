@@ -2,12 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-    android:layout_marginRight="@dimen/activity_horizontal_margin"
-    android:layout_marginTop="@dimen/activity_vertical_margin"
-    android:layout_marginBottom="@dimen/activity_vertical_margin"
+    android:layout_margin="@dimen/ts_common_spacing_s"
     android:weightSum="1.0"
     android:orientation="vertical" >
+    
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/ts_common_spacing_xxs"
+        android:gravity="center"
+        android:textColor="@color/ts_gray_dark"
+        android:text="@string/ts_fragment_emailconfirmation_instruction_top"/>
     
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,9 +24,20 @@
             android:id="@+id/fragment_emailconfirmation_edit_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"/>
+            android:inputType="textEmailAddress"
+            android:drawableLeft="@drawable/ic_create_email"
+            android:textColor="@color/ts_brand_light"
+            android:textColorHint="@color/ts_gray_dark"/>
         
     </LinearLayout>
+    
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/ts_common_spacing_xxs"
+        android:gravity="center"
+        android:textColor="@color/ts_gray_dark"
+        android:text="@string/ts_fragment_emailconfirmation_instruction_bottom"/>
     
     <Button
         android:id="@+id/fragment_emailconfirmation_button_complete"
