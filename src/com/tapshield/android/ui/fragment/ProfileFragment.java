@@ -1,5 +1,10 @@
 package com.tapshield.android.ui.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,8 +19,10 @@ import com.tapshield.android.R;
 import com.tapshield.android.api.JavelinClient;
 import com.tapshield.android.api.JavelinUserManager;
 import com.tapshield.android.api.model.User;
+import com.tapshield.android.api.model.UserProfile;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.ui.activity.MainActivity;
+import com.tapshield.android.utils.PictureSetter;
 import com.tapshield.android.utils.UiUtils;
 
 public class ProfileFragment extends BaseFragment {
@@ -23,6 +30,8 @@ public class ProfileFragment extends BaseFragment {
 	private ImageButton mPicture;
 	private EditText mFirstName;
 	private EditText mLastName;
+	
+	private BroadcastReceiver mPictureSetReceiver;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -49,13 +58,34 @@ public class ProfileFragment extends BaseFragment {
 			
 			@Override
 			public void onClick(View v) {
-				//open suggestion dialog
-				//which will open options dialog
-				//after cropping or picking, result will be back here
-				//optimize image 
-				//refresh
+				PictureSetter.offerOptions(getActivity(), getActivity());
 			}
 		});
+		
+		mPictureSetReceiver = new BroadcastReceiver() {
+			
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				loadPicture();
+			}
+		};
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		
+		loadPicture();
+		
+		IntentFilter filter = new IntentFilter(PictureSetter.ACTION_PICTURE_SET);
+		getActivity().registerReceiver(mPictureSetReceiver, filter);
+	}
+	
+	@Override
+	public void onPause() {
+		getActivity().unregisterReceiver(mPictureSetReceiver);
+		
+		super.onPause();
 	}
 	
 	@Override
@@ -72,6 +102,20 @@ public class ProfileFragment extends BaseFragment {
 			return true;
 		}
 		return false;
+	}
+	
+	private void loadPicture() {
+		if (!UserProfile.hasPicture(getActivity())) {
+			return;
+		}
+		
+		Bitmap picture = UserProfile.getPicture(getActivity());
+
+		if (picture != null) {
+			mPicture.setImageBitmap(picture);
+		} else {
+			mPicture.setImageResource(R.drawable.ic_launcher);
+		}
 	}
 	
 	private void saveUserInformation() {
