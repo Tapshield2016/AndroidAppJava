@@ -15,8 +15,10 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/ts_common_spacing_s"
             android:gravity="center"
-            android:text="@string/ts_fragment_semiprofile_text_explanation"/>
+            android:text="@string/ts_fragment_semiprofile_text_explanation"
+            android:textColor="@color/ts_gray_dark"/>
         
         <!-- card -->
         
@@ -28,12 +30,26 @@
             android:padding="@dimen/activity_horizontal_margin"
             android:background="@drawable/ts_background_card">
             
-            <ImageButton
-                android:id="@+id/fragment_profile_imagebutton"
+            <FrameLayout
                 android:layout_width="@dimen/fragment_profile_picture"
-                android:layout_height="@dimen/fragment_profile_picture"
-                android:src="@drawable/ic_launcher"
-                android:scaleType="fitCenter"/>
+                android:layout_height="@dimen/fragment_profile_picture">
+                
+                <ImageButton
+	                android:id="@+id/fragment_profile_imagebutton"
+	                android:layout_width="match_parent"
+	                android:layout_height="match_parent"
+	                android:src="@drawable/ts_avatar_default"
+	                android:padding="0dp"
+	                android:scaleType="fitCenter"/>
+                
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:gravity="center"
+                    android:text="@string/ts_common_edit"
+                    android:textColor="@color/ts_brand_dark"/>
+            </FrameLayout>
             
             <LinearLayout
                 android:layout_width="match_parent"
@@ -51,15 +67,18 @@
                     android:id="@+id/fragment_profile_edit_lastname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/ts_common_lastname"/>
+                    android:hint="@string/ts_common_lastname"
+                    android:textColor="@color/ts_brand_light"
+                    android:textColorHint="@color/ts_gray_dark"/>
             </LinearLayout>
         </LinearLayout>
         
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/activity_vertical_margin"
+            android:layout_margin="@dimen/ts_common_spacing_m"
             android:gravity="center"
-            android:text="@string/ts_fragment_semiprofile_text_disclaimer"/>
+            android:text="@string/ts_fragment_semiprofile_text_disclaimer"
+            android:textColor="@color/ts_gray_dark"/>
     </LinearLayout>
 </ScrollView>
