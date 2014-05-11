@@ -22,13 +22,13 @@
             android:orientation="horizontal">
             
             <ImageView
-                android:id="@+id/details_image_type"
+                android:id="@+id/report_image_type"
                 android:layout_width="@dimen/details_image_type"
                 android:layout_height="@dimen/details_image_type"
                 android:scaleType="fitCenter"/>
             
             <TextView
-                android:id="@+id/details_text_type"
+                android:id="@+id/report_text_type"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/ts_common_spacing_xs"
@@ -41,14 +41,15 @@
         <!-- extra info -->
         
         <TextView
-            android:id="@+id/details_text_location"
+            android:id="@+id/report_text_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/ts_gray_dark"
-            android:drawableLeft="@drawable/ic_drawer"/>
+            android:drawableLeft="@drawable/ic_drawer"
+            android:visibility="gone"/>
         
         <TextView
-            android:id="@+id/details_text_datetime"
+            android:id="@+id/report_text_datetime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/ts_gray_dark"
@@ -64,11 +65,17 @@
             android:text="@string/ts_common_description"
             style="@style/TapShieldHeader"/>
         
+        <EditText
+            android:id="@+id/report_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        
         <TextView
-            android:id="@+id/details_text_description"
+            android:id="@+id/report_text_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/ts_gray_dark"/>
+            android:textColor="@color/ts_gray_dark"
+            android:visibility="gone"/>
         
         <!-- possible image/media here -->
     </LinearLayout>

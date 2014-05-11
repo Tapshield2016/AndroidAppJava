@@ -25,6 +25,7 @@
     <string name="ts_common_prev">Prev</string>
     <string name="ts_common_next">Next</string>
     <string name="ts_common_edit">Edit</string>
+    <string name="ts_common_error">Error</string>
     
     <!-- welcome -->
     <string name="ts_welcome_skip">Skip</string>
@@ -128,6 +129,11 @@
     <string name="ts_alert_twilio_ended">Call Ended</string>
     <string name="ts_alert_twilio_error">Call Failed</string>
     
+    <!-- reporting -->
+    <string name="ts_reporting_dialog_message">Reporting&#8230;</string>
+    <string name="ts_reporting_dialog_message_error">Oops! There was an issue. Try again later.</string>
+    <string name="ts_reporting_toast_successful">Reported!</string>
+    
     <!-- fragment alert -->
     <string name="ts_fragment_alert_card_button_speaker">Speaker</string>
     <string name="ts_fragment_alert_circlebutton_details">Details</string>
@@ -197,5 +203,8 @@
     <string name="ts_notification_message_massalert">New notification(s)</string>
     <string name="ts_notification_message_twilio_failed">Call failed. Tap for details.</string>
     <string name="ts_notification_ticker_twilio_failed">TapShield: Call failed</string>
+    
+    <!-- misc -->
+    <string name="ts_misc_credits_spotcrime">Powered by SpotCrime.com</string>
     
 </resources>
