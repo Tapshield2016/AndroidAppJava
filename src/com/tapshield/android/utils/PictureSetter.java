@@ -37,14 +37,8 @@ public class PictureSetter {
 	public static void offerOptions(Activity activity, Context context) {
 		mActivity = activity;
 		mContext = context;
-		
-		if (mOptionsDialog == null) {
-			mOptionsDialog = getOptionsDialog(mContext);
-		}
-		
-		if (!mOptionsDialog.isShowing()) {
-			mOptionsDialog.show();
-		}
+		mOptionsDialog = getOptionsDialog(mContext);
+		mOptionsDialog.show();
 	}
 	
 	private static void takePicture() {
@@ -142,11 +136,7 @@ public class PictureSetter {
 
 				@Override
 				protected void onPreExecute() {
-					
-					if (mOptimizationDialog == null) {
-						mOptimizationDialog = getOptimizationDialog(mContext);
-					}
-					
+					mOptimizationDialog = getOptimizationDialog(mContext);
 					mOptimizationDialog.show();
 				}
 				
