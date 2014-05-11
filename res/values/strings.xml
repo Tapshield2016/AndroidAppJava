@@ -73,8 +73,9 @@
     <string name="ts_fragment_emailconfirmation_instruction_bottom">Head to your inbox and follow the instructions from there.</string>
     
     <!-- fragment phone confirmation -->
-    <string name="ts_fragment_phoneconfirmation_text_instructions">Please enter your code below:</string>
-    <string name="ts_fragment_phoneconfirmation_button_resend">Re-send Code</string>
+    <string name="ts_fragment_phoneconfirmation_text_instructions_top">We\'ve sent a verification code via SMS to:</string>
+    <string name="ts_fragment_phoneconfirmation_text_instructions_bottom">Please enter your code below:</string>
+    <string name="ts_fragment_phoneconfirmation_button_resend">Re-send SMS</string>
     
     <!-- fragment semi-profile -->
     <string name="ts_fragment_semiprofile_text_explanation">This information will help us identify you in case of emergency.</string>
