@@ -14,6 +14,7 @@ public class SocialReportsUtils {
 		//R.drawable.ic_launcher,
 		R.drawable.ts_report_highfever,
 		R.drawable.ts_report_choking,
+		R.drawable.ts_report_stroke,
 		R.drawable.ts_report_other,
 		//R.drawable.ic_launcher,
 		//R.drawable.ic_launcher,
