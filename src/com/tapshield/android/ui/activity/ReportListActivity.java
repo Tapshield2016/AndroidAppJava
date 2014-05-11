@@ -4,6 +4,7 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import com.tapshield.android.R;
 import com.tapshield.android.api.JavelinSocialReportingManager;
 import com.tapshield.android.utils.SocialReportsUtils;
+import com.tapshield.android.utils.UiUtils;
 
 public class ReportListActivity extends ListActivity implements OnItemClickListener {
 
@@ -23,9 +25,22 @@ public class ReportListActivity extends ListActivity implements OnItemClickListe
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+		
 		mAdapter = new ReportListAdapter();
 		setListAdapter(mAdapter);
 		getListView().setOnItemClickListener(this);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			UiUtils.startActivityNoStack(this, MainActivity.class);
+			return true;
+		}
+		return false;
 	}
 	
 	@Override

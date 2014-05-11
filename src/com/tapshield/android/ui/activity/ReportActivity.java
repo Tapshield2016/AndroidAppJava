@@ -48,6 +48,8 @@ public class ReportActivity extends Activity implements LocationListener, Social
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_report);
 		
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+		
 		mTypeText = (TextView) findViewById(R.id.report_text_type);
 		mTypeImage = (ImageView) findViewById(R.id.report_image_type);
 		mDatetime = (TextView) findViewById(R.id.report_text_datetime);
@@ -60,6 +62,7 @@ public class ReportActivity extends Activity implements LocationListener, Social
 		mReportingDialog = getReportingDialog();
 		
 		setUi();
+		
 	}
 	
 	@Override
@@ -85,6 +88,9 @@ public class ReportActivity extends Activity implements LocationListener, Social
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+		case android.R.id.home:
+			UiUtils.startActivityNoStack(this, MainActivity.class);
+			return true;
 		case R.id.action_done:
 			report();
 			return true;
