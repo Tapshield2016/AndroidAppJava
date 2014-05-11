@@ -197,7 +197,8 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 			
 			@Override
 			public void onClick(View v) {
-				
+				Intent reporting = new Intent(MainActivity.this, ReportListActivity.class);
+				startActivity(reporting);
 			}
 		});
 		
