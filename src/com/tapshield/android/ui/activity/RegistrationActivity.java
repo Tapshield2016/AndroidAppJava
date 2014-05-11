@@ -24,6 +24,7 @@ import com.tapshield.android.ui.fragment.PhoneConfirmationFragment;
 import com.tapshield.android.ui.fragment.ProfileFragment;
 import com.tapshield.android.ui.fragment.RequiredInfoFragment;
 import com.tapshield.android.ui.view.StepIndicator;
+import com.tapshield.android.utils.PictureSetter;
 
 public class RegistrationActivity extends FragmentActivity
 		implements OnUserActionRequestedListener {
@@ -225,5 +226,11 @@ public class RegistrationActivity extends FragmentActivity
 		}
 		
 		getCancelDialog(messageResource).show();
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		PictureSetter.onActivityResult(requestCode, resultCode, data);
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 }
