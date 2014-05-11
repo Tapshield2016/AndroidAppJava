@@ -98,6 +98,16 @@
     <string name="ts_fullprofile_picture_chooserintent_title">Select Picture</string>
     <string name="ts_fullprofile_error_sdcard_absent">No SD card, the picture cannot be saved</string>
     
+    <!-- full profile : basic -->
+    <string name="ts_profile_basic_firstname">First Name</string>
+    <string name="ts_profile_basic_lastname">Last Name</string>
+    <string name="ts_profile_basic_dob">Date of Birth</string>
+    <string name="ts_profile_basic_gender">Gender</string>
+    <string-array name="ts_profile_basic_genders">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+    
     <!-- main -->
     <string name="ts_main_circlebutton_report">Report</string>
     <string name="ts_main_circlebutton_alert">Alert</string>
