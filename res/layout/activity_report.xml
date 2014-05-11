@@ -53,7 +53,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/ts_gray_dark"
-            android:drawableLeft="@drawable/ic_drawer"/>        
+            android:drawableLeft="@drawable/ic_time"/>        
         
         <!-- description -->
         
