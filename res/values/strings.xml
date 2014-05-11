@@ -64,6 +64,7 @@
     <string name="ts_fragment_requiredinfo_edit_password_hint">Password</string>
     <string name="ts_fragment_requiredinfo_edit_passcode_hint">Passcode</string>
     <string name="ts_fragment_requiredinfo_edit_phone_hint">Phone Number</string>
+    <string name="ts_fragment_requiredinfo_text_phonenotice">We will only use your phone number to contact you in case of emergency</string>
     
     <!-- fragment email confirmation -->
     <string name="ts_fragment_emailconfirmation_complete">Complete Verification</string>
