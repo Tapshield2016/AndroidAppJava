@@ -1,5 +1,6 @@
 package com.tapshield.android.ui.activity;
 
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
@@ -8,22 +9,29 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.tapshield.android.R;
+import com.tapshield.android.location.LocationTracker;
 import com.tapshield.android.manager.EmergencyManager;
 import com.tapshield.android.ui.adapter.AlertFragmentPagerAdapter;
 import com.tapshield.android.ui.fragment.DialpadFragment;
 import com.tapshield.android.ui.view.AnimatedVerticalColorProgress;
+import com.tapshield.android.utils.MapUtils;
 
 public class AlertActivity extends FragmentActivity
-		implements AnimatedVerticalColorProgress.Listener, OnPageChangeListener {
+		implements AnimatedVerticalColorProgress.Listener, OnPageChangeListener, LocationListener {
 
 	private EmergencyManager mEmergencyManager;
 	private FrameLayout mMapFrame;
 	private GoogleMap mMap;
 	private ViewPager mPager;
 	private AlertFragmentPagerAdapter mAdapter;
+	private LocationTracker mTracker;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +46,8 @@ public class AlertActivity extends FragmentActivity
 		mPager = (ViewPager) findViewById(R.id.alert_pager);
 		mPager.setAdapter(mAdapter);
 		mPager.setOnPageChangeListener(this);
+		
+		mTracker = LocationTracker.getInstance(this);
 	}
 	
 	@Override
@@ -73,6 +83,20 @@ public class AlertActivity extends FragmentActivity
 			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		mTracker.addLocationListener(this);
+		mTracker.start();
+	}
+	
+	@Override
+	protected void onPause() {
+		mTracker.removeLocationListener(this);
+		mTracker.stop();
+		super.onPause();
 	}
 	
 	//Go to last page (alert page) once the animation ends
@@ -117,5 +141,14 @@ public class AlertActivity extends FragmentActivity
 	@Override
 	public void onBackPressed() {
 		mPager.setCurrentItem(0, true);
+	}
+
+	@Override
+	public void onLocationChanged(Location location) {
+		MapUtils.displayUserPositionWithAccuracy(this, mMap, location.getLatitude(),
+				location.getLongitude(), location.getAccuracy());
+		CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(
+				location.getLatitude(), location.getLongitude()), 12);
+		mMap.moveCamera(cameraUpdate);
 	}
 }
