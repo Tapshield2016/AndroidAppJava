@@ -105,9 +105,13 @@
     <string name="ts_profile_basic_dob">Date of Birth</string>
     <string name="ts_profile_basic_gender">Gender</string>
     <string-array name="ts_profile_basic_genders">
+        <item>Gender</item>
         <item>Male</item>
         <item>Female</item>
     </string-array>
+    
+    <string name="ts_profile_basic_dialog_saving">Saving changes&#8230;</string>
+    <string name="ts_profile_basic_toast_error">There was an error. Please try again!</string>
     
     <!-- main -->
     <string name="ts_main_circlebutton_report">Report</string>
