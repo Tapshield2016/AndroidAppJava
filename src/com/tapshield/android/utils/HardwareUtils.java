@@ -65,4 +65,9 @@ public class HardwareUtils {
 		
 		return on;
 	}
+	
+	public static final boolean isSpeakerphoneOn(Context context) {
+		AudioManager manager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+		return manager.isSpeakerphoneOn();
+	}
 }
