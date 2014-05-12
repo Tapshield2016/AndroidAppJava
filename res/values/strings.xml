@@ -261,6 +261,13 @@
     <string name="ts_dialog_weightpicker_minus_10">-10</string>
     <string name="ts_dialog_weightpicker_minus_1">-1</string>
     
+    <!-- height picker dialog fragment -->
+    <string name="ts_dialog_heightpicker_title">Set Height</string>
+    <string name="ts_dialog_heightpicker_button_set">Set</string>
+    <string name="ts_dialog_heightpicker_button_cancel">Cancel</string>
+    <string name="ts_dialog_heightpicker_plus_1">+1</string>
+    <string name="ts_dialog_heightpicker_minus_1">-1</string>
+    
     <!-- misc -->
     <string name="ts_misc_credits_spotcrime">Powered by SpotCrime.com</string>
     
