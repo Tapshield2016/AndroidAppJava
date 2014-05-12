@@ -118,11 +118,14 @@ public class FullProfileActivity extends Activity implements OnClickListener {
 	
 	@Override
 	public void onClick(View view) {
+		Intent activity = null;
+		
 		switch (view.getId()) {
 		case R.id.fullprofile_imagebutton_picture:
 			PictureSetter.offerOptions(this, this);
 			break;
 		case R.id.fullprofile_button_basic:
+			activity = new Intent(this, BasicInfoActivity.class);
 			break;
 		case R.id.fullprofile_button_contact:
 			break;
@@ -132,6 +135,10 @@ public class FullProfileActivity extends Activity implements OnClickListener {
 			break;
 		case R.id.fullprofile_button_emergency:
 			break;
+		}
+		
+		if (activity != null) {
+			startActivity(activity);
 		}
 	}
 	
