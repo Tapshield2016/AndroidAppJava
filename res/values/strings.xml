@@ -114,6 +114,12 @@
     </string-array>
     
     <!-- full profile : appearance -->
+    <string name="ts_profile_appearance_race">Race</string>
+    <string name="ts_profile_appearance_haircolor">Hair Color</string>
+    <string name="ts_profile_appearance_weight">Weight</string>
+    <string name="ts_profile_appearance_height">Height</string>
+    <string name="ts_profile_appearance_weight_dialog">Set weight (Lbs)</string>
+    
     <string-array name="ts_profile_appearance_races">
         <item>Race</item>
         <item>Black/African Decent</item>
@@ -244,6 +250,16 @@
     <string name="ts_notification_message_massalert">New notification(s)</string>
     <string name="ts_notification_message_twilio_failed">Call failed. Tap for details.</string>
     <string name="ts_notification_ticker_twilio_failed">TapShield: Call failed</string>
+
+    <!-- weight picker dialog fragment -->
+    <string name="ts_dialog_weightpicker_button_set">Set</string>
+    <string name="ts_dialog_weightpicker_button_cancel">Cancel</string>
+    <string name="ts_dialog_weightpicker_plus_100">+100</string>
+    <string name="ts_dialog_weightpicker_plus_10">+10</string>
+    <string name="ts_dialog_weightpicker_plus_1">+1</string>
+    <string name="ts_dialog_weightpicker_minus_100">-100</string>
+    <string name="ts_dialog_weightpicker_minus_10">-10</string>
+    <string name="ts_dialog_weightpicker_minus_1">-1</string>
     
     <!-- misc -->
     <string name="ts_misc_credits_spotcrime">Powered by SpotCrime.com</string>
