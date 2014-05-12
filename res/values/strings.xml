@@ -144,8 +144,16 @@
         <item>Other</item>
     </string-array>
     
-    <!-- full profile : emergency contact -->
+    <!-- full profile : medical -->
+    <string name="ts_profile_medical_allergies">Known Allergies</string>
+    <string name="ts_profile_medical_medication">Known Medication</string>
     
+    <!-- full profile : emergency contact -->
+    <string name="ts_profile_contact_header_names">Contact Name</string>
+    <string name="ts_profile_contact_header_other">Other</string>
+    <string name="ts_profile_contact_edit_first_hint">First Name</string>
+    <string name="ts_profile_contact_edit_last_hint">Last Name</string>
+    <string name="ts_profile_contact_edit_phone_hint">Phone Number</string>
     <string-array name="ts_profile_contact_relationships">
         <item>Relationship</item>
         <item>Father</item>
