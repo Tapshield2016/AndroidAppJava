@@ -30,6 +30,10 @@ public class RegistrationActivity extends FragmentActivity
 		implements OnUserActionRequestedListener {
 	
 	public static final String EXTRA_SKIP_ORG = "com.tapshield.android.extra.skip_org";
+	public static final String EXTRA_SET_STEP = "com.tapshield.android.extra.set_step";
+	
+	public static final int STEP_PHONEVERIFICATION = 3;
+	public static final int STEP_TERMSCONDITIONS = 4;
 	
 	private static final int NUM_FRAGMENTS = 5;
 	private static final int mFragmentContainer = R.id.registration_container;
@@ -67,6 +71,13 @@ public class RegistrationActivity extends FragmentActivity
 				boolean skipOrg = e.getBoolean(EXTRA_SKIP_ORG, false);
 				if (skipOrg) {
 					mIndex = 1;
+				}
+			}
+			
+			if (e != null && e.containsKey(EXTRA_SET_STEP)) {
+				int index = e.getInt(EXTRA_SET_STEP, -1);
+				if (index >= 1) {
+					mIndex = index;
 				}
 			}
 		}

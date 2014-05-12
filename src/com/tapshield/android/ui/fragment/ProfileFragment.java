@@ -22,6 +22,7 @@ import com.tapshield.android.api.model.User;
 import com.tapshield.android.api.model.UserProfile;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.ui.activity.MainActivity;
+import com.tapshield.android.utils.LocalTermConditionAgreement;
 import com.tapshield.android.utils.PictureSetter;
 import com.tapshield.android.utils.UiUtils;
 
@@ -97,6 +98,7 @@ public class ProfileFragment extends BaseFragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()) {
 		case R.id.action_finish:
+			LocalTermConditionAgreement.setTermConditionsAccepted(getActivity());
 			saveUserInformation();
 			UiUtils.startActivityNoStack(getActivity(), MainActivity.class);
 			return true;

@@ -57,6 +57,7 @@ import com.tapshield.android.ui.adapter.NavigationListAdapter.NavigationItem;
 import com.tapshield.android.ui.fragment.NavigationFragment;
 import com.tapshield.android.ui.fragment.NavigationFragment.OnNavigationItemClickListener;
 import com.tapshield.android.ui.view.CircleButton;
+import com.tapshield.android.utils.LocalTermConditionAgreement;
 import com.tapshield.android.utils.MapUtils;
 import com.tapshield.android.utils.SpotCrimeUtils;
 import com.tapshield.android.utils.UiUtils;
@@ -250,9 +251,28 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 			}
 		} else {
 			mUserBelongsToAgency = userManager.getUser().belongsToAgency();
+
+			boolean verifyPhone  = mUserBelongsToAgency && !userManager.getUser().isPhoneNumberVerified();
+			boolean acceptedContidions = LocalTermConditionAgreement.getTermConditionsAccepted(this);
 			
 			if (!mUserBelongsToAgency) {
 				mChat.setEnabled(false);
+			}
+			
+			if (verifyPhone || !acceptedContidions) {
+				Intent welcome = new Intent(this, WelcomeActivity.class);
+				Intent finishStep = new Intent(this, RegistrationActivity.class);
+				
+				if (verifyPhone) {
+					finishStep.putExtra(RegistrationActivity.EXTRA_SET_STEP,
+							RegistrationActivity.STEP_PHONEVERIFICATION);
+				} else if (!acceptedContidions) {
+					finishStep.putExtra(RegistrationActivity.EXTRA_SET_STEP,
+							RegistrationActivity.STEP_TERMSCONDITIONS);
+				}
+				
+				Intent[] stack = new Intent[]{welcome, finishStep};
+				startActivities(stack);
 			}
 		}
 		
