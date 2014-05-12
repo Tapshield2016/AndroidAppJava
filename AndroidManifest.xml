@@ -157,6 +157,16 @@
             android:name="com.tapshield.android.ui.activity.AppearanceActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"/>
+       
+       <activity
+            android:name="com.tapshield.android.ui.activity.MedicalActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
+       
+       <activity
+            android:name="com.tapshield.android.ui.activity.EmergencyContactActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
         
         <!-- SERVICES -->
         <service
