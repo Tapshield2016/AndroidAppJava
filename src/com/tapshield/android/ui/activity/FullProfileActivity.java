@@ -130,6 +130,7 @@ public class FullProfileActivity extends Activity implements OnClickListener {
 		case R.id.fullprofile_button_contact:
 			break;
 		case R.id.fullprofile_button_appearance:
+			activity = new Intent(this, AppearanceActivity.class);
 			break;
 		case R.id.fullprofile_button_medical:
 			break;
