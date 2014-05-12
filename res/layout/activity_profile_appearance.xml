@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+        
+        <!-- weight and height side by side -->
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+        
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="@string/ts_profile_appearance_weight"
+                style="@style/TapShieldHeader"/>
+            
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="@string/ts_profile_appearance_height"
+                style="@style/TapShieldHeader"/>
+        </LinearLayout>
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            
+            <EditText
+                android:id="@+id/profile_appearance_edit_weight"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:textColor="@color/ts_brand_dark"/>
+        
+            <EditText
+                android:id="@+id/profile_appearance_edit_height"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:textColor="@color/ts_brand_dark"/>
+        </LinearLayout>
+        
+        
+        <!-- following spinners -->
+        
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ts_profile_appearance_race"
+            style="@style/TapShieldHeader"/>
+        
+        <Spinner
+            android:id="@+id/profile_appearance_spinner_race"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/ts_profile_appearance_races"/>
+        
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ts_profile_appearance_haircolor"
+            style="@style/TapShieldHeader"/>
+        
+        <Spinner
+            android:id="@+id/profile_appearance_spinner_haircolor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/ts_profile_appearance_haircolors"/>
+    </LinearLayout>
+</ScrollView>
