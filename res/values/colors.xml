@@ -12,7 +12,7 @@
     <color name="ts_chat_user_text">#fff</color>
     <color name="ts_chat_other_background">#55ffffff</color>
     <color name="ts_chat_other_text">#454545</color>
-    <color name="ts_chat_status">#959595</color>
+    <color name="ts_chat_status">#d9d9d9</color>
     <color name="ts_background_gradient_start">#2e3e6d</color>
     <color name="ts_background_gradient_end">#549f9a</color>
     <color name="ts_dialpad_text">#ffffff</color>
