@@ -13,8 +13,7 @@
         android:layout_marginLeft="@dimen/ts_common_spacing_xxs"
         android:layout_marginRight="@dimen/ts_common_spacing_xxs"
         android:padding="@dimen/ts_common_spacing_xxs"
-        android:background="@drawable/ts_background_card"
-        android:visibility="gone">
+        android:background="@drawable/ts_background_card">
         
         <TextView
             android:id="@+id/fragment_alert_text_phone"
@@ -28,7 +27,7 @@
             android:id="@+id/fragment_alert_chrono"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_drawer"
+            android:drawableLeft="@drawable/ic_time"
             android:textColor="@color/ts_brand_dark"
             android:textSize="@dimen/ts_fragment_alert_card_text_callduration"
             android:gravity="center"
@@ -55,7 +54,6 @@
                 android:id="@+id/fragment_alert_button_speaker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_drawer"
                 android:text="@string/ts_fragment_alert_card_button_speaker"
                 android:textColor="@color/ts_gray_dark"
                 android:textSize="15sp"
