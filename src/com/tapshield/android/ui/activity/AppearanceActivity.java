@@ -16,11 +16,14 @@ import com.tapshield.android.api.JavelinClient;
 import com.tapshield.android.api.JavelinUserManager;
 import com.tapshield.android.api.model.UserProfile;
 import com.tapshield.android.app.TapShieldApplication;
+import com.tapshield.android.ui.dialog.HeightPickerDialogFragment;
+import com.tapshield.android.ui.dialog.HeightPickerDialogFragment.HeightPickerListener;
 import com.tapshield.android.ui.dialog.WeightPickerDialogFragment;
 import com.tapshield.android.ui.dialog.WeightPickerDialogFragment.WeightPickerListener;
 import com.tapshield.android.utils.StringUtils;
 
-public class AppearanceActivity extends Activity implements WeightPickerListener {
+public class AppearanceActivity extends Activity
+		implements WeightPickerListener, HeightPickerListener {
 
 	private JavelinUserManager mUserManager;
 	
@@ -30,6 +33,7 @@ public class AppearanceActivity extends Activity implements WeightPickerListener
 	private EditText mHeight;
 	
 	private WeightPickerDialogFragment mWeightPicker;
+	private HeightPickerDialogFragment mHeightPicker;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -82,8 +86,29 @@ public class AppearanceActivity extends Activity implements WeightPickerListener
 			}
 		});
 		
+		mHeight.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+			
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (hasFocus) {
+					heightStringToPicker();
+				}
+			}
+		});
+		
+		mHeight.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				heightStringToPicker();
+			}
+		});
+		
 		mWeightPicker = new WeightPickerDialogFragment()
 				.setTitle(R.string.ts_profile_appearance_weight_dialog)
+				.setListener(this);
+		
+		mHeightPicker = new HeightPickerDialogFragment()
 				.setListener(this);
 		
 		load();
@@ -107,6 +132,11 @@ public class AppearanceActivity extends Activity implements WeightPickerListener
 	@Override
 	public void onWeightSet(int pounds) {
 		mWeight.setText(pounds + " lbs");
+	}
+	
+	@Override
+	public void onHeightSet(int feet, int inches) {
+		mHeight.setText(feet + "' " + inches + "\"");
 	}
 	
 	private void load() {
@@ -151,9 +181,31 @@ public class AppearanceActivity extends Activity implements WeightPickerListener
 			profile.setHairColor(haircolor);
 		}
 		
-		profile.setWeight(mWeightPicker.getValue());
+		if (!mWeight.getText().toString().isEmpty()) {
+			profile.setWeight(mWeightPicker.getValue());
+		}
+		
+		if (!mHeight.getText().toString().isEmpty()) {
+			profile.setHeight(mHeightPicker.getFeet() + "' " + mHeightPicker.getInches() + "\"");
+		}
 		
 		mUserManager.setUserProfile(profile);
 		super.onBackPressed();
+	}
+	
+	private void heightStringToPicker() {
+		String height = mHeight.getText().toString().trim();
+		if (!height.isEmpty()) {
+			final String regexFeetMark = "'";
+			final String regexNonDigit = "\\D*";
+			String[] parts = height.split(regexFeetMark);
+			parts[0] = parts[0].replaceAll(regexNonDigit, "");
+			parts[1] = parts[1].replaceAll(regexNonDigit, "");
+			int feet = Integer.parseInt(parts[0]);
+			int inches = Integer.parseInt(parts[1]);
+			mHeightPicker.setFeet(feet);
+			mHeightPicker.setInches(inches);
+		}
+		mHeightPicker.show(this);
 	}
 }
