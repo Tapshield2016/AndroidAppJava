@@ -1,5 +1,6 @@
 package com.tapshield.android.utils;
 
+
 public class StringUtils {
 
 	public static final String REGEX_WHITESPACES = "\\s+";
@@ -23,5 +24,19 @@ public class StringUtils {
 	
 	public static boolean isPhoneNumberValid(final String tenDigitNumber) {
 		return tenDigitNumber.replaceAll(REGEX_NO_DIGITS, new String()).length() == 10;
+	}
+	
+	public static final int getIndexOf(String lookingFor, String[] strings) {
+		lookingFor = lookingFor.trim().toLowerCase();
+		int index = -1;
+		
+		for (int i = 0; i < strings.length; i++) {
+			String current = strings[i].toLowerCase().trim();
+			if (current.equals(lookingFor)) {
+				index = i;
+				break;
+			}
+		}
+		return index;
 	}
 }
