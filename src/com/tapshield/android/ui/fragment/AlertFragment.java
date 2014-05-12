@@ -139,6 +139,9 @@ public class AlertFragment extends Fragment implements OnClickListener, OnStatus
 		};
 
 		mTwilioFailureDialog = getTwilioFailureDialog();
+		
+		boolean enabled = HardwareUtils.isSpeakerphoneOn(getActivity());
+		setCardSpeakerState(enabled);
 	}
 	
 	@Override
@@ -199,11 +202,17 @@ public class AlertFragment extends Fragment implements OnClickListener, OnStatus
 			break;
 		case R.id.fragment_alert_button_speaker:
 			boolean speakers = HardwareUtils.toggleSpeakerphone(getActivity());
-			int color = getResources().getColor(
-					speakers ? R.color.ts_brand_light : R.color.ts_alert_authorities_text_color);
-			mCardSpeaker.setTextColor(color);
+			setCardSpeakerState(speakers);
 			break;
 		}
+	}
+	
+	private void setCardSpeakerState(boolean enabled) {
+		int color = getResources().getColor(
+				enabled ? R.color.ts_brand_light : R.color.ts_gray_dark);
+		int icon = enabled ? R.drawable.ts_speakers_enabled : R.drawable.ts_speakers_disabled;
+		mCardSpeaker.setTextColor(color);
+		mCardSpeaker.setCompoundDrawablesWithIntrinsicBounds(icon, 0, 0, 0);
 	}
 	
 	private void setCompletionMessage() {
