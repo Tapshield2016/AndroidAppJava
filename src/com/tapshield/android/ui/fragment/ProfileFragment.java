@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.tapshield.android.R;
 import com.tapshield.android.api.JavelinClient;
@@ -31,6 +34,7 @@ public class ProfileFragment extends BaseFragment {
 	private ImageButton mPicture;
 	private EditText mFirstName;
 	private EditText mLastName;
+	private TextView mDisclaimer;
 	
 	private BroadcastReceiver mPictureSetReceiver;
 	
@@ -47,6 +51,7 @@ public class ProfileFragment extends BaseFragment {
 		mPicture = (ImageButton) root.findViewById(R.id.fragment_profile_imagebutton);
 		mFirstName = (EditText) root.findViewById(R.id.fragment_profile_edit_firstname);
 		mLastName = (EditText) root.findViewById(R.id.fragment_profile_edit_lastname);
+		mDisclaimer = (TextView) root.findViewById(R.id.fragment_profile_text_disclaimer);
 		
 		return root;
 	}
@@ -70,6 +75,9 @@ public class ProfileFragment extends BaseFragment {
 				loadPicture();
 			}
 		};
+		
+		mDisclaimer.setText(Html.fromHtml(mDisclaimer.getText().toString()));
+		mDisclaimer.setMovementMethod(LinkMovementMethod.getInstance());
 	}
 	
 	@Override

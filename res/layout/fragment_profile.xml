@@ -18,6 +18,7 @@
             android:layout_margin="@dimen/ts_common_spacing_s"
             android:gravity="center"
             android:text="@string/ts_fragment_semiprofile_text_explanation"
+            android:textSize="@dimen/ts_common_text_s"
             android:textColor="@color/ts_gray_dark"/>
         
         <!-- card -->
@@ -74,11 +75,14 @@
         </LinearLayout>
         
         <TextView
+            android:id="@+id/fragment_profile_text_disclaimer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/ts_common_spacing_m"
             android:gravity="center"
             android:text="@string/ts_fragment_semiprofile_text_disclaimer"
-            android:textColor="@color/ts_gray_dark"/>
+            android:textSize="@dimen/ts_common_text_s"
+            android:textColor="@color/ts_gray_dark"
+            android:textColorLink="@color/ts_brand_dark"/>
     </LinearLayout>
 </ScrollView>
