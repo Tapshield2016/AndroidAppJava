@@ -95,7 +95,7 @@ public class BasicInfoActivity extends Activity
 		});
 		
 		mSaving = new ProgressDialog(this);
-		mSaving.setMessage(getString(R.string.ts_profile_basic_dialog_saving));
+		mSaving.setMessage(getString(R.string.ts_profile_dialog_saving));
 		mSaving.setIndeterminate(true);
 		mSaving.setCancelable(false);
 		
@@ -194,7 +194,7 @@ public class BasicInfoActivity extends Activity
 		if (successful) {
 			super.onBackPressed();
 		} else {
-			UiUtils.toastShort(this, getString(R.string.ts_profile_basic_toast_error));
+			UiUtils.toastShort(this, getString(R.string.ts_profile_toast_error));
 		}
 	}
 }

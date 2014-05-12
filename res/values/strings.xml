@@ -99,6 +99,9 @@
     <string name="ts_fullprofile_picture_chooserintent_title">Select Picture</string>
     <string name="ts_fullprofile_error_sdcard_absent">No SD card, the picture cannot be saved</string>
     
+    <string name="ts_profile_dialog_saving">Saving changes&#8230;</string>
+    <string name="ts_profile_toast_error">There was an error. Please try again!</string>
+    
     <!-- full profile : basic -->
     <string name="ts_profile_basic_firstname">First Name</string>
     <string name="ts_profile_basic_lastname">Last Name</string>
@@ -110,8 +113,42 @@
         <item>Female</item>
     </string-array>
     
-    <string name="ts_profile_basic_dialog_saving">Saving changes&#8230;</string>
-    <string name="ts_profile_basic_toast_error">There was an error. Please try again!</string>
+    <!-- full profile : appearance -->
+    <string-array name="ts_profile_appearance_races">
+        <item>Race</item>
+        <item>Black/African Decent</item>
+        <item>White/Caucasian</item>
+        <item>East Indian</item>
+        <item>Asian</item>
+        <item>Latino/Hispanic</item>
+        <item>Middle Eastern</item>
+        <item>Pacific Islander</item>
+        <item>Native American</item>
+        <item>Other</item>
+    </string-array>
+    
+    <string-array name="ts_profile_appearance_haircolors">
+        <item>Hair color</item>
+        <item>Blonde</item>
+        <item>Brown</item>
+        <item>Black</item>
+        <item>Red</item>
+        <item>Bald</item>
+        <item>Grey</item>
+        <item>Other</item>
+    </string-array>
+    
+    <!-- full profile : emergency contact -->
+    
+    <string-array name="ts_profile_contact_relationships">
+        <item>Relationship</item>
+        <item>Father</item>
+        <item>Mother</item>
+        <item>Spouse</item>
+        <item>Brother</item>
+        <item>Sister</item>
+        <item>Friend</item>
+    </string-array>
     
     <!-- main -->
     <string name="ts_main_circlebutton_report">Report</string>
