@@ -59,7 +59,7 @@ public class MedicalActivity extends Activity {
 		}
 		
 		if (profile.hasMedications()) {
-			mAllergies.setText(profile.getMedications());
+			mMedication.setText(profile.getMedications());
 		}
 	}
 	

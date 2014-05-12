@@ -65,11 +65,11 @@ public class EmergencyContactActivity extends Activity {
 		}
 		
 		if (profile.hasEmergencyContactLastName()) {
-			mFirst.setText(profile.getEmergencyContactLastName());
+			mLast.setText(profile.getEmergencyContactLastName());
 		}
 		
 		if (profile.hasEmergencyContactPhoneNumber()) {
-			mFirst.setText(profile.getEmergencyContactPhoneNumber());
+			mPhone.setText(profile.getEmergencyContactPhoneNumber());
 		}
 		
 		if (profile.hasEmergencyContactRelationship()) {
