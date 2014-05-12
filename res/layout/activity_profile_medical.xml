@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/TapShieldHeader"
+            android:text="@string/ts_profile_medical_allergies"/>
+        
+        <EditText
+            android:id="@+id/profile_medical_edit_allergies"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/ts_brand_dark"
+            android:inputType="textCapSentences"/>
+        
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/TapShieldHeader"
+            android:text="@string/ts_profile_medical_medication"/>
+        
+        <EditText
+            android:id="@+id/profile_medical_edit_medication"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/ts_brand_dark"
+            android:inputType="textCapSentences"/>
+    </LinearLayout>
+</ScrollView>
