@@ -3,9 +3,8 @@
 
     <string name="app_name">TapShield</string>
     <string name="ts_home">Home</string>
-    
     <string name="ts_no_org_emergency_number">911</string>
-    
+
     <!-- common -->
     <string name="ts_common_login">Log In</string>
     <string name="ts_common_signup">Sign Up</string>
@@ -26,7 +25,7 @@
     <string name="ts_common_next">Next</string>
     <string name="ts_common_edit">Edit</string>
     <string name="ts_common_error">Error</string>
-    
+
     <!-- welcome -->
     <string name="ts_welcome_skip">Skip</string>
     <string name="ts_welcome_noaccount">No Account?</string>
@@ -37,7 +36,7 @@
     <string name="ts_welcome_intro_4">Walk with an Entourage™ Set your route before you go. If you don\'t arrive in time, your safety network is automatically notified.</string>
     <string name="ts_welcome_intro_5">If your college subscribes to TapShield, safety alerts originating from inside school boundaries are routes to campus dispatchers.</string>
     <string name="ts_welcome_intro_6">If you use TapShield outside of campus boundaries, the app will automatically dial 9&#8211;1&#8211;1 for you to call.</string>
-    
+
     <!-- welcome fragment login -->
     <string name="ts_welcome_fragment_login_edit_email_hint">Your Email</string>
     <string name="ts_welcome_fragment_login_edit_password_hint">Your Password</string>
@@ -51,7 +50,7 @@
     <string name="ts_welcome_fragment_login_toast_login_error_default">Error logging in. please try again later or contact support</string>
     <string name="ts_welcome_fragment_login_toast_login_error_badcredentials">Wrong login combination!</string>
     <string name="ts_welcome_fragment_login_toast_login_error_emailunverified">You need to verify your email before logging in!</string>
-    
+
     <!-- registration -->
     <string name="ts_registration_actionbar_title_pickorg">Pick your organization</string>
     <string name="ts_registration_actionbar_title_createaccount">Create account</string>
@@ -60,29 +59,29 @@
     <string name="ts_registration_actionbar_title_profile">Profile</string>
     <string name="ts_registration_dialog_cancel_aftercreation_message">You are past the point of creating the account. Would you like to start over?</string>
     <string name="ts_registration_dialog_cancel_simple_message">Are you sure you want to start over?</string>
-    
+
     <!-- fragment required info -->
     <string name="ts_fragment_requiredinfo_edit_email_hint">Email Address</string>
     <string name="ts_fragment_requiredinfo_edit_password_hint">Password</string>
     <string name="ts_fragment_requiredinfo_edit_passcode_hint">Passcode</string>
     <string name="ts_fragment_requiredinfo_edit_phone_hint">Phone Number</string>
     <string name="ts_fragment_requiredinfo_text_phonenotice">We will only use your phone number to contact you in case of emergency</string>
-    
+
     <!-- fragment email confirmation -->
     <string name="ts_fragment_emailconfirmation_complete">Complete Verification</string>
     <string name="ts_fragment_emailconfirmation_resend">Resend Verification Email</string>
     <string name="ts_fragment_emailconfirmation_instruction_top">We\'ve sent a verification email to:</string>
     <string name="ts_fragment_emailconfirmation_instruction_bottom">Head to your inbox and follow the instructions from there.</string>
-    
+
     <!-- fragment phone confirmation -->
     <string name="ts_fragment_phoneconfirmation_text_instructions_top">We\'ve sent a verification code via SMS to:</string>
     <string name="ts_fragment_phoneconfirmation_text_instructions_bottom">Please enter your code below:</string>
     <string name="ts_fragment_phoneconfirmation_button_resend">Re-send SMS</string>
-    
+
     <!-- fragment semi-profile -->
     <string name="ts_fragment_semiprofile_text_explanation">This information will help us identify you in case of emergency.</string>
     <string name="ts_fragment_semiprofile_text_disclaimer"><![CDATA[By tapping \'Finish\' you accept to have read, understand, and agree to the <a href=\'http://tapshield.com/eula/\'>End User License Agreement</a>.]]></string>
-    
+
     <!-- full profile -->
     <string name="ts_fullprofile_button_basic">Basic Information</string>
     <string name="ts_fullprofile_button_contact">Contact Information</string>
@@ -98,28 +97,28 @@
     <string name="ts_fullprofile_dialog_picturesource_button_gallery">Pick</string>
     <string name="ts_fullprofile_picture_chooserintent_title">Select Picture</string>
     <string name="ts_fullprofile_error_sdcard_absent">No SD card, the picture cannot be saved</string>
-    
     <string name="ts_profile_dialog_saving">Saving changes&#8230;</string>
     <string name="ts_profile_toast_error">There was an error. Please try again!</string>
-    
+
     <!-- full profile : basic -->
     <string name="ts_profile_basic_firstname">First Name</string>
     <string name="ts_profile_basic_lastname">Last Name</string>
     <string name="ts_profile_basic_dob">Date of Birth</string>
     <string name="ts_profile_basic_gender">Gender</string>
+
     <string-array name="ts_profile_basic_genders">
         <item>Gender</item>
         <item>Male</item>
         <item>Female</item>
     </string-array>
-    
+
     <!-- full profile : appearance -->
     <string name="ts_profile_appearance_race">Race</string>
     <string name="ts_profile_appearance_haircolor">Hair Color</string>
     <string name="ts_profile_appearance_weight">Weight</string>
     <string name="ts_profile_appearance_height">Height</string>
     <string name="ts_profile_appearance_weight_dialog">Set weight (Lbs)</string>
-    
+
     <string-array name="ts_profile_appearance_races">
         <item>Race</item>
         <item>Black/African Decent</item>
@@ -132,7 +131,6 @@
         <item>Native American</item>
         <item>Other</item>
     </string-array>
-    
     <string-array name="ts_profile_appearance_haircolors">
         <item>Hair color</item>
         <item>Blonde</item>
@@ -143,17 +141,18 @@
         <item>Grey</item>
         <item>Other</item>
     </string-array>
-    
+
     <!-- full profile : medical -->
     <string name="ts_profile_medical_allergies">Known Allergies</string>
     <string name="ts_profile_medical_medication">Known Medication</string>
-    
+
     <!-- full profile : emergency contact -->
     <string name="ts_profile_contact_header_names">Contact Name</string>
     <string name="ts_profile_contact_header_other">Other</string>
     <string name="ts_profile_contact_edit_first_hint">First Name</string>
     <string name="ts_profile_contact_edit_last_hint">Last Name</string>
     <string name="ts_profile_contact_edit_phone_hint">Phone Number</string>
+
     <string-array name="ts_profile_contact_relationships">
         <item>Relationship</item>
         <item>Father</item>
@@ -163,7 +162,7 @@
         <item>Sister</item>
         <item>Friend</item>
     </string-array>
-    
+
     <!-- main -->
     <string name="ts_main_circlebutton_report">Report</string>
     <string name="ts_main_circlebutton_alert">Alert</string>
@@ -172,10 +171,10 @@
     <string name="ts_main_dialog_yank_message">To enable Yank, plug your headset in. Yank will allow you start an alert any time by pulling the headset out when enabled.</string>
     <string name="ts_main_toast_yank_enabled">Yank enabled</string>
     <string name="ts_main_toast_yank_disabled">Yank disabled</string>
-    
+
     <!-- chat -->
     <string name="ts_chat_edit_hint">Enter a message</string>
-    
+
     <!-- alert -->
     <string name="ts_alert_authorities">Authorities notified</string>
     <string name="ts_alert_details">Add details</string>
@@ -183,23 +182,22 @@
     <string name="ts_alert_twilio_connecting">Connecting&#8230;</string>
     <string name="ts_alert_twilio_ended">Call Ended</string>
     <string name="ts_alert_twilio_error">Call Failed</string>
-    
+
     <!-- reporting -->
     <string name="ts_reporting_dialog_message">Reporting&#8230;</string>
     <string name="ts_reporting_dialog_message_error">Oops! There was an issue. Try again later.</string>
     <string name="ts_reporting_toast_successful">Reported!</string>
-    
+
     <!-- fragment alert -->
     <string name="ts_fragment_alert_card_button_speaker">Speaker</string>
     <string name="ts_fragment_alert_circlebutton_details">Details</string>
     <string name="ts_fragment_alert_circlebutton_call">Call</string>
     <string name="ts_fragment_alert_circlebutton_chat">Chat</string>
-    
     <string name="ts_dialog_alert_twilio_failure_title">Call Failed</string>
     <string name="ts_dialog_alert_twilio_failure_message">Attempts to connect to the dispatcher over your data connection have failed. Retry again or launch a standard phone call.</string>
     <string name="ts_dialog_alert_twilio_failure_button_normalcall">Standard Call</string>
     <string name="ts_dialog_alert_twilio_failure_button_retry">Retry</string>
-    
+
     <!-- pick destination -->
     <string name="ts_fragment_pickdestination_contact_search_hint">Filter names</string>
     <string name="ts_fragment_pickdestination_place_search_hint">Search for places</string>
@@ -207,17 +205,17 @@
     <string name="ts_fragment_pickdestination_dialog_mode_message">How do you intend to reach your destination?</string>
     <string name="ts_fragment_pickdestination_dialog_mode_button_driving">Driving</string>
     <string name="ts_fragment_pickdestination_dialog_mode_button_walking">Walking</string>
-    
+
     <!-- pick route -->
     <string name="ts_pickroute_progressdialog_location_message">Getting starting point&#8230;</string>
     <string name="ts_pickroute_progressdialog_routes_message">Getting routes&#8230;</string>
     <string name="ts_pickroute_toast_noroute">Select a route before moving on</string>
-    
+
     <!-- pick arrival contacts -->
     <string name="ts_pickarrivalcontacts_text_arrivaltime">Arrival time</string>
     <string name="ts_pickarrivalcontacts_text_notifycontacts">Notify following contacts</string>
     <string name="ts_pickarrivalcontacts_text_addremove">Add/Remove</string>
-    
+
     <!-- dialpad -->
     <string name="ts_dialpad_message">Enter your passcode to disarm</string>
     <string name="ts_dialpad_message_error">Wrong passcode!</string>
@@ -233,7 +231,7 @@
     <string name="ts_dialpad_button_0">0</string>
     <string name="ts_dialpad_button_clear">Clear</string>
     <string name="ts_dialpad_button_delete">Delete</string>
-    
+
     <!-- menus -->
     <string name="ts_menu_finish">Finish</string>
     <string name="ts_menu_login_signup_facebook">Facebook</string>
@@ -246,7 +244,7 @@
     <string name="ts_menu_verify">Verify</string>
     <string name="ts_menu_alert">Alert</string>
     <string name="ts_menu_disarm">Disarm</string>
-    
+
     <!-- notifications -->
     <string name="ts_notification_title">TapShield</string>
     <string name="ts_notification_title_chat">TapShield Messages</string>
@@ -268,15 +266,25 @@
     <string name="ts_dialog_weightpicker_minus_100">-100</string>
     <string name="ts_dialog_weightpicker_minus_10">-10</string>
     <string name="ts_dialog_weightpicker_minus_1">-1</string>
-    
+
     <!-- height picker dialog fragment -->
     <string name="ts_dialog_heightpicker_title">Set Height</string>
     <string name="ts_dialog_heightpicker_button_set">Set</string>
     <string name="ts_dialog_heightpicker_button_cancel">Cancel</string>
     <string name="ts_dialog_heightpicker_plus_1">+1</string>
     <string name="ts_dialog_heightpicker_minus_1">-1</string>
-    
+
     <!-- misc -->
     <string name="ts_misc_credits_spotcrime">Powered by SpotCrime.com</string>
-    
+
+    <!-- settings -->
+    <string name="ts_settings_category">Settings</string>
+    <string name="ts_settings_passcode_title">Change Your Passcode</string>
+    <string name="ts_settings_passcode_summary">Your passcode verifies your identity</string>
+    <string name="ts_settings_passcode_key">com.tapshield.android.settings.passcode.key</string>
+    <string name="ts_settings_logout_title">Sign Out</string>
+    <string name="ts_settings_logout_key">com.tapshield.android.settings.logout.key</string>
+    <string name="ts_settings_about_category">About</string>
+    <string name="ts_settings_about_title">About TapShield</string>
+    <string name="ts_settings_about_key">com.tapshield.android.settings.about.key</string>
 </resources>
