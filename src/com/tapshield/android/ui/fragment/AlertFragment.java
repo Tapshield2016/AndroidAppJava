@@ -272,6 +272,13 @@ public class AlertFragment extends Fragment implements OnClickListener, OnStatus
 		boolean busy = status.equals(TwilioManager.Status.BUSY);
 		boolean error = status.equals(TwilioManager.Status.DISABLED);
 		
+		if (idle) {
+			mCall.setEnabled(true);
+		} else {
+			mCall.setEnabled(false);
+		}
+		
+		
 		getActivity().runOnUiThread(new Runnable() {
 			
 			@Override

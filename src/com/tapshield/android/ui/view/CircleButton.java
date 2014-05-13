@@ -94,9 +94,18 @@ public class CircleButton extends RelativeLayout {
 	}
 	
 	@Override
-	public void setEnabled(boolean enabled) {
-		super.setEnabled(enabled);
-		mButton.setEnabled(enabled);
-		mLabel.setEnabled(enabled);
+	public void setEnabled(final boolean enabled) {
+		
+		Runnable action = new Runnable() {
+			
+			@Override
+			public void run() {
+				CircleButton.super.setEnabled(enabled);
+				mButton.setEnabled(enabled);
+				mLabel.setEnabled(enabled);
+			}
+		};
+		
+		post(action);
 	}
 }
