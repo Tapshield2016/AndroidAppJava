@@ -12,6 +12,7 @@ import com.tapshield.android.api.JavelinClient;
 import com.tapshield.android.api.JavelinUserManager;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.ui.adapter.WelcomeFragmentPagerAdapter;
+import com.tapshield.android.ui.fragment.LoginFragment;
 import com.tapshield.android.ui.view.PageIndicator;
 
 public class WelcomeActivity extends FragmentActivity {
@@ -88,5 +89,19 @@ public class WelcomeActivity extends FragmentActivity {
 		if (userManager.isPresent()) {
 			finish();
 		}
+	}
+	
+	@Override
+	public void onBackPressed() {
+		boolean lastFragment = mPager.getCurrentItem() == mPagerAdapter.getCount() - 1;
+		
+		if (lastFragment) {
+			LoginFragment lf = (LoginFragment) mPagerAdapter.getLastFragment();
+			boolean alreadyHandled = lf.onBackPressed();
+			if (alreadyHandled) {
+				return;
+			}
+		}
+		super.onBackPressed();
 	}
 }

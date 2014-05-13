@@ -127,14 +127,22 @@ public class LoginFragment extends BaseFragment implements OnClickListener, OnMe
 			requestPasswordReset();
 			break;
 		case R.id.fragment_login_button_login: case R.id.fragment_login_button_signup:
-			//CHECK ICONCONTEXTMENU CLASS TO SUPPORT ICONS
-
 			mLoginPressed = v.getId() == R.id.fragment_login_button_login;
 
+			//removed social login
+			if (mLoginPressed) {
+				mForm.setVisibility(View.VISIBLE);
+				mOptions.setVisibility(View.INVISIBLE);
+			} else {
+				mOrgQuestion.show();
+			}
+			
+			/*
 			PopupMenu menu = new PopupMenu(getActivity(), v);
 			menu.inflate(R.menu.login_signup);
 			menu.setOnMenuItemClickListener(this);
 			menu.show();
+			*/
 			break;
 		}
 	}
@@ -228,5 +236,14 @@ public class LoginFragment extends BaseFragment implements OnClickListener, OnMe
 			String message = getActivity().getString(messageRes);
 			UiUtils.toastLong(getActivity(), message);
 		}
+	}
+	
+	public boolean onBackPressed() {
+		if (mForm.getVisibility() == View.VISIBLE) {
+			mForm.setVisibility(View.INVISIBLE);
+			mOptions.setVisibility(View.VISIBLE);
+			return true;
+		}
+		return false;
 	}
 }

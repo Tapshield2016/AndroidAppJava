@@ -5,12 +5,15 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.google.android.gms.internal.gt;
 import com.tapshield.android.R;
 import com.tapshield.android.ui.fragment.LoginFragment;
 import com.tapshield.android.ui.fragment.TutorialFragment;
 
 public class WelcomeFragmentPagerAdapter extends FragmentPagerAdapter {
 
+	private Fragment mLastFragment;
+	
 	public WelcomeFragmentPagerAdapter(FragmentManager fm) {
 		super(fm);
 	}
@@ -22,6 +25,7 @@ public class WelcomeFragmentPagerAdapter extends FragmentPagerAdapter {
 		//special case for last fragment
 		if (position == getCount() - 1) {
 			f = new LoginFragment();
+			mLastFragment = f;
 			return f;
 		} 
 		
@@ -76,5 +80,9 @@ public class WelcomeFragmentPagerAdapter extends FragmentPagerAdapter {
 	@Override
 	public int getCount() {
 		return 7;
+	}
+	
+	public Fragment getLastFragment() {
+		return mLastFragment;
 	}
 }
