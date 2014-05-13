@@ -568,6 +568,8 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 		case NavigationFragment.NAV_ID_HOME:
 		case NavigationFragment.NAV_ID_HELP:
 		case NavigationFragment.NAV_ID_SETTINGS:
+			newActivity = new Intent(this, SettingsActivity.class);
+			break;
 		case NavigationFragment.NAV_ID_ABOUT:
 		}
 

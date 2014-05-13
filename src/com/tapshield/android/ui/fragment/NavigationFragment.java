@@ -28,7 +28,8 @@ public class NavigationFragment extends Fragment implements OnItemClickListener 
 	public NavigationItem[] ITEMS = new NavigationItem[] {
 			new NavigationItem(NAV_ID_PROFILE, R.drawable.ts_icon_nav_profile, "Profile"),
 			new NavigationItem(NAV_ID_HOME, R.drawable.ts_icon_nav_home, "Home"),
-			new NavigationItem(NAV_ID_NOTIFICATION, R.drawable.ts_icon_nav_notifications, "Notifications")
+			new NavigationItem(NAV_ID_NOTIFICATION, R.drawable.ts_icon_nav_notifications, "Notifications"),
+			new NavigationItem(NAV_ID_SETTINGS, R.drawable.ts_icon_nav_settings, "Settings")
 			};
 
 	@Override
