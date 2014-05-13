@@ -275,6 +275,7 @@
     <string name="ts_dialog_heightpicker_minus_1">-1</string>
 
     <!-- misc -->
+    <string name="ts_misc_online_eula">http://www.tapshield.com/eula/</string>
     <string name="ts_misc_credits_spotcrime">Powered by SpotCrime.com</string>
 
     <!-- settings -->
