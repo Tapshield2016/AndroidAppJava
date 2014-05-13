@@ -38,7 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/ts_alert_authorities"
-            android:textColor="@color/ts_alert_authorities_text_color"
+            android:textColor="@color/ts_alert_red"
             android:textSize="@dimen/ts_fragment_alert_card_text_status"
             android:gravity="center"
             android:visibility="invisible"/>

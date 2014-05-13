@@ -3,5 +3,5 @@
     android:shape="oval">
 
     <solid
-        android:color="@color/ts_alert_authorities_text_color"/>
+        android:color="@color/ts_alert_red"/>
 </shape>
