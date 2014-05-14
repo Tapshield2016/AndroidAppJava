@@ -106,4 +106,7 @@
     <dimen name="ts_notification_item_text_title">18sp</dimen>
     <dimen name="ts_notification_item_text_subtitle">15sp</dimen>
     
+    <!-- about -->
+    <dimen name="ts_about_logo_height">130dp</dimen>
+    
 </resources>

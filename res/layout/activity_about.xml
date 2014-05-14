@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/ts_about_logo_height"
+            android:padding="@dimen/ts_common_spacing_xs"
+            android:src="@drawable/ts_logo"
+            android:scaleType="fitCenter"/>
+        
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/ts_common_spacing_xxs"
+            android:gravity="center"
+            android:text="@string/ts_about_message"
+            android:textSize="@dimen/ts_common_text_xs"
+            android:textColor="@color/ts_gray_dark"/>
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@android:color/white"
+            android:divider="@drawable/ts_divider_horizontal_gray"
+            android:showDividers="middle">
+            
+			<Button
+	            android:id="@+id/about_button_eula"
+			    android:text="@string/ts_about_button_eula"
+			    style="@style/TapShieldProfileButton"/>
+			
+			<Button
+			    android:id="@+id/about_button_thirdparty"
+                android:text="@string/ts_about_button_thirdparty"
+			    style="@style/TapShieldProfileButton"/>
+		</LinearLayout>
+		
+        <TextView
+            android:id="@+id/about_text_version"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/ts_gray_dark"
+            android:textSize="@dimen/ts_common_text_m"/>
+    </LinearLayout>
+</ScrollView>
