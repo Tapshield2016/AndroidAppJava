@@ -27,6 +27,7 @@ import com.tapshield.android.manager.TwilioManager;
 import com.tapshield.android.manager.TwilioManager.OnStatusChangeListener;
 import com.tapshield.android.manager.TwilioManager.Status;
 import com.tapshield.android.ui.activity.ChatActivity;
+import com.tapshield.android.ui.activity.ReportListActivity;
 import com.tapshield.android.ui.view.CircleButton;
 import com.tapshield.android.utils.HardwareUtils;
 import com.tapshield.android.utils.UiUtils;
@@ -185,6 +186,8 @@ public class AlertFragment extends Fragment implements OnClickListener, OnStatus
 	public void onClick(View view) {
 		switch (view.getId()) {
 		case R.id.fragment_alert_circlebutton_details:
+			Intent reporting = new Intent(getActivity(), ReportListActivity.class);
+			startActivity(reporting);
 			break;
 		case R.id.fragment_alert_circlebutton_call:
 			boolean scheduled = mEmergencyManager.isRunning() && !mEmergencyManager.isTransmitting();
