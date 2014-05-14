@@ -57,15 +57,31 @@
 	        android:text="@string/ts_pickarrivalcontacts_text_notifycontacts"
 	        android:textSize="@dimen/ts_entourage_pickarrivalcontacts_text"/>
 	    
-	    <GridView
-	        android:id="@+id/pickarrivalcontacts_grid"
+	    <FrameLayout
 	        android:layout_width="match_parent"
-	        android:numColumns="auto_fit"
-	        android:gravity="center"
-	        android:columnWidth="@dimen/ts_entourage_pickarrivalcontacts_image"
-	        android:stretchMode="columnWidth"
 	        android:layout_height="0dp"
-	        android:layout_weight="0.6"/>
+            android:layout_weight="0.6">
+	        
+	        <GridView
+	            android:id="@+id/pickarrivalcontacts_grid"
+	            android:layout_width="match_parent"
+	            android:layout_height="match_parent"
+	            android:numColumns="auto_fit"
+	            android:gravity="center"
+	            android:columnWidth="@dimen/ts_entourage_pickarrivalcontacts_image"
+	            android:stretchMode="columnWidth"/>
+	        
+	        <TextView
+	            android:id="@+id/pickarrivalcontacts_text_busy"
+	            android:layout_width="match_parent"
+	            android:layout_height="match_parent"
+	            android:gravity="center"
+	            android:text="Entourage is running."
+	            android:textColor="@color/ts_gray_light"
+	            android:textSize="@dimen/ts_common_text_m"
+	            android:background="#88000000"
+	            android:clickable="true"/>
+	    </FrameLayout>
     </LinearLayout>
     
     <FrameLayout

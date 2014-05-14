@@ -48,6 +48,7 @@ public class PickArrivalContacts extends Activity
 	
 	private CircleSeekBar mEtaKnob;
 	private TextView mEtaText;
+	private TextView mBusy;
 	private long mEta;
 	private long mEtaMilli;
 	private long mEtaMilliPerStep;
@@ -64,6 +65,7 @@ public class PickArrivalContacts extends Activity
 		mEntourage = EntourageManager.get(this);
 		mEtaKnob = (CircleSeekBar) findViewById(R.id.pickarrivalcontacts_circleseekbar);
 		mEtaText = (TextView) findViewById(R.id.pickarrivalcontacts_text_eta);
+		mBusy = (TextView) findViewById(R.id.pickarrivalcontacts_text_busy);
 		
 		mAdapter = new ArrivalContactAdapter(this, mChosen, R.layout.item_arrivalcontact);
 		
@@ -94,6 +96,8 @@ public class PickArrivalContacts extends Activity
 				ContactsRetriever.TYPE_EMAIL |
 				ContactsRetriever.TYPE_PHONE |
 				ContactsRetriever.TYPE_PHOTO);
+		
+		mBusy.setVisibility(mEntourage.isSet() ? View.VISIBLE : View.GONE);
 	}
 	
 	@Override
