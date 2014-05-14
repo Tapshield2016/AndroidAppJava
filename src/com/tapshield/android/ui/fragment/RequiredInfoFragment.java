@@ -105,7 +105,10 @@ public class RequiredInfoFragment extends BaseFragment implements OnUserSignUpLi
 		String password = getTextOffEditText(mPassword);
 		String phone = mRequestPhone ? getTextOffEditText(mPhone) : null;
 		
-		if (!StringUtils.isEmailValid(email)) {
+		if (mSelectedOrganization.requiredDomainEmails
+				&& !email.endsWith(mSelectedOrganization.domain)) {
+			mEmail.setError("this organization requires " + mSelectedOrganization.domain + " emails");
+		} else if (!StringUtils.isEmailValid(email)) {
 			mEmail.setError("email is not valid");
 		} else if (password.length() < 4) {
 			mPassword.setError("has to have at least 4 characters");
