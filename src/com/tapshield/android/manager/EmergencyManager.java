@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.util.Log;
@@ -22,9 +23,12 @@ import com.tapshield.android.manager.TwilioManager.OnStatusChangeListener;
 import com.tapshield.android.manager.TwilioManager.Status;
 import com.tapshield.android.service.AlertIdUpdateService;
 import com.tapshield.android.service.ChatUpdateService;
+import com.tapshield.android.ui.activity.MainActivity;
+import com.tapshield.android.ui.activity.OutOfBoundsActivity;
 import com.tapshield.android.utils.GeoUtils;
 import com.tapshield.android.utils.HardwareUtils;
 import com.tapshield.android.utils.NetUtils;
+import com.tapshield.android.utils.UiUtils;
 
 public class EmergencyManager implements LocationListener, OnStatusChangeListener {
 	
@@ -325,14 +329,7 @@ public class EmergencyManager implements LocationListener, OnStatusChangeListene
 				.getInteger(R.integer.emergency_alert_id_periodic_check_max_attempts);
 		
 		if (mAlertIdUpdaterRetries >= maxRetries) {
-			/*
-			 * GO TO MAIN ACTIVITY/FRAGMENT
-			Intent main = new Intent(mContext, MainActivity.class);
-			main.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			main.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);;
-			main.putExtra(NavUtils.EXTRA_RESUMING, true);
-			mContext.startActivity(main);
-			*/
+			UiUtils.startActivityNoStack(mContext, MainActivity.class);
 			cancel();
 			Notifier.getInstance(mContext).notify(Notifier.NOTIFICATION_FAILED_ALERT);
 		}
@@ -438,12 +435,10 @@ public class EmergencyManager implements LocationListener, OnStatusChangeListene
 			
 			@Override
 			public void onFinish() {
-				/*
-				 * GO TO WARNING ACTIVITY/FRAGMENT
-				Intent warning = new Intent(mContext, WarningActivity.class);
-				warning.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-				mContext.startActivity(warning);
-				*/
+				Intent main = new Intent(mContext, MainActivity.class);
+				Intent oob = new Intent(mContext, OutOfBoundsActivity.class);
+				Intent[] stack = new Intent[]{main, oob};
+				mContext.startActivities(stack);
 				cancelRefMethod();
 			}
 		}.start();
