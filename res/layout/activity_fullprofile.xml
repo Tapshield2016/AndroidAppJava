@@ -20,7 +20,7 @@
                 android:layout_width="@dimen/ts_fullprofile_picture"
                 android:layout_height="@dimen/ts_fullprofile_picture"
                 android:layout_margin="@dimen/ts_common_spacing_xxs"
-                android:src="@drawable/ic_launcher"
+                android:src="@drawable/ts_avatar_default"
                 android:scaleType="centerInside"
                 android:background="@drawable/ts_button_rect"/>
             
