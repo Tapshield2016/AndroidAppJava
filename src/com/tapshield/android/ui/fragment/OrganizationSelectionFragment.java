@@ -43,6 +43,7 @@ public class OrganizationSelectionFragment extends BaseFragment
 	private LocationTracker mTracker;
 	
 	private ListView mList;
+	private TextView mEmpty;
 	private List<Agency> mNearbyAgencies;
 	private List<Agency> mAllAgencies;
 	private List<Agency> mQueryResultAllAgencies;
@@ -62,6 +63,7 @@ public class OrganizationSelectionFragment extends BaseFragment
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View root = inflater.inflate(R.layout.fragment_organizationselection, container, false);
 		mList = (ListView) root.findViewById(R.id.fragment_organizationselection_list);
+		mEmpty = (TextView) root.findViewById(R.id.fragment_organizationselection_empty);
 		return root;
 	}
 	
@@ -78,18 +80,12 @@ public class OrganizationSelectionFragment extends BaseFragment
 		mAdapter = new AgencyListAdapter(getActivity(), R.layout.item_organizationselection,
 				mNearbyAgencies);
 		
-		TextView emptyListView = new TextView(getActivity());
-		LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-		emptyListView.setLayoutParams(lp);
-		emptyListView.setGravity(Gravity.CENTER);
-		
 		mList.setOnItemClickListener(this);
-		mList.setEmptyView(emptyListView);
 		mList.setAdapter(mAdapter);
 		
 		mLoader = new AlertDialog.Builder(getActivity())
-				.setTitle("loading agencies")
-				.setMessage("please wait...")
+				.setTitle(R.string.ts_organizationselection_dialog_loading_title)
+				.setMessage(R.string.ts_organizationselection_dialog_loading_message)
 				.create();
 		
 		mLoader.show();
@@ -112,7 +108,7 @@ public class OrganizationSelectionFragment extends BaseFragment
 					mAllLoaded = true;
 					dismissLoaderWhenFinished();
 				} else {
-					UiUtils.toastShort(getActivity(), "error retrieving list of organizations");
+					UiUtils.toastShort(getActivity(), getString(R.string.ts_organizationselection_toast_loading_error));
 					getActivity().finish();
 				}
 			}
@@ -133,7 +129,7 @@ public class OrganizationSelectionFragment extends BaseFragment
 		
 		MenuItem searchItem = menu.findItem(R.id.action_organizationselection_search);
 		SearchView searchView = (SearchView) searchItem.getActionView();
-		searchView.setQueryHint("search all organizations");
+		searchView.setQueryHint(getString(R.string.ts_organizationselection_searchview_hint));
 		searchItem.setOnActionExpandListener(new OnActionExpandListener() {
 			
 			@Override
@@ -166,6 +162,7 @@ public class OrganizationSelectionFragment extends BaseFragment
 	
 	private void setDataSet(List<Agency> dataSet) {
 		mAdapter.setItems(dataSet);
+		mEmpty.setVisibility(dataSet.isEmpty() ? View.VISIBLE : View.GONE);
 	}
 	
 	private void filterAll(String query) {
@@ -208,7 +205,7 @@ public class OrganizationSelectionFragment extends BaseFragment
 	
 	@Override
 	public void onLocationChanged(Location l) {
-mTracker.stop();
+		mTracker.stop();
 		
 		if (!mNearbyAgencies.isEmpty()) {
 			return;
@@ -225,8 +222,9 @@ mTracker.stop();
 					mAdapter.notifyDataSetChanged();
 					mNearbyLoaded = true;
 					dismissLoaderWhenFinished();
+					mEmpty.setVisibility(mNearbyAgencies.isEmpty() ? View.VISIBLE : View.GONE);
 				} else {
-					UiUtils.toastShort(getActivity(), "error retrieving list of organizations");
+					UiUtils.toastShort(getActivity(), getString(R.string.ts_organizationselection_toast_loading_error));
 					getActivity().finish();
 				}
 			}

@@ -59,6 +59,13 @@
     <string name="ts_registration_actionbar_title_profile">Profile</string>
     <string name="ts_registration_dialog_cancel_aftercreation_message">You are past the point of creating the account. Would you like to start over?</string>
     <string name="ts_registration_dialog_cancel_simple_message">Are you sure you want to start over?</string>
+    
+    <!-- selecting organization -->
+    <string name="ts_organizationselection_dialog_loading_title">Please wait</string>
+    <string name="ts_organizationselection_dialog_loading_message">Loading organization&#8230;</string>
+    <string name="ts_organizationselection_toast_loading_error">Error retrieving list</string>
+    <string name="ts_organizationselection_searchview_hint">Search All</string>
+    <string name="ts_organizationselection_list_empty">No nearby organizations. Tap \'search\' icon to see all organization.</string>
 
     <!-- fragment required info -->
     <string name="ts_fragment_requiredinfo_edit_email_hint">Email Address</string>
