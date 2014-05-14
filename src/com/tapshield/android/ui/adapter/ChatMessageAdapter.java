@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -122,13 +121,12 @@ public class ChatMessageAdapter extends BaseAdapter {
 			//using gmt-approx (utc) to convert to current timezone
 			//NOTE: AWS (DDB) STORES TIMESTAMPS IN SECONDS. THUS, timestamp TIMES 1000 (s -> ms)
 			long utc = chatMessage.timestamp * 1000;
-			long local = DateTimeZone.getDefault().convertUTCToLocal(utc);
-			DateTime currentDateTime = new DateTime(local);
+			DateTime local = new DateTime(utc);
 
 			//set "mm minutes ago..." if within an hour, otherwise, format as hh:mm (AM|PM)
 			long now = System.currentTimeMillis();
 			
-			int diffMinutes = (int) ((now - currentDateTime.getMillis()) / (1000 * 60));
+			int diffMinutes = (int) ((now - local.getMillis()) / (1000 * 60));
 			
 			if (diffMinutes == 0) {
 				statusValue = "just now";
@@ -137,7 +135,7 @@ public class ChatMessageAdapter extends BaseAdapter {
 			} else if (diffMinutes > 1 && diffMinutes < 60) {
 				statusValue = diffMinutes + " minutes ago";
 			} else {
-				statusValue = currentDateTime.toString("hh:mm aa");
+				statusValue = local.toString("hh:mm aa");
 			}
 		}
 		
