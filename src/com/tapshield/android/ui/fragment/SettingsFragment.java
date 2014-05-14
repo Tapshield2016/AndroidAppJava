@@ -1,5 +1,6 @@
 package com.tapshield.android.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
@@ -9,6 +10,7 @@ import com.tapshield.android.R;
 import com.tapshield.android.api.JavelinClient;
 import com.tapshield.android.api.JavelinUserManager.OnUserLogOutListener;
 import com.tapshield.android.app.TapShieldApplication;
+import com.tapshield.android.ui.activity.AboutActivity;
 import com.tapshield.android.ui.activity.MainActivity;
 import com.tapshield.android.utils.UiUtils;
 
@@ -48,16 +50,16 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 		boolean about = key.equals(mAboutKey);
 		
 		if (change) {
-			//Intent changePasscode = new Intent(getActivity(), ChangePasscodeActivity.class);
-			//startActivity(changePasscode);
+			//Intent activity = new Intent(getActivity(), ChangePasscodeActivity.class);
+			//startActivity(activity);
 		} else if (signout) {
 			JavelinClient
 					.getInstance(getActivity(), TapShieldApplication.JAVELIN_CONFIG)
 					.getUserManager()
 					.logOut(this);
 		} else if (about) {
-			//Intent about = new Intent(getActivity(), AboutActivity.class);
-			//startActivity(about);
+			Intent activity = new Intent(getActivity(), AboutActivity.class);
+			startActivity(activity);
 		}
 			
 		return true;
