@@ -277,6 +277,8 @@
     <!-- misc -->
     <string name="ts_misc_online_eula">http://www.tapshield.com/eula/</string>
     <string name="ts_misc_credits_spotcrime">Powered by SpotCrime.com</string>
+    <string name="ts_misc_feedback_email">hello@tapshield.com</string>
+    <string name="ts_misc_feedback_subject">TapShield Android App Feedback</string>
 
     <!-- settings -->
     <string name="ts_settings_category">Settings</string>
@@ -285,9 +287,11 @@
     <string name="ts_settings_passcode_key">com.tapshield.android.settings.passcode.key</string>
     <string name="ts_settings_logout_title">Sign Out</string>
     <string name="ts_settings_logout_key">com.tapshield.android.settings.logout.key</string>
-    <string name="ts_settings_about_category">About</string>
+    <string name="ts_settings_other_category">Other</string>
     <string name="ts_settings_about_title">About TapShield</string>
     <string name="ts_settings_about_key">com.tapshield.android.settings.about.key</string>
+    <string name="ts_settings_feedback_title">Feedback</string>
+    <string name="ts_settings_feedback_key">com.tapshield.android.settings.feedback.key</string>
     
     <!-- about -->
     <string name="ts_about_button_eula">EULA</string>

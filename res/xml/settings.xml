@@ -16,7 +16,11 @@
     </PreferenceCategory>
     
     <PreferenceCategory
-        android:title="@string/ts_settings_about_category">
+        android:title="@string/ts_settings_other_category">
+        
+        <Preference
+            android:title="@string/ts_settings_feedback_title"
+            android:key="@string/ts_settings_feedback_key"/>
         
         <Preference
             android:title="@string/ts_settings_about_title"

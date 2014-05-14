@@ -1,6 +1,7 @@
 package com.tapshield.android.ui.fragment;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
@@ -18,10 +19,12 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 
 	Preference mChangePasscode;
 	Preference mSignOut;
+	Preference mFeedback;
 	Preference mAbout;
 	
 	String mChangePasscodeKey;
 	String mSignOutKey;
+	String mFeedbackKey;
 	String mAboutKey;
 	
 	@Override
@@ -31,14 +34,17 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 		
 		mChangePasscodeKey = getString(R.string.ts_settings_passcode_key);
 		mSignOutKey = getString(R.string.ts_settings_logout_key);
+		mFeedbackKey = getString(R.string.ts_settings_feedback_key);
 		mAboutKey = getString(R.string.ts_settings_about_key);
 		
 		mChangePasscode = (Preference) getPreferenceManager().findPreference(mChangePasscodeKey);
 		mSignOut = (Preference) getPreferenceManager().findPreference(mSignOutKey);
+		mFeedback = (Preference) getPreferenceManager().findPreference(mFeedbackKey);
 		mAbout = (Preference) getPreferenceManager().findPreference(mAboutKey);
 		
 		mChangePasscode.setOnPreferenceClickListener(this);
 		mSignOut.setOnPreferenceClickListener(this);
+		mFeedback.setOnPreferenceClickListener(this);
 		mAbout.setOnPreferenceClickListener(this);
 	}
 
@@ -47,19 +53,30 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 		String key = preference.getKey();
 		boolean change = key.equals(mChangePasscodeKey);
 		boolean signout = key.equals(mSignOutKey);
+		boolean feedback = key.equals(mFeedbackKey);
 		boolean about = key.equals(mAboutKey);
 		
 		if (change) {
-			//Intent activity = new Intent(getActivity(), ChangePasscodeActivity.class);
-			//startActivity(activity);
+			//Intent intent = new Intent(getActivity(), ChangePasscodeActivity.class);
+			//startActivity(intent);
 		} else if (signout) {
 			JavelinClient
 					.getInstance(getActivity(), TapShieldApplication.JAVELIN_CONFIG)
 					.getUserManager()
 					.logOut(this);
+		} else if (feedback) {
+			String email = getString(R.string.ts_misc_feedback_email);
+			String subject = getString(R.string.ts_misc_feedback_subject);
+			
+			Intent intent = new Intent(Intent.ACTION_SEND);
+			intent.setData(Uri.parse("mailto:"));
+			intent.setType("message/rfc822");
+			intent.putExtra(Intent.EXTRA_EMAIL, new String[]{email});
+			intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+			startActivity(Intent.createChooser(intent, "Choose an Email client:"));
 		} else if (about) {
-			Intent activity = new Intent(getActivity(), AboutActivity.class);
-			startActivity(activity);
+			Intent intent = new Intent(getActivity(), AboutActivity.class);
+			startActivity(intent);
 		}
 			
 		return true;
