@@ -6,6 +6,9 @@ import android.location.Location;
 import android.os.IBinder;
 
 import com.google.android.gms.location.LocationListener;
+import com.tapshield.android.api.JavelinClient;
+import com.tapshield.android.api.model.User;
+import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.location.LocationTracker;
 import com.tapshield.android.manager.EntourageManager;
 import com.tapshield.android.manager.EntourageManager.Listener;
@@ -13,7 +16,7 @@ import com.tapshield.android.manager.EntourageManager.Listener;
 public class EntourageArrivalCheckService extends Service implements LocationListener, Listener {
 
 	private static final float ACCURACY_MINIMUM = 200f;
-	private static final float DISTANCE_MINIMUM_FOR_ALERT = 500f;
+	private static final float DISTANCE_MINIMUM_FOR_ALERT = 200f;
 	private EntourageManager mEntourage;
 	private LocationTracker mTracker;
 	private Location mDestination;
@@ -38,7 +41,6 @@ public class EntourageArrivalCheckService extends Service implements LocationLis
 	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		mEntourage.stop();
 		mTracker.start();
 		return START_STICKY;
 	}
@@ -53,13 +55,27 @@ public class EntourageArrivalCheckService extends Service implements LocationLis
 
 			if (location != null && mDestination != null) {
 				float distance = location.distanceTo(mDestination);
-				
 
+				User user = JavelinClient
+						.getInstance(this, TapShieldApplication.JAVELIN_CONFIG)
+						.getUserManager()
+						.getUser();
+				
+				String name = user.firstName + " " + user.lastName;
+				String destination = mEntourage.getRoute().endAddress();
+				
+				String message = name + " has not reached their destination("
+						+ destination + ") at the estimated time of arrival."
+						+ " They might need your help at"
+						+ " http://maps.google.com/maps"
+						+ "?q=" + location.getLatitude() + "," + location.getLongitude();
+				
 				if (distance >= DISTANCE_MINIMUM_FOR_ALERT) {
 					mEntourage.addListener(this);
-					mEntourage.messageMembers("User has not reached their destination at the estimated time of arrival.");
+					mEntourage.messageMembers(message);
 					mEntourage.notifyUserMissedETA();
 				}
+				mEntourage.stop();
 			}
 		}
 	}
