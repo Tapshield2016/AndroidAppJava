@@ -63,7 +63,9 @@ public class EntourageManager implements EntourageListener {
 	private boolean mSet;
 	private int mMembersAdditionIndex = 0;
 	private int mMemberAdditionRetry = 0;
+	private int mMemberDeletionIndex = 0;
 	private List<Listener> mListeners;
+	private List<Integer> mMembersToDelete;
 	
 	public static EntourageManager get(Context context) {
 		if (mIt == null) {
@@ -80,6 +82,7 @@ public class EntourageManager implements EntourageListener {
 		mPreferences = mContext.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
 		mAlarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
 		mListeners = new ArrayList<Listener>();
+		mMembersToDelete = new ArrayList<Integer>();
 		load();
 	}
 	
@@ -146,7 +149,8 @@ public class EntourageManager implements EntourageListener {
 		
 		long durationSeconds =
 				wantedDurationSeconds >= 0 ? wantedDurationSeconds : r.durationSeconds();
-		
+
+		mMembersToDelete.clear();
 		addMembers(contacts);
 		//preset startAt here, setFlags() method will set the rest with this and the route
 		mStartAt = System.currentTimeMillis();
@@ -167,7 +171,8 @@ public class EntourageManager implements EntourageListener {
 		if (!isSet()) {
 			return;
 		}
-		
+
+		removeMembers();
 		mSet = false;
 		mRoute = null;
 		mStartAt = 0;
@@ -275,6 +280,16 @@ public class EntourageManager implements EntourageListener {
 		addMemberViaJavelin();
 	}
 	
+	private void removeMembers() {
+		mMemberDeletionIndex = 0;
+		removeMemberViaJavelin();
+	}
+	
+	private void removeMemberViaJavelin() {
+		int id = mMembersToDelete.get(mMemberDeletionIndex);
+		mEntourage.removeMemberWithId(id, this);
+	}
+	
 	private void addMemberViaJavelin() {
 		EntourageMember first = mMembers.members().get(mMembersAdditionIndex);
 		
@@ -295,8 +310,9 @@ public class EntourageManager implements EntourageListener {
 	public void onMemberAdded(boolean ok, int memberId, String errorIfNotOk) {
 		Log.i("aaa", "ent add ok=" + ok + " m=" + (ok ? memberId : errorIfNotOk)
 				+ " " + (mMembersAdditionIndex + 1) + "/" + mMembers.members().size());
-		
 		if (ok) {
+			mMembersToDelete.add(memberId);
+			
 			mMemberAdditionRetry = 0;
 
 			boolean stillLeft = mMembersAdditionIndex + 1 < mMembers.members().size();
@@ -316,7 +332,19 @@ public class EntourageManager implements EntourageListener {
 	}
 
 	@Override
-	public void onMemberRemoved(boolean ok, int memberId, String errorIfNotOk) {}
+	public void onMemberRemoved(boolean ok, int memberId, String errorIfNotOk) {
+		if (ok) {
+			boolean stillLeft = mMemberDeletionIndex + 1 < mMembersToDelete.size();
+			if (stillLeft) {
+				mMemberDeletionIndex++;
+				removeMemberViaJavelin();
+			} else {
+				mMembersToDelete.clear();
+			}
+		} else {
+			removeMemberViaJavelin();
+		}
+	}
 
 	@Override
 	public void onMessage(boolean ok, String message, String errorIfNotOk) {
