@@ -157,14 +157,9 @@ public class EmergencyManager implements LocationListener, OnStatusChangeListene
 					handleLatestLocation();
 				} else {
 					cancel();
-					/*
-					 * GO TO MAIN ACTIVITY (SET MAIN FRAGMENT)
-					Intent intent = new Intent(mContext, MainActivity.class);
-					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-					intent.putExtra(NavUtils.EXTRA_RESUMING, true);
-					intent.putExtra(MainActivity.EXTRA_NO_CONNECTION, true);
-					mContext.startActivity(intent);
-					*/
+					Bundle extras = new Bundle();
+					extras.putBoolean(MainActivity.EXTRA_DISCONNECTED, true);
+					UiUtils.startActivityNoStack(mContext, MainActivity.class, extras);
 				}
 			}
 		};
