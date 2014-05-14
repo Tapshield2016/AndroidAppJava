@@ -151,7 +151,7 @@ public class Notifier {
 	private Notification buildMass() {
 		return getCommonBuilder()
 				.setContentText(mContext.getString(R.string.ts_notification_message_massalert))
-				.setContentIntent(getPendingIntentWithBackStack(MassAlertsActivity.class))
+				.setContentIntent(getPendingIntentWithBackStack(MainActivity.class, MassAlertsActivity.class))
 				.setAutoCancel(true)
 				.build();
 	}
