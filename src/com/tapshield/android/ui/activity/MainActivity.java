@@ -148,7 +148,6 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 		mEntourageManager = EntourageManager.get(this);
 		
 		mYankDialog = getYankDialog();
-		mDisconnectedDialog = getDisconnectedDialog();
 		
 		mEntourage.setOnClickListener(new OnClickListener() {
 			
@@ -279,6 +278,7 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 				startActivities(stack);
 			} else {
 				if (getIntent() != null && getIntent().getBooleanExtra(EXTRA_DISCONNECTED, false)) {
+					mDisconnectedDialog = getDisconnectedDialog();
 					mDisconnectedDialog.show();
 				}
 			}
