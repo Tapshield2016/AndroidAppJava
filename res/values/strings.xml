@@ -26,6 +26,10 @@
     <string name="ts_common_edit">Edit</string>
     <string name="ts_common_error">Error</string>
 
+    <!-- main -->
+    <string name="ts_main_dialog_disconnected_title">No Network Data Connection</string>
+    <string name="ts_main_dialog_disconnected_button_call_preffix">Call</string>
+    
     <!-- welcome -->
     <string name="ts_welcome_skip">Skip</string>
     <string name="ts_welcome_noaccount">No Account?</string>
@@ -280,7 +284,7 @@
     <string name="ts_dialog_heightpicker_button_cancel">Cancel</string>
     <string name="ts_dialog_heightpicker_plus_1">+1</string>
     <string name="ts_dialog_heightpicker_minus_1">-1</string>
-
+    
     <!-- misc -->
     <string name="ts_misc_online_eula">http://www.tapshield.com/eula/</string>
     <string name="ts_misc_credits_spotcrime">Powered by SpotCrime.com</string>

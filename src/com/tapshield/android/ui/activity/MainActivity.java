@@ -65,6 +65,8 @@ import com.tapshield.android.utils.UiUtils;
 public class MainActivity extends FragmentActivity implements OnNavigationItemClickListener,
 		LocationListener, YankListener, OnMapLoadedCallback {
 
+	public static final String EXTRA_DISCONNECTED = "com.tapshield.android.extra.disconnected";
+	
 	private static final String KEY_RESUME = "resuming";
 
 	private ActionBarDrawerToggle mDrawerToggle;
@@ -85,6 +87,7 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 	private EntourageManager mEntourageManager;
 	
 	private AlertDialog mYankDialog;
+	private AlertDialog mDisconnectedDialog;
 
 	private boolean mMapLoaded = false;
 	private boolean mUserScrollingMap = false;
@@ -145,6 +148,7 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 		mEntourageManager = EntourageManager.get(this);
 		
 		mYankDialog = getYankDialog();
+		mDisconnectedDialog = getDisconnectedDialog();
 		
 		mEntourage.setOnClickListener(new OnClickListener() {
 			
@@ -273,6 +277,10 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 				
 				Intent[] stack = new Intent[]{welcome, finishStep};
 				startActivities(stack);
+			} else {
+				if (getIntent() != null && getIntent().getBooleanExtra(EXTRA_DISCONNECTED, false)) {
+					mDisconnectedDialog.show();
+				}
 			}
 		}
 		
@@ -551,6 +559,27 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 					}
 				});
 		return builder.create();
+	}
+	
+	private AlertDialog getDisconnectedDialog() {
+		final String secondaryPhone = mJavelin
+				.getUserManager()
+				.getUser()
+				.agency
+				.secondaryNumber;
+		String call = getString(R.string.ts_main_dialog_disconnected_button_call_preffix)
+				+ " " + secondaryPhone;
+		return new AlertDialog.Builder(this)
+				.setTitle(R.string.ts_main_dialog_disconnected_title)
+				.setPositiveButton(call, new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface arg0, int arg1) {
+						UiUtils.MakePhoneCall(MainActivity.this, secondaryPhone);
+					}
+				})
+				.setNegativeButton(R.string.ts_common_cancel, null)
+				.create();
 	}
 
 	@Override
