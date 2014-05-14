@@ -163,6 +163,10 @@
             android:name="com.tapshield.android.ui.activity.AboutActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="com.tapshield.android.ui.activity.OutOfBoundsActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
 
         <!-- SERVICES -->
         <service
