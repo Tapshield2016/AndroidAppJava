@@ -430,10 +430,10 @@ public class EmergencyManager implements LocationListener, OnStatusChangeListene
 			
 			@Override
 			public void onFinish() {
-				Intent main = new Intent(mContext, MainActivity.class);
+				UiUtils.startActivityNoStack(mContext, MainActivity.class);
 				Intent oob = new Intent(mContext, OutOfBoundsActivity.class);
-				Intent[] stack = new Intent[]{main, oob};
-				mContext.startActivities(stack);
+				oob.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				mContext.startActivity(oob);
 				cancelRefMethod();
 			}
 		}.start();
