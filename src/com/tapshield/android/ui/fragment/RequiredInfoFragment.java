@@ -3,6 +3,7 @@ package com.tapshield.android.ui.fragment;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -77,6 +78,7 @@ public class RequiredInfoFragment extends BaseFragment implements OnUserSignUpLi
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
+		mPhone.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 		super.onActivityCreated(savedInstanceState);
 	}
 	
