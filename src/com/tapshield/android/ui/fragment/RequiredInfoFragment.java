@@ -44,8 +44,8 @@ public class RequiredInfoFragment extends BaseFragment implements OnUserSignUpLi
 		mJavelin = JavelinClient.getInstance(getActivity(), TapShieldApplication.JAVELIN_CONFIG);
 		
 		mDialogSignUp = new ProgressDialog(getActivity());
-		mDialogSignUp.setTitle("signing up");
-		mDialogSignUp.setMessage("please wait...");
+		mDialogSignUp.setTitle(R.string.ts_fragment_requiredinfo_dialog_signup_title);
+		mDialogSignUp.setMessage(getString(R.string.ts_fragment_requiredinfo_dialog_signup_message));
 		mDialogSignUp.setIndeterminate(true);
 		mDialogSignUp.setCancelable(false);
 	
@@ -107,15 +107,16 @@ public class RequiredInfoFragment extends BaseFragment implements OnUserSignUpLi
 		
 		if (mSelectedOrganization != null && mSelectedOrganization.requiredDomainEmails
 				&& !email.endsWith(mSelectedOrganization.domain)) {
-			mEmail.setError("this organization requires " + mSelectedOrganization.domain + " emails");
+			mEmail.setError(getString(R.string.ts_fragment_requiredinfo_error_domainrequired_prefix)
+					+ mSelectedOrganization.domain);
 		} else if (!StringUtils.isEmailValid(email)) {
-			mEmail.setError("email is not valid");
+			mEmail.setError(getString(R.string.ts_fragment_requiredinfo_error_emailinvalid));
 		} else if (password.length() < 4) {
-			mPassword.setError("has to have at least 4 characters");
+			mPassword.setError(getString(R.string.ts_fragment_requiredinfo_error_passwordshort));
 		} else if (!StringUtils.isFourDigitsNoSpaceValid(passcode)) {
-			mPasscode.setError("has to have 4 digits");
+			mPasscode.setError(getString(R.string.ts_fragment_requiredinfo_error_passcodeshort));
 		} else if (mRequestPhone && !StringUtils.isPhoneNumberValid(phone)) {
-			mPhone.setError("has to have 10 digits");
+			mPhone.setError(getString(R.string.ts_fragment_requiredinfo_error_phoneinvalid));
 		} else {
 			//meaning no error was found, attempt to sign up
 			mDialogSignUp.show();
@@ -136,9 +137,9 @@ public class RequiredInfoFragment extends BaseFragment implements OnUserSignUpLi
 	
 	private void showErrorDialog(String message) {
 		AlertDialog errorDialog = new AlertDialog.Builder(getActivity())
-				.setTitle("error")
+				.setTitle(R.string.ts_common_error)
 				.setMessage(message)
-				.setPositiveButton("ok", null)
+				.setPositiveButton(R.string.ts_common_ok, null)
 				.create();
 		errorDialog.show();
 	}
@@ -152,7 +153,7 @@ public class RequiredInfoFragment extends BaseFragment implements OnUserSignUpLi
 		mDialogSignUp.dismiss();
 		
 		if (successful) {
-			UiUtils.toastShort(getActivity(), "registered");
+			UiUtils.toastShort(getActivity(), getString(R.string.ts_fragment_requiredinfo_signup_done));
 			
 			try {
 				Bundle extras = new Bundle();

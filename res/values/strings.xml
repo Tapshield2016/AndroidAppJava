@@ -77,6 +77,14 @@
     <string name="ts_fragment_requiredinfo_edit_passcode_hint">Passcode</string>
     <string name="ts_fragment_requiredinfo_edit_phone_hint">Phone Number</string>
     <string name="ts_fragment_requiredinfo_text_phonenotice">We will only use your phone number to contact you in case of emergency</string>
+    <string name="ts_fragment_requiredinfo_dialog_signup_title">Signing Up</string>
+    <string name="ts_fragment_requiredinfo_dialog_signup_message">Please wait&#8230;</string>
+    <string name="ts_fragment_requiredinfo_error_domainrequired_prefix">This organization requires emails ending in </string>
+    <string name="ts_fragment_requiredinfo_error_emailinvalid">Email is not valid</string>
+    <string name="ts_fragment_requiredinfo_error_passwordshort">It has to be at least 4 characters</string>
+    <string name="ts_fragment_requiredinfo_error_passcodeshort">It has to be 4 digits</string>
+    <string name="ts_fragment_requiredinfo_error_phoneinvalid">It has to be 10 digits long</string>
+    <string name="ts_fragment_requiredinfo_signup_done">Signed in!</string>
 
     <!-- fragment email confirmation -->
     <string name="ts_fragment_emailconfirmation_complete">Complete Verification</string>
