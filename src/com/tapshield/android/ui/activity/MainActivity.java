@@ -14,7 +14,6 @@ import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
@@ -62,7 +61,7 @@ import com.tapshield.android.utils.MapUtils;
 import com.tapshield.android.utils.SpotCrimeUtils;
 import com.tapshield.android.utils.UiUtils;
 
-public class MainActivity extends FragmentActivity implements OnNavigationItemClickListener,
+public class MainActivity extends BaseFragmentActivity implements OnNavigationItemClickListener,
 		LocationListener, YankListener, OnMapLoadedCallback {
 
 	public static final String EXTRA_DISCONNECTED = "com.tapshield.android.extra.disconnected";

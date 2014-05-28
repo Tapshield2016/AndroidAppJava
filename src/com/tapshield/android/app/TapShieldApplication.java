@@ -1,19 +1,23 @@
 package com.tapshield.android.app;
 
+import java.util.HashMap;
 import java.util.List;
 
+import android.app.Application;
+
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
+import com.tapshield.android.R;
 import com.tapshield.android.api.JavelinAlertManager.AlertListener;
 import com.tapshield.android.api.JavelinChatManager.OnNewIncomingChatMessagesListener;
 import com.tapshield.android.api.JavelinClient;
 import com.tapshield.android.api.JavelinConfig;
 import com.tapshield.android.api.JavelinMassAlertManager.OnNewMassAlertListener;
+import com.tapshield.android.api.JavelinUserManager;
 import com.tapshield.android.api.googledirections.GoogleDirectionsConfig;
 import com.tapshield.android.api.googleplaces.GooglePlacesConfig;
 import com.tapshield.android.api.spotcrime.SpotCrimeConfig;
-import com.tapshield.android.api.JavelinUserManager;
 import com.tapshield.android.manager.Notifier;
-
-import android.app.Application;
 
 public class TapShieldApplication extends Application {
 
@@ -50,7 +54,23 @@ public class TapShieldApplication extends Application {
 			.key("AIzaSyDrODd9nuDCy6-UGC7JkuG85PA7gcvZS8I")
 			.build();
 	
-	//public static boolean IN_APP_EMERGENCY_DIALOG_SHOWED = false;
+	public enum TrackerName {
+	    APP_TRACKER // Tracker used only in this app.
+	}
+
+	HashMap<TrackerName, Tracker> mTrackers = new HashMap<TrackerName, Tracker>();
+	
+	public synchronized Tracker getTracker(TrackerName trackerId) {
+		
+		//as of now, only one tracker is being used, add if not present already
+		
+		if (!mTrackers.containsKey(trackerId)) {
+			GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+			Tracker t = analytics.newTracker(R.xml.googleanalytics);
+			mTrackers.put(trackerId, t);
+		}
+		return mTrackers.get(trackerId);
+	}
 	
 	@Override
 	public void onCreate() {

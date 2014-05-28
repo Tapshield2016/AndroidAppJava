@@ -8,10 +8,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,7 +36,8 @@ import com.tapshield.android.manager.EntourageManager;
 import com.tapshield.android.ui.adapter.RouteFragmentPagerAdapter;
 import com.tapshield.android.utils.UiUtils;
 
-public class PickRouteActivity extends FragmentActivity implements LocationListener, GoogleDirectionsListener, OnPageChangeListener {
+public class PickRouteActivity extends BaseFragmentActivity 
+		implements LocationListener, GoogleDirectionsListener, OnPageChangeListener {
 	
 	public static final String EXTRA_MODE = "com.tapshield.android.intent.extra.route_mode";
 	public static final String EXTRA_DESTINATION = "com.tapshield.android.intent.extra.route_destination";

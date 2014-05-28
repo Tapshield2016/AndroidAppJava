@@ -2,13 +2,11 @@ package com.tapshield.android.ui.activity;
 
 import org.joda.time.DateTime;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -25,7 +23,8 @@ import com.tapshield.android.location.LocationTracker;
 import com.tapshield.android.utils.SocialReportsUtils;
 import com.tapshield.android.utils.UiUtils;
 
-public class ReportActivity extends Activity implements LocationListener, SocialReportingListener {
+public class ReportActivity extends BaseFragmentActivity
+		implements LocationListener, SocialReportingListener {
 
 	public static final String EXTRA_TYPE_INDEX = "com.tapshield.android.intent.extra.report_type_index";
 	

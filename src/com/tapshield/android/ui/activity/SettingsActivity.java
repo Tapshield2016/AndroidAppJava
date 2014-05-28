@@ -1,14 +1,11 @@
 package com.tapshield.android.ui.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 
 import com.tapshield.android.R;
-import com.tapshield.android.R.id;
-import com.tapshield.android.R.layout;
 import com.tapshield.android.ui.fragment.SettingsFragment;
 
-public class SettingsActivity extends Activity {
+public class SettingsActivity extends BaseFragmentActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

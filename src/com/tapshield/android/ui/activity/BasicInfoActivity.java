@@ -3,7 +3,6 @@ package com.tapshield.android.ui.activity;
 import org.joda.time.DateTime;
 import org.joda.time.MutableDateTime;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.ProgressDialog;
@@ -26,7 +25,7 @@ import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.utils.StringUtils;
 import com.tapshield.android.utils.UiUtils;
 
-public class BasicInfoActivity extends Activity
+public class BasicInfoActivity extends BaseFragmentActivity
 		implements OnDateSetListener, OnUserRequiredInformationUpdateListener {
 
 	private static final String FORMAT_DOB = "MM/dd/yyyy";

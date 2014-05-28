@@ -17,7 +17,7 @@ import com.tapshield.android.ui.fragment.PickDestinationContactFragment;
 import com.tapshield.android.ui.fragment.PickDestinationPlaceFragment;
 import com.tapshield.android.utils.UiUtils;
 
-public class PickDestinationActivity extends Activity implements DestinationPickListener {
+public class PickDestinationActivity extends BaseFragmentActivity implements DestinationPickListener {
 
 	private AlertDialog mModeDialog;
 	private String mDestination;

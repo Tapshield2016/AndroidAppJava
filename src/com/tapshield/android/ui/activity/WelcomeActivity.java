@@ -1,7 +1,6 @@
 package com.tapshield.android.ui.activity;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -15,7 +14,7 @@ import com.tapshield.android.ui.adapter.WelcomeFragmentPagerAdapter;
 import com.tapshield.android.ui.fragment.LoginFragment;
 import com.tapshield.android.ui.view.PageIndicator;
 
-public class WelcomeActivity extends FragmentActivity {
+public class WelcomeActivity extends BaseFragmentActivity {
 
 	private static final float INDICATOR_SKIP_HIDE_OFFSET = 0.25f;
 	

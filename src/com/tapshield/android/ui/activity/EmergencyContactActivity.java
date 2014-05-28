@@ -1,6 +1,5 @@
 package com.tapshield.android.ui.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -9,12 +8,11 @@ import android.widget.Spinner;
 import com.tapshield.android.R;
 import com.tapshield.android.api.JavelinClient;
 import com.tapshield.android.api.JavelinUserManager;
-import com.tapshield.android.api.model.User;
 import com.tapshield.android.api.model.UserProfile;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.utils.StringUtils;
 
-public class EmergencyContactActivity extends Activity {
+public class EmergencyContactActivity extends BaseFragmentActivity {
 
 	private JavelinUserManager mUserManager;
 	

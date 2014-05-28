@@ -9,7 +9,6 @@ import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.ListFragment;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
@@ -35,7 +34,7 @@ import com.tapshield.android.utils.ContactsRetriever.Contact;
 import com.tapshield.android.utils.ContactsRetriever.ContactsRetrieverListener;
 import com.tapshield.android.utils.UiUtils;
 
-public class PickArrivalContacts extends Activity
+public class PickArrivalContacts extends BaseFragmentActivity
 		implements ContactsRetrieverListener, OnItemClickListener, OnSeekBarChangeListener {
 
 	private EntourageManager mEntourage;

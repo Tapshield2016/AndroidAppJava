@@ -1,6 +1,5 @@
 package com.tapshield.android.ui.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -13,7 +12,7 @@ import android.widget.TextView;
 
 import com.tapshield.android.R;
 
-public class AboutActivity extends Activity implements OnClickListener {
+public class AboutActivity extends BaseFragmentActivity implements OnClickListener {
 	
 	private Button mEula;
 	private Button mThirdParty;

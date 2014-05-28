@@ -1,15 +1,13 @@
 package com.tapshield.android.ui.activity;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.tapshield.android.R;
 import com.tapshield.android.api.JavelinClient;
@@ -22,7 +20,7 @@ import com.tapshield.android.ui.dialog.WeightPickerDialogFragment;
 import com.tapshield.android.ui.dialog.WeightPickerDialogFragment.WeightPickerListener;
 import com.tapshield.android.utils.StringUtils;
 
-public class AppearanceActivity extends Activity
+public class AppearanceActivity extends BaseFragmentActivity
 		implements WeightPickerListener, HeightPickerListener {
 
 	private JavelinUserManager mUserManager;
