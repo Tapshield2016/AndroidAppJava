@@ -9,6 +9,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,6 +35,7 @@ public class ReportActivity extends BaseFragmentActivity
 	private ImageView mTypeImage;
 	private TextView mDatetime;
 	private EditText mDescription;
+	private CheckBox mAnonymous;
 	
 	private JavelinSocialReportingManager mJavelinReporter;
 	private LocationTracker mTracker;
@@ -53,6 +55,7 @@ public class ReportActivity extends BaseFragmentActivity
 		mTypeImage = (ImageView) findViewById(R.id.report_image_type);
 		mDatetime = (TextView) findViewById(R.id.report_text_datetime);
 		mDescription = (EditText) findViewById(R.id.report_edit);
+		mAnonymous = (CheckBox) findViewById(R.id.report_checkbox);
 
 		mJavelinReporter = JavelinClient
 				.getInstance(this, TapShieldApplication.JAVELIN_CONFIG)
@@ -137,7 +140,9 @@ public class ReportActivity extends BaseFragmentActivity
 			String description = mDescription.getText().toString();
 			String latitude = Double.toString(mLocation.getLatitude());
 			String longitude = Double.toString(mLocation.getLongitude());
-			mJavelinReporter.report(description, type, latitude, longitude, this);
+			boolean anonymously = mAnonymous.isChecked();
+			
+			mJavelinReporter.report(description, type, latitude, longitude, anonymously, this);
 			//javelinsocualreportingmanager.report(type, description, latitude, longitude, this);
 			//toast(ok), dialog.dismiss(), finish() on callback ^
 		}

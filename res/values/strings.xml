@@ -203,6 +203,7 @@
     <string name="ts_alert_twilio_error">Call Failed</string>
 
     <!-- reporting -->
+    <string name="ts_reporting_checkbox_anonymous">Report anonymously</string>
     <string name="ts_reporting_dialog_message">Reporting&#8230;</string>
     <string name="ts_reporting_dialog_message_error">Oops! There was an issue. Try again later.</string>
     <string name="ts_reporting_toast_successful">Reported!</string>
