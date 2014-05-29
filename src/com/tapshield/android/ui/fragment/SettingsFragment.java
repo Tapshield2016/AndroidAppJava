@@ -1,6 +1,7 @@
 package com.tapshield.android.ui.fragment;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -15,17 +16,18 @@ import com.tapshield.android.ui.activity.AboutActivity;
 import com.tapshield.android.ui.activity.MainActivity;
 import com.tapshield.android.utils.UiUtils;
 
-public class SettingsFragment extends PreferenceFragment implements OnPreferenceClickListener, OnUserLogOutListener {
+public class SettingsFragment extends PreferenceFragment
+		implements OnPreferenceClickListener, OnUserLogOutListener {
 
-	Preference mChangePasscode;
-	Preference mSignOut;
-	Preference mFeedback;
-	Preference mAbout;
+	private Preference mChangePasscode;
+	private Preference mSignOut;
+	private Preference mFeedback;
+	private Preference mAbout;
 	
-	String mChangePasscodeKey;
-	String mSignOutKey;
-	String mFeedbackKey;
-	String mAboutKey;
+	private String mChangePasscodeKey;
+	private String mSignOutKey;
+	private String mFeedbackKey;
+	private String mAboutKey;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -66,7 +68,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 					.logOut(this);
 		} else if (feedback) {
 			String email = getString(R.string.ts_misc_feedback_email);
-			String subject = getString(R.string.ts_misc_feedback_subject);
+			String subject = getString(R.string.ts_misc_feedback_subject) + " (" + getVersion() + ")";
 			
 			Intent intent = new Intent(Intent.ACTION_SEND);
 			intent.setData(Uri.parse("mailto:"));
@@ -80,6 +82,16 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 		}
 			
 		return true;
+	}
+	
+	private String getVersion() {
+		try {
+			PackageInfo pInfo = getActivity().getPackageManager().getPackageInfo(
+					getActivity().getPackageName(), 0);
+			return "v" + pInfo.versionName;
+		} catch (Exception e) {
+			return new String();
+		}
 	}
 
 	@Override
