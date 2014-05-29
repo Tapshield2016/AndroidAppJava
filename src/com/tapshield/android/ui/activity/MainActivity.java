@@ -595,6 +595,8 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 			break;
 		case NavigationFragment.NAV_ID_HOME:
 		case NavigationFragment.NAV_ID_HELP:
+			newActivity = new Intent(this, WebHelpActivity.class);
+			break;
 		case NavigationFragment.NAV_ID_SETTINGS:
 			newActivity = new Intent(this, SettingsActivity.class);
 			break;

@@ -1,6 +1,8 @@
 package com.tapshield.android.ui.fragment;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -12,6 +14,9 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.tapshield.android.R;
+import com.tapshield.android.api.JavelinClient;
+import com.tapshield.android.api.JavelinUserManager;
+import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.ui.adapter.NavigationListAdapter;
 import com.tapshield.android.ui.adapter.NavigationListAdapter.NavigationItem;
 
@@ -25,12 +30,7 @@ public class NavigationFragment extends Fragment implements OnItemClickListener 
 	public static final int NAV_ID_ABOUT = 5;
 	
 	private ListView mList;
-	public NavigationItem[] ITEMS = new NavigationItem[] {
-			new NavigationItem(NAV_ID_PROFILE, R.drawable.ts_icon_nav_profile, "Profile"),
-			new NavigationItem(NAV_ID_HOME, R.drawable.ts_icon_nav_home, "Home"),
-			new NavigationItem(NAV_ID_NOTIFICATION, R.drawable.ts_icon_nav_notifications, "Notifications"),
-			new NavigationItem(NAV_ID_SETTINGS, R.drawable.ts_icon_nav_settings, "Settings")
-			};
+	public NavigationItem[] ITEMS;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -43,6 +43,8 @@ public class NavigationFragment extends Fragment implements OnItemClickListener 
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		
+		addNavigationItems();
+		
 		NavigationListAdapter adapter = new NavigationListAdapter(
 				getActivity(),
 				Arrays.asList(ITEMS),
@@ -54,6 +56,35 @@ public class NavigationFragment extends Fragment implements OnItemClickListener 
 		mList.setDivider(null);
 		mList.setDividerHeight(0);
 		mList.setOnItemClickListener(this);
+	}
+	
+	private void addNavigationItems() {
+		
+		List<NavigationItem> navigationItems = new ArrayList<NavigationItem>();
+		
+		navigationItems.add(new NavigationItem(
+				NAV_ID_PROFILE, R.drawable.ts_icon_nav_profile, "Profile"));
+		navigationItems.add(new NavigationItem(
+				NAV_ID_HOME, R.drawable.ts_icon_nav_home, "Home"));
+		navigationItems.add(new NavigationItem(
+				NAV_ID_NOTIFICATION, R.drawable.ts_icon_nav_notifications, "Notifications"));
+		navigationItems.add(new NavigationItem(
+				NAV_ID_SETTINGS, R.drawable.ts_icon_nav_settings, "Settings"));
+		
+		JavelinUserManager userManager = JavelinClient
+				.getInstance(getActivity(), TapShieldApplication.JAVELIN_CONFIG)
+				.getUserManager();
+		
+		if (userManager.isPresent()
+				&& userManager.getUser().agency != null
+				&& userManager.getUser().agency.infoUrl != null) {
+			navigationItems.add(new NavigationItem(
+					NAV_ID_HELP, R.drawable.ts_icon_nav_help,
+					userManager.getUser().agency.name));
+		}
+		
+		ITEMS = new NavigationItem[navigationItems.size()];
+		navigationItems.toArray(ITEMS);
 	}
 	
 	@Override
