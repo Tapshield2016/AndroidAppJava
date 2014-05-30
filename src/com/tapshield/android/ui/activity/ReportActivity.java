@@ -2,15 +2,14 @@ package com.tapshield.android.ui.activity;
 
 import org.joda.time.DateTime;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -25,7 +24,8 @@ import com.tapshield.android.location.LocationTracker;
 import com.tapshield.android.utils.SocialReportsUtils;
 import com.tapshield.android.utils.UiUtils;
 
-public class ReportActivity extends Activity implements LocationListener, SocialReportingListener {
+public class ReportActivity extends BaseFragmentActivity
+		implements LocationListener, SocialReportingListener {
 
 	public static final String EXTRA_TYPE_INDEX = "com.tapshield.android.intent.extra.report_type_index";
 	
@@ -35,6 +35,7 @@ public class ReportActivity extends Activity implements LocationListener, Social
 	private ImageView mTypeImage;
 	private TextView mDatetime;
 	private EditText mDescription;
+	private CheckBox mAnonymous;
 	
 	private JavelinSocialReportingManager mJavelinReporter;
 	private LocationTracker mTracker;
@@ -54,6 +55,7 @@ public class ReportActivity extends Activity implements LocationListener, Social
 		mTypeImage = (ImageView) findViewById(R.id.report_image_type);
 		mDatetime = (TextView) findViewById(R.id.report_text_datetime);
 		mDescription = (EditText) findViewById(R.id.report_edit);
+		mAnonymous = (CheckBox) findViewById(R.id.report_checkbox);
 
 		mJavelinReporter = JavelinClient
 				.getInstance(this, TapShieldApplication.JAVELIN_CONFIG)
@@ -138,7 +140,9 @@ public class ReportActivity extends Activity implements LocationListener, Social
 			String description = mDescription.getText().toString();
 			String latitude = Double.toString(mLocation.getLatitude());
 			String longitude = Double.toString(mLocation.getLongitude());
-			mJavelinReporter.report(description, type, latitude, longitude, this);
+			boolean anonymously = mAnonymous.isChecked();
+			
+			mJavelinReporter.report(description, type, latitude, longitude, anonymously, this);
 			//javelinsocualreportingmanager.report(type, description, latitude, longitude, this);
 			//toast(ok), dialog.dismiss(), finish() on callback ^
 		}

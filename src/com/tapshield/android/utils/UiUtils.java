@@ -1,13 +1,23 @@
 package com.tapshield.android.utils;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CheckBox;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.tapshield.android.R;
 
 public class UiUtils {
 
@@ -71,5 +81,44 @@ public class UiUtils {
 		}
 		
 		fromContext.startActivity(intent);
+	}
+	
+	public static void showTutorialTipDialog(final Context context, final int title,
+			final int message, final String keySuffix) {
+		
+		final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+		
+		final String key = "com.tapshield.android.preferences.tutorialtip." + keySuffix;
+		final boolean show = preferences.getBoolean(key, true);
+		
+		if (show) {
+			final View content = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+					.inflate(R.layout.dialog_tip_tutorial, null);
+			final TextView text = (TextView)
+					content.findViewById(R.id.dialog_tip_tutorial_text);
+			text.setText(message);
+			
+			final CheckBox checkbox = (CheckBox)
+					content.findViewById(R.id.dialog_tip_tutorial_checkbox);
+			
+			new AlertDialog.Builder(context)
+					.setTitle(title)
+					.setView(content)
+					.setCancelable(false)
+					.setPositiveButton(R.string.ts_common_ok, new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							final boolean dontShowAnymore = checkbox.isChecked();
+							if (dontShowAnymore) {
+								SharedPreferences.Editor editor = preferences.edit();
+								editor.putBoolean(key, false);
+								editor.commit();
+							}
+						}
+					})
+					.create()
+					.show();
+		}
 	}
 }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/ts_common_spacing_xs">
+
+    <TextView
+        android:id="@+id/dialog_tip_tutorial_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/ts_common_spacing_xs"
+        android:textColor="@color/ts_gray_dark"
+        android:textSize="@dimen/ts_common_text_s"
+        android:gravity="center"/>
+    
+    <CheckBox
+        android:id="@+id/dialog_tip_tutorial_checkbox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/ts_common_spacing_xs"
+        android:text="Don\'t show again."
+        android:textColor="@color/ts_gray_dark"/>
+</LinearLayout>

@@ -2,7 +2,6 @@ package com.tapshield.android.ui.activity;
 
 import android.location.Location;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.Menu;
@@ -23,7 +22,7 @@ import com.tapshield.android.ui.fragment.DialpadFragment;
 import com.tapshield.android.ui.view.AnimatedVerticalColorProgress;
 import com.tapshield.android.utils.MapUtils;
 
-public class AlertActivity extends FragmentActivity
+public class AlertActivity extends BaseFragmentActivity
 		implements AnimatedVerticalColorProgress.Listener, OnPageChangeListener, LocationListener {
 
 	private EmergencyManager mEmergencyManager;

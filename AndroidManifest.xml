@@ -12,6 +12,11 @@
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true" />
+    
+    <!-- Google Analytics Version v4 needs this value for easy tracking -->
+	<meta-data
+        android:name="com.google.android.gms.analytics.globalConfigResource"
+        android:resource="@xml/googleanalytics" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -167,6 +172,10 @@
             android:name="com.tapshield.android.ui.activity.OutOfBoundsActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="com.tapshield.android.ui.activity.WebHelpActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
 
         <!-- SERVICES -->
         <service

@@ -55,6 +55,16 @@
             android:textColor="@color/ts_gray_dark"
             android:drawableLeft="@drawable/ic_time"/>        
         
+        <CheckBox
+            android:id="@+id/report_checkbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingTop="@dimen/ts_common_spacing_s"
+            android:paddingBottom="@dimen/ts_common_spacing_s"
+            android:textColor="@color/ts_gray_dark"
+            android:text="@string/ts_reporting_checkbox_anonymous" />
+        
         <!-- description -->
         
         <TextView

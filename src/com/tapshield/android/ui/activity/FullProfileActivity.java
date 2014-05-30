@@ -1,7 +1,6 @@
 package com.tapshield.android.ui.activity;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -23,7 +22,7 @@ import com.tapshield.android.api.model.UserProfile;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.utils.PictureSetter;
 
-public class FullProfileActivity extends Activity implements OnClickListener {
+public class FullProfileActivity extends BaseFragmentActivity implements OnClickListener {
 
 	private ImageButton mPicture;
 	private TextView mName;

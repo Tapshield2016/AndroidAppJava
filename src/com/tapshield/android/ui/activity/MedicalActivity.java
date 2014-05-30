@@ -1,6 +1,5 @@
 package com.tapshield.android.ui.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -12,7 +11,7 @@ import com.tapshield.android.api.model.User;
 import com.tapshield.android.api.model.UserProfile;
 import com.tapshield.android.app.TapShieldApplication;
 
-public class MedicalActivity extends Activity {
+public class MedicalActivity extends BaseFragmentActivity {
 
 	private JavelinUserManager mUserManager;
 	private EditText mAllergies;

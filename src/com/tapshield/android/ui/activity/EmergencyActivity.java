@@ -11,7 +11,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -26,7 +25,7 @@ import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.manager.EmergencyManager;
 import com.tapshield.android.utils.UiUtils;
 
-public class EmergencyActivity extends FragmentActivity {
+public class EmergencyActivity extends BaseFragmentActivity {
 
 	private EmergencyManager mEmergencyManager;
 	

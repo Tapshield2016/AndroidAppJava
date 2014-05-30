@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
@@ -26,7 +25,7 @@ import com.tapshield.android.ui.fragment.RequiredInfoFragment;
 import com.tapshield.android.ui.view.StepIndicator;
 import com.tapshield.android.utils.PictureSetter;
 
-public class RegistrationActivity extends FragmentActivity
+public class RegistrationActivity extends BaseFragmentActivity
 		implements OnUserActionRequestedListener {
 	
 	public static final String EXTRA_SKIP_ORG = "com.tapshield.android.extra.skip_org";

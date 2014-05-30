@@ -3,7 +3,6 @@ package com.tapshield.android.ui.activity;
 import java.util.List;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -29,7 +28,7 @@ import com.tapshield.android.manager.EmergencyManager;
 import com.tapshield.android.ui.adapter.ChatMessageAdapter;
 import com.tapshield.android.utils.UiUtils;
 
-public class ChatActivity extends Activity implements OnNewChatMessageListener {
+public class ChatActivity extends BaseFragmentActivity implements OnNewChatMessageListener {
 
 	private ListView mList;
 	private EditText mUserMessage;

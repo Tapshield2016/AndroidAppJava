@@ -1,6 +1,5 @@
 package com.tapshield.android.ui.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -12,7 +11,7 @@ import com.tapshield.android.api.model.Agency;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.utils.UiUtils;
 
-public class OutOfBoundsActivity extends Activity implements OnClickListener {
+public class OutOfBoundsActivity extends BaseFragmentActivity implements OnClickListener {
 
 	private String mSecondaryPhone;
 	private Button mButton;

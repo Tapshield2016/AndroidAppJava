@@ -17,7 +17,7 @@ import com.tapshield.android.ui.fragment.PickDestinationContactFragment;
 import com.tapshield.android.ui.fragment.PickDestinationPlaceFragment;
 import com.tapshield.android.utils.UiUtils;
 
-public class PickDestinationActivity extends Activity implements DestinationPickListener {
+public class PickDestinationActivity extends BaseFragmentActivity implements DestinationPickListener {
 
 	private AlertDialog mModeDialog;
 	private String mDestination;
@@ -32,6 +32,12 @@ public class PickDestinationActivity extends Activity implements DestinationPick
 		
 		setTabs();
 		mModeDialog = getModeDialog();
+		
+		UiUtils.showTutorialTipDialog(
+				this,
+				R.string.ts_entourage_tutorial_destination_title,
+				R.string.ts_entourage_tutorial_destination_message,
+				"entourage.destination");
 	}
 	
 	@Override

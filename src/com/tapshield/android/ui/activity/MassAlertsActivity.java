@@ -3,7 +3,6 @@ package com.tapshield.android.ui.activity;
 import java.util.List;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ListView;
@@ -18,7 +17,7 @@ import com.tapshield.android.manager.EmergencyManager;
 import com.tapshield.android.ui.adapter.MassAlertAdapter;
 import com.tapshield.android.utils.UiUtils;
 
-public class MassAlertsActivity extends Activity implements OnMassAlertUpdateListener {
+public class MassAlertsActivity extends BaseFragmentActivity implements OnMassAlertUpdateListener {
 
 	private JavelinMassAlertManager mManager;
 	private ListView mList;

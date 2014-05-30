@@ -14,7 +14,6 @@ import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
@@ -62,7 +61,7 @@ import com.tapshield.android.utils.MapUtils;
 import com.tapshield.android.utils.SpotCrimeUtils;
 import com.tapshield.android.utils.UiUtils;
 
-public class MainActivity extends FragmentActivity implements OnNavigationItemClickListener,
+public class MainActivity extends BaseFragmentActivity implements OnNavigationItemClickListener,
 		LocationListener, YankListener, OnMapLoadedCallback {
 
 	public static final String EXTRA_DISCONNECTED = "com.tapshield.android.extra.disconnected";
@@ -387,6 +386,12 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 		
 		//set custom view with entourage-related information
 		if (entourageSet) {
+			UiUtils.showTutorialTipDialog(
+					this,
+					R.string.ts_entourage_warning_limitations_and_boundaries_title,
+					R.string.ts_entourage_warning_limitations_and_boundaries_message,
+					"entourage.warning_limitations_and_boundaries");
+			
 			View entourageActionBarView = getLayoutInflater().inflate(R.layout.actionbar_main_entourage, null);
 			
 			Route r = mEntourageManager.getRoute();
@@ -596,6 +601,8 @@ public class MainActivity extends FragmentActivity implements OnNavigationItemCl
 			break;
 		case NavigationFragment.NAV_ID_HOME:
 		case NavigationFragment.NAV_ID_HELP:
+			newActivity = new Intent(this, WebHelpActivity.class);
+			break;
 		case NavigationFragment.NAV_ID_SETTINGS:
 			newActivity = new Intent(this, SettingsActivity.class);
 			break;
