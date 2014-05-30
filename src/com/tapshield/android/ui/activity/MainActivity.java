@@ -386,6 +386,12 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		
 		//set custom view with entourage-related information
 		if (entourageSet) {
+			UiUtils.showTutorialTipDialog(
+					this,
+					R.string.ts_entourage_warning_limitations_and_boundaries_title,
+					R.string.ts_entourage_warning_limitations_and_boundaries_message,
+					"entourage.warning_limitations_and_boundaries");
+			
 			View entourageActionBarView = getLayoutInflater().inflate(R.layout.actionbar_main_entourage, null);
 			
 			Route r = mEntourageManager.getRoute();

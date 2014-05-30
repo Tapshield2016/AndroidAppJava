@@ -129,6 +129,12 @@ public class PickRouteActivity extends BaseFragmentActivity
 		});
 		
 		mPager.setOnPageChangeListener(this);
+		
+		UiUtils.showTutorialTipDialog(
+				this,
+				R.string.ts_entourage_tutorial_route_title,
+				R.string.ts_entourage_tutorial_route_message,
+				"entourage.route");
 	}
 	
 	@Override

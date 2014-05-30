@@ -32,6 +32,12 @@ public class PickDestinationActivity extends BaseFragmentActivity implements Des
 		
 		setTabs();
 		mModeDialog = getModeDialog();
+		
+		UiUtils.showTutorialTipDialog(
+				this,
+				R.string.ts_entourage_tutorial_destination_title,
+				R.string.ts_entourage_tutorial_destination_message,
+				"entourage.destination");
 	}
 	
 	@Override
