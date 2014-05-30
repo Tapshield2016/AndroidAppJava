@@ -235,6 +235,18 @@
     <string name="ts_pickarrivalcontacts_text_arrivaltime">Arrival time</string>
     <string name="ts_pickarrivalcontacts_text_notifycontacts">Notify following contacts</string>
     <string name="ts_pickarrivalcontacts_text_addremove">Add/Remove</string>
+    
+    <!-- entourage tutorial -->
+    <string name="ts_entourage_tutorial_destination_title">Pick a destination</string>
+    <string name="ts_entourage_tutorial_destination_message">Search for a place or select a saved location from your contacts.</string>
+    <string name="ts_entourage_tutorial_route_title">Pick a route</string>
+    <string name="ts_entourage_tutorial_route_message">Your route will determine the estimated time of arrival to notify your entourage members.</string>
+    <string name="ts_entourage_tutorial_contacts_title">Add entourage members</string>
+    <string name="ts_entourage_tutorial_contacts_message">Check-marked members will automatically be notified of your arrival or non-arrival.</string>
+    
+    <!-- entourage warning - call and boundaries -->
+    <string name="ts_entourage_warning_limitations_and_boundaries_title">Warning</string>
+    <string name="ts_entourage_warning_limitations_and_boundaries_message">Due to a limitation of Android, TapShield is unable to automatically call 911. It will be dialed but the user must press the call button. Authorities will be alerted if you are within your organization\'s boundaries at the time of the alert.</string>
 
     <!-- dialpad -->
     <string name="ts_dialpad_message">Enter your passcode to disarm</string>
