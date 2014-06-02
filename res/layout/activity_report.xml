@@ -71,7 +71,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/ts_common_spacing_m"
-            android:layout_marginBottom="@dimen/ts_common_spacing_m"
             android:text="@string/ts_common_description"
             style="@style/TapShieldHeader"/>
         
@@ -86,8 +85,42 @@
             android:layout_height="wrap_content"
             android:textColor="@color/ts_gray_dark"
             android:visibility="gone"/>
-        
-        <!-- possible image/media here -->
-    </LinearLayout>
 
+        <!-- media -->
+        
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ts_common_spacing_m"
+            android:text="@string/ts_reporting_media_header"
+            style="@style/TapShieldHeader"/>
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            
+            <Button
+                android:id="@+id/report_button_media_audio"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/ts_reporting_media_audio"
+                android:gravity="center"/>
+            
+            <Button
+                android:id="@+id/report_button_media_image"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/ts_reporting_media_image"/>
+            
+            <Button
+                android:id="@+id/report_button_media_video"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/ts_reporting_media_video"/>
+        </LinearLayout>
+    </LinearLayout>
 </ScrollView>
