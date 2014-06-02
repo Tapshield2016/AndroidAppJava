@@ -10,7 +10,4 @@
 	 
 	<!-- catch and report uncaught exceptions from the app -->
 	<bool name="ga_reportUncaughtExceptions">true</bool>
-	 
-	<!-- How long a session exists before giving up -->
-	<integer name="ga_sessionTimeout">-1</integer>
 </resources>
