@@ -19,23 +19,20 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.google.android.gms.location.LocationListener;
 import com.tapshield.android.R;
-import com.tapshield.android.api.JavelinClient;
 import com.tapshield.android.api.JavelinSocialReportingManager;
-import com.tapshield.android.api.JavelinSocialReportingManager.SocialReportingListener;
-import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.location.LocationTracker;
 import com.tapshield.android.service.SocialReportingService;
 import com.tapshield.android.utils.SocialReportsUtils;
 import com.tapshield.android.utils.UiUtils;
 
 public class ReportActivity extends BaseFragmentActivity
-		implements LocationListener, SocialReportingListener, OnClickListener {
+		implements LocationListener, OnClickListener {
 
 	public static final String EXTRA_TYPE_INDEX = "com.tapshield.android.intent.extra.report_type_index";
 
@@ -55,10 +52,11 @@ public class ReportActivity extends BaseFragmentActivity
 	private Button mMediaAudio;
 	private Button mMediaImage;
 	private Button mMediaVideo;
+	private ImageButton mMediaRemove;
 	
-	private JavelinSocialReportingManager mJavelinReporter;
 	private LocationTracker mTracker;
 	private Location mLocation;
+	private AlertDialog.Builder mMediaOptionsDialog;
 	private ProgressDialog mReportingDialog;
 	private boolean mReporting = false;
 	private boolean mWaitingForLocation = false;
@@ -79,18 +77,19 @@ public class ReportActivity extends BaseFragmentActivity
 		mMediaAudio = (Button) findViewById(R.id.report_button_media_audio);
 		mMediaImage = (Button) findViewById(R.id.report_button_media_image);
 		mMediaVideo = (Button) findViewById(R.id.report_button_media_video);
-
-		mJavelinReporter = JavelinClient
-				.getInstance(this, TapShieldApplication.JAVELIN_CONFIG)
-				.getSocialReportingManager();
+		mMediaRemove = (ImageButton) findViewById(R.id.report_button_media_remove);
+		
 		mTracker = LocationTracker.getInstance(this);
 		mReportingDialog = getReportingDialog();
 		
 		mMediaAudio.setOnClickListener(this);
 		mMediaImage.setOnClickListener(this);
 		mMediaVideo.setOnClickListener(this);
+		mMediaRemove.setOnClickListener(this);
 		
-		setUi();
+		mMediaOptionsDialog = getBasicMediaOptionsBuilder();
+		
+		setTypeUi();
 		
 	}
 	
@@ -105,6 +104,7 @@ public class ReportActivity extends BaseFragmentActivity
 		super.onResume();
 		mTracker.addLocationListener(this);
 		mTracker.start();
+		setMediaUi();
 	}
 	
 	@Override
@@ -130,9 +130,7 @@ public class ReportActivity extends BaseFragmentActivity
 	@Override
 	public void onClick(View view) {
 		
-		Intent intent = new Intent();
-		intent.setAction(Intent.ACTION_GET_CONTENT);
-		
+		Intent intent = new Intent().setAction(Intent.ACTION_GET_CONTENT);
 		int requestCode = 0;
 		
 		switch (view.getId()) {
@@ -142,11 +140,16 @@ public class ReportActivity extends BaseFragmentActivity
 			break;
 		case R.id.report_button_media_image:
 			intent.setType("image/*");
-			requestCode = INTENT_REQUEST_PICK_AUDIO;
+			requestCode = INTENT_REQUEST_PICK_IMAGE;
 			break;
 		case R.id.report_button_media_video:
 			intent.setType("video/*");
-			requestCode = INTENT_REQUEST_PICK_AUDIO;
+			requestCode = INTENT_REQUEST_PICK_VIDEO;
+			break;
+		case R.id.report_button_media_remove:
+			intent = null;
+			mMediaUri = null;
+			setMediaUi();
 			break;
 		default:
 			intent = null;
@@ -157,7 +160,7 @@ public class ReportActivity extends BaseFragmentActivity
 		}
 	}
 	
-	private void setUi() {
+	private void setTypeUi() {
 		int typeIndex = getIntent().getIntExtra(EXTRA_TYPE_INDEX, -1);
 		if (typeIndex >= 0) {
 			String type = JavelinSocialReportingManager.TYPE_LIST[typeIndex];
@@ -165,13 +168,36 @@ public class ReportActivity extends BaseFragmentActivity
 			mTypeImage.setImageResource(res);
 			mTypeText.setText(type);
 			mDatetime.setText(new DateTime().toString(DATETIME_FORMAT));
+			
+			String description = getIntent().getStringExtra(SocialReportingService.EXTRA_DESCRIPTION);
+			if (description != null) {
+				mDescription.setText(description);
+			}
+			
+			boolean anon = getIntent().getBooleanExtra(SocialReportingService.EXTRA_ANONYMOUS, false);
+			mAnonymous.setChecked(anon);
 		}
+	}
+	
+	private void setMediaUi() {
+		
+		boolean mediaSelected = mMediaUri != null;
+		
+		findViewById(R.id.report_layout_media_options)
+				.setVisibility(mediaSelected ? View.GONE : View.VISIBLE);
+		
+		findViewById(R.id.report_layout_media_selection)
+				.setVisibility(mediaSelected ? View.VISIBLE: View.GONE);
+	}
+	
+	private AlertDialog.Builder getBasicMediaOptionsBuilder() {
+		return null;
 	}
 	
 	private ProgressDialog getReportingDialog() {
 		ProgressDialog p = new ProgressDialog(this);
 		p.setIndeterminate(true);
-		p.setMessage(getString(R.string.ts_reporting_dialog_message));
+		p.setMessage(getString(R.string.ts_reporting_location_dialog_message));
 		p.setCancelable(true);
 		p.setOnCancelListener(new DialogInterface.OnCancelListener() {
 			
@@ -203,6 +229,8 @@ public class ReportActivity extends BaseFragmentActivity
 			boolean anonymously = mAnonymous.isChecked();
 			
 			Bundle extras = new Bundle();
+			//copy type extra so in case of error the notification pending intent recreates it
+			extras.putInt(EXTRA_TYPE_INDEX, getIntent().getIntExtra(EXTRA_TYPE_INDEX, -1));
 			extras.putString(SocialReportingService.EXTRA_TYPE, type);
 			extras.putString(SocialReportingService.EXTRA_DESCRIPTION, description);
 			extras.putString(SocialReportingService.EXTRA_LOC_LAT, latitude);
@@ -216,29 +244,6 @@ public class ReportActivity extends BaseFragmentActivity
 			startService(service);
 			
 			UiUtils.startActivityNoStack(this, MainActivity.class);
-			
-			//mJavelinReporter.report(description, type, latitude, longitude, anonymously, this);
-			//javelinsocualreportingmanager.report(type, description, latitude, longitude, this);
-			//toast(ok), dialog.dismiss(), finish() on callback ^
-		}
-	}
-	
-	@Override
-	public void onReport(boolean ok, int code, String errorIfNotOk) {
-		mReportingDialog.dismiss();
-		if (ok) {
-			UiUtils.toastShort(this, getString(R.string.ts_reporting_toast_successful));
-			UiUtils.startActivityNoStack(this, MainActivity.class);
-		} else {
-			final String errorMessage =
-					getString(R.string.ts_reporting_dialog_message_error) + " (" + code + ")";
-			new AlertDialog
-					.Builder(this)
-					.setTitle(R.string.ts_common_error)
-					.setMessage(errorMessage)
-					.setNeutralButton(R.string.ts_common_ok, null)
-					.create()
-					.show();
 		}
 	}
 	
@@ -270,47 +275,22 @@ public class ReportActivity extends BaseFragmentActivity
 			
 			mMediaUri = uri;
 			
-			//kitkat (4.4) implements a new storage access framework
-			if (TapShieldApplication.VERSION_AT_LEAST_KITKAT) {
-				//get inputstream via filedescriptor and filename before passing to aws
-				
-			} else {
-				//get file object
-			}
-			
 			ContentResolver contentResolver = getContentResolver();
-			
-			String[] fileInfo = {OpenableColumns.DISPLAY_NAME, OpenableColumns.SIZE};
+			String[] fileInfo = {OpenableColumns.DISPLAY_NAME};
 			
 			Cursor cursor = contentResolver.query(uri, fileInfo, null, null, null);
 			
 			if (cursor == null || !cursor.moveToFirst()) {
-				UiUtils.toastShort(this, "Cursor (" + cursor + ") is null or does not have first");
 				return;
 			}
 			
 			int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-			int sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE);
-			
 			String name = cursor.getString(nameIndex);
-			String size = null;
-			
-			ObjectMetadata metadata = new ObjectMetadata();
-			metadata.setContentType(contentResolver.getType(uri));
-			
-			if (!cursor.isNull(sizeIndex) && (size = cursor.getString(sizeIndex)) != null) {
-				metadata.setContentLength(Long.parseLong(size));
-			}
 			
 			cursor.close();
 			
-			String message = name + (size != null ? " (" + size + ")" : new String());
-			
-			new AlertDialog.Builder(this)
-					.setTitle("Media file selected")
-					.setMessage(message)
-					.create()
-					.show();
+			((TextView) findViewById(R.id.report_text_media_name)).setText(name);
+			setMediaUi();
 		}
 	}
 }

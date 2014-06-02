@@ -2,6 +2,7 @@ package com.tapshield.android.service;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +18,7 @@ import com.tapshield.android.api.JavelinSocialReportingManager;
 import com.tapshield.android.api.JavelinSocialReportingManager.SocialReportingListener;
 import com.tapshield.android.api.JavelinUtils;
 import com.tapshield.android.app.TapShieldApplication;
+import com.tapshield.android.ui.activity.ReportActivity;
 import com.tapshield.android.utils.UiUtils;
 
 public class SocialReportingService extends Service implements SocialReportingListener {
@@ -28,11 +30,13 @@ public class SocialReportingService extends Service implements SocialReportingLi
 	public static final String EXTRA_ANONYMOUS = "com.tapshield.android.extra.reportingservice_anonymous";
 	public static final String EXTRA_MEDIA_URI = "com.tapshield.android.extra.reportingservice_media_uri";
 	
-	private static final int NOTIFICATION_ID = 100;
+	private static final int NOTIFICATION_UPLOAD_ID = 100;
+	private static final int NOTIFICATION_ERROR_ID = 200;
 	
 	private NotificationManager mNotificationManager;
 	private JavelinSocialReportingManager mJavelinReporter;
 	private NotificationCompat.Builder mNotificationBuilder;
+	private Notification mNotificationError;
 	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
@@ -45,8 +49,25 @@ public class SocialReportingService extends Service implements SocialReportingLi
 				.setSmallIcon(R.drawable.ic_stat)
 				.setDefaults(Notification.DEFAULT_ALL)
 				.setOnlyAlertOnce(true)
-				.setContentTitle(getString(R.string.ts_reporting_media_notification_uploading_title))
-				.setContentText(getString(R.string.ts_reporting_media_notification_uploading_message));
+				.setContentTitle(getString(R.string.ts_reporting_media_notification_title))
+				.setContentText(getString(R.string.ts_reporting_media_notification_preparing_message));
+
+		Intent report = new Intent(this, ReportActivity.class)
+				.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP)
+				.putExtras(intent.getExtras());
+		
+		PendingIntent retryPendingIntent = PendingIntent.getActivity(this, 1, report,
+				PendingIntent.FLAG_UPDATE_CURRENT);
+		
+		mNotificationError =
+				new NotificationCompat.Builder(this)
+				.setSmallIcon(R.drawable.ic_stat)
+				.setDefaults(Notification.DEFAULT_ALL)
+				.setContentTitle(getString(R.string.ts_reporting_media_notification_title))
+				.setContentText(getString(R.string.ts_reporting_media_notification_error_message))
+				.setContentIntent(retryPendingIntent)
+				.setAutoCancel(true)
+				.build();
 		
 		Uri[] mediaUris = null;
 		String[] uriStrings = null;
@@ -79,7 +100,7 @@ public class SocialReportingService extends Service implements SocialReportingLi
 	//returning value being string (of media url if present) or null
 	
 	private class ReportUploader extends AsyncTask<Void, Float, String[]>
-			implements JavelinUtils.S3UploadProgressListener {
+			implements JavelinUtils.S3UploadListener {
 
 		private long mTransferred = 0;
 		private String type;
@@ -102,7 +123,7 @@ public class SocialReportingService extends Service implements SocialReportingLi
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			mNotificationManager.notify(NOTIFICATION_ID, mNotificationBuilder.build());
+			mNotificationManager.notify(NOTIFICATION_UPLOAD_ID, mNotificationBuilder.build());
 		}
 		
 		@Override
@@ -113,7 +134,7 @@ public class SocialReportingService extends Service implements SocialReportingLi
 			if (mediaUris != null && mediaUris.length > 0) {
 				Uri uri = mediaUris[0];
 				mediaUrls = new String[1];
-				mediaUrls[0] = JavelinUtils.uploadFileToS3WithUri(SocialReportingService.this,
+				mediaUrls[0] = JavelinUtils.syncUploadFileToS3WithUri(SocialReportingService.this,
 						TapShieldApplication.JAVELIN_CONFIG, uri, this);
 			}
 			
@@ -134,10 +155,8 @@ public class SocialReportingService extends Service implements SocialReportingLi
 			//set progress of current media file adding segments of finished media files
 			int progress = ((int) (100f * values[0])) + (which * 100);
 			
-			Log.i("aaa", "media progress=" + progress);
-			
 			mNotificationBuilder.setProgress(max, progress, false);
-			mNotificationManager.notify(NOTIFICATION_ID, mNotificationBuilder.build());
+			mNotificationManager.notify(NOTIFICATION_UPLOAD_ID, mNotificationBuilder.build());
 		}
 		
 		@Override
@@ -164,7 +183,7 @@ public class SocialReportingService extends Service implements SocialReportingLi
 					SocialReportingService.this, mediaParams[0], mediaParams[1], mediaParams[2]);
 			super.onPostExecute(mediaUrls);
 		}
-
+		
 		@Override
 		public void onUploading(Uri uri, long newBytesTransferred, long total) {
 			//only one medial file upload is supported at this time, pass second arg as 0f
@@ -176,12 +195,27 @@ public class SocialReportingService extends Service implements SocialReportingLi
 			
 			publishProgress((float)(transferred/max), 0f);
 		}
+		
+		@Override
+		public void onError(Uri uri, String error) {
+			Log.e("aaa", "onerror " + error);
+			reportError();
+		}
 	}
 
 	@Override
 	public void onReport(boolean ok, int code, String errorIfNotOk) {
-		mNotificationManager.cancel(NOTIFICATION_ID);
-		String message = ok ? "Report uploaded" : "Error reporting";
-		UiUtils.toastLong(SocialReportingService.this, message);
+		if (ok) {
+			mNotificationManager.cancel(NOTIFICATION_UPLOAD_ID);
+			UiUtils.toastLong(SocialReportingService.this, "Report uploaded!");
+		} else {
+			Log.e("aaa", "onreport " + errorIfNotOk);
+			reportError();
+		}
+	}
+	
+	private void reportError() {
+		mNotificationManager.cancel(NOTIFICATION_UPLOAD_ID);
+		mNotificationManager.notify(NOTIFICATION_ERROR_ID, mNotificationError);
 	}
 }

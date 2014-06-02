@@ -95,32 +95,66 @@
             android:text="@string/ts_reporting_media_header"
             style="@style/TapShieldHeader"/>
         
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
             
-            <Button
-                android:id="@+id/report_button_media_audio"
-                android:layout_width="0dp"
-                android:layout_weight="1"
+            <LinearLayout
+	            android:id="@+id/report_layout_media_options"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:orientation="horizontal"
+	            android:visibility="gone">
+	            
+	            <Button
+	                android:id="@+id/report_button_media_audio"
+	                android:layout_width="0dp"
+	                android:layout_weight="1"
+	                android:layout_height="wrap_content"
+	                android:text="@string/ts_reporting_media_audio"
+	                android:gravity="center"/>
+	            
+	            <Button
+	                android:id="@+id/report_button_media_image"
+	                android:layout_width="0dp"
+	                android:layout_weight="1"
+	                android:layout_height="wrap_content"
+	                android:text="@string/ts_reporting_media_image"/>
+	            
+	            <Button
+	                android:id="@+id/report_button_media_video"
+	                android:layout_width="0dp"
+	                android:layout_weight="1"
+	                android:layout_height="wrap_content"
+	                android:text="@string/ts_reporting_media_video"/>
+	        </LinearLayout>
+	        
+            <LinearLayout
+                android:id="@+id/report_layout_media_selection"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/ts_reporting_media_audio"
-                android:gravity="center"/>
-            
-            <Button
-                android:id="@+id/report_button_media_image"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="@string/ts_reporting_media_image"/>
-            
-            <Button
-                android:id="@+id/report_button_media_video"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="@string/ts_reporting_media_video"/>
-        </LinearLayout>
+                android:orientation="horizontal"
+                android:visibility="visible">
+                
+                <ImageButton
+                    android:id="@+id/report_button_media_remove"
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:src="@android:drawable/ic_menu_delete"
+                    android:background="@drawable/ts_background_imagebutton"/>
+                
+                <TextView
+                    android:id="@+id/report_text_media_name"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:ellipsize="middle"
+                    android:singleLine="true"
+                    android:maxLines="1"
+                    android:textSize="@dimen/ts_common_text_s"
+                    android:textColor="@color/ts_brand_dark"
+                    android:gravity="center_vertical"/>
+            </LinearLayout>
+        </FrameLayout>
     </LinearLayout>
 </ScrollView>
