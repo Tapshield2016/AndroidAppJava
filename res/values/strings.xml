@@ -207,6 +207,14 @@
     <string name="ts_reporting_dialog_message">Reporting&#8230;</string>
     <string name="ts_reporting_dialog_message_error">Oops! There was an issue. Try again later.</string>
     <string name="ts_reporting_toast_successful">Reported!</string>
+    <string name="ts_reporting_media_header">Add media</string>
+    <string name="ts_reporting_media_audio">Audio</string>
+    <string name="ts_reporting_media_image">Image</string>
+    <string name="ts_reporting_media_video">Video</string>
+    <string name="ts_reporting_media_notification_uploading_title">TapShield</string>
+    <string name="ts_reporting_media_notification_uploading_message">Uploading report</string>
+    <string name="ts_reporting_media_notification_error_title">TapShield</string>
+    <string name="ts_reporting_media_notification_error_message">Error reporting. Tap to retry.</string>
 
     <!-- fragment alert -->
     <string name="ts_fragment_alert_card_button_speaker">Speaker</string>
