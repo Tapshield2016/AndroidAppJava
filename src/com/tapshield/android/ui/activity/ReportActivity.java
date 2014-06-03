@@ -1,17 +1,26 @@
 package com.tapshield.android.ui.activity;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import org.joda.time.DateTime;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.provider.OpenableColumns;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,9 +28,12 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.google.android.gms.location.LocationListener;
 import com.tapshield.android.R;
@@ -42,6 +54,18 @@ public class ReportActivity extends BaseFragmentActivity
 	private static final int INTENT_REQUEST_TAKE_AUDIO = 40;
 	private static final int INTENT_REQUEST_TAKE_IMAGE = 50;
 	private static final int INTENT_REQUEST_TAKE_VIDEO = 60;
+
+	private enum OptionType {
+		EXISTING,
+		NEW
+	}
+	
+	private enum MediaType {
+		AUDIO,
+		IMAGE,
+		VIDEO
+	}
+	
 	private static final String DATETIME_FORMAT = "MM/dd/yyyy HH:mm";
 	
 	private TextView mTypeText;
@@ -49,18 +73,22 @@ public class ReportActivity extends BaseFragmentActivity
 	private TextView mDatetime;
 	private EditText mDescription;
 	private CheckBox mAnonymous;
-	private Button mMediaAudio;
-	private Button mMediaImage;
-	private Button mMediaVideo;
+	private Button mMediaExisting;
+	private Button mMediaNew;
 	private ImageButton mMediaRemove;
+
+	private boolean mReporting = false;
+	private boolean mWaitingForLocation = false;
 	
 	private LocationTracker mTracker;
 	private Location mLocation;
-	private AlertDialog.Builder mMediaOptionsDialog;
 	private ProgressDialog mReportingDialog;
-	private boolean mReporting = false;
-	private boolean mWaitingForLocation = false;
+	
+	private AlertDialog.Builder mMediaTypeDialogBuilder;
 	private Uri mMediaUri;
+	private File mMediaNewPhotoFile;
+	private OptionType mOptionType;
+	private MediaType mMediaType;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -74,23 +102,20 @@ public class ReportActivity extends BaseFragmentActivity
 		mDatetime = (TextView) findViewById(R.id.report_text_datetime);
 		mDescription = (EditText) findViewById(R.id.report_edit);
 		mAnonymous = (CheckBox) findViewById(R.id.report_checkbox);
-		mMediaAudio = (Button) findViewById(R.id.report_button_media_audio);
-		mMediaImage = (Button) findViewById(R.id.report_button_media_image);
-		mMediaVideo = (Button) findViewById(R.id.report_button_media_video);
+		mMediaExisting = (Button) findViewById(R.id.report_button_media_existing);
+		mMediaNew = (Button) findViewById(R.id.report_button_media_new);
 		mMediaRemove = (ImageButton) findViewById(R.id.report_button_media_remove);
 		
 		mTracker = LocationTracker.getInstance(this);
 		mReportingDialog = getReportingDialog();
 		
-		mMediaAudio.setOnClickListener(this);
-		mMediaImage.setOnClickListener(this);
-		mMediaVideo.setOnClickListener(this);
+		mMediaExisting.setOnClickListener(this);
+		mMediaNew.setOnClickListener(this);
 		mMediaRemove.setOnClickListener(this);
-		
-		mMediaOptionsDialog = getBasicMediaOptionsBuilder();
 		
 		setTypeUi();
 		
+		mMediaTypeDialogBuilder = getBasicMediaTypeDialogBuilder();
 	}
 	
 	@Override
@@ -130,33 +155,18 @@ public class ReportActivity extends BaseFragmentActivity
 	@Override
 	public void onClick(View view) {
 		
-		Intent intent = new Intent().setAction(Intent.ACTION_GET_CONTENT);
-		int requestCode = 0;
-		
 		switch (view.getId()) {
-		case R.id.report_button_media_audio:
-			intent.setType("audio/*");
-			requestCode = INTENT_REQUEST_PICK_AUDIO;
+		case R.id.report_button_media_existing:
+			showMediaTypeDialog(OptionType.EXISTING);
 			break;
-		case R.id.report_button_media_image:
-			intent.setType("image/*");
-			requestCode = INTENT_REQUEST_PICK_IMAGE;
-			break;
-		case R.id.report_button_media_video:
-			intent.setType("video/*");
-			requestCode = INTENT_REQUEST_PICK_VIDEO;
+		case R.id.report_button_media_new:
+			showMediaTypeDialog(OptionType.NEW);
 			break;
 		case R.id.report_button_media_remove:
-			intent = null;
+			mMediaNewPhotoFile = null;
 			mMediaUri = null;
 			setMediaUi();
 			break;
-		default:
-			intent = null;
-		}
-		
-		if (intent != null) {
-			startActivityForResult(intent, requestCode);
 		}
 	}
 	
@@ -186,12 +196,35 @@ public class ReportActivity extends BaseFragmentActivity
 		findViewById(R.id.report_layout_media_options)
 				.setVisibility(mediaSelected ? View.GONE : View.VISIBLE);
 		
-		findViewById(R.id.report_layout_media_selection)
+		findViewById(R.id.report_layout_media_preview)
 				.setVisibility(mediaSelected ? View.VISIBLE: View.GONE);
-	}
-	
-	private AlertDialog.Builder getBasicMediaOptionsBuilder() {
-		return null;
+		
+		FrameLayout container = (FrameLayout) findViewById(R.id.report_layout_media_preview_container);
+		
+		container.removeAllViews();
+		
+		if (mediaSelected) {
+
+			FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+					FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT,
+					Gravity.CENTER);
+
+			MediaType type = getMimeTypeAsMediaType(mMediaUri);
+
+			if (type == MediaType.IMAGE) {
+				ImageView image = new ImageView(this);
+				image.setLayoutParams(params);
+				image.setScaleType(ScaleType.CENTER_INSIDE);
+				image.setImageURI(mMediaUri);
+				container.addView(image);
+			} else if (type == MediaType.VIDEO) {
+				VideoView video = new VideoView(this);
+				video.setVideoURI(mMediaUri);
+				video.setLayoutParams(params);
+				container.addView(video);
+				video.start();
+			}
+		}
 	}
 	
 	private ProgressDialog getReportingDialog() {
@@ -207,6 +240,124 @@ public class ReportActivity extends BaseFragmentActivity
 			}
 		});
 		return p;
+	}
+	
+	private AlertDialog.Builder getBasicMediaTypeDialogBuilder() {
+		return new AlertDialog.Builder(this)
+				.setTitle(R.string.ts_reporting_dialog_media_options_title)
+				.setPositiveButton(R.string.ts_reporting_dialog_media_options_button_video,
+						new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						mMediaType = MediaType.VIDEO;
+						performMediaAction();
+					}
+				})
+				.setNeutralButton(R.string.ts_reporting_dialog_media_options_button_image,
+						new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						mMediaType = MediaType.IMAGE;
+						performMediaAction();
+					}
+				})
+				.setNegativeButton(R.string.ts_reporting_dialog_media_options_button_audio,
+						new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						mMediaType = MediaType.AUDIO;
+						performMediaAction();
+					}
+				});
+	}
+	
+	private void showMediaTypeDialog(OptionType optionType) {
+		
+		mOptionType = optionType;
+		
+		int messageResource = mOptionType ==
+				OptionType.EXISTING ?
+				R.string.ts_reporting_dialog_media_options_message_existing :
+				R.string.ts_reporting_dialog_media_options_message_new;
+		
+		mMediaTypeDialogBuilder
+				.setMessage(messageResource)
+				.create()
+				.show();
+	}
+	
+	private void performMediaAction() {
+		
+		int intentRequestCode = -1;
+		
+		if (mOptionType == OptionType.EXISTING) {
+			if (mMediaType == MediaType.AUDIO) {
+				intentRequestCode = INTENT_REQUEST_PICK_AUDIO;
+			} else if (mMediaType == MediaType.IMAGE) {
+				intentRequestCode = INTENT_REQUEST_PICK_IMAGE;
+			} else if (mMediaType == MediaType.VIDEO) {
+				intentRequestCode = INTENT_REQUEST_PICK_VIDEO;
+			}
+		} else if (mOptionType == OptionType.NEW) {
+			if (mMediaType == MediaType.AUDIO) {
+				intentRequestCode = INTENT_REQUEST_TAKE_AUDIO;
+			} else if (mMediaType == MediaType.IMAGE) {
+				intentRequestCode = INTENT_REQUEST_TAKE_IMAGE;
+			} else if (mMediaType == MediaType.VIDEO) {
+				intentRequestCode = INTENT_REQUEST_TAKE_VIDEO;
+			}
+		}
+		
+		//set most common intent for following cases
+		Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+		
+		switch (intentRequestCode) {
+		case INTENT_REQUEST_PICK_AUDIO:
+			intent.setType("audio/*");
+			break;
+		case INTENT_REQUEST_PICK_IMAGE:
+			intent.setType("image/*");
+			break;
+		case INTENT_REQUEST_PICK_VIDEO:
+			intent.setType("video/*");
+			break;
+		case INTENT_REQUEST_TAKE_AUDIO:
+			//record audio
+			break;
+		case INTENT_REQUEST_TAKE_IMAGE:
+			intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		    if (intent.resolveActivity(getPackageManager()) != null) {
+		    	
+		    	String name = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+		    	
+		    	File photoFile = null;
+		        try {
+		        	File dir = Environment
+		        			.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+		            photoFile = new File(dir, name + ".jpg");
+		            
+		            if (!photoFile.exists()) {
+		            	photoFile.createNewFile();
+		            }
+		        } catch (Exception e) {}
+
+		        if (photoFile != null) {
+		        	mMediaNewPhotoFile = photoFile;
+		        	intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+		        }
+		    }
+			break;
+		case INTENT_REQUEST_TAKE_VIDEO:
+			intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+			break;
+		}
+		
+		if (intent != null && intent.resolveActivity(getPackageManager()) != null) {
+			startActivityForResult(intent, intentRequestCode);
+		}
 	}
 	
 	private void report() {
@@ -263,34 +414,67 @@ public class ReportActivity extends BaseFragmentActivity
 			return;
 		}
 		
-		Uri uri;
-		
-		if (data == null || (uri = data.getData()) == null) {
-			return;
+		mMediaUri = null;
+
+		//if different, it means the reference for new image via camera can be discarded due to a
+		//  different media being retrieved
+		if (requestCode == INTENT_REQUEST_TAKE_IMAGE) {
+			ContentValues values = new ContentValues();
+			values.put(MediaStore.Images.Media.DATA, mMediaNewPhotoFile.getAbsolutePath());
+			mMediaUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+					values);
+		} else {
+			mMediaNewPhotoFile = null;
 		}
-		
+
+		//deal with uri-returned data (all picks and video recording)
 		if (requestCode == INTENT_REQUEST_PICK_AUDIO
 				|| requestCode == INTENT_REQUEST_PICK_IMAGE
-				|| requestCode == INTENT_REQUEST_PICK_VIDEO) {
-			
-			mMediaUri = uri;
-			
-			ContentResolver contentResolver = getContentResolver();
-			String[] fileInfo = {OpenableColumns.DISPLAY_NAME};
-			
-			Cursor cursor = contentResolver.query(uri, fileInfo, null, null, null);
-			
-			if (cursor == null || !cursor.moveToFirst()) {
-				return;
+				|| requestCode == INTENT_REQUEST_PICK_VIDEO
+				|| requestCode == INTENT_REQUEST_TAKE_VIDEO) {
+
+			if (data != null) {
+				mMediaUri = data.getData();
 			}
-			
-			int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-			String name = cursor.getString(nameIndex);
-			
-			cursor.close();
-			
-			((TextView) findViewById(R.id.report_text_media_name)).setText(name);
-			setMediaUi();
 		}
+		
+		setMediaUi();
+	}
+	
+	private MediaType getMimeTypeAsMediaType(final Uri uri) {
+		ContentResolver contentResolver = getContentResolver();
+		String mimeType = contentResolver.getType(uri);
+		
+		if (mimeType == null) {
+			return null;
+		}
+		
+		if (mimeType.contains("audio")) {
+			return MediaType.AUDIO;
+		} else if (mimeType.contains("image")) {
+			return MediaType.IMAGE;
+		} else if (mimeType.contains("video")) {
+			return MediaType.VIDEO;
+		}
+		
+		return null;
+	}
+	
+	private String getNameWithUri(final Uri uri) {
+		ContentResolver contentResolver = getContentResolver();
+		String[] fileInfo = {OpenableColumns.DISPLAY_NAME};
+		
+		Cursor cursor = contentResolver.query(uri, fileInfo, null, null, null);
+		
+		if (cursor == null || !cursor.moveToFirst()) {
+			return null;
+		}
+		
+		int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+		String name = cursor.getString(nameIndex);
+		
+		cursor.close();
+		
+		return name;
 	}
 }
