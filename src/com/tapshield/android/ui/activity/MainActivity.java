@@ -1,6 +1,8 @@
 package com.tapshield.android.ui.activity;
 
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import org.joda.time.DateTime;
 
@@ -28,18 +30,22 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.OnMapLoadedCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.tapshield.android.R;
 import com.tapshield.android.api.JavelinClient;
+import com.tapshield.android.api.JavelinSocialReportingManager;
+import com.tapshield.android.api.JavelinSocialReportingManager.SocialReportingListener;
 import com.tapshield.android.api.JavelinUserManager;
 import com.tapshield.android.api.googledirections.model.Route;
+import com.tapshield.android.api.model.SocialCrime;
+import com.tapshield.android.api.model.SocialCrime.SocialCrimes;
 import com.tapshield.android.api.model.User;
 import com.tapshield.android.api.spotcrime.SpotCrimeClient;
 import com.tapshield.android.api.spotcrime.SpotCrimeClient.SpotCrimeCallback;
@@ -62,7 +68,7 @@ import com.tapshield.android.utils.SpotCrimeUtils;
 import com.tapshield.android.utils.UiUtils;
 
 public class MainActivity extends BaseFragmentActivity implements OnNavigationItemClickListener,
-		LocationListener, YankListener, OnMapLoadedCallback {
+		LocationListener, YankListener {
 
 	public static final String EXTRA_DISCONNECTED = "com.tapshield.android.extra.disconnected";
 	
@@ -88,17 +94,19 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 	private AlertDialog mYankDialog;
 	private AlertDialog mDisconnectedDialog;
 
-	private boolean mMapLoaded = false;
 	private boolean mUserScrollingMap = false;
 	private boolean mTrackUser = true;
 	private boolean mResuming = false;
-	private boolean mSpotCrimeError = false;
 	private boolean mUserBelongsToAgency = false;
-
-	private static final int MINIMUM_NUMBER_CRIMES = 50;
-	private long mCrimeSince = new DateTime().minusHours(5).getMillis();
-	private float mCrimeRadius = 0.03f;
-	private List<Crime> mCrimeRecords;
+	
+	private ConcurrentMap<Integer, Crime> mSpotCrimeRecords;
+	private ConcurrentMap<Crime, Marker> mSpotCrimeMarkers;
+	private boolean mSpotCrimeError = false;
+	
+	private ConcurrentMap<String, SocialCrime> mSocialCrimesRecords;
+	private ConcurrentMap<SocialCrime, Marker> mSocialCrimesMarkers;
+	private boolean mSocialCrimesError = false;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -131,8 +139,19 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		mDrawer = (FrameLayout) findViewById(R.id.main_drawer);
 		mMap = ((SupportMapFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.main_fragment_map)).getMap();
-		mMap.setOnMapLoadedCallback(this);
-		mMap.setInfoWindowAdapter(new CrimeInfoWindowAdapter(this));
+		
+		if (mMap != null) {
+			mMap.setInfoWindowAdapter(new CrimeInfoWindowAdapter(this));
+			mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+				
+				@Override
+				public void onCameraChange(CameraPosition position) {
+					if (mUserScrollingMap && mTrackUser) {
+						mTrackUser = false;
+					}
+				}
+			});
+		}
 		
 		mEntourage = (ImageButton) findViewById(R.id.main_imagebutton_entourage);
 		mLocateMe = (ImageButton) findViewById(R.id.main_imagebutton_locateuser);
@@ -205,15 +224,11 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 			}
 		});
 		
-		mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-			
-			@Override
-			public void onCameraChange(CameraPosition position) {
-				if (mUserScrollingMap && mTrackUser) {
-					mTrackUser = false;
-				}
-			}
-		});
+		loadMapSettings();
+		loadAgencyBoundaries();
+		loadNearbySpotCrime();
+		loadNearbySocialCrimes();
+		loadOnEntourage();
 	}
 	
 	@Override
@@ -336,15 +351,6 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		return false;
 	}
 	
-	@Override
-	public void onMapLoaded() {
-		mMapLoaded = true;
-		loadMapSettings();
-		loadAgencyBoundaries();
-		loadNearbyCrimes(false);
-		loadOnEntourage();
-	}
-	
 	private void moveCameraToUser(boolean animate) {
 		if (mUserLocation == null) {
 			return;
@@ -421,7 +427,17 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 	public void onLocationChanged(Location location) {
 		mUserLocation = location;
 		drawUser();
-		loadNearbyCrimes(false);
+		
+
+		//check if the crime map structures are null, meaning location s needed before the requests
+		
+		if (mSpotCrimeRecords == null) {
+			loadNearbySpotCrime();
+		}
+		
+		if (mSocialCrimesRecords == null) {
+			loadNearbySocialCrimes();
+		}
 	}
 	
 	private void loadMapSettings() {
@@ -461,50 +477,75 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		mMap.addPolygon(polygonOptions);
 	}
 	
-	private void loadNearbyCrimes(boolean broaderSearch) {
-		//stop here if map is not loaded yet or there was an error
-		if (!mMapLoaded || mSpotCrimeError || mUserLocation == null) {
+	private void loadNearbySpotCrime() {
+		if (mUserLocation == null || mSpotCrimeError) {
 			return;
 		}
 		
-		//since this method can be called recursively check for this flag and
-		//	return if a broader search is not requested with a non-null list
-		//	this way onLocationChanged method is not requesting this one more than once
-		if (broaderSearch && mCrimeRecords == null) {
-			return;
-		}
+		mSpotCrimeRecords = new ConcurrentHashMap<Integer, Crime>();
+		mSpotCrimeMarkers = new ConcurrentHashMap<Crime, Marker>();
+		
+		final long since = new DateTime()
+				.minusHours(TapShieldApplication.CRIMES_PERIOD_HOURS)
+				.getMillis();
 		
 		SpotCrimeRequest request =
 				new SpotCrimeRequest(TapShieldApplication.SPOTCRIME_CONFIG,
-						mUserLocation.getLatitude(), mUserLocation.getLongitude(), mCrimeRadius)
-				.setSince(mCrimeSince)
-				.setSortBy(SpotCrimeRequest.SORT_BY_DISTANCE)
-				.setSortOrder(SpotCrimeRequest.SORT_ORDER_ASCENDING);
+						mUserLocation.getLatitude(), mUserLocation.getLongitude(),
+						TapShieldApplication.SPOTCRIME_RADIUS)
+				.setSince(since)
+				.setSortBy(SpotCrimeRequest.SORT_BY_DATE)
+				.setSortOrder(SpotCrimeRequest.SORT_ORDER_DESCENDING)
+				.setMaxRecords(500);
 		
 		SpotCrimeCallback callback = new SpotCrimeCallback() {
 			
 			@Override
 			public void onRequest(boolean ok, List<Crime> results, String errorIfNotOk) {
-				Log.i("spotcrime",
-						"callback ok=" + ok
-						+ " results=" + (results == null? results : results.size())
-						+ " error=" + errorIfNotOk
-						+ (ok ? " for=" + new DateTime(mCrimeSince) + " " + mCrimeRadius + "mi" : new String()));
+				
+				mSpotCrimeError = !ok;
+				
 				if (ok) {
 					if (results == null) {
 						return;
 					}
 
-					mCrimeRecords = results;
-					
-					//broaden search parameter if less than minimum number of crimes
-					if (results.size() < MINIMUM_NUMBER_CRIMES) {
-						broadenCrimeRetrievalCriteria();
-						loadNearbyCrimes(true);
-						return;
+					for (Crime c : results) {
+						Log.i("aaa", "spotcrime c=" + c.getType() + " " + c.getDate());
 					}
-
-					addCrimeMarkers();
+					
+					DateTime limit = new DateTime()
+							.minusHours(TapShieldApplication.CRIMES_PERIOD_HOURS);
+					
+					//add new ones (records and markers)
+					for (Crime crime : results) {
+						DateTime crimeDateTime = SpotCrimeUtils.getDateTimeFromCrime(crime);
+						boolean old = crimeDateTime.isBefore(limit);
+						
+						//add non-duplicates and ones within the timeframe
+						if (!old && !mSpotCrimeRecords.containsKey(crime.getId())) {
+							mSpotCrimeRecords.put(crime.getId(), crime);
+							mSpotCrimeMarkers.put(crime, addCrimeMarker(crime, crimeDateTime));
+						}
+					}
+					
+					//remove old ones
+					for (Crime crime : mSpotCrimeRecords.values()) {
+						boolean old = SpotCrimeUtils.getDateTimeFromCrime(crime).isBefore(limit);
+						
+						if (old) {
+							//remove stored marker
+							if (mSpotCrimeMarkers.containsKey(crime)) {
+								mSpotCrimeMarkers.get(crime).remove();
+								mSpotCrimeMarkers.remove(crime);
+							}
+							
+							//remove stored record
+							if (mSpotCrimeRecords.containsKey(crime.getId())) {
+								mSpotCrimeRecords.remove(crime.getId());
+							}
+						}
+					}
 				} else {
 					UiUtils.toastShort(MainActivity.this, "Error loading crimes:" + errorIfNotOk);
 				}
@@ -515,30 +556,107 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		spotCrime.request(request, callback);
 	}
 	
-	private void addCrimeMarkers() {
-		for (Crime c : mCrimeRecords) {
-			String type = c.getType();
-			
-			//for the time being, ignore type 'other.' thus, if (type != other)
-			if (!type.equals(SpotCrimeClient.TYPE_OTHER)) {
-				int markerDrawableResource = SpotCrimeUtils.getMarkerResourceOfType(type);
-				
-				LatLng position = new LatLng(c.getLatitude(), c.getLongitude());
-				MarkerOptions markerOptions = new MarkerOptions()
-						.draggable(false)
-						.icon(BitmapDescriptorFactory.fromResource(markerDrawableResource))
-						.anchor(0.5f, 1.0f)
-						.position(position)
-						.title(c.getType())
-						.snippet(c.getDate() + CrimeInfoWindowAdapter.SEPARATOR + c.getAddress());
-				mMap.addMarker(markerOptions);
-			}
-		}
+	private Marker addCrimeMarker(Crime crime, DateTime crimeDateTime) {
+		//by passing the crime DateTime it avoids parsing another time for adding the marker info
+		
+		final String type = crime.getType();
+		final int markerDrawableResource = SpotCrimeUtils.getMarkerResourceOfType(type);
+		final String timeDifference = getTimeLabelFor(crimeDateTime);
+		
+		LatLng position = new LatLng(crime.getLatitude(), crime.getLongitude());
+		MarkerOptions markerOptions = new MarkerOptions()
+				.draggable(false)
+				.icon(BitmapDescriptorFactory.fromResource(markerDrawableResource))
+				.anchor(0.5f, 1.0f)
+				.alpha(getOpacityOffTimeframeAt(crimeDateTime.getMillis()))
+				.position(position)
+				.title(type)
+				.snippet(timeDifference + CrimeInfoWindowAdapter.SEPARATOR + crime.getAddress());
+		return mMap.addMarker(markerOptions);
 	}
 	
-	private void broadenCrimeRetrievalCriteria() {
-		mCrimeSince = new DateTime(mCrimeSince).minusHours(5).getMillis();
-		mCrimeRadius += 0.005;
+	private void loadNearbySocialCrimes() {
+		if (mUserLocation == null || mSocialCrimesError) {
+			return;
+		}
+		
+		mSocialCrimesRecords = new ConcurrentHashMap<String, SocialCrime>();
+		mSocialCrimesMarkers = new ConcurrentHashMap<SocialCrime, Marker>();
+		
+		SocialReportingListener callback = new SocialReportingListener() {
+
+			@Override
+			public void onReport(boolean ok, int code, String errorIfNotOk) {}
+
+			@Override
+			public void onFetch(boolean ok, int code, SocialCrimes socialCrimes,
+					String errorIfNotOk) {
+
+				mSocialCrimesError = !ok;
+				if (ok) {
+					if (socialCrimes == null || socialCrimes.getSocialCrimes() == null) {
+						return;
+					}
+
+					DateTime limit = new DateTime()
+							.minusHours(TapShieldApplication.CRIMES_PERIOD_HOURS);
+
+					//add new ones (records and markers)
+					for (SocialCrime crime : socialCrimes.getSocialCrimes()) {
+						boolean old = crime.getDate().isBefore(limit);
+
+						//add non-duplicates and ones within the timeframe
+						
+						if (!old && !mSocialCrimesRecords.containsKey(crime.getUrl())) {
+							mSocialCrimesRecords.put(crime.getUrl(), crime);;
+							mSocialCrimesMarkers.put(crime,
+									addSocialCrimeMarker(crime, crime.getDate()));
+						}
+					}
+
+					//remove old ones (markers and records)
+					for (SocialCrime crime : mSocialCrimesRecords.values()) {
+						boolean old = crime.getDate().isBefore(limit);
+
+						if (old) {
+							//remove stored marker
+							if (mSocialCrimesMarkers.containsKey(crime)) {
+								mSocialCrimesMarkers.get(crime).remove();
+								mSocialCrimesMarkers.remove(crime);
+							}
+
+							//remove stored record
+							if (mSocialCrimesRecords.containsKey(crime.getUrl())) {
+								mSocialCrimesRecords.remove(crime.getUrl());
+							}
+						}
+					}
+				}
+			}
+		};
+		
+		JavelinSocialReportingManager socialReporting = mJavelin.getSocialReportingManager();
+		socialReporting.getReportsAt(mUserLocation.getLatitude(), mUserLocation.getLongitude(),
+				TapShieldApplication.SOCIAL_CRIMES_RADIUS, callback);
+	}
+	
+	private Marker addSocialCrimeMarker(SocialCrime crime, DateTime crimeDateTime) {
+		//by passing the crime DateTime it avoids parsing another time for adding the marker info
+
+		final String type = crime.getTypeName();
+		final int markerDrawableResource = SpotCrimeUtils.getMarkerResourceOfType(type);
+		final String timeDifference = getTimeLabelFor(crimeDateTime);
+
+		LatLng position = new LatLng(crime.getLatitude(), crime.getLongitude());
+		MarkerOptions markerOptions = new MarkerOptions()
+				.draggable(false)
+				.icon(BitmapDescriptorFactory.fromResource(markerDrawableResource))
+				.anchor(0.5f, 1.0f)
+				.alpha(1.0f)//getOpacityOffTimeframeAt(crimeDateTime.getMillis()))
+				.position(position)
+				.title(type)
+				.snippet(timeDifference);
+		return mMap.addMarker(markerOptions);
 	}
 	
 	private void drawUser() {
@@ -636,5 +754,64 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 			UiUtils.toastShort(this, getString(R.string.ts_main_toast_yank_enabled));
 			break;
 		}
+	}
+	
+	private String getTimeLabelFor(DateTime forDateTime) {
+		String label = "Just now";
+		
+		DateTime now = new DateTime();
+		
+		long diff = now.getMillis() - forDateTime.getMillis();
+		
+		int seconds = (int) Math.ceil(diff / 1000);
+		int minutes = (int) Math.ceil(seconds / 60);
+		int hours = (int) Math.ceil(minutes / 60);
+		
+		if (seconds >= 2) {
+			label = seconds + " seconds ago";
+		}
+		
+		if (minutes == 1) {
+			label = minutes + " minute ago";
+		}
+		
+		if (minutes >= 2) {
+			label = minutes + " minutes ago";
+		}
+		
+		if (hours == 1) {
+			label = hours + " hour ago";
+		}
+		
+		if (hours >= 2) {
+			label = hours + " hours ago";
+		}
+		
+		if (hours > 6) {
+			int forDay = forDateTime.getDayOfMonth();
+			int nowDay = now.getDayOfMonth();
+			
+			if (nowDay - forDay < 2) {
+				String dayLabel = nowDay == forDay ? "Today" : "Yesterday";
+				label = dayLabel + " " + forDateTime.toString("hh:mm aa"); 
+			} else {
+				label = forDateTime.toString(SpotCrimeUtils.FORMAT_CRIME_DATE);
+			}
+		}
+		
+		return label;
+	}
+	
+	private float getOpacityOffTimeframeAt(long atMillis) {
+		float opacity = 1.0f;
+		float opacityMin = TapShieldApplication.CRIMES_MARKER_OPACITY_MINIMUM;
+		float opacityRange = 1.0f - opacityMin;
+		int timeRangeHours = TapShieldApplication.CRIMES_PERIOD_HOURS;
+		long timeMax = new DateTime().minusHours(timeRangeHours).getMillis();
+		long timeRange = new DateTime().getMillis() - timeMax;
+		float timeRangeRatio = (float) (((double) (atMillis - timeMax)) / (double) timeRange);
+		float opacityRangeRatio = opacityRange * timeRangeRatio;
+		opacity = opacityMin + opacityRangeRatio;
+		return opacity;
 	}
 }
