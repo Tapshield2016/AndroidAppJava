@@ -563,6 +563,13 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		final int markerDrawableResource = SpotCrimeUtils.getMarkerResourceOfType(type);
 		final String timeDifference = getTimeLabelFor(crimeDateTime);
 		
+		//set snippet with mandatory time label and source (optional address if not null)
+		final String source = getString(R.string.ts_misc_credits_spotcrime);
+		final String address = crime.getAddress() != null ?
+				CrimeInfoWindowAdapter.SEPARATOR + crime.getAddress() : new String();
+		final String snippet = timeDifference
+				+ CrimeInfoWindowAdapter.SEPARATOR + source + address;
+		
 		LatLng position = new LatLng(crime.getLatitude(), crime.getLongitude());
 		MarkerOptions markerOptions = new MarkerOptions()
 				.draggable(false)
@@ -571,7 +578,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 				.alpha(getOpacityOffTimeframeAt(crimeDateTime.getMillis()))
 				.position(position)
 				.title(type)
-				.snippet(timeDifference + CrimeInfoWindowAdapter.SEPARATOR + crime.getAddress());
+				.snippet(snippet);
 		return mMap.addMarker(markerOptions);
 	}
 	
@@ -647,15 +654,19 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		final int markerDrawableResource = SpotCrimeUtils.getMarkerResourceOfType(type);
 		final String timeDifference = getTimeLabelFor(crimeDateTime);
 
+		//set snippet with mandatory time label and source
+		final String source = getString(R.string.ts_misc_credits_socialcrimes);
+		final String snippet = timeDifference + CrimeInfoWindowAdapter.SEPARATOR + source;
+		
 		LatLng position = new LatLng(crime.getLatitude(), crime.getLongitude());
 		MarkerOptions markerOptions = new MarkerOptions()
 				.draggable(false)
 				.icon(BitmapDescriptorFactory.fromResource(markerDrawableResource))
 				.anchor(0.5f, 1.0f)
-				.alpha(1.0f)//getOpacityOffTimeframeAt(crimeDateTime.getMillis()))
+				.alpha(getOpacityOffTimeframeAt(crimeDateTime.getMillis()))
 				.position(position)
 				.title(type)
-				.snippet(timeDifference);
+				.snippet(snippet);
 		return mMap.addMarker(markerOptions);
 	}
 	
