@@ -52,10 +52,13 @@ public class SocialReportingService extends Service implements SocialReportingLi
 				.setOnlyAlertOnce(true)
 				.setContentTitle(getString(R.string.ts_reporting_media_notification_title))
 				.setContentText(getString(R.string.ts_reporting_media_notification_preparing_message));
-
+		
 		Intent report = new Intent(this, ReportActivity.class)
-				.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP)
-				.putExtras(intent.getExtras());
+				.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		
+		if (intent != null && intent.getExtras() != null) {
+			report.putExtras(intent.getExtras());
+		}
 		
 		PendingIntent retryPendingIntent = PendingIntent.getActivity(this, 1, report,
 				PendingIntent.FLAG_UPDATE_CURRENT);
