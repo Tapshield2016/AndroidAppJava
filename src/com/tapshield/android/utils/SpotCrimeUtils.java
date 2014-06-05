@@ -1,10 +1,16 @@
 package com.tapshield.android.utils;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+
 import com.tapshield.android.R;
 import com.tapshield.android.api.spotcrime.SpotCrimeClient;
+import com.tapshield.android.api.spotcrime.model.Crime;
 
 public class SpotCrimeUtils {
 
+	public static final String FORMAT_CRIME_DATE = "MM/dd/yy hh:mm aa";
+	
 	public static int getMarkerResourceOfType(String type) {
 		int resource = R.drawable.ts_pin_other;
 		
@@ -29,5 +35,9 @@ public class SpotCrimeUtils {
 		}
 		
 		return resource;
+	}
+	
+	public static DateTime getDateTimeFromCrime(Crime crime) {
+		return DateTimeFormat.forPattern(FORMAT_CRIME_DATE).parseDateTime(crime.getDate());
 	}
 }
