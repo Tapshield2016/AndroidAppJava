@@ -17,6 +17,7 @@ import com.tapshield.android.api.JavelinClient;
 import com.tapshield.android.api.JavelinSocialReportingManager;
 import com.tapshield.android.api.JavelinSocialReportingManager.SocialReportingListener;
 import com.tapshield.android.api.JavelinUtils;
+import com.tapshield.android.api.model.SocialCrime.SocialCrimes;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.ui.activity.ReportActivity;
 import com.tapshield.android.utils.UiUtils;
@@ -213,6 +214,9 @@ public class SocialReportingService extends Service implements SocialReportingLi
 			reportError();
 		}
 	}
+	
+	@Override
+	public void onFetch(boolean ok, int code, SocialCrimes socialCrimes,String errorIfNotOk) {}
 	
 	private void reportError() {
 		mNotificationManager.cancel(NOTIFICATION_UPLOAD_ID);
