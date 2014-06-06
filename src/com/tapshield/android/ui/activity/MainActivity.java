@@ -17,7 +17,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -64,6 +63,7 @@ import com.tapshield.android.ui.fragment.NavigationFragment.OnNavigationItemClic
 import com.tapshield.android.ui.view.CircleButton;
 import com.tapshield.android.utils.LocalTermConditionAgreement;
 import com.tapshield.android.utils.MapUtils;
+import com.tapshield.android.utils.SocialReportsUtils;
 import com.tapshield.android.utils.SpotCrimeUtils;
 import com.tapshield.android.utils.UiUtils;
 
@@ -510,10 +510,6 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 						return;
 					}
 
-					for (Crime c : results) {
-						Log.i("aaa", "spotcrime c=" + c.getType() + " " + c.getDate());
-					}
-					
 					DateTime limit = new DateTime()
 							.minusHours(TapShieldApplication.CRIMES_PERIOD_HOURS);
 					
@@ -560,7 +556,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		//by passing the crime DateTime it avoids parsing another time for adding the marker info
 		
 		final String type = crime.getType();
-		final int markerDrawableResource = SpotCrimeUtils.getMarkerResourceOfType(type);
+		final int markerDrawableResource = SpotCrimeUtils.getDrawableOfType(type, true);
 		final String timeDifference = getTimeLabelFor(crimeDateTime);
 		
 		//set snippet with mandatory time label and source (optional address if not null)
@@ -651,7 +647,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		//by passing the crime DateTime it avoids parsing another time for adding the marker info
 
 		final String type = crime.getTypeName();
-		final int markerDrawableResource = SpotCrimeUtils.getMarkerResourceOfType(type);
+		final int markerDrawableResource = SocialReportsUtils.getDrawableOfType(type, true);
 		final String timeDifference = getTimeLabelFor(crimeDateTime);
 
 		//set snippet with mandatory time label and source

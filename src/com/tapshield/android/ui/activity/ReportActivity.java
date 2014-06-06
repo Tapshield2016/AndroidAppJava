@@ -174,7 +174,7 @@ public class ReportActivity extends BaseFragmentActivity
 		int typeIndex = getIntent().getIntExtra(EXTRA_TYPE_INDEX, -1);
 		if (typeIndex >= 0) {
 			String type = JavelinSocialReportingManager.TYPE_LIST[typeIndex];
-			int res = SocialReportsUtils.getImageResourceByType(type);
+			int res = SocialReportsUtils.getDrawableOfType(type, false);
 			mTypeImage.setImageResource(res);
 			mTypeText.setText(type);
 			mDatetime.setText(new DateTime().toString(DATETIME_FORMAT));
