@@ -1,6 +1,7 @@
 package com.tapshield.android.ui.activity;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -517,9 +518,14 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 					for (Crime crime : results) {
 						DateTime crimeDateTime = SpotCrimeUtils.getDateTimeFromCrime(crime);
 						boolean old = crimeDateTime.isBefore(limit);
+						boolean notOther = !crime
+								.getType()
+								.trim()
+								.toLowerCase(Locale.getDefault())
+								.equals(SpotCrimeClient.TYPE_OTHER);
 						
 						//add non-duplicates and ones within the timeframe
-						if (!old && !mSpotCrimeRecords.containsKey(crime.getId())) {
+						if (!old && notOther && !mSpotCrimeRecords.containsKey(crime.getId())) {
 							mSpotCrimeRecords.put(crime.getId(), crime);
 							mSpotCrimeMarkers.put(crime, addCrimeMarker(crime, crimeDateTime));
 						}
