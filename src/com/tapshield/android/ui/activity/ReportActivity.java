@@ -47,7 +47,7 @@ public class ReportActivity extends BaseFragmentActivity
 		implements LocationListener, OnClickListener {
 
 	public static final String EXTRA_TYPE_INDEX = "com.tapshield.android.intent.extra.report_type_index";
-
+	
 	private static final int INTENT_REQUEST_PICK_AUDIO = 10;
 	private static final int INTENT_REQUEST_PICK_IMAGE = 20;
 	private static final int INTENT_REQUEST_PICK_VIDEO = 30;
@@ -262,7 +262,8 @@ public class ReportActivity extends BaseFragmentActivity
 						mMediaType = MediaType.IMAGE;
 						performMediaAction();
 					}
-				})
+				});
+				/*
 				.setNegativeButton(R.string.ts_reporting_dialog_media_options_button_audio,
 						new DialogInterface.OnClickListener() {
 					
@@ -272,6 +273,7 @@ public class ReportActivity extends BaseFragmentActivity
 						performMediaAction();
 					}
 				});
+				*/
 	}
 	
 	private void showMediaTypeDialog(OptionType optionType) {
