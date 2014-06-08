@@ -2,11 +2,18 @@ package com.tapshield.android.api.spotcrime;
 
 public class SpotCrimeConfig {
 
-	private String mUrl = "https://api.spotcrime.com/crimes.json";
+	private String mBaseUrl = "https://api.spotcrime.com/crimes";
+	private String mUrl = mBaseUrl + ".json";
+	private String mUrlDetailsPrefix = mBaseUrl + "/";
+	private String mUrlDetailsSuffix = ".json";
 	private String mKey;
 	
 	public String getUrl() {
 		return mUrl;
+	}
+	
+	public String getDetailsUrl(int crimeId) {
+		return mUrlDetailsPrefix + Integer.toString(crimeId) + mUrlDetailsSuffix;
 	}
 	
 	public String getKey() {
