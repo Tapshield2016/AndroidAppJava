@@ -1,5 +1,6 @@
 package com.tapshield.android.ui.activity;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
@@ -62,6 +63,7 @@ import com.tapshield.android.ui.adapter.NavigationListAdapter.NavigationItem;
 import com.tapshield.android.ui.fragment.NavigationFragment;
 import com.tapshield.android.ui.fragment.NavigationFragment.OnNavigationItemClickListener;
 import com.tapshield.android.ui.view.CircleButton;
+import com.tapshield.android.utils.DateTimeUtils;
 import com.tapshield.android.utils.LocalTermConditionAgreement;
 import com.tapshield.android.utils.MapUtils;
 import com.tapshield.android.utils.SocialReportsUtils;
@@ -143,6 +145,50 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		
 		if (mMap != null) {
 			mMap.setInfoWindowAdapter(new CrimeInfoWindowAdapter(this));
+			mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+				
+				@Override
+				public void onInfoWindowClick(Marker marker) {
+					if (marker == null) {
+						return;
+					}
+					
+					boolean found = false;
+					Intent details = new Intent(MainActivity.this, ReportDetailsActivity.class);
+					
+					//iterate through the records until a matching marker is found
+					Iterator<Crime> spotCrimeIter = mSpotCrimeMarkers.keySet().iterator();
+					while (spotCrimeIter != null && spotCrimeIter.hasNext()) {
+						Crime c = spotCrimeIter.next();
+						if (marker.equals(mSpotCrimeMarkers.get(c))) {
+							found = true;
+							details.putExtra(ReportDetailsActivity.EXTRA_REPORT_TYPE,
+									ReportDetailsActivity.TYPE_SPOTCRIME);
+							details.putExtra(ReportDetailsActivity.EXTRA_REPORT_ID, c.getId());
+							break;
+						}
+					}
+					
+					//iterate through records if not found yet
+					if (!found) {
+						Iterator<SocialCrime> socialCrimesIter = mSocialCrimesMarkers.keySet().iterator();
+						while (socialCrimesIter != null && socialCrimesIter.hasNext()) {
+							SocialCrime sc = socialCrimesIter.next();
+							if (marker.equals(mSocialCrimesMarkers.get(sc))) {
+								found = true;
+								details.putExtra(ReportDetailsActivity.EXTRA_REPORT_TYPE,
+										ReportDetailsActivity.TYPE_SOCIALCRIME);
+								details.putExtra(ReportDetailsActivity.EXTRA_REPORT_ID, sc.getUrl());
+								break;
+							}
+						}
+					}
+					
+					if (found) {
+						startActivity(details);
+					}
+				}
+			});
 			mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
 				
 				@Override
@@ -552,6 +598,9 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 					UiUtils.toastShort(MainActivity.this, "Error loading crimes:" + errorIfNotOk);
 				}
 			}
+
+			@Override
+			public void onDetail(boolean ok, Crime crime, String errorIfNotOk) {}
 		};
 		
 		SpotCrimeClient spotCrime = SpotCrimeClient.getInstance(TapShieldApplication.SPOTCRIME_CONFIG);
@@ -563,7 +612,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		
 		final String type = crime.getType();
 		final int markerDrawableResource = SpotCrimeUtils.getDrawableOfType(type, true);
-		final String timeDifference = getTimeLabelFor(crimeDateTime);
+		final String timeDifference = DateTimeUtils.getTimeLabelFor(crimeDateTime);
 		
 		//set snippet with mandatory time label and source (optional address if not null)
 		final String source = getString(R.string.ts_misc_credits_spotcrime);
@@ -642,6 +691,10 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 					}
 				}
 			}
+
+			@Override
+			public void onDetails(boolean ok, int code, SocialCrime socialCrime,
+					String errorIfNotOk) {}
 		};
 		
 		JavelinSocialReportingManager socialReporting = mJavelin.getSocialReportingManager();
@@ -654,7 +707,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 
 		final String type = crime.getTypeName();
 		final int markerDrawableResource = SocialReportsUtils.getDrawableOfType(type, true);
-		final String timeDifference = getTimeLabelFor(crimeDateTime);
+		final String timeDifference = DateTimeUtils.getTimeLabelFor(crimeDateTime);
 
 		//set snippet with mandatory time label and source
 		final String source = getString(R.string.ts_misc_credits_socialcrimes);
@@ -767,52 +820,6 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 			UiUtils.toastShort(this, getString(R.string.ts_main_toast_yank_enabled));
 			break;
 		}
-	}
-	
-	private String getTimeLabelFor(DateTime forDateTime) {
-		String label = "Just now";
-		
-		DateTime now = new DateTime();
-		
-		long diff = now.getMillis() - forDateTime.getMillis();
-		
-		int seconds = (int) Math.ceil(diff / 1000);
-		int minutes = (int) Math.ceil(seconds / 60);
-		int hours = (int) Math.ceil(minutes / 60);
-		
-		if (seconds >= 2) {
-			label = seconds + " seconds ago";
-		}
-		
-		if (minutes == 1) {
-			label = minutes + " minute ago";
-		}
-		
-		if (minutes >= 2) {
-			label = minutes + " minutes ago";
-		}
-		
-		if (hours == 1) {
-			label = hours + " hour ago";
-		}
-		
-		if (hours >= 2) {
-			label = hours + " hours ago";
-		}
-		
-		if (hours > 6) {
-			int forDay = forDateTime.getDayOfMonth();
-			int nowDay = now.getDayOfMonth();
-			
-			if (nowDay - forDay < 2) {
-				String dayLabel = nowDay == forDay ? "Today" : "Yesterday";
-				label = dayLabel + " " + forDateTime.toString("hh:mm aa"); 
-			} else {
-				label = forDateTime.toString(SpotCrimeUtils.FORMAT_CRIME_DATE);
-			}
-		}
-		
-		return label;
 	}
 	
 	private float getOpacityOffTimeframeAt(long atMillis) {

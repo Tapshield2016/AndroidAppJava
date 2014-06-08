@@ -17,6 +17,7 @@ import com.tapshield.android.api.JavelinClient;
 import com.tapshield.android.api.JavelinSocialReportingManager;
 import com.tapshield.android.api.JavelinSocialReportingManager.SocialReportingListener;
 import com.tapshield.android.api.JavelinUtils;
+import com.tapshield.android.api.model.SocialCrime;
 import com.tapshield.android.api.model.SocialCrime.SocialCrimes;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.ui.activity.ReportActivity;
@@ -75,7 +76,8 @@ public class SocialReportingService extends Service implements SocialReportingLi
 		
 		Uri[] mediaUris = null;
 		String[] uriStrings = null;
-		if ((uriStrings = intent.getStringArrayExtra(EXTRA_MEDIA_URI)) != null
+		if (intent != null
+				&& (uriStrings = intent.getStringArrayExtra(EXTRA_MEDIA_URI)) != null
 				&& uriStrings.length > 0) {
 			mediaUris = new Uri[uriStrings.length];
 			for (int u = 0; u < mediaUris.length; u++) {
@@ -220,6 +222,9 @@ public class SocialReportingService extends Service implements SocialReportingLi
 	
 	@Override
 	public void onFetch(boolean ok, int code, SocialCrimes socialCrimes,String errorIfNotOk) {}
+
+	@Override
+	public void onDetails(boolean ok, int code, SocialCrime socialCrime, String errorIfNotOk) {}
 	
 	private void reportError() {
 		mNotificationManager.cancel(NOTIFICATION_UPLOAD_ID);
