@@ -62,7 +62,9 @@
                     android:id="@+id/fragment_profile_edit_firstname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/ts_common_firstname"/>
+                    android:hint="@string/ts_common_firstname"
+                    android:textColor="@color/ts_brand_light"
+                    android:textColorHint="@color/ts_gray_dark"/>
                 
                 <EditText
                     android:id="@+id/fragment_profile_edit_lastname"

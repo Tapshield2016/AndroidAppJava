@@ -145,6 +145,10 @@
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
+            android:name="com.tapshield.android.ui.activity.ReportDetailsActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+        <activity
             android:name="com.tapshield.android.ui.activity.BasicInfoActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
@@ -192,6 +196,9 @@
             android:exported="false" />
         <service
             android:name="com.tapshield.android.service.EntourageArrivalCheckService"
+            android:exported="false" />
+        <service
+            android:name="com.tapshield.android.service.SocialReportingService"
             android:exported="false" />
 
         <!-- BROADCAST RECEIVERS -->

@@ -80,7 +80,7 @@ public class ReportListActivity extends ListActivity implements OnItemClickListe
 			ImageView image = (ImageView) view.findViewById(R.id.item_reportlist_image);
 			TextView text = (TextView) view.findViewById(R.id.item_reportlist_text);
 
-			image.setImageResource(SocialReportsUtils.getImageResourceByType(getItem(position)));
+			image.setImageResource(SocialReportsUtils.getDrawableOfType(getItem(position), false));
 			text.setText(getItem(position));
 			
 			return view;

@@ -3,6 +3,8 @@ package com.tapshield.android.api.spotcrime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -97,7 +99,37 @@ public class SpotCrimeClient {
 		JavelinComms.httpGet(url, null, null, request.getParams(), internalCallback); 
 	}
 	
+	public void details(final int crimeId, final SpotCrimeCallback callback) {
+		JavelinCommsCallback internalCallback = new JavelinComms.JavelinCommsCallback() {
+			
+			@Override
+			public void onEnd(JavelinCommsRequestResponse response) {
+				
+				String error = new String();
+				Crime crime = null;
+				
+				if (response.successful) {
+					try {
+						crime = Crime.deserialize(response.jsonResponse);
+					} catch (Exception e) {
+						error = e.getMessage();
+					}
+				} else {
+					error = response.exception.getMessage();
+				}
+				
+				callback.onDetail(response.successful, crime, error);
+			}
+		};
+		
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair(SpotCrimeRequest.PARAM_KEY, mConfig.getKey()));
+		
+		JavelinComms.httpGet(mConfig.getDetailsUrl(crimeId), null, null, params, internalCallback);
+	}
+	
 	public interface SpotCrimeCallback {
 		void onRequest(boolean ok, List<Crime> results, String errorIfNotOk);
+		void onDetail(boolean ok, Crime crime, String errorIfNotOk);
 	}
 }

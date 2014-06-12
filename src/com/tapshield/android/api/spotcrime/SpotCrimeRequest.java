@@ -16,10 +16,11 @@ public class SpotCrimeRequest {
 	public static final String SORT_ORDER_DESCENDING = "DESC";
 	
 	//required
+	static final String PARAM_KEY = "key";
+	
 	private static final String PARAM_LAT = "lat";
 	private static final String PARAM_LON = "lon";
 	private static final String PARAM_RADIUS = "radius";
-	private static final String PARAM_KEY = "key";
 	
 	//optional
 	private static final String PARAM_SINCE = "since";

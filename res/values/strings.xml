@@ -204,9 +204,23 @@
 
     <!-- reporting -->
     <string name="ts_reporting_checkbox_anonymous">Report anonymously</string>
-    <string name="ts_reporting_dialog_message">Reporting&#8230;</string>
+    <string name="ts_reporting_location_dialog_message">Getting location for the report&#8230;</string>
     <string name="ts_reporting_dialog_message_error">Oops! There was an issue. Try again later.</string>
     <string name="ts_reporting_toast_successful">Reported!</string>
+    <string name="ts_reporting_media_header">Add media</string>
+    <string name="ts_reporting_media_audio">Audio</string>
+    <string name="ts_reporting_media_image">Picture</string>
+    <string name="ts_reporting_media_video">Video</string>
+    <string name="ts_reporting_media_notification_title">TapShield</string>
+    <string name="ts_reporting_media_notification_preparing_message">Preparing report</string>
+    <string name="ts_reporting_media_notification_uploading_message">Uploading report</string>
+    <string name="ts_reporting_media_notification_error_message">Error reporting. Tap to retry.</string>
+    <string name="ts_reporting_dialog_media_options_title">Media Attachment</string>
+    <string name="ts_reporting_dialog_media_options_message_existing">What type of media would you like to pick?</string>
+    <string name="ts_reporting_dialog_media_options_message_new">What type of media would you like to create?</string>
+    <string name="ts_reporting_dialog_media_options_button_audio">Audio</string>
+    <string name="ts_reporting_dialog_media_options_button_image">Picture</string>
+    <string name="ts_reporting_dialog_media_options_button_video">Video</string>
 
     <!-- fragment alert -->
     <string name="ts_fragment_alert_card_button_speaker">Speaker</string>
@@ -309,7 +323,8 @@
     <!-- misc -->
     <string name="ts_misc_online_eula">http://www.tapshield.com/eula/</string>
     <string name="ts_misc_credits_spotcrime">Powered by SpotCrime.com</string>
-    <string name="ts_misc_feedback_email">hello@tapshield.com</string>
+    <string name="ts_misc_credits_socialcrimes">User-submitted</string>
+    <string name="ts_misc_feedback_email">feedback@tapshield.com</string>
     <string name="ts_misc_feedback_subject">TapShield Android App Feedback</string>
 
     <!-- settings -->

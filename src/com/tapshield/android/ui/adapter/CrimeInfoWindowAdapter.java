@@ -26,29 +26,35 @@ public class CrimeInfoWindowAdapter implements InfoWindowAdapter {
 
 	@Override
 	public View getInfoWindow(Marker marker) {
-		String snippet = marker.getSnippet();
-		String[] data = snippet.split(SEPARATOR);//0:date, 1: address (optional)
 		
-		View infoWindow = LayoutInflater.from(mContext).inflate(R.layout.infowindow_crime, null);
+		View infoWindow = null;
+		String snippet = null;
 		
-		TextView title = (TextView) infoWindow.findViewById(R.id.infowindow_crime_text_title);
-		title.setText(marker.getTitle());
-		
-		boolean hasAtLeastOne = data != null && data.length >= 1;
-		boolean hasAtLeastTwo = data != null && data.length >= 2;
-		
-		if (hasAtLeastOne) {
+		if (marker != null && (snippet = marker.getSnippet()) != null) {
+			String[] data = snippet.split(SEPARATOR);//0:date, 1:source [, 2:address ]
+			
+			infoWindow = LayoutInflater.from(mContext).inflate(R.layout.infowindow_crime, null);
+			TextView title = (TextView) infoWindow.findViewById(R.id.infowindow_crime_text_title);
 			TextView date = (TextView) infoWindow.findViewById(R.id.infowindow_crime_text_date);
-			date.setText(data[0]);
-			date.setVisibility(View.VISIBLE);
-		}
-		
-		if (hasAtLeastTwo) {
 			TextView address = (TextView) infoWindow.findViewById(R.id.infowindow_crime_text_address);
-			address.setText(data[1]);
-			address.setVisibility(View.VISIBLE);
+			TextView source = (TextView) infoWindow.findViewById(R.id.infowindow_crime_text_source);
+			
+			title.setText(marker.getTitle());
+			date.setText(data[0]);
+			
+			boolean sourcePresent = data != null && data.length >= 2 && data[1] != null;
+			boolean addressPresent = data != null && data.length >= 3 && data[2] != null;
+	
+			if (sourcePresent) {
+				source.setText(data[1]);
+				source.setVisibility(View.VISIBLE);
+			}
+			
+			if (addressPresent) {
+				address.setText(data[2]);
+				address.setVisibility(View.VISIBLE);
+			}
 		}
-		
 		return infoWindow;
 	}
 }

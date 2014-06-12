@@ -108,11 +108,16 @@ public class EmailConfirmationFragment extends BaseFragment
 		String oldEmail = mUser.email.trim();
 		String newEmail = mEmail.getText().toString().trim();
 		boolean emailChanged = !oldEmail.equals(newEmail);
+		boolean requiredDomain = mUser.agency.requiredDomainEmails;
+		boolean wrongDomain = requiredDomain && !newEmail.endsWith(mUser.agency.domain);
 		
 		//if different email, update local user reference and logout
 		//otherwise, attempt to log in with the local reference of the user
-		
-		if (emailChanged) {
+		if (wrongDomain) {
+			String prefix = getActivity()
+					.getString(R.string.ts_fragment_requiredinfo_error_domainrequired_prefix);
+			mEmail.setError(prefix + " " + mUser.agency.domain);
+		} else if (emailChanged) {
 			mUser.email = newEmail;
 			mUserManager.logOut(this);
 		} else {
@@ -123,19 +128,19 @@ public class EmailConfirmationFragment extends BaseFragment
 	@Override
 	public void onUserLogIn(boolean successful, User user, int errorCode, Throwable e) {
 		if (successful) {
-			UiUtils.toastShort(getActivity(), "email verified");
+			UiUtils.toastShort(getActivity(), "Email verified");
 			userRequestProceed();
 		} else {
 			String message = new String();
 			switch (errorCode) {
 			case JavelinUserManager.CODE_ERROR_UNVERIFIED_EMAIL:
-				message = "unverified email, check your inbox";
+				message = "Unverified email, check your inbox";
 				break;
 			case JavelinUserManager.CODE_ERROR_WRONG_CREDENTIALS:
-				message = "error with credentials";
+				message = "Error with credentials";
 				break;
 			case JavelinUserManager.CODE_ERROR_OTHER:
-				message = "unexpected error: " + e.getMessage();
+				message = "Unexpected error: " + e.getMessage();
 				break;
 			}
 			UiUtils.toastShort(getActivity(), message);
@@ -156,12 +161,14 @@ public class EmailConfirmationFragment extends BaseFragment
 	public void onUserSignUp(boolean successful, Throwable e) {
 		if (successful) {
 			resendConfirmationSms();
+		} else {
+			UiUtils.toastShort(getActivity(), e.getMessage());
 		}
 	}
 
 	@Override
 	public void onVerificationEmailRequest(boolean successful, Throwable e) {
-		String message = successful ? "email sent" : "retry again in a few";
+		String message = successful ? "Email sent" : "Retry again in a few";
 		UiUtils.toastShort(getActivity(), message);
 	}
 }
