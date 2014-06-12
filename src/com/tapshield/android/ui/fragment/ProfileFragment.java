@@ -60,6 +60,22 @@ public class ProfileFragment extends BaseFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		
+		JavelinUserManager userManager = JavelinClient
+				.getInstance(getActivity(), TapShieldApplication.JAVELIN_CONFIG)
+				.getUserManager();
+		
+		User user = userManager.getUser();
+		
+		if (user != null) {
+			if (user.firstName != null && !user.firstName.isEmpty()) {
+				mFirstName.setText(user.firstName);
+			}
+			
+			if (user.lastName != null && !user.lastName.isEmpty()) {
+				mLastName.setText(user.lastName);
+			}
+		}
+		
 		mPicture.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -106,9 +122,7 @@ public class ProfileFragment extends BaseFragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()) {
 		case R.id.action_finish:
-			LocalTermConditionAgreement.setTermConditionsAccepted(getActivity());
-			saveUserInformation();
-			UiUtils.startActivityNoStack(getActivity(), MainActivity.class);
+			verifyInformation();
 			return true;
 		}
 		return false;
@@ -126,6 +140,20 @@ public class ProfileFragment extends BaseFragment {
 		} else {
 			mPicture.setImageResource(R.drawable.ic_launcher);
 		}
+	}
+	
+	private void verifyInformation() {
+		String first = mFirstName.getText().toString().trim();
+		String last = mLastName.getText().toString().trim();
+		
+		if (first.isEmpty() || last.isEmpty()) {
+			UiUtils.toastLong(getActivity(), "First and last names are required");
+			return;
+		}
+		
+		LocalTermConditionAgreement.setTermConditionsAccepted(getActivity());
+		saveUserInformation();
+		UiUtils.startActivityNoStack(getActivity(), MainActivity.class);
 	}
 	
 	private void saveUserInformation() {
