@@ -160,8 +160,11 @@ public class LocationTracker
 	@Override
 	public void onLocationChanged(Location location) {
 		mLatestLocation = location;
-		for (LocationListener listener : mListeners) {
-			listener.onLocationChanged(location);
+		LocationListener[] listeners = new LocationListener[mListeners.size()];
+		mListeners.toArray(listeners);
+		
+		for (LocationListener l : listeners) {
+			l.onLocationChanged(mLatestLocation);
 		}
 	}
 }
