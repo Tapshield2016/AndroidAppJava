@@ -198,6 +198,13 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 					}
 				}
 			});
+			mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+				
+				@Override
+				public void onMapLoaded() {
+					loadOnEntourage();
+				}
+			});
 		}
 		
 		mEntourage = (ImageButton) findViewById(R.id.main_imagebutton_entourage);
@@ -270,12 +277,12 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 				startActivity(reporting);
 			}
 		});
-		
+
+		//load all map-related except for Entourage, that will be loaded once map has loaded
 		loadMapSettings();
 		loadAgencyBoundaries();
 		loadNearbySpotCrime();
 		loadNearbySocialCrimes();
-		loadOnEntourage();
 	}
 	
 	@Override
