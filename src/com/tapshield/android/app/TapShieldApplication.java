@@ -57,7 +57,7 @@ public class TapShieldApplication extends Application {
 	public static final int CRIMES_PERIOD_HOURS = 24;
 	public static final float CRIMES_MARKER_OPACITY_MINIMUM = 0.1f;
 	public static final int SPOTCRIME_UPDATE_FREQUENCY_SECONDS = 60;
-	public static final int SOCIAL_CRIMES_UPDATE_FREQUENCY_SECONDS = 20;
+	public static final int SOCIAL_CRIMES_UPDATE_FREQUENCY_SECONDS = 15;
 	public static final float SPOTCRIME_RADIUS = 0.25f;
 	public static final float SOCIAL_CRIMES_RADIUS = 2.0f;
 	

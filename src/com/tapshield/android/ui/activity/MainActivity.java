@@ -17,6 +17,7 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
@@ -102,14 +103,18 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 	private boolean mResuming = false;
 	private boolean mUserBelongsToAgency = false;
 	
-	private ConcurrentMap<Integer, Crime> mSpotCrimeRecords;
-	private ConcurrentMap<Crime, Marker> mSpotCrimeMarkers;
+	private ConcurrentMap<Integer, Crime> mSpotCrimeRecords = new ConcurrentHashMap<Integer, Crime>();
+	private ConcurrentMap<Crime, Marker> mSpotCrimeMarkers = new ConcurrentHashMap<Crime, Marker>();
 	private boolean mSpotCrimeError = false;
 	
-	private ConcurrentMap<String, SocialCrime> mSocialCrimesRecords;
-	private ConcurrentMap<SocialCrime, Marker> mSocialCrimesMarkers;
+	private ConcurrentMap<String, SocialCrime> mSocialCrimesRecords = new ConcurrentHashMap<String, SocialCrime>();
+	private ConcurrentMap<SocialCrime, Marker> mSocialCrimesMarkers = new ConcurrentHashMap<SocialCrime, Marker>();
+	
 	private boolean mSocialCrimesError = false;
 	
+	private Handler mCrimesHandler = new Handler();
+	private Runnable mSpotCrimesUpdater;
+	private Runnable mSocialCrimesUpdater;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -281,8 +286,27 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		//load all map-related except for Entourage, that will be loaded once map has loaded
 		loadMapSettings();
 		loadAgencyBoundaries();
-		loadNearbySpotCrime();
-		loadNearbySocialCrimes();
+		
+		//define runnables for periodic updates on crimes (to be started/stopped at onStart/onStop)
+		mSpotCrimesUpdater = new Runnable() {
+			
+			@Override
+			public void run() {
+				loadNearbySpotCrime();
+				mCrimesHandler.postDelayed(mSpotCrimesUpdater,
+						TapShieldApplication.SPOTCRIME_UPDATE_FREQUENCY_SECONDS * 1000);
+			}
+		};
+		
+		mSocialCrimesUpdater = new Runnable() {
+			
+			@Override
+			public void run() {
+				loadNearbySocialCrimes();
+				mCrimesHandler.postDelayed(mSocialCrimesUpdater,
+						TapShieldApplication.SOCIAL_CRIMES_UPDATE_FREQUENCY_SECONDS * 1000);
+			}
+		};
 	}
 	
 	@Override
@@ -354,11 +378,17 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		
 		mTracker.start();
 		mTracker.addLocationListener(this);
+		
+		mCrimesHandler.post(mSpotCrimesUpdater);
+		mCrimesHandler.post(mSocialCrimesUpdater);
 	}
 	
 	@Override
 	protected void onPause() {
 		super.onPause();
+
+		mCrimesHandler.removeCallbacks(mSpotCrimesUpdater);
+		mCrimesHandler.removeCallbacks(mSocialCrimesUpdater);
 		
 		mYank.removeListener(this);
 		
@@ -479,17 +509,14 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 	
 	@Override
 	public void onLocationChanged(Location location) {
+		//load crimes from this method only once (how? mUserLocation should be null just once)
+		boolean firstUpdate = mUserLocation == null;
 		mUserLocation = location;
 		drawUser();
-		
 
-		//check if the crime map structures are null, meaning location s needed before the requests
 		
-		if (mSpotCrimeRecords == null) {
+		if (firstUpdate) {
 			loadNearbySpotCrime();
-		}
-		
-		if (mSocialCrimesRecords == null) {
 			loadNearbySocialCrimes();
 		}
 	}
@@ -541,9 +568,6 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		if (mUserLocation == null || mSpotCrimeError) {
 			return;
 		}
-		
-		mSpotCrimeRecords = new ConcurrentHashMap<Integer, Crime>();
-		mSpotCrimeMarkers = new ConcurrentHashMap<Crime, Marker>();
 		
 		final long since = new DateTime()
 				.minusHours(TapShieldApplication.CRIMES_PERIOD_HOURS)
@@ -650,9 +674,6 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		if (mUserLocation == null || mSocialCrimesError) {
 			return;
 		}
-		
-		mSocialCrimesRecords = new ConcurrentHashMap<String, SocialCrime>();
-		mSocialCrimesMarkers = new ConcurrentHashMap<SocialCrime, Marker>();
 		
 		SocialReportingListener callback = new SocialReportingListener() {
 
