@@ -34,6 +34,7 @@ import com.tapshield.android.service.EntourageArrivalCheckService;
 import com.tapshield.android.ui.activity.AlertActivity;
 import com.tapshield.android.ui.activity.MainActivity;
 import com.tapshield.android.utils.ContactsRetriever.Contact;
+import com.tapshield.android.utils.UiUtils;
 
 
 public class EntourageManager implements EntourageListener {
@@ -243,19 +244,31 @@ public class EntourageManager implements EntourageListener {
 	
 	public void notifyUserMissedETA() {
 		
-		EmergencyManager manager = EmergencyManager.getInstance(mContext);
-		manager.startNow(EmergencyManager.TYPE_START_REQUESTED);
+		boolean orgPresent = JavelinClient.getInstance(mContext,
+				TapShieldApplication.JAVELIN_CONFIG).getUserManager().getUser().belongsToAgency();
+		
+		if (orgPresent) {
+		
+			EmergencyManager manager = EmergencyManager.getInstance(mContext);
+			manager.startNow(EmergencyManager.TYPE_START_REQUESTED);
+			
+			
+			Intent home = new Intent(mContext, MainActivity.class)
+					.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			
+			Intent alert = new Intent(mContext, AlertActivity.class)
+					.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	
+			Intent[] stack = new Intent[] {home, alert};
+			
+			mContext.startActivities(stack);
+		} else {
+			
+			String defaultEmergencyNumber = mContext.getString(R.string.ts_no_org_emergency_number);
+			UiUtils.MakePhoneCall(mContext, defaultEmergencyNumber);
+		}
 		
 		
-		Intent home = new Intent(mContext, MainActivity.class)
-				.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		
-		Intent alert = new Intent(mContext, AlertActivity.class)
-				.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-		Intent[] stack = new Intent[] {home, alert};
-		
-		mContext.startActivities(stack);
 	}
 	
 	private void syncMembers(final Contact... contacts) {
