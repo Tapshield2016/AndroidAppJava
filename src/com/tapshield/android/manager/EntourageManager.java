@@ -27,6 +27,7 @@ import com.tapshield.android.R;
 import com.tapshield.android.api.JavelinClient;
 import com.tapshield.android.api.JavelinEntourageManager;
 import com.tapshield.android.api.JavelinEntourageManager.EntourageListener;
+import com.tapshield.android.api.JavelinUtils;
 import com.tapshield.android.api.googledirections.model.Route;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.service.EntourageArrivalCheckService;
@@ -37,6 +38,12 @@ import com.tapshield.android.utils.ContactsRetriever.Contact;
 
 public class EntourageManager implements EntourageListener {
 
+	public static enum SyncStatus {
+		IDLE,
+		BUSY,
+		ERROR
+	}
+	
 	public static final String ACTION_ENTOURAGE_ARRIVAL_CHECK = "com.tapshield.android.action.ENTOURAGE_ARRIVAL_CHECK";
 	
 	private static final String PREFERENCES = "com.tapshield.android.preferences.entourage";
@@ -61,11 +68,9 @@ public class EntourageManager implements EntourageListener {
 	private long mStartAt;
 	private long mDuration;
 	private boolean mSet;
-	private int mMembersAdditionIndex = 0;
-	private int mMemberAdditionRetry = 0;
-	private int mMemberDeletionIndex = 0;
 	private List<Listener> mListeners;
 	private List<Integer> mMembersToDelete;
+	private SyncStatus mStatus = SyncStatus.IDLE;
 	
 	public static EntourageManager get(Context context) {
 		if (mIt == null) {
@@ -151,7 +156,8 @@ public class EntourageManager implements EntourageListener {
 				wantedDurationSeconds >= 0 ? wantedDurationSeconds : r.durationSeconds();
 
 		mMembersToDelete.clear();
-		addMembers(contacts);
+		syncMembers(contacts);
+		//addMembers(contacts);
 		//preset startAt here, setFlags() method will set the rest with this and the route
 		mStartAt = System.currentTimeMillis();
 		setFlags(r);
@@ -172,7 +178,6 @@ public class EntourageManager implements EntourageListener {
 			return;
 		}
 
-		removeMembers();
 		mSet = false;
 		mRoute = null;
 		mStartAt = 0;
@@ -197,6 +202,10 @@ public class EntourageManager implements EntourageListener {
 	}
 	
 	public void drawOnMap(GoogleMap m) {
+		if (!isSet()) {
+			return;
+		}
+		
 		Route r = getRoute();
 		
 		MarkerOptions destination = new MarkerOptions()
@@ -234,8 +243,6 @@ public class EntourageManager implements EntourageListener {
 	
 	public void notifyUserMissedETA() {
 		
-		Log.i("aaa", "notifyUserMissedETA");
-		
 		EmergencyManager manager = EmergencyManager.getInstance(mContext);
 		manager.startNow(EmergencyManager.TYPE_START_REQUESTED);
 		
@@ -251,56 +258,62 @@ public class EntourageManager implements EntourageListener {
 		mContext.startActivities(stack);
 	}
 	
-	public void setMembers(Contact... contacts) {}
-	
-	public void addMembers(Contact... contacts) {
-		
-		if (contacts == null || contacts.length == 0) {
-			return;
-		}
-		
-		mMembers.members().clear();
-		
-		for (Contact c : contacts) {
-			EntourageMember m = new EntourageMember();
-			m.name(c.name());
+	private void syncMembers(final Contact... contacts) {
+		final EntourageListener callback = new EntourageListener() {
 			
-			if (!c.email().isEmpty()) {
-				m.email(c.email().get(0));
+			@Override
+			public void onMembersMessage(boolean ok, String message, String errorIfNotOk) {}
+			
+			@Override
+			public void onMembersFetch(boolean ok, String message, String errorIfNotOk) {
+				
+				setStatus(SyncStatus.BUSY, null);
+				
+				//get all members
+				EntourageMembers members = null;
+				
+				try {
+					Gson gson = new Gson();
+					members = gson.fromJson(message, EntourageMembers.class);
+				} catch (Exception e) {
+					Log.e("aaa", "entourage error fetching members", e);
+					members = null;
+				}
+				
+				//remove all on remote to add fresh
+				
+				if (members != null) {
+					for (EntourageMember m : members.members) {
+						int id = JavelinUtils.extractLastIntOfString(m.url());
+						mEntourage.removeMemberWithId(id, this);
+					}
+				}
+				
+				//add new
+				for (Contact c : contacts) {
+					if (c.email() != null && !c.email().isEmpty()) {
+						mEntourage.addMemberWithEmail(c.name(), c.email().get(0), this);
+					} else {
+						mEntourage.addMemberWithPhone(c.name(), c.phone().get(0), this);
+					}
+				}
+				
+				setStatus(SyncStatus.IDLE, null);
 			}
 			
-			if (!c.phone().isEmpty()) {
-				m.phone(c.phone().get(0));
+			@Override
+			public void onMemberRemoved(boolean ok, int memberId, String errorIfNotOk) {
+				Log.i("aaa", "entourage removed member ok=" + ok + " m=" + (ok ? memberId : errorIfNotOk));
 			}
 			
-			mMembers.members.add(m);
-		}
+			@Override
+			public void onMemberAdded(boolean ok, int memberId, String errorIfNotOk) {
+				Log.i("aaa", "entourage added member ok=" + ok + " m=" + (ok ? memberId : errorIfNotOk));
+			}
+		};
 		
-		mMembersAdditionIndex = 0;
-		addMemberViaJavelin();
+		mEntourage.fetchMembers(callback);
 	}
-	
-	private void removeMembers() {
-		mMemberDeletionIndex = 0;
-		removeMemberViaJavelin();
-	}
-	
-	private void removeMemberViaJavelin() {
-		int id = mMembersToDelete.get(mMemberDeletionIndex);
-		mEntourage.removeMemberWithId(id, this);
-	}
-	
-	private void addMemberViaJavelin() {
-		EntourageMember first = mMembers.members().get(mMembersAdditionIndex);
-		
-		if (first.phone() != null) {
-			mEntourage.addMemberWithPhone(first.name(), first.phone(), this);
-		} else {
-			mEntourage.addMemberWithEmail(first.name(), first.email(), this);
-		}
-	}
-	
-	public void removeMember(Contact contact) {}
 	
 	public void messageMembers(String message) {
 		mEntourage.messageMembers(message, this);
@@ -308,52 +321,21 @@ public class EntourageManager implements EntourageListener {
 
 	@Override
 	public void onMemberAdded(boolean ok, int memberId, String errorIfNotOk) {
-		Log.i("aaa", "ent add ok=" + ok + " m=" + (ok ? memberId : errorIfNotOk)
-				+ " " + (mMembersAdditionIndex + 1) + "/" + mMembers.members().size());
-		if (ok) {
-			mMembersToDelete.add(memberId);
-			
-			mMemberAdditionRetry = 0;
-
-			boolean stillLeft = mMembersAdditionIndex + 1 < mMembers.members().size();
-			
-			if (stillLeft) {
-				mMembersAdditionIndex++;
-				addMemberViaJavelin();
-			}
-		} else {
-			if (mMemberAdditionRetry < 3) {
-				mMemberAdditionRetry++;
-				addMemberViaJavelin();
-			} else {
-				Log.i("aaa", "ent add retries exceeded (" + mMemberAdditionRetry + ")");
-			}
-		}
+		Log.i("aaa", "entourage added member ok=" + ok + " m=" + (ok ? memberId : errorIfNotOk));
 	}
 
 	@Override
 	public void onMemberRemoved(boolean ok, int memberId, String errorIfNotOk) {
-		if (ok) {
-			boolean stillLeft = mMemberDeletionIndex + 1 < mMembersToDelete.size();
-			if (stillLeft) {
-				mMemberDeletionIndex++;
-				removeMemberViaJavelin();
-			} else {
-				mMembersToDelete.clear();
-			}
-		} else {
-			removeMemberViaJavelin();
-		}
+		Log.i("aaa", "entourage removed member ok=" + ok + " m=" + (ok ? memberId : errorIfNotOk));
 	}
 
 	@Override
-	public void onMessage(boolean ok, String message, String errorIfNotOk) {
+	public void onMembersMessage(boolean ok, String message, String errorIfNotOk) {
 		Log.i("aaa", "ent message ok=" + ok + " m=" + (ok ? message : errorIfNotOk));
 	}
 	
-	//keep track of members after:
-	//Contact class must have a toJson() and fromJson() methods to serialize into preferences
-	//clear contacts on stop()
+	@Override
+	public void onMembersFetch(boolean ok, String message, String errorIfNotOk) {}
 	
 	public boolean hasTemporaryRoute() {
 		return mPreferences.contains(KEY_ROUTE_TEMP);
@@ -382,9 +364,20 @@ public class EntourageManager implements EntourageListener {
 		return r;
 	}
 	
+	private void setStatus(final SyncStatus newStatus, final String extra) {
+		if (newStatus != mStatus) {
+			mStatus = newStatus;
+			
+			for (Listener l : mListeners) {
+				l.onStatusChange(mStatus, extra);
+			}
+		}
+	}
+	
 	public void addListener(final Listener l) {
 		if (!mListeners.contains(l)) {
 			mListeners.add(l);
+			l.onStatusChange(mStatus, null);
 		}
 	}
 	
@@ -395,6 +388,7 @@ public class EntourageManager implements EntourageListener {
 	}
 	
 	public interface Listener {
+		void onStatusChange(SyncStatus status, String extra);
 		void onMessageSent(final boolean ok, final String message, final String errorIfNotOk);
 	}
 	

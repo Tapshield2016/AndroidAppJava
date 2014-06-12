@@ -1,7 +1,6 @@
 package com.tapshield.android.ui.activity;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.joda.time.Duration;
@@ -9,40 +8,36 @@ import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
 
 import android.app.ActionBar;
-import android.app.ListFragment;
 import android.os.Bundle;
-import android.util.SparseBooleanArray;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.GridView;
-import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.tapshield.android.R;
 import com.tapshield.android.api.googledirections.model.Route;
 import com.tapshield.android.manager.EntourageManager;
+import com.tapshield.android.manager.EntourageManager.SyncStatus;
 import com.tapshield.android.ui.adapter.ArrivalContactAdapter;
+import com.tapshield.android.ui.dialog.ContactPickerDialogFragment;
 import com.tapshield.android.ui.view.CircleSeekBar;
-import com.tapshield.android.utils.ContactsRetriever;
 import com.tapshield.android.utils.ContactsRetriever.Contact;
-import com.tapshield.android.utils.ContactsRetriever.ContactsRetrieverListener;
 import com.tapshield.android.utils.UiUtils;
 
 public class PickArrivalContacts extends BaseFragmentActivity
-		implements ContactsRetrieverListener, OnItemClickListener, OnSeekBarChangeListener {
+		implements OnItemClickListener, OnSeekBarChangeListener, EntourageManager.Listener {
 
 	private EntourageManager mEntourage;
 	private GridView mGrid;
 	private ArrivalContactAdapter mAdapter;
-	private ContactSelectionFragment mSelectionFragment;
-	private boolean mSelectionFragmentShown = false;
-	private List<Contact> mContacts = new ArrayList<Contact>();
+	private ContactPickerDialogFragment mContactPicker;
 	private List<Contact> mChosen = new ArrayList<Contact>();
 	
 	private CircleSeekBar mEtaKnob;
@@ -67,17 +62,22 @@ public class PickArrivalContacts extends BaseFragmentActivity
 		mBusy = (TextView) findViewById(R.id.pickarrivalcontacts_text_busy);
 		
 		mAdapter = new ArrivalContactAdapter(this, mChosen, R.layout.item_arrivalcontact);
+
+		mContactPicker = new ContactPickerDialogFragment();
+		mContactPicker.setListener(new ContactPickerDialogFragment.ContactPickerListener() {
+				
+			@Override
+			public void onContactsPick(List<Contact> contacts) {
+				mChosen.clear();
+				mChosen.addAll(contacts);
+				mAdapter.notifyDataSetChanged();
+			}
+		});
+		mContactPicker.show(this);
 		
 		mGrid = (GridView) findViewById(R.id.pickarrivalcontacts_grid);
 		mGrid.setAdapter(mAdapter);
 		mGrid.setOnItemClickListener(this);
-		
-		if (savedInstanceState != null) {
-			mSelectionFragment = (ContactSelectionFragment) getFragmentManager()
-					.findFragmentById(R.id.pickarrivalcontacts_container);
-			
-			mSelectionFragmentShown = mSelectionFragment != null;
-		}
 		
 		mRoute = mEntourage.isSet() ? mEntourage.getRoute() : mEntourage.getTemporaryRoute();
 		
@@ -96,27 +96,12 @@ public class PickArrivalContacts extends BaseFragmentActivity
 	@Override
 	protected void onResume() {
 		super.onResume();
-		mContacts.clear();
-		new ContactsRetriever(this, this).execute(
-				ContactsRetriever.TYPE_EMAIL |
-				ContactsRetriever.TYPE_PHONE |
-				ContactsRetriever.TYPE_PHOTO);
-		
 		mBusy.setVisibility(mEntourage.isSet() ? View.VISIBLE : View.GONE);
 	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		boolean shown = isSelectionFragmentShown();
-		
-		int menuResource = R.menu.start;
-		
-		if (shown) {
-			menuResource = R.menu.done;
-		} else if (mEntourage.isSet()) {
-			menuResource = R.menu.stop;
-		}
-		
+		int menuResource = mEntourage.isSet() ? R.menu.stop : R.menu.start;
 		getMenuInflater().inflate(menuResource, menu);
 		return true;
 	}
@@ -124,9 +109,6 @@ public class PickArrivalContacts extends BaseFragmentActivity
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.action_done:
-			addSelectedContacts();
-			return true;
 		case R.id.action_start:
 			startEntourage();
 			return true;
@@ -142,21 +124,14 @@ public class PickArrivalContacts extends BaseFragmentActivity
 	}
 	
 	@Override
-	public void onBackPressed() {
-		if (isSelectionFragmentShown()) {
-			addSelectedContacts();
-			hideSelectionFragment();
-			return;
-		}
-		
-		super.onBackPressed();
-	}
-	
-	@Override
 	public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 		if (position == 0) {
-			showSelectionFragment();
-			passContactsToSelectionFragment();
+			mContactPicker.show(this);
+		} else if (position > 0) {
+			Contact c = mAdapter.getItem(position);
+			mContactPicker.removeContact(this, c);
+			mChosen.remove(c);
+			mAdapter.notifyDataSetChanged();
 		}
 	}
 	
@@ -189,18 +164,6 @@ public class PickArrivalContacts extends BaseFragmentActivity
 		mEtaText.setText(formatted);
 	}
 	
-	@Override
-	public void onContactsRetrieval(List<Contact> contacts) {
-		if (isFinishing()) {
-			return;
-		}
-		
-		mContacts.clear();
-		mContacts.addAll(contacts);
-
-		passContactsToSelectionFragment();
-	}
-	
 	private void startEntourage() {
 		Contact[] chosenArray = new Contact[mChosen.size()];
 		
@@ -210,88 +173,21 @@ public class PickArrivalContacts extends BaseFragmentActivity
 
 		long etaSeconds = mEta/1000;
 		
+		Log.i("aaa", "Entourage route=" + mRoute);
+		
 		mEntourage.start(mRoute, etaSeconds, chosenArray);
 		UiUtils.startActivityNoStack(this, MainActivity.class);
 	}
-	
-	private void passContactsToSelectionFragment() {
-		int len = mContacts.size();
-		
-		if (len == 0 || !isSelectionFragmentShown() || getSelectionFragment().areItemsSet()) {
-			return;
-		}
-		
-		String[] names = new String[len];
-		
-		for (int i = 0; i < len; i++) {
-			names[i] = mContacts.get(i).name();
-		}
-		
-		getSelectionFragment().setItems(names);
-	}
-	
-	private boolean isSelectionFragmentShown() {
-		return mSelectionFragmentShown && mSelectionFragment != null;
-	}
-	
-	private ContactSelectionFragment getSelectionFragment() {
-		return mSelectionFragment;
-	}
-	
-	private void showSelectionFragment() {
 
-		if (isSelectionFragmentShown()) {
-			return;
-		}
-		
-		if (mSelectionFragment == null) {
-			mSelectionFragment = new ContactSelectionFragment();
-		}
-
-		getFragmentManager()
-				.beginTransaction()
-				.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
-				.add(R.id.pickarrivalcontacts_container, mSelectionFragment)
-				.commit();
-		
-		mSelectionFragmentShown = true;
-		
-		invalidateOptionsMenu();
+	@Override
+	public void onStatusChange(SyncStatus status, String extra) {
+		boolean idle = status.equals(SyncStatus.IDLE);
+		boolean busy = status.equals(SyncStatus.BUSY);
 	}
-	
-	private void hideSelectionFragment() {
-		if (!isSelectionFragmentShown()) {
-			return;
-		}
 
-		getFragmentManager()
-				.beginTransaction()
-				.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
-				.remove(getSelectionFragment())
-				.commit();
-
-		mSelectionFragmentShown = false;
+	@Override
+	public void onMessageSent(boolean ok, String message, String errorIfNotOk) {
 		
-		invalidateOptionsMenu();
-	}
-	
-	private void addSelectedContacts() {
-		SparseBooleanArray checked = getSelectionFragment().getCheckedPositions();
-		
-		hideSelectionFragment();
-		
-		mChosen.clear();
-		
-		if (checked != null) {
-			
-			for (int i = 0; i < checked.size(); i++) {
-				if (checked.valueAt(i)) {
-					mChosen.add(mContacts.get(checked.keyAt(i)));
-				}
-			}
-		}
-		
-		mAdapter.notifyDataSetChanged();
 	}
 	
 	/*
@@ -304,38 +200,4 @@ public class PickArrivalContacts extends BaseFragmentActivity
 		entourage.messageMembers("idk man", this);
 	}
 	*/
-	
-	public static class ContactSelectionFragment extends ListFragment {
-
-		private ListView list;
-		private String[] items;
-		private ArrayAdapter<String> adapter;
-		private boolean itemsSet = false;
-		
-		@Override
-		public void onActivityCreated(Bundle savedInstanceState) {
-			super.onActivityCreated(savedInstanceState);
-			getView().setBackgroundColor(getActivity().getResources().getColor(R.color.ts_gray_light));
-			list = getListView();
-			list.setFastScrollEnabled(true);
-			list.setFastScrollAlwaysVisible(true);
-			list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-		}
-		
-		public void setItems(String[] contactNames) {
-			items = Arrays.copyOf(contactNames, contactNames.length);
-			adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_multiple_choice, items);
-			setListAdapter(adapter);
-			adapter.notifyDataSetChanged();
-			itemsSet = true;
-		}
-		
-		public SparseBooleanArray getCheckedPositions() {
-			return list.getCheckedItemPositions();
-		}
-		
-		public boolean areItemsSet() {
-			return itemsSet;
-		}
-	}
 }
