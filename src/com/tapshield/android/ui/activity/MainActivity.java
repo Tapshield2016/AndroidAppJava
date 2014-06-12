@@ -518,10 +518,16 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 			return;
 		}
 
+		int solidColor = Color.parseColor("#00529b");
+		int fillColor = Color.argb(
+				51,
+				Color.red(solidColor),
+				Color.green(solidColor),
+				Color.blue(solidColor));
 		PolygonOptions polygonOptions = new PolygonOptions()
 				.strokeWidth(3)
-				.strokeColor(Color.parseColor("#FF6600FF"))
-				.fillColor(Color.parseColor("#336600FF"));
+				.strokeColor(solidColor)
+				.fillColor(fillColor);
 
 		for (Location l : user.agency.getBoundaries()) {
 			LatLng point = new LatLng(l.getLatitude(), l.getLongitude());
