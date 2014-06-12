@@ -8,9 +8,12 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.tapshield.android.R;
+import com.tapshield.android.api.JavelinClient;
+import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.service.YankService;
 import com.tapshield.android.ui.activity.AlertActivity;
 import com.tapshield.android.ui.activity.MainActivity;
+import com.tapshield.android.utils.UiUtils;
 
 public class YankManager {
 
@@ -150,31 +153,41 @@ public class YankManager {
 			return;
 		}
 		
-		//alert, start alert activity, and disable yank
-		long duration = (long) mContext
-				.getResources()
-				.getInteger(R.integer.timer_emergency_yank_millis);
-		EmergencyManager
-				.getInstance(mContext)
-				.start(duration, EmergencyManager.TYPE_HEADSET_UNPLUGGED);
+		boolean orgPresent = JavelinClient.getInstance(mContext,
+				TapShieldApplication.JAVELIN_CONFIG).getUserManager().getUser().belongsToAgency();
+		
+		if (orgPresent) {
 
-		/*
-		if no activity is shown when yank is triggered, then it could lead to this stack: [A]
-		A being alert, and then attempted to reposition main [M] and since there is any, would lead
-		to [A, M] and when finishing M, A should pop-up again.
-		
-		Set back stack to re-position M back to the top clearing the bottom.
-		*/
-		
-		Intent main = new Intent(mContext, MainActivity.class)
-				.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		
-		Intent alert = new Intent(mContext, AlertActivity.class)
-				.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		
-		Intent[] stack = new Intent[] {main, alert};
-		
-		mContext.startActivities(stack);
+			//alert, start alert activity, and disable yank
+			long duration = (long) mContext
+					.getResources()
+					.getInteger(R.integer.timer_emergency_yank_millis);
+			EmergencyManager
+					.getInstance(mContext)
+					.start(duration, EmergencyManager.TYPE_HEADSET_UNPLUGGED);
+
+			/*
+			if no activity is shown when yank is triggered, then it could lead to this stack: [A]
+			A being alert, and then attempted to reposition main [M] and since there is any, would lead
+			to [A, M] and when finishing M, A should pop-up again.
+	
+			Set back stack to re-position M back to the top clearing the bottom.
+			*/
+
+			Intent main = new Intent(mContext, MainActivity.class)
+					.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+			Intent alert = new Intent(mContext, AlertActivity.class)
+					.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+			Intent[] stack = new Intent[] {main, alert};
+
+			mContext.startActivities(stack);
+		} else {
+			
+			String defaultEmergencyNumber = mContext.getString(R.string.ts_no_org_emergency_number);
+			UiUtils.MakePhoneCall(mContext, defaultEmergencyNumber);
+		}
 		
 		setEnabled(false);
 	}
