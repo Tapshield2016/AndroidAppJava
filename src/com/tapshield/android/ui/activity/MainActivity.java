@@ -791,6 +791,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 			newActivity = new Intent(this, MassAlertsActivity.class);
 			break;
 		case NavigationFragment.NAV_ID_HOME:
+			break;
 		case NavigationFragment.NAV_ID_HELP:
 			newActivity = new Intent(this, WebHelpActivity.class);
 			break;
