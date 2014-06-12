@@ -324,7 +324,7 @@
     <string name="ts_misc_online_eula">http://www.tapshield.com/eula/</string>
     <string name="ts_misc_credits_spotcrime">Powered by SpotCrime.com</string>
     <string name="ts_misc_credits_socialcrimes">User-submitted</string>
-    <string name="ts_misc_feedback_email">hello@tapshield.com</string>
+    <string name="ts_misc_feedback_email">feedback@tapshield.com</string>
     <string name="ts_misc_feedback_subject">TapShield Android App Feedback</string>
 
     <!-- settings -->
