@@ -42,6 +42,25 @@ public class SocialReportingService extends Service implements SocialReportingLi
 	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+		
+		String type = null;
+		String description = null;
+		String locLat = null;
+		String locLon = null;
+
+		//check for required info: type and location
+		if (intent == null
+				|| (type = intent.getStringExtra(EXTRA_TYPE)) == null
+				|| (locLat = intent.getStringExtra(EXTRA_LOC_LAT)) == null
+				|| (locLon = intent.getStringExtra(EXTRA_LOC_LON)) == null) {
+			stopSelf();
+			return START_NOT_STICKY;
+		}
+		
+		if (description == null) {
+			description = new String();
+		}
+		
 		mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		mJavelinReporter = JavelinClient.getInstance(this, TapShieldApplication.JAVELIN_CONFIG)
 				.getSocialReportingManager();
@@ -57,7 +76,7 @@ public class SocialReportingService extends Service implements SocialReportingLi
 		Intent report = new Intent(this, ReportActivity.class)
 				.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		
-		if (intent != null && intent.getExtras() != null) {
+		if (intent.getExtras() != null) {
 			report.putExtras(intent.getExtras());
 		}
 		
@@ -86,10 +105,10 @@ public class SocialReportingService extends Service implements SocialReportingLi
 		}
 		
 		new ReportUploader(
-				intent.getStringExtra(EXTRA_TYPE),
-				intent.getStringExtra(EXTRA_DESCRIPTION),
-				intent.getStringExtra(EXTRA_LOC_LAT),
-				intent.getStringExtra(EXTRA_LOC_LON),
+				type,
+				description,
+				locLat,
+				locLon,
 				intent.getBooleanExtra(EXTRA_ANONYMOUS, false),
 				mediaUris)
 				.execute();
@@ -221,7 +240,7 @@ public class SocialReportingService extends Service implements SocialReportingLi
 	}
 	
 	@Override
-	public void onFetch(boolean ok, int code, SocialCrimes socialCrimes,String errorIfNotOk) {}
+	public void onFetch(boolean ok, int code, SocialCrimes socialCrimes, String errorIfNotOk) {}
 
 	@Override
 	public void onDetails(boolean ok, int code, SocialCrime socialCrime, String errorIfNotOk) {}
