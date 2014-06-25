@@ -20,6 +20,7 @@ import com.tapshield.android.api.JavelinUtils;
 import com.tapshield.android.api.model.SocialCrime;
 import com.tapshield.android.api.model.SocialCrime.SocialCrimes;
 import com.tapshield.android.app.TapShieldApplication;
+import com.tapshield.android.ui.activity.MainActivity;
 import com.tapshield.android.ui.activity.ReportActivity;
 import com.tapshield.android.utils.UiUtils;
 
@@ -75,6 +76,9 @@ public class SocialReportingService extends Service implements SocialReportingLi
 				.setContentTitle(getString(R.string.ts_reporting_media_notification_title))
 				.setContentText(getString(R.string.ts_reporting_media_notification_preparing_message));
 		
+		Intent home = new Intent(this, MainActivity.class)
+				.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		
 		Intent report = new Intent(this, ReportActivity.class)
 				.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		
@@ -82,9 +86,11 @@ public class SocialReportingService extends Service implements SocialReportingLi
 			report.putExtras(intent.getExtras());
 		}
 		
-		PendingIntent retryPendingIntent = PendingIntent.getActivity(this, 1, report,
-				PendingIntent.FLAG_UPDATE_CURRENT);
+		Intent[] intents = new Intent[]{home, report};
 		
+		PendingIntent retryPendingIntent = PendingIntent.getActivities(this, 1,
+				intents, PendingIntent.FLAG_UPDATE_CURRENT);
+
 		mNotificationError =
 				new NotificationCompat.Builder(this)
 				.setSmallIcon(R.drawable.ic_stat)
