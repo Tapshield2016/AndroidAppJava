@@ -25,31 +25,46 @@ public class GeoUtils {
 		}
 	    
 	    boolean inside = false;
-        int len = boundaries.size();
-	    Location a, b;
 	    
-	    for (int ia = 0; ia < len; ia++) {
-	    	//A last vertex? B = first. Else, B = vertex(A+1)
-	    	int ib = ia == len-1 ? 0 : ia + 1;
-	    	
-	        a = boundaries.get(ia);
-	        b = boundaries.get(ib);
-	    
-	        //check for same vertex being used for first and last
-	        if ((ia == len - 1) && (a.getLatitude() == b.getLatitude()) && (a.getLongitude() == b.getLongitude())) {
-	        	break;
-	        }
+	    //for (Geofence g : geofences) {
 	        
-	        boolean isCrossing =
-	        		(a.getLatitude() > location.getLatitude() && b.getLatitude() <= location.getLatitude())
-	        		|| (a.getLatitude() < location.getLatitude() && b.getLatitude() >= location.getLatitude());
-	        
-	        boolean isAhead = (a.getLongitude() > location.getLongitude() || b.getLongitude() > location.getLongitude());
-	        
-	        if ((isCrossing && isAhead)) {
-	            inside = !inside;
-	        }
-	    }
+	    	int len = boundaries.size();
+	    	//len = g.size(); //list of location objects within current geofence
+		    Location a, b;
+		    
+		    //check for current geofence
+		    for (int ia = 0; ia < len; ia++) {
+		    	//A last vertex? B = first. Else, B = vertex(A+1)
+		    	int ib = ia == len-1 ? 0 : ia + 1;
+		    	
+		        a = boundaries.get(ia);
+		        b = boundaries.get(ib);
+		    
+		        //check for same vertex being used for first and last
+		        if ((ia == len - 1) && (a.getLatitude() == b.getLatitude()) && (a.getLongitude() == b.getLongitude())) {
+		        	break;
+		        }
+		        
+		        boolean isCrossing =
+		        		(a.getLatitude() > location.getLatitude() && b.getLatitude() <= location.getLatitude())
+		        		|| (a.getLatitude() < location.getLatitude() && b.getLatitude() >= location.getLatitude());
+		        
+		        boolean isAhead = (a.getLongitude() > location.getLongitude() || b.getLongitude() > location.getLongitude());
+		        
+		        if ((isCrossing && isAhead)) {
+		            inside = !inside;
+		        }
+		    }
+		    
+		    //if inside one geofence (current one) break it and have the function return inside
+		    // which is true at this point
+		    
+		    /*
+		    if (inside) {
+		    	break;
+		    }
+		    */
+		//}
 	    return inside;
 	}
 	
@@ -61,21 +76,22 @@ public class GeoUtils {
 			Log.e("tapshield-location", "Error arg(s) null");
 			return min;
 		}
-		
-		//get a and b, if a is last vertex then b should be first (index 0)
-		for (int i = 0; i < list.size(); i++) {
-			Location a = list.get(i);
-			Location b = i == list.size() - 1 ? list.get(0) : list.get(i + 1);
-			
-			float d = minDistanceBetweenLocationAndEdge(location, a, b);
-			Log.d("tapshield-location", "Min distance between point and edge " + i + "/" + (list.size()-1));
-			Log.i("tapshield-location", " d=" + d + " [p=" + location.toString()
-					+ " a=" + a.toString() + " b=" + b.toString() + "]");
-			
-			if (d < min) {
-				min = d;
+		//for (Geofence g : geofences) {
+			//get a and b, if a is last vertex then b should be first (index 0)
+			for (int i = 0; i < list.size(); i++) {
+				Location a = list.get(i);
+				Location b = i == list.size() - 1 ? list.get(0) : list.get(i + 1);
+				
+				float d = minDistanceBetweenLocationAndEdge(location, a, b);
+				Log.d("tapshield-location", "Min distance between point and edge " + i + "/" + (list.size()-1));
+				Log.i("tapshield-location", " d=" + d + " [p=" + location.toString()
+						+ " a=" + a.toString() + " b=" + b.toString() + "]");
+				
+				if (d < min) {
+					min = d;
+				}
 			}
-		}
+		//}
 		
 		Log.d("tapshield-location", "Min to be returned=" + min);
 
