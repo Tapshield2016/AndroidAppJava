@@ -57,6 +57,8 @@ public class SocialReportingService extends Service implements SocialReportingLi
 			return START_NOT_STICKY;
 		}
 		
+		description = intent.getStringExtra(EXTRA_DESCRIPTION);
+		
 		if (description == null) {
 			description = new String();
 		}
