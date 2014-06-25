@@ -590,7 +590,8 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 				mSpotCrimeError = !ok;
 				
 				if (ok) {
-					if (results == null) {
+					
+					if (isFinishing() || results == null || mMap == null) {
 						return;
 					}
 
@@ -631,8 +632,6 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 							}
 						}
 					}
-				} else {
-					UiUtils.toastShort(MainActivity.this, "Error loading crimes:" + errorIfNotOk);
 				}
 			}
 
@@ -685,42 +684,42 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 					String errorIfNotOk) {
 
 				mSocialCrimesError = !ok;
-				if (ok) {
-					if (socialCrimes == null || socialCrimes.getSocialCrimes() == null) {
-						return;
+
+				if (isFinishing() || !ok || socialCrimes == null
+						|| socialCrimes.getSocialCrimes() == null || mMap == null) {
+					return;
+				}
+
+				DateTime limit = new DateTime()
+						.minusHours(TapShieldApplication.CRIMES_PERIOD_HOURS);
+
+				//add new ones (records and markers)
+				for (SocialCrime crime : socialCrimes.getSocialCrimes()) {
+					boolean old = crime.getDate().isBefore(limit);
+
+					//add non-duplicates and ones within the timeframe
+
+					if (!old && !mSocialCrimesRecords.containsKey(crime.getUrl())) {
+						mSocialCrimesRecords.put(crime.getUrl(), crime);;
+						mSocialCrimesMarkers.put(crime,
+								addSocialCrimeMarker(crime, crime.getDate()));
 					}
+				}
 
-					DateTime limit = new DateTime()
-							.minusHours(TapShieldApplication.CRIMES_PERIOD_HOURS);
+				//remove old ones (markers and records)
+				for (SocialCrime crime : mSocialCrimesRecords.values()) {
+					boolean old = crime.getDate().isBefore(limit);
 
-					//add new ones (records and markers)
-					for (SocialCrime crime : socialCrimes.getSocialCrimes()) {
-						boolean old = crime.getDate().isBefore(limit);
-
-						//add non-duplicates and ones within the timeframe
-						
-						if (!old && !mSocialCrimesRecords.containsKey(crime.getUrl())) {
-							mSocialCrimesRecords.put(crime.getUrl(), crime);;
-							mSocialCrimesMarkers.put(crime,
-									addSocialCrimeMarker(crime, crime.getDate()));
+					if (old) {
+						//remove stored marker
+						if (mSocialCrimesMarkers.containsKey(crime)) {
+							mSocialCrimesMarkers.get(crime).remove();
+							mSocialCrimesMarkers.remove(crime);
 						}
-					}
 
-					//remove old ones (markers and records)
-					for (SocialCrime crime : mSocialCrimesRecords.values()) {
-						boolean old = crime.getDate().isBefore(limit);
-
-						if (old) {
-							//remove stored marker
-							if (mSocialCrimesMarkers.containsKey(crime)) {
-								mSocialCrimesMarkers.get(crime).remove();
-								mSocialCrimesMarkers.remove(crime);
-							}
-
-							//remove stored record
-							if (mSocialCrimesRecords.containsKey(crime.getUrl())) {
-								mSocialCrimesRecords.remove(crime.getUrl());
-							}
+						//remove stored record
+						if (mSocialCrimesRecords.containsKey(crime.getUrl())) {
+							mSocialCrimesRecords.remove(crime.getUrl());
 						}
 					}
 				}
