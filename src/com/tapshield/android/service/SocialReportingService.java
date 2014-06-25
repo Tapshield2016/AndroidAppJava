@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.IBinder;
@@ -64,6 +65,8 @@ public class SocialReportingService extends Service implements SocialReportingLi
 			description = new String();
 		}
 		
+		final Resources res = SocialReportingService.this.getResources();
+		
 		mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		mJavelinReporter = JavelinClient.getInstance(this, TapShieldApplication.JAVELIN_CONFIG)
 				.getSocialReportingManager();
@@ -73,8 +76,8 @@ public class SocialReportingService extends Service implements SocialReportingLi
 				.setSmallIcon(R.drawable.ic_stat)
 				.setDefaults(Notification.DEFAULT_ALL)
 				.setOnlyAlertOnce(true)
-				.setContentTitle(getString(R.string.ts_reporting_media_notification_title))
-				.setContentText(getString(R.string.ts_reporting_media_notification_preparing_message));
+				.setContentTitle(res.getString(R.string.ts_reporting_media_notification_title))
+				.setContentText(res.getString(R.string.ts_reporting_media_notification_preparing_message));
 		
 		Intent home = new Intent(this, MainActivity.class)
 				.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -95,8 +98,8 @@ public class SocialReportingService extends Service implements SocialReportingLi
 				new NotificationCompat.Builder(this)
 				.setSmallIcon(R.drawable.ic_stat)
 				.setDefaults(Notification.DEFAULT_ALL)
-				.setContentTitle(getString(R.string.ts_reporting_media_notification_title))
-				.setContentText(getString(R.string.ts_reporting_media_notification_error_message))
+				.setContentTitle(res.getString(R.string.ts_reporting_media_notification_title))
+				.setContentText(res.getString(R.string.ts_reporting_media_notification_error_message))
 				.setContentIntent(retryPendingIntent)
 				.setAutoCancel(true)
 				.build();
@@ -120,7 +123,7 @@ public class SocialReportingService extends Service implements SocialReportingLi
 				intent.getBooleanExtra(EXTRA_ANONYMOUS, false),
 				mediaUris)
 				.execute();
-		return START_STICKY;
+		return START_REDELIVER_INTENT;
 	}
 	
 	@Override
@@ -238,6 +241,11 @@ public class SocialReportingService extends Service implements SocialReportingLi
 
 	@Override
 	public void onReport(boolean ok, int code, String errorIfNotOk) {
+		
+		if (mNotificationManager == null) {
+			return;
+		}
+		
 		if (ok) {
 			mNotificationManager.cancel(NOTIFICATION_UPLOAD_ID);
 			UiUtils.toastLong(SocialReportingService.this, "Report uploaded!");
@@ -245,6 +253,7 @@ public class SocialReportingService extends Service implements SocialReportingLi
 			Log.e("aaa", "onreport " + errorIfNotOk);
 			reportError();
 		}
+		stopSelf();
 	}
 	
 	@Override
@@ -254,6 +263,11 @@ public class SocialReportingService extends Service implements SocialReportingLi
 	public void onDetails(boolean ok, int code, SocialCrime socialCrime, String errorIfNotOk) {}
 	
 	private void reportError() {
+		
+		if (mNotificationError == null) {
+			return;
+		}
+		
 		mNotificationManager.cancel(NOTIFICATION_UPLOAD_ID);
 		mNotificationManager.notify(NOTIFICATION_ERROR_ID, mNotificationError);
 	}
