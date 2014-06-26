@@ -118,12 +118,16 @@ public class Notifier {
 		String title = mContext.getString(R.string.ts_notification_title_chat);
 		String content = count == 1 ? count + " message." : count + " messages.";
 
+		Intent chat = new Intent(mContext, ChatActivity.class);
+		PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 1, chat,
+				PendingIntent.FLAG_UPDATE_CURRENT);
+		
 		NotificationCompat.Builder builder = getCommonBuilder()
 				.setPriority(NotificationCompat.PRIORITY_MAX)
 				.setContentTitle(title)
 				.setContentText(content)
-				.setContentIntent(getPendingIntentWithBackStack(
-						MainActivity.class, AlertActivity.class, ChatActivity.class))
+				//.setContentIntent(getPendingIntentWithBackStack(MainActivity.class, AlertActivity.class, ChatActivity.class))
+				.setContentIntent(pendingIntent)
 				.setAutoCancel(true);
 
 		//set a preview of the single message (if just one)

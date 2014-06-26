@@ -86,7 +86,9 @@ public class AnimatedVerticalColorProgress extends View
 	}
 	
 	public void cancel() {
-		mAnimator.cancel();
+		if (mAnimator != null) {
+			mAnimator.cancel();
+		}
 	}
 	
 	public void end() {

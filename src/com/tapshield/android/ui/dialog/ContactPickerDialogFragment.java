@@ -110,7 +110,7 @@ public class ContactPickerDialogFragment extends DialogFragment
 		mContacts.addAll(contacts);
 		
 		mNames.clear();
-		for (int i = 0; i < 20; i++) {
+		for (int i = 0; i < mContacts.size(); i++) {
 			mNames.add(mContacts.get(i).name());
 		}
 
