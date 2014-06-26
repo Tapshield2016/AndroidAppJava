@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.IBinder;
@@ -20,6 +21,7 @@ import com.tapshield.android.api.JavelinUtils;
 import com.tapshield.android.api.model.SocialCrime;
 import com.tapshield.android.api.model.SocialCrime.SocialCrimes;
 import com.tapshield.android.app.TapShieldApplication;
+import com.tapshield.android.ui.activity.MainActivity;
 import com.tapshield.android.ui.activity.ReportActivity;
 import com.tapshield.android.utils.UiUtils;
 
@@ -42,6 +44,29 @@ public class SocialReportingService extends Service implements SocialReportingLi
 	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+		
+		String type = null;
+		String description = null;
+		String locLat = null;
+		String locLon = null;
+
+		//check for required info: type and location
+		if (intent == null
+				|| (type = intent.getStringExtra(EXTRA_TYPE)) == null
+				|| (locLat = intent.getStringExtra(EXTRA_LOC_LAT)) == null
+				|| (locLon = intent.getStringExtra(EXTRA_LOC_LON)) == null) {
+			stopSelf();
+			return START_NOT_STICKY;
+		}
+		
+		description = intent.getStringExtra(EXTRA_DESCRIPTION);
+		
+		if (description == null) {
+			description = new String();
+		}
+		
+		final Resources res = SocialReportingService.this.getResources();
+		
 		mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		mJavelinReporter = JavelinClient.getInstance(this, TapShieldApplication.JAVELIN_CONFIG)
 				.getSocialReportingManager();
@@ -51,25 +76,30 @@ public class SocialReportingService extends Service implements SocialReportingLi
 				.setSmallIcon(R.drawable.ic_stat)
 				.setDefaults(Notification.DEFAULT_ALL)
 				.setOnlyAlertOnce(true)
-				.setContentTitle(getString(R.string.ts_reporting_media_notification_title))
-				.setContentText(getString(R.string.ts_reporting_media_notification_preparing_message));
+				.setContentTitle(res.getString(R.string.ts_reporting_media_notification_title))
+				.setContentText(res.getString(R.string.ts_reporting_media_notification_preparing_message));
+		
+		Intent home = new Intent(this, MainActivity.class)
+				.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		
 		Intent report = new Intent(this, ReportActivity.class)
 				.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		
-		if (intent != null && intent.getExtras() != null) {
+		if (intent.getExtras() != null) {
 			report.putExtras(intent.getExtras());
 		}
 		
-		PendingIntent retryPendingIntent = PendingIntent.getActivity(this, 1, report,
-				PendingIntent.FLAG_UPDATE_CURRENT);
+		Intent[] intents = new Intent[]{home, report};
 		
+		PendingIntent retryPendingIntent = PendingIntent.getActivities(this, 1,
+				intents, PendingIntent.FLAG_UPDATE_CURRENT);
+
 		mNotificationError =
 				new NotificationCompat.Builder(this)
 				.setSmallIcon(R.drawable.ic_stat)
 				.setDefaults(Notification.DEFAULT_ALL)
-				.setContentTitle(getString(R.string.ts_reporting_media_notification_title))
-				.setContentText(getString(R.string.ts_reporting_media_notification_error_message))
+				.setContentTitle(res.getString(R.string.ts_reporting_media_notification_title))
+				.setContentText(res.getString(R.string.ts_reporting_media_notification_error_message))
 				.setContentIntent(retryPendingIntent)
 				.setAutoCancel(true)
 				.build();
@@ -86,14 +116,14 @@ public class SocialReportingService extends Service implements SocialReportingLi
 		}
 		
 		new ReportUploader(
-				intent.getStringExtra(EXTRA_TYPE),
-				intent.getStringExtra(EXTRA_DESCRIPTION),
-				intent.getStringExtra(EXTRA_LOC_LAT),
-				intent.getStringExtra(EXTRA_LOC_LON),
+				type,
+				description,
+				locLat,
+				locLon,
 				intent.getBooleanExtra(EXTRA_ANONYMOUS, false),
 				mediaUris)
 				.execute();
-		return START_STICKY;
+		return START_REDELIVER_INTENT;
 	}
 	
 	@Override
@@ -211,6 +241,11 @@ public class SocialReportingService extends Service implements SocialReportingLi
 
 	@Override
 	public void onReport(boolean ok, int code, String errorIfNotOk) {
+		
+		if (mNotificationManager == null) {
+			return;
+		}
+		
 		if (ok) {
 			mNotificationManager.cancel(NOTIFICATION_UPLOAD_ID);
 			UiUtils.toastLong(SocialReportingService.this, "Report uploaded!");
@@ -218,15 +253,21 @@ public class SocialReportingService extends Service implements SocialReportingLi
 			Log.e("aaa", "onreport " + errorIfNotOk);
 			reportError();
 		}
+		stopSelf();
 	}
 	
 	@Override
-	public void onFetch(boolean ok, int code, SocialCrimes socialCrimes,String errorIfNotOk) {}
+	public void onFetch(boolean ok, int code, SocialCrimes socialCrimes, String errorIfNotOk) {}
 
 	@Override
 	public void onDetails(boolean ok, int code, SocialCrime socialCrime, String errorIfNotOk) {}
 	
 	private void reportError() {
+		
+		if (mNotificationError == null) {
+			return;
+		}
+		
 		mNotificationManager.cancel(NOTIFICATION_UPLOAD_ID);
 		mNotificationManager.notify(NOTIFICATION_ERROR_ID, mNotificationError);
 	}
