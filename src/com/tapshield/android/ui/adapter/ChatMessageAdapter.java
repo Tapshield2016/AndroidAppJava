@@ -94,20 +94,18 @@ public class ChatMessageAdapter extends BaseAdapter {
 		ChatMessage chatMessage = getItem(position);
 		boolean userCreated = mUserId.equals(chatMessage.senderId);
 		
-		if (convertView == null) {
-			if (mLayoutInflater == null) {
-				mLayoutInflater = LayoutInflater.from(mContext);
-				
-				//if still null, retrieve via context
-				if (mLayoutInflater == null) {
-					mLayoutInflater = (LayoutInflater)
-							mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				}
-			}
+		if (mLayoutInflater == null) {
+			mLayoutInflater = LayoutInflater.from(mContext);
 			
-			int layoutToInflate = userCreated ? mResourceUser : mResourceOther;
-			convertView = mLayoutInflater.inflate(layoutToInflate, null);
+			//if still null, retrieve via context
+			if (mLayoutInflater == null) {
+				mLayoutInflater = (LayoutInflater)
+						mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			}
 		}
+		
+		int layoutToInflate = userCreated ? mResourceUser : mResourceOther;
+		convertView = mLayoutInflater.inflate(layoutToInflate, null);
 
 		TextView message = (TextView) convertView.findViewById(R.id.item_chat_message_text_message);
 		TextView status = (TextView) convertView.findViewById(R.id.item_chat_message_text_status);
