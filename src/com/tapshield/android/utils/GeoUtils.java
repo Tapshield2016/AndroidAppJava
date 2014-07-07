@@ -6,11 +6,70 @@ import android.content.Context;
 import android.location.Location;
 import android.util.Log;
 
+import com.tapshield.android.api.model.Agency;
+import com.tapshield.android.api.model.DispatchCenter;
+import com.tapshield.android.api.model.Region;
+
 public class GeoUtils {
 
 	public static boolean isThereOverhang(Context c, Location l, List<Location> boundaries) {
 		float minDistance = minDistanceBetweenLocationAndEdges(l, boundaries);
 		return l.getAccuracy() > (2 * minDistance);
+	}
+	
+	public static boolean isLocationInsideAgency(Context c, final Location location,
+			Agency agency) {
+		
+		//assuming agency is not null
+		if (!agency.hasRegions()) {
+			return true;
+		}
+		
+		if (location == null) {
+			return false;
+		}
+		
+		for (Region r : agency.regions) {
+			if (r.hasBoundaries()) {
+				List<Location> boundaries = Agency.getBoundariesOfRegion(r);
+				Log.i("javelin", "checking for location inside region " + r.mUrl);
+				if (isLocationInsideBoundaries(c, location, boundaries)) {
+					
+					Log.i("javelin", "inside region " + r.mUrl);
+					
+					//check for open dispatch centers in current region before returning true
+					//check being done here for the time being
+					if (agency.dispatchCenters != null) {
+						
+						//primary dispatch centers
+						for (DispatchCenter dc : agency.dispatchCenters) {
+							if (dc.mUrl.trim().equals(r.mPrimaryDispatchCenterUrl) && dc.isOpen()) {
+								Log.i("javelin", "primary dispatcher " + dc.mUrl  + " is open");
+								return true;
+							}
+						}
+						
+						//secondary dispatch centers
+						for (DispatchCenter dc : agency.dispatchCenters) {
+							if (dc.mUrl.trim().equals(r.mSecondaryDispatchCenterUrl) && dc.isOpen()) {
+								Log.i("javelin", "secondary dispatcher " + dc.mUrl  + " is open");
+								return true;
+							}
+						}
+						
+						//fallback dispatch centers
+						for (DispatchCenter dc : agency.dispatchCenters) {
+							if (dc.mUrl.trim().equals(r.mFallbackDispatchCenterUrl) && dc.isOpen()) {
+								Log.i("javelin", "fallback dispatcher " + dc.mUrl  + " is open");
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		return false;
 	}
 	
 	public static boolean isLocationInsideBoundaries(Context c, final Location location,
@@ -66,6 +125,22 @@ public class GeoUtils {
 		    */
 		//}
 	    return inside;
+	}
+	
+	public static float minDistanceBetweenLocationAndRegions(final Location location,
+			List<Region> regions) {
+
+		float min = Float.MAX_VALUE;
+		
+		if (location == null || regions == null) {
+			return min;
+		}
+		
+		for (Region r : regions) {
+			min = minDistanceBetweenLocationAndEdges(location, Agency.getBoundariesOfRegion(r));
+		}
+		
+		return min;
 	}
 	
 	public static float minDistanceBetweenLocationAndEdges(final Location location, List<Location> list) {
