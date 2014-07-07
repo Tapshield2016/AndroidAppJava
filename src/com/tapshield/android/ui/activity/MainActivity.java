@@ -570,7 +570,8 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		}
 		
 		final long since = new DateTime()
-				.minusHours(TapShieldApplication.CRIMES_PERIOD_HOURS)
+				//.minusHours(TapShieldApplication.CRIMES_PERIOD_HOURS)
+				.minusDays(14)
 				.getMillis();
 		
 		SpotCrimeRequest request =
@@ -596,7 +597,8 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 					}
 
 					DateTime limit = new DateTime()
-							.minusHours(TapShieldApplication.CRIMES_PERIOD_HOURS);
+							//.minusHours(TapShieldApplication.CRIMES_PERIOD_HOURS);
+							.minusDays(14);
 					
 					//add new ones (records and markers)
 					for (Crime crime : results) {
@@ -691,7 +693,8 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 				}
 
 				DateTime limit = new DateTime()
-						.minusHours(TapShieldApplication.CRIMES_PERIOD_HOURS);
+						//.minusHours(TapShieldApplication.CRIMES_PERIOD_HOURS);
+						.minusDays(14);
 
 				//add new ones (records and markers)
 				for (SocialCrime crime : socialCrimes.getSocialCrimes()) {
@@ -861,7 +864,10 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		float opacityMin = TapShieldApplication.CRIMES_MARKER_OPACITY_MINIMUM;
 		float opacityRange = 1.0f - opacityMin;
 		int timeRangeHours = TapShieldApplication.CRIMES_PERIOD_HOURS;
-		long timeMax = new DateTime().minusHours(timeRangeHours).getMillis();
+		long timeMax = new DateTime()
+				//.minusHours(timeRangeHours)
+				.minusDays(14)
+				.getMillis();
 		long timeRange = new DateTime().getMillis() - timeMax;
 		float timeRangeRatio = (float) (((double) (atMillis - timeMax)) / (double) timeRange);
 		float opacityRangeRatio = opacityRange * timeRangeRatio;
