@@ -17,6 +17,7 @@ import com.google.android.gms.location.LocationListener;
 import com.tapshield.android.R;
 import com.tapshield.android.api.JavelinAlertManager;
 import com.tapshield.android.api.JavelinClient;
+import com.tapshield.android.api.model.Agency;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.location.LocationTracker;
 import com.tapshield.android.manager.TwilioManager.OnStatusChangeListener;
@@ -61,6 +62,7 @@ public class EmergencyManager implements LocationListener, OnStatusChangeListene
 	private JavelinAlertManager.OnDispatcherAlertedListener mDispatcherAlertedListener;
 	private LocationTracker mTracker;
 	private Location mLatestLocation;
+	private Agency mAgency;
 	
 	private int mType, mAlertIdUpdaterRetries = 0, mTwilioRetries = 0, mTwilioMaxRetries;
 	private long mScheduledAt;
@@ -171,7 +173,8 @@ public class EmergencyManager implements LocationListener, OnStatusChangeListene
 	
 		mJavelinAlert.setOnDispatcherAlertedListener(mDispatcherAlertedListener);
 		
-		mAgencyBoundaries = mJavelin.getUserManager().getUser().agency.getBoundaries();
+		mAgency = mJavelin.getUserManager().getUser().agency;
+		mAgencyBoundaries = mAgency.getBoundaries();
 		
 		startTracker();
 		HardwareUtils.vibrateStop(mContext);
@@ -349,15 +352,36 @@ public class EmergencyManager implements LocationListener, OnStatusChangeListene
 		boolean established = mJavelinAlert.isEstablished();
 
 		//time and location-related flags
-		float distanceToBoundaries =
-				GeoUtils.minDistanceBetweenLocationAndEdges(mLatestLocation, mAgencyBoundaries);
 		float cutoff = mContext.getResources().getInteger(R.integer.location_cutoff_meters);
 		float goodAccuracyMinimum = 
 				mContext.getResources().getInteger(R.integer.location_accuracy_good_minimum_meters);
 		
 		boolean timeAcceptable = true;
-		boolean inside = GeoUtils.isLocationInsideBoundaries(mContext, mLatestLocation,
-				mAgencyBoundaries);
+		boolean inside = false;
+		float distanceToBoundaries = Float.MAX_VALUE;
+		
+		if (mAgency == null && mJavelin.getUserManager().getUser().belongsToAgency()) {
+			mAgency = mJavelin.getUserManager().getUser().agency;
+		}
+		
+		//multiple geofence (via regions), otherwise, classic (simple/single geofence)
+		if (mAgency.hasRegions()) {
+			Log.i("javelin", "agency has regions, complex check");
+			//* for the time being, time variable is also calculated via
+			//  isLocationInsideRegions() method just below to do so with dispatch center
+			//  of found region. Thus, time variable will stay true, and inside will go to false
+			//  if no center is available *
+			inside = GeoUtils.isLocationInsideAgency(mContext, mLatestLocation, mAgency);
+			distanceToBoundaries = GeoUtils.minDistanceBetweenLocationAndRegions(mLatestLocation,
+					mAgency.regions);
+		} else {
+			Log.i("javelin", "agency has no regions, simple check");
+			inside = GeoUtils.isLocationInsideBoundaries(mContext, mLatestLocation,
+					mAgencyBoundaries);
+			distanceToBoundaries =
+					GeoUtils.minDistanceBetweenLocationAndEdges(mLatestLocation, mAgencyBoundaries);
+		}
+		
 		boolean thereIsOverhang = mLatestLocation.getAccuracy() > distanceToBoundaries;
 		boolean goodAccuracy = mLatestLocation.getAccuracy() <= goodAccuracyMinimum;
 		boolean insideForCutoff = (distanceToBoundaries <= cutoff && goodAccuracy) || (distanceToBoundaries > cutoff);
