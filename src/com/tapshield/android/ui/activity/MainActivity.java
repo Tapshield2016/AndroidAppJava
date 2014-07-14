@@ -539,29 +539,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 			return;
 		}
 
-		User user = userManager.getUser();
-
-		if (user.agency == null || !user.agency.hasBoundaries()) {
-			return;
-		}
-
-		int solidColor = Color.parseColor("#00529b");
-		int fillColor = Color.argb(
-				51,
-				Color.red(solidColor),
-				Color.green(solidColor),
-				Color.blue(solidColor));
-		PolygonOptions polygonOptions = new PolygonOptions()
-				.strokeWidth(3)
-				.strokeColor(solidColor)
-				.fillColor(fillColor);
-
-		for (Location l : user.agency.getBoundaries()) {
-			LatLng point = new LatLng(l.getLatitude(), l.getLongitude());
-			polygonOptions.add(point);
-		}
-		
-		mMap.addPolygon(polygonOptions);
+		MapUtils.displayAgencyBoundaries(MainActivity.this, mMap, userManager.getUser().agency);
 	}
 	
 	private void loadNearbySpotCrime() {
