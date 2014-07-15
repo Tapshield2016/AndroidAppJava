@@ -11,8 +11,11 @@ import org.joda.time.DateTime;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.location.Location;
@@ -36,6 +39,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -94,6 +98,9 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 	private LocationTracker mTracker;
 	private YankManager mYank;
 	private EntourageManager mEntourageManager;
+	
+	private GroundOverlay[] mLogoOverlays;
+	private BroadcastReceiver mLogoUpdatedReceiver;
 	
 	private AlertDialog mYankDialog;
 	private AlertDialog mDisconnectedDialog;
@@ -223,6 +230,19 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		mTracker = LocationTracker.getInstance(this);
 		mYank = YankManager.get(this);
 		mEntourageManager = EntourageManager.get(this);
+
+		mLogoUpdatedReceiver = new BroadcastReceiver() {
+			
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				if (mLogoOverlays != null) {
+					for (GroundOverlay overlay : mLogoOverlays) {
+						overlay.remove();
+					}
+				}
+				loadAgencyLogo();
+			}
+		};
 		
 		mYankDialog = getYankDialog();
 		
@@ -286,6 +306,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		//load all map-related except for Entourage, that will be loaded once map has loaded
 		loadMapSettings();
 		loadAgencyBoundaries();
+		loadAgencyLogo();
 		
 		//define runnables for periodic updates on crimes (to be started/stopped at onStart/onStop)
 		mSpotCrimesUpdater = new Runnable() {
@@ -330,6 +351,9 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 	@Override
 	protected void onResume() {
 		super.onResume();
+		
+		IntentFilter filter = new IntentFilter(JavelinUserManager.ACTION_AGENCY_LOGOS_UPDATED);
+		registerReceiver(mLogoUpdatedReceiver, filter);
 		
 		mYank.setListener(this);
 		
@@ -403,6 +427,8 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		if (!EmergencyManager.getInstance(this).isRunning()) {
 			mTracker.stop();
 		}
+		
+		unregisterReceiver(mLogoUpdatedReceiver);
 	}
 
 	@Override
@@ -532,14 +558,23 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 	}
 	
 	private void loadAgencyBoundaries() {
-
 		JavelinUserManager userManager = mJavelin.getUserManager();
 
 		if (!userManager.isPresent()) {
 			return;
 		}
-
+		
 		MapUtils.displayAgencyBoundaries(MainActivity.this, mMap, userManager.getUser().agency);
+	}
+	
+	private void loadAgencyLogo() {
+		JavelinUserManager userManager = mJavelin.getUserManager();
+
+		if (!userManager.isPresent()) {
+			return;
+		}
+		
+		mLogoOverlays = MapUtils.displayAgencyLogo(this, mMap);
 	}
 	
 	private void loadNearbySpotCrime() {
