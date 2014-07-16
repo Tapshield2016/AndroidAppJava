@@ -26,6 +26,7 @@ public class TickerTextSwitcher extends TextSwitcher implements ViewFactory {
 	
 	public TickerTextSwitcher(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		setVisibility(View.INVISIBLE);
 		mMessages = new ArrayList<String>();
 		mIndex = -1;
 		mRunning = false;
