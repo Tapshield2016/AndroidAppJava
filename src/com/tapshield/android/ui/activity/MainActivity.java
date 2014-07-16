@@ -64,6 +64,9 @@ import com.tapshield.android.ui.adapter.NavigationListAdapter.NavigationItem;
 import com.tapshield.android.ui.fragment.NavigationFragment;
 import com.tapshield.android.ui.fragment.NavigationFragment.OnNavigationItemClickListener;
 import com.tapshield.android.ui.view.CircleButton;
+import com.tapshield.android.ui.view.TickerTextSwitcher;
+import com.tapshield.android.utils.ConnectivityMonitor;
+import com.tapshield.android.utils.ConnectivityMonitor.ConnectivityMonitorListener;
 import com.tapshield.android.utils.DateTimeUtils;
 import com.tapshield.android.utils.LocalTermConditionAgreement;
 import com.tapshield.android.utils.MapUtils;
@@ -88,12 +91,15 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 	private CircleButton mEmergency;
 	private CircleButton mChat;
 	private CircleButton mReport;
+	private TickerTextSwitcher mConnectionTicker;
 	
 	private EmergencyManager mEmergencyManager;
 	private JavelinClient mJavelin;
 	private LocationTracker mTracker;
 	private YankManager mYank;
 	private EntourageManager mEntourageManager;
+	private ConnectivityMonitor mConnectionMonitor;
+	private ConnectivityMonitorListener mConnectionMonitorListener;
 	
 	private AlertDialog mYankDialog;
 	private AlertDialog mDisconnectedDialog;
@@ -217,12 +223,34 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		mEmergency = (CircleButton) findViewById(R.id.main_circlebutton_alert);
 		mChat = (CircleButton) findViewById(R.id.main_circlebutton_chat);
 		mReport = (CircleButton) findViewById(R.id.main_circlebutton_report);
+		mConnectionTicker = (TickerTextSwitcher) findViewById(R.id.main_ticker);
 		
 		mEmergencyManager = EmergencyManager.getInstance(this);
 		mJavelin = JavelinClient.getInstance(this, TapShieldApplication.JAVELIN_CONFIG);
 		mTracker = LocationTracker.getInstance(this);
 		mYank = YankManager.get(this);
 		mEntourageManager = EntourageManager.get(this);
+		mConnectionMonitor = ConnectivityMonitor.getInstance(this);
+		mConnectionMonitorListener = new ConnectivityMonitorListener() {
+			
+			@Override
+			public void onChanged(boolean connected, int reason, String systemReason) {
+				mConnectionTicker.clearText();
+				if (!connected) {
+					mConnectionTicker.addText("No Internet Connection");
+					if (reason == ConnectivityMonitor.REASON_UNKNOWN && systemReason != null) {
+						mConnectionTicker.addText(String.format("(%s)", systemReason));
+					} else if (reason == ConnectivityMonitor.REASON_RADIO_OFF) {
+						mConnectionTicker.addText("Phone Service Unavailable");
+					} else if (reason == ConnectivityMonitor.REASON_DATA_DISABLED) {
+						mConnectionTicker.addText("Mobile Data Disabled");
+					}
+				}
+			}
+		};
+		
+		mConnectionTicker.set(3000);
+		mConnectionTicker.setBackgroundColor(getResources().getColor(R.color.ts_alert_red));
 		
 		mYankDialog = getYankDialog();
 		
@@ -331,6 +359,8 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 	protected void onResume() {
 		super.onResume();
 		
+		mConnectionMonitor.addListener(mConnectionMonitorListener);
+		
 		mYank.setListener(this);
 		
 		JavelinUserManager userManager = mJavelin.getUserManager();
@@ -387,6 +417,8 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 	protected void onPause() {
 		super.onPause();
 
+		mConnectionMonitor.removeListener(mConnectionMonitorListener);
+		
 		mCrimesHandler.removeCallbacks(mSpotCrimesUpdater);
 		mCrimesHandler.removeCallbacks(mSocialCrimesUpdater);
 		
