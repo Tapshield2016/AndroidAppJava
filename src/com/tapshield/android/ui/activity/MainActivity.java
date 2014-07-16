@@ -297,6 +297,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 					}
 				}
 			});
+			
 			mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
 				
 				@Override
@@ -306,6 +307,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 					}
 				}
 			});
+			
 			mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
 				
 				@Override
@@ -313,6 +315,10 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 					loadOnEntourage();
 				}
 			});
+		} else {
+			UiUtils.toastLong(this,
+					"There's a problem with Google Maps. Please try accessing the app again.");
+			finish();
 		}
 	}
 	
