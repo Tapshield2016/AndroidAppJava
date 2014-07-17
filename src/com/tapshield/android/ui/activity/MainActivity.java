@@ -265,11 +265,6 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 			}
 		});
 		
-		//load all map-related except for Entourage, that will be loaded once map has loaded
-		loadMapSettings();
-		loadAgencyBoundaries();
-		loadAgencyLogo();
-		
 		//define runnables for periodic updates on crimes (to be started/stopped at onStart/onStop)
 		mSpotCrimesUpdater = new Runnable() {
 			
@@ -304,6 +299,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 			//load all map-related except for Entourage, that will be loaded once map has loaded
 			loadMapSettings();
 			loadAgencyBoundaries();
+			loadAgencyLogo();
 			
 			mMap.setInfoWindowAdapter(new CrimeInfoWindowAdapter(this));
 			mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
