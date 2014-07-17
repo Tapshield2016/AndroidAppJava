@@ -282,11 +282,13 @@ public class PickRouteActivity extends BaseFragmentActivity
 	public void onDirectionsRetrieval(boolean ok, GoogleDirectionsResponse response) {
 		mGettingRoutesDialog.dismiss();
 		
-		if (ok) {
+		if (ok && response.ok()) {
 			mSelectedRoute = 0;
 			mRoutes = response.routes();
 			mPagerAdapter.setRoutes(mRoutes);
 			onPageSelected(0);
+		} else {
+			UiUtils.toastShort(this, response.status());
 		}
 	}
 	
