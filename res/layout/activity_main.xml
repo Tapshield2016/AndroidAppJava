@@ -46,6 +46,14 @@
             android:scaleType="fitCenter"
             android:background="@drawable/ts_background_card"/>
         
+        <!-- have the automatictextswitcher widget show above top buttons -->
+        <com.tapshield.android.ui.view.TickerTextSwitcher
+            android:id="@+id/main_ticker"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/activity_main_circlebutton_margin"
+            android:inAnimation="@anim/slide_in_up"
+            android:outAnimation="@anim/slide_out_up"/>
+        
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
