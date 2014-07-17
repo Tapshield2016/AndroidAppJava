@@ -31,6 +31,7 @@ import com.tapshield.android.api.JavelinUtils;
 import com.tapshield.android.api.googledirections.model.Route;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.service.EntourageArrivalCheckService;
+import com.tapshield.android.service.EntourageTtsTimeNotificationService;
 import com.tapshield.android.ui.activity.AlertActivity;
 import com.tapshield.android.ui.activity.MainActivity;
 import com.tapshield.android.utils.ContactsRetriever.Contact;
@@ -56,10 +57,19 @@ public class EntourageManager implements EntourageListener {
 	
 	private static final String KEY_ROUTE_TEMP = "com.tapshield.android.preferences.key.route_temp";
 
+	private static final String TTS_MESSAGE_SUFFIX_SECONDS = " seconds remaining.";
+	private static final String TTS_MESSAGE_SUFFIX_MINUTE = "minute remaining.";
+	private static final String TTS_MESSAGE_SUFFIX_MINUTES = " minutes remaining.";
+	
+	private static final String TTS_MESSAGE_SECONDS_TEN = "10" + TTS_MESSAGE_SUFFIX_SECONDS;
+	private static final String TTS_MESSAGE_SECONDS_THIRTY = "30" + TTS_MESSAGE_SUFFIX_SECONDS;
+	private static final String TTS_MESSAGE_MINUTES_ONE = "1" + TTS_MESSAGE_SUFFIX_MINUTE;
+	private static final String TTS_MESSAGE_MINUTES_FIVE = "5" + TTS_MESSAGE_SUFFIX_MINUTES;
+	
 	private static final float ARRIVE_BUFFER_FACTOR = 0.0f;
 	
 	private static EntourageManager mIt = null;
-	
+
 	private Context mContext;
 	private SharedPreferences mPreferences;
 	private JavelinEntourageManager mEntourage;
@@ -125,21 +135,78 @@ public class EntourageManager implements EntourageListener {
 		editor.apply();
 	}
 	
-	private void scheduleAlertIn(long inMillseconds) {
+	private void scheduleAlertIn(long inMilliseconds) {
 		mAlarmManager.set(
 				AlarmManager.ELAPSED_REALTIME_WAKEUP,
-				SystemClock.elapsedRealtime() + inMillseconds,
+				SystemClock.elapsedRealtime() + inMilliseconds,
 				getPendingIntent());
+		scheduleNotifications(inMilliseconds);
 	}
 	
 	private void unscheduledAlert() {
 		mAlarmManager.cancel(getPendingIntent());
+		unscheduleNotifications();
 	}
 	
 	private PendingIntent getPendingIntent() {
 		Intent receiver = new Intent(ACTION_ENTOURAGE_ARRIVAL_CHECK);
-		PendingIntent operation = PendingIntent.getBroadcast(mContext, 1, receiver, 0);
-		return operation;
+		return PendingIntent.getBroadcast(mContext, 1, receiver, 0);
+	}
+	
+	private void scheduleNotifications(long inMilliseconds) {
+		int alarmType = AlarmManager.ELAPSED_REALTIME_WAKEUP;
+		
+		long now = SystemClock.elapsedRealtime();
+		int inSeconds = (int) (inMilliseconds/1000d);
+		
+		Log.i("bbb", "inSeconds=" + inSeconds);
+		
+		long at;
+		
+		if (inSeconds > 10) {
+			at = now + (inMilliseconds-(10*1000));
+			
+			Log.i("bbb", "now=" + now + " 10 secs notif at=" + at + " diff=" + (at-now));
+			
+			mAlarmManager.set(
+					alarmType,
+					at,
+					getTtsNotificationPendingIntent(10, TTS_MESSAGE_SECONDS_TEN));
+		}
+		
+		if (inSeconds > 30) {
+			mAlarmManager.set(
+					alarmType,
+					now + (inMilliseconds - (30*1000)),
+					getTtsNotificationPendingIntent(30, TTS_MESSAGE_SECONDS_THIRTY));
+		}
+		
+		if (inSeconds > 60) {
+			mAlarmManager.set(
+					alarmType,
+					now + (inMilliseconds - (60*1000)),
+					getTtsNotificationPendingIntent(60, TTS_MESSAGE_MINUTES_ONE));
+		}
+		
+		if (inSeconds > (60 * 5)) {
+			mAlarmManager.set(
+					alarmType,
+					now + (inMilliseconds - (5*60*1000)),
+					getTtsNotificationPendingIntent(60*5, TTS_MESSAGE_MINUTES_FIVE));
+		}
+	}
+	
+	private void unscheduleNotifications() {
+		mAlarmManager.cancel(getTtsNotificationPendingIntent(10, TTS_MESSAGE_SECONDS_TEN));
+		mAlarmManager.cancel(getTtsNotificationPendingIntent(30, TTS_MESSAGE_SECONDS_THIRTY));
+		mAlarmManager.cancel(getTtsNotificationPendingIntent(60, TTS_MESSAGE_MINUTES_ONE));
+		mAlarmManager.cancel(getTtsNotificationPendingIntent(60*5, TTS_MESSAGE_MINUTES_FIVE));
+	}
+	
+	private PendingIntent getTtsNotificationPendingIntent(final int requestCode, final String message) {
+		Intent ttsNotifService = new Intent(mContext, EntourageTtsTimeNotificationService.class);
+		ttsNotifService.putExtra(EntourageTtsTimeNotificationService.EXTRA_MESSAGE, message);
+		return PendingIntent.getService(mContext, requestCode, ttsNotifService, 0);
 	}
 	
 	public void start(Route r, Contact... contacts) {
@@ -182,6 +249,7 @@ public class EntourageManager implements EntourageListener {
 		mSet = false;
 		mRoute = null;
 		mStartAt = 0;
+		EntourageTtsTimeNotificationService.dismissNotifications(mContext);
 		unscheduledAlert();
 		save();
 	}
