@@ -95,8 +95,10 @@ public class WelcomeActivity extends BaseFragmentActivity {
 		boolean lastFragment = mPager.getCurrentItem() == mPagerAdapter.getCount() - 1;
 		
 		if (lastFragment) {
+			
 			LoginFragment lf = (LoginFragment) mPagerAdapter.getLastFragment();
-			boolean alreadyHandled = lf.onBackPressed();
+			boolean alreadyHandled = lf == null ? false : lf.onBackPressed();
+
 			if (alreadyHandled) {
 				return;
 			}

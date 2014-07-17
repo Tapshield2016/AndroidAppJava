@@ -169,6 +169,8 @@ public class EmailConfirmationFragment extends BaseFragment
 	@Override
 	public void onVerificationEmailRequest(boolean successful, Throwable e) {
 		String message = successful ? "Email sent" : "Retry again in a few";
-		UiUtils.toastShort(getActivity(), message);
+		try {
+			UiUtils.toastShort(getActivity(), message);
+		} catch (Exception e1) {}
 	}
 }
