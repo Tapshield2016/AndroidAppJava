@@ -20,7 +20,7 @@ import com.tapshield.android.manager.EntourageManager.SyncStatus;
 public class EntourageArrivalCheckService extends Service implements LocationListener, Listener {
 
 	private static final float ACCURACY_MINIMUM = 200f;
-	private static final float DISTANCE_MINIMUM_FOR_ALERT = 200f;
+	private static final float DISTANCE_MINIMUM_FOR_ALERT = 75f;
 	private boolean mCheckRunning = false;
 	private int mSuccessfulMessages;
 	private int mNumMessages;
