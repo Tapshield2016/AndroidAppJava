@@ -151,72 +151,6 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 		
 		mDrawer = (FrameLayout) findViewById(R.id.main_drawer);
-		mMap = ((SupportMapFragment) getSupportFragmentManager()
-				.findFragmentById(R.id.main_fragment_map)).getMap();
-		
-		if (mMap != null) {
-			mMap.setInfoWindowAdapter(new CrimeInfoWindowAdapter(this));
-			mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-				
-				@Override
-				public void onInfoWindowClick(Marker marker) {
-					if (marker == null) {
-						return;
-					}
-					
-					boolean found = false;
-					Intent details = new Intent(MainActivity.this, ReportDetailsActivity.class);
-					
-					//iterate through the records until a matching marker is found
-					Iterator<Crime> spotCrimeIter = mSpotCrimeMarkers.keySet().iterator();
-					while (spotCrimeIter != null && spotCrimeIter.hasNext()) {
-						Crime c = spotCrimeIter.next();
-						if (marker.equals(mSpotCrimeMarkers.get(c))) {
-							found = true;
-							details.putExtra(ReportDetailsActivity.EXTRA_REPORT_TYPE,
-									ReportDetailsActivity.TYPE_SPOTCRIME);
-							details.putExtra(ReportDetailsActivity.EXTRA_REPORT_ID, c.getId());
-							break;
-						}
-					}
-					
-					//iterate through records if not found yet
-					if (!found) {
-						Iterator<SocialCrime> socialCrimesIter = mSocialCrimesMarkers.keySet().iterator();
-						while (socialCrimesIter != null && socialCrimesIter.hasNext()) {
-							SocialCrime sc = socialCrimesIter.next();
-							if (marker.equals(mSocialCrimesMarkers.get(sc))) {
-								found = true;
-								details.putExtra(ReportDetailsActivity.EXTRA_REPORT_TYPE,
-										ReportDetailsActivity.TYPE_SOCIALCRIME);
-								details.putExtra(ReportDetailsActivity.EXTRA_REPORT_ID, sc.getUrl());
-								break;
-							}
-						}
-					}
-					
-					if (found) {
-						startActivity(details);
-					}
-				}
-			});
-			mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-				
-				@Override
-				public void onCameraChange(CameraPosition position) {
-					if (mUserScrollingMap && mTrackUser) {
-						mTrackUser = false;
-					}
-				}
-			});
-			mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
-				
-				@Override
-				public void onMapLoaded() {
-					loadOnEntourage();
-				}
-			});
-		}
 		
 		mEntourage = (ImageButton) findViewById(R.id.main_imagebutton_entourage);
 		mLocateMe = (ImageButton) findViewById(R.id.main_imagebutton_locateuser);
@@ -311,10 +245,6 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 			}
 		});
 
-		//load all map-related except for Entourage, that will be loaded once map has loaded
-		loadMapSettings();
-		loadAgencyBoundaries();
-		
 		//define runnables for periodic updates on crimes (to be started/stopped at onStart/onStop)
 		mSpotCrimesUpdater = new Runnable() {
 			
@@ -341,6 +271,83 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
 		mDrawerToggle.syncState();
+		
+		mMap = ((SupportMapFragment) getSupportFragmentManager()
+				.findFragmentById(R.id.main_fragment_map)).getMap();
+		
+		if (mMap != null) {
+			//load all map-related except for Entourage, that will be loaded once map has loaded
+			loadMapSettings();
+			loadAgencyBoundaries();
+			
+			mMap.setInfoWindowAdapter(new CrimeInfoWindowAdapter(this));
+			mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+				
+				@Override
+				public void onInfoWindowClick(Marker marker) {
+					if (marker == null) {
+						return;
+					}
+					
+					boolean found = false;
+					Intent details = new Intent(MainActivity.this, ReportDetailsActivity.class);
+					
+					//iterate through the records until a matching marker is found
+					Iterator<Crime> spotCrimeIter = mSpotCrimeMarkers.keySet().iterator();
+					while (spotCrimeIter != null && spotCrimeIter.hasNext()) {
+						Crime c = spotCrimeIter.next();
+						if (marker.equals(mSpotCrimeMarkers.get(c))) {
+							found = true;
+							details.putExtra(ReportDetailsActivity.EXTRA_REPORT_TYPE,
+									ReportDetailsActivity.TYPE_SPOTCRIME);
+							details.putExtra(ReportDetailsActivity.EXTRA_REPORT_ID, c.getId());
+							break;
+						}
+					}
+					
+					//iterate through records if not found yet
+					if (!found) {
+						Iterator<SocialCrime> socialCrimesIter = mSocialCrimesMarkers.keySet().iterator();
+						while (socialCrimesIter != null && socialCrimesIter.hasNext()) {
+							SocialCrime sc = socialCrimesIter.next();
+							if (marker.equals(mSocialCrimesMarkers.get(sc))) {
+								found = true;
+								details.putExtra(ReportDetailsActivity.EXTRA_REPORT_TYPE,
+										ReportDetailsActivity.TYPE_SOCIALCRIME);
+								details.putExtra(ReportDetailsActivity.EXTRA_REPORT_ID, sc.getUrl());
+								break;
+							}
+						}
+					}
+					
+					if (found) {
+						startActivity(details);
+					}
+				}
+			});
+			
+			mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+				
+				@Override
+				public void onCameraChange(CameraPosition position) {
+					if (mUserScrollingMap && mTrackUser) {
+						mTrackUser = false;
+					}
+				}
+			});
+			
+			mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+				
+				@Override
+				public void onMapLoaded() {
+					loadOnEntourage();
+				}
+			});
+		} else {
+			UiUtils.toastLong(this,
+					"There's a problem with Google Maps. Please try accessing the app again.");
+			finish();
+		}
 	}
 	
 	@Override
