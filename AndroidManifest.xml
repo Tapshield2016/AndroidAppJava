@@ -200,6 +200,9 @@
         <service
             android:name="com.tapshield.android.service.SocialReportingService"
             android:exported="false" />
+        <service
+            android:name="com.tapshield.android.service.EntourageTtsTimeNotificationService"
+            android:exported="false"/>
 
         <!-- BROADCAST RECEIVERS -->
         <receiver
