@@ -11,8 +11,11 @@ import org.joda.time.DateTime;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.location.Location;
@@ -36,6 +39,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -64,6 +68,9 @@ import com.tapshield.android.ui.adapter.NavigationListAdapter.NavigationItem;
 import com.tapshield.android.ui.fragment.NavigationFragment;
 import com.tapshield.android.ui.fragment.NavigationFragment.OnNavigationItemClickListener;
 import com.tapshield.android.ui.view.CircleButton;
+import com.tapshield.android.ui.view.TickerTextSwitcher;
+import com.tapshield.android.utils.ConnectivityMonitor;
+import com.tapshield.android.utils.ConnectivityMonitor.ConnectivityMonitorListener;
 import com.tapshield.android.utils.DateTimeUtils;
 import com.tapshield.android.utils.LocalTermConditionAgreement;
 import com.tapshield.android.utils.MapUtils;
@@ -88,12 +95,18 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 	private CircleButton mEmergency;
 	private CircleButton mChat;
 	private CircleButton mReport;
+	private TickerTextSwitcher mConnectionTicker;
 	
 	private EmergencyManager mEmergencyManager;
 	private JavelinClient mJavelin;
 	private LocationTracker mTracker;
 	private YankManager mYank;
 	private EntourageManager mEntourageManager;
+	private ConnectivityMonitor mConnectionMonitor;
+	private ConnectivityMonitorListener mConnectionMonitorListener;
+	
+	private GroundOverlay[] mLogoOverlays;
+	private BroadcastReceiver mLogoUpdatedReceiver;
 	
 	private AlertDialog mYankDialog;
 	private AlertDialog mDisconnectedDialog;
@@ -145,84 +158,53 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 		
 		mDrawer = (FrameLayout) findViewById(R.id.main_drawer);
-		mMap = ((SupportMapFragment) getSupportFragmentManager()
-				.findFragmentById(R.id.main_fragment_map)).getMap();
-		
-		if (mMap != null) {
-			mMap.setInfoWindowAdapter(new CrimeInfoWindowAdapter(this));
-			mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-				
-				@Override
-				public void onInfoWindowClick(Marker marker) {
-					if (marker == null) {
-						return;
-					}
-					
-					boolean found = false;
-					Intent details = new Intent(MainActivity.this, ReportDetailsActivity.class);
-					
-					//iterate through the records until a matching marker is found
-					Iterator<Crime> spotCrimeIter = mSpotCrimeMarkers.keySet().iterator();
-					while (spotCrimeIter != null && spotCrimeIter.hasNext()) {
-						Crime c = spotCrimeIter.next();
-						if (marker.equals(mSpotCrimeMarkers.get(c))) {
-							found = true;
-							details.putExtra(ReportDetailsActivity.EXTRA_REPORT_TYPE,
-									ReportDetailsActivity.TYPE_SPOTCRIME);
-							details.putExtra(ReportDetailsActivity.EXTRA_REPORT_ID, c.getId());
-							break;
-						}
-					}
-					
-					//iterate through records if not found yet
-					if (!found) {
-						Iterator<SocialCrime> socialCrimesIter = mSocialCrimesMarkers.keySet().iterator();
-						while (socialCrimesIter != null && socialCrimesIter.hasNext()) {
-							SocialCrime sc = socialCrimesIter.next();
-							if (marker.equals(mSocialCrimesMarkers.get(sc))) {
-								found = true;
-								details.putExtra(ReportDetailsActivity.EXTRA_REPORT_TYPE,
-										ReportDetailsActivity.TYPE_SOCIALCRIME);
-								details.putExtra(ReportDetailsActivity.EXTRA_REPORT_ID, sc.getUrl());
-								break;
-							}
-						}
-					}
-					
-					if (found) {
-						startActivity(details);
-					}
-				}
-			});
-			mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-				
-				@Override
-				public void onCameraChange(CameraPosition position) {
-					if (mUserScrollingMap && mTrackUser) {
-						mTrackUser = false;
-					}
-				}
-			});
-			mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
-				
-				@Override
-				public void onMapLoaded() {
-					loadOnEntourage();
-				}
-			});
-		}
 		
 		mEntourage = (ImageButton) findViewById(R.id.main_imagebutton_entourage);
 		mLocateMe = (ImageButton) findViewById(R.id.main_imagebutton_locateuser);
 		mEmergency = (CircleButton) findViewById(R.id.main_circlebutton_alert);
 		mChat = (CircleButton) findViewById(R.id.main_circlebutton_chat);
 		mReport = (CircleButton) findViewById(R.id.main_circlebutton_report);
+		mConnectionTicker = (TickerTextSwitcher) findViewById(R.id.main_ticker);
 		
 		mEmergencyManager = EmergencyManager.getInstance(this);
 		mJavelin = JavelinClient.getInstance(this, TapShieldApplication.JAVELIN_CONFIG);
 		mTracker = LocationTracker.getInstance(this);
 		mYank = YankManager.get(this);
 		mEntourageManager = EntourageManager.get(this);
+		mConnectionMonitor = ConnectivityMonitor.getInstance(this);
+		mConnectionMonitorListener = new ConnectivityMonitorListener() {
+			
+			@Override
+			public void onChanged(boolean connected, int reason, String systemReason) {
+				mConnectionTicker.clearText();
+				if (!connected) {
+					mConnectionTicker.addText("No Internet Connection");
+					if (reason == ConnectivityMonitor.REASON_UNKNOWN && systemReason != null) {
+						mConnectionTicker.addText(String.format("(%s)", systemReason));
+					} else if (reason == ConnectivityMonitor.REASON_RADIO_OFF) {
+						mConnectionTicker.addText("Phone Service Unavailable");
+					} else if (reason == ConnectivityMonitor.REASON_DATA_DISABLED) {
+						mConnectionTicker.addText("Mobile Data Disabled");
+					}
+				}
+			}
+		};
+		
+		mConnectionTicker.set(3000);
+		mConnectionTicker.setBackgroundColor(getResources().getColor(R.color.ts_alert_red));
+		
+		mLogoUpdatedReceiver = new BroadcastReceiver() {
+			
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				if (mLogoOverlays != null) {
+					for (GroundOverlay overlay : mLogoOverlays) {
+						overlay.remove();
+					}
+				}
+				loadAgencyLogo();
+			}
+		};
 		
 		mYankDialog = getYankDialog();
 		
@@ -282,10 +264,6 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 				startActivity(reporting);
 			}
 		});
-
-		//load all map-related except for Entourage, that will be loaded once map has loaded
-		loadMapSettings();
-		loadAgencyBoundaries();
 		
 		//define runnables for periodic updates on crimes (to be started/stopped at onStart/onStop)
 		mSpotCrimesUpdater = new Runnable() {
@@ -313,6 +291,84 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
 		mDrawerToggle.syncState();
+		
+		mMap = ((SupportMapFragment) getSupportFragmentManager()
+				.findFragmentById(R.id.main_fragment_map)).getMap();
+		
+		if (mMap != null) {
+			//load all map-related except for Entourage, that will be loaded once map has loaded
+			loadMapSettings();
+			loadAgencyBoundaries();
+			loadAgencyLogo();
+			
+			mMap.setInfoWindowAdapter(new CrimeInfoWindowAdapter(this));
+			mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+				
+				@Override
+				public void onInfoWindowClick(Marker marker) {
+					if (marker == null) {
+						return;
+					}
+					
+					boolean found = false;
+					Intent details = new Intent(MainActivity.this, ReportDetailsActivity.class);
+					
+					//iterate through the records until a matching marker is found
+					Iterator<Crime> spotCrimeIter = mSpotCrimeMarkers.keySet().iterator();
+					while (spotCrimeIter != null && spotCrimeIter.hasNext()) {
+						Crime c = spotCrimeIter.next();
+						if (marker.equals(mSpotCrimeMarkers.get(c))) {
+							found = true;
+							details.putExtra(ReportDetailsActivity.EXTRA_REPORT_TYPE,
+									ReportDetailsActivity.TYPE_SPOTCRIME);
+							details.putExtra(ReportDetailsActivity.EXTRA_REPORT_ID, c.getId());
+							break;
+						}
+					}
+					
+					//iterate through records if not found yet
+					if (!found) {
+						Iterator<SocialCrime> socialCrimesIter = mSocialCrimesMarkers.keySet().iterator();
+						while (socialCrimesIter != null && socialCrimesIter.hasNext()) {
+							SocialCrime sc = socialCrimesIter.next();
+							if (marker.equals(mSocialCrimesMarkers.get(sc))) {
+								found = true;
+								details.putExtra(ReportDetailsActivity.EXTRA_REPORT_TYPE,
+										ReportDetailsActivity.TYPE_SOCIALCRIME);
+								details.putExtra(ReportDetailsActivity.EXTRA_REPORT_ID, sc.getUrl());
+								break;
+							}
+						}
+					}
+					
+					if (found) {
+						startActivity(details);
+					}
+				}
+			});
+			
+			mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+				
+				@Override
+				public void onCameraChange(CameraPosition position) {
+					if (mUserScrollingMap && mTrackUser) {
+						mTrackUser = false;
+					}
+				}
+			});
+			
+			mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+				
+				@Override
+				public void onMapLoaded() {
+					loadOnEntourage();
+				}
+			});
+		} else {
+			UiUtils.toastLong(this,
+					"There's a problem with Google Maps. Please try accessing the app again.");
+			finish();
+		}
 	}
 	
 	@Override
@@ -330,6 +386,11 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 	@Override
 	protected void onResume() {
 		super.onResume();
+		
+		mConnectionMonitor.addListener(mConnectionMonitorListener);
+		
+		IntentFilter filter = new IntentFilter(JavelinUserManager.ACTION_AGENCY_LOGOS_UPDATED);
+		registerReceiver(mLogoUpdatedReceiver, filter);
 		
 		mYank.setListener(this);
 		
@@ -387,6 +448,8 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 	protected void onPause() {
 		super.onPause();
 
+		mConnectionMonitor.removeListener(mConnectionMonitorListener);
+		
 		mCrimesHandler.removeCallbacks(mSpotCrimesUpdater);
 		mCrimesHandler.removeCallbacks(mSocialCrimesUpdater);
 		
@@ -403,6 +466,8 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		if (!EmergencyManager.getInstance(this).isRunning()) {
 			mTracker.stop();
 		}
+		
+		unregisterReceiver(mLogoUpdatedReceiver);
 	}
 
 	@Override
@@ -532,36 +597,23 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 	}
 	
 	private void loadAgencyBoundaries() {
-
 		JavelinUserManager userManager = mJavelin.getUserManager();
 
 		if (!userManager.isPresent()) {
 			return;
 		}
+		
+		MapUtils.displayAgencyBoundaries(MainActivity.this, mMap, userManager.getUser().agency);
+	}
+	
+	private void loadAgencyLogo() {
+		JavelinUserManager userManager = mJavelin.getUserManager();
 
-		User user = userManager.getUser();
-
-		if (user.agency == null || !user.agency.hasBoundaries()) {
+		if (!userManager.isPresent()) {
 			return;
 		}
-
-		int solidColor = Color.parseColor("#00529b");
-		int fillColor = Color.argb(
-				51,
-				Color.red(solidColor),
-				Color.green(solidColor),
-				Color.blue(solidColor));
-		PolygonOptions polygonOptions = new PolygonOptions()
-				.strokeWidth(3)
-				.strokeColor(solidColor)
-				.fillColor(fillColor);
-
-		for (Location l : user.agency.getBoundaries()) {
-			LatLng point = new LatLng(l.getLatitude(), l.getLongitude());
-			polygonOptions.add(point);
-		}
 		
-		mMap.addPolygon(polygonOptions);
+		mLogoOverlays = MapUtils.displayAgencyLogo(this, mMap);
 	}
 	
 	private void loadNearbySpotCrime() {

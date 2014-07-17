@@ -21,4 +21,8 @@ public class GoogleDirectionsResponse {
 	public boolean ok() {
 		return mStatus.equals(STATUS_OK);
 	}
+	
+	public String status() {
+		return mStatus;
+	}
 }
