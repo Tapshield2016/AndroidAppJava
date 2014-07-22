@@ -71,16 +71,6 @@
 	            android:columnWidth="@dimen/ts_entourage_pickarrivalcontacts_image"
 	            android:stretchMode="columnWidth"/>
 	        
-	        <TextView
-	            android:id="@+id/pickarrivalcontacts_text_busy"
-	            android:layout_width="match_parent"
-	            android:layout_height="match_parent"
-	            android:gravity="center"
-	            android:text="Entourage is running."
-	            android:textColor="@color/ts_gray_light"
-	            android:textSize="@dimen/ts_common_text_m"
-	            android:background="#88000000"
-	            android:clickable="true"/>
 	    </FrameLayout>
     </LinearLayout>
     
@@ -88,4 +78,15 @@
         android:id="@+id/pickarrivalcontacts_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+    
+    <TextView
+		android:id="@+id/pickarrivalcontacts_text_busy"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:gravity="center"
+		android:text="Entourage is running."
+		android:textColor="@color/ts_gray_light"
+		android:textSize="@dimen/ts_common_text_m"
+		android:background="#aa000000"
+		android:clickable="true"/>
 </RelativeLayout>
