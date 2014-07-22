@@ -1,16 +1,19 @@
 package com.tapshield.android.ui.activity;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.tapshield.android.R;
+import com.tapshield.android.utils.UiUtils;
 
 public class AboutActivity extends BaseFragmentActivity implements OnClickListener {
 	
@@ -24,6 +27,9 @@ public class AboutActivity extends BaseFragmentActivity implements OnClickListen
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_about);
 		
+		ActionBar actionBar = getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		
 		mEula = (Button) findViewById(R.id.about_button_eula);
 		mThirdParty = (Button) findViewById(R.id.about_button_thirdparty);
 		mVersion = (TextView) findViewById(R.id.about_text_version);
@@ -33,6 +39,18 @@ public class AboutActivity extends BaseFragmentActivity implements OnClickListen
 		
 		mEula.setOnClickListener(this);
 		mThirdParty.setOnClickListener(this);
+	}
+	
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			UiUtils.startActivityNoStack(this, MainActivity.class);
+			return true;
+		}
+		
+		return false;
 	}
 
 	@Override
