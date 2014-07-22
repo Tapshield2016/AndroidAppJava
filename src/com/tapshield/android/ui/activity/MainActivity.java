@@ -293,10 +293,16 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 				.findFragmentById(R.id.main_fragment_map)).getMap();
 		
 		if (mMap != null) {
-			//load all map-related except for Entourage, that will be loaded once map has loaded
+			//load all map-related except for entourage
 			loadMapSettings();
 			loadAgencyBoundaries();
 			loadAgencyLogo();
+			
+			//if entourage is not set, load entourage and related views
+			//meaning there is no need to wait until map loads to display routes, lock drawer, etc
+			if (!mEntourageManager.isSet()) {
+				loadEntourage();
+			}
 			
 			mMap.setInfoWindowAdapter(new CrimeInfoWindowAdapter(this));
 			mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
@@ -358,7 +364,10 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 				
 				@Override
 				public void onMapLoaded() {
-					loadOnEntourage();
+					//just load if set, if not, the rest has been loaded at onPostCreate()
+					if (mEntourageManager.isSet()) {
+						loadEntourage();
+					}
 				}
 			});
 		} else {
@@ -520,7 +529,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		}
 	}
 	
-	private void loadOnEntourage() {
+	private void loadEntourage() {
 
 		boolean entourageSet = mEntourageManager.isSet();
 		
