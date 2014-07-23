@@ -1,6 +1,5 @@
 package com.tapshield.android.ui.activity;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,7 +16,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
@@ -37,13 +35,11 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolygonOptions;
+import com.google.maps.android.clustering.ClusterManager;
 import com.tapshield.android.R;
 import com.tapshield.android.api.JavelinClient;
 import com.tapshield.android.api.JavelinSocialReportingManager;
@@ -52,7 +48,6 @@ import com.tapshield.android.api.JavelinUserManager;
 import com.tapshield.android.api.googledirections.model.Route;
 import com.tapshield.android.api.model.SocialCrime;
 import com.tapshield.android.api.model.SocialCrime.SocialCrimes;
-import com.tapshield.android.api.model.User;
 import com.tapshield.android.api.spotcrime.SpotCrimeClient;
 import com.tapshield.android.api.spotcrime.SpotCrimeClient.SpotCrimeCallback;
 import com.tapshield.android.api.spotcrime.SpotCrimeRequest;
@@ -63,6 +58,8 @@ import com.tapshield.android.manager.EmergencyManager;
 import com.tapshield.android.manager.EntourageManager;
 import com.tapshield.android.manager.YankManager;
 import com.tapshield.android.manager.YankManager.YankListener;
+import com.tapshield.android.model.CrimeClusterItem;
+import com.tapshield.android.model.SocialCrimeClusterItem;
 import com.tapshield.android.ui.adapter.CrimeInfoWindowAdapter;
 import com.tapshield.android.ui.adapter.NavigationListAdapter.NavigationItem;
 import com.tapshield.android.ui.fragment.NavigationFragment;
@@ -71,10 +68,10 @@ import com.tapshield.android.ui.view.CircleButton;
 import com.tapshield.android.ui.view.TickerTextSwitcher;
 import com.tapshield.android.utils.ConnectivityMonitor;
 import com.tapshield.android.utils.ConnectivityMonitor.ConnectivityMonitorListener;
-import com.tapshield.android.utils.DateTimeUtils;
+import com.tapshield.android.utils.CrimeMapClusterRenderer;
 import com.tapshield.android.utils.LocalTermConditionAgreement;
 import com.tapshield.android.utils.MapUtils;
-import com.tapshield.android.utils.SocialReportsUtils;
+import com.tapshield.android.utils.SocialCrimeMapClusterRenderer;
 import com.tapshield.android.utils.SpotCrimeUtils;
 import com.tapshield.android.utils.UiUtils;
 
@@ -105,24 +102,23 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 	private ConnectivityMonitor mConnectionMonitor;
 	private ConnectivityMonitorListener mConnectionMonitorListener;
 	
+	private ClusterManager<CrimeClusterItem> mMapCrimeClusterManager;
+	private ClusterManager<SocialCrimeClusterItem> mMapSocialCrimeClusterManager;
+	
 	private GroundOverlay[] mLogoOverlays;
 	private BroadcastReceiver mLogoUpdatedReceiver;
 	
 	private AlertDialog mYankDialog;
 	private AlertDialog mDisconnectedDialog;
 
-	private boolean mUserScrollingMap = false;
 	private boolean mTrackUser = true;
 	private boolean mResuming = false;
 	private boolean mUserBelongsToAgency = false;
 	
 	private ConcurrentMap<Integer, Crime> mSpotCrimeRecords = new ConcurrentHashMap<Integer, Crime>();
-	private ConcurrentMap<Crime, Marker> mSpotCrimeMarkers = new ConcurrentHashMap<Crime, Marker>();
 	private boolean mSpotCrimeError = false;
 	
 	private ConcurrentMap<String, SocialCrime> mSocialCrimesRecords = new ConcurrentHashMap<String, SocialCrime>();
-	private ConcurrentMap<SocialCrime, Marker> mSocialCrimesMarkers = new ConcurrentHashMap<SocialCrime, Marker>();
-	
 	private boolean mSocialCrimesError = false;
 	
 	private Handler mCrimesHandler = new Handler();
@@ -296,64 +292,81 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 				.findFragmentById(R.id.main_fragment_map)).getMap();
 		
 		if (mMap != null) {
-			//load all map-related except for Entourage, that will be loaded once map has loaded
+			//load all map-related except for entourage
 			loadMapSettings();
 			loadAgencyBoundaries();
 			loadAgencyLogo();
 			
+			//if entourage is not set, load entourage and related views
+			//meaning there is no need to wait until map loads to display routes, lock drawer, etc
+			if (!mEntourageManager.isSet()) {
+				loadEntourage();
+			}
+
+			//two cluster managers for the independent clustering between spotcrime pins and
+			// social crime pins
+			
 			mMap.setInfoWindowAdapter(new CrimeInfoWindowAdapter(this));
-			mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-				
-				@Override
-				public void onInfoWindowClick(Marker marker) {
-					if (marker == null) {
-						return;
-					}
-					
-					boolean found = false;
-					Intent details = new Intent(MainActivity.this, ReportDetailsActivity.class);
-					
-					//iterate through the records until a matching marker is found
-					Iterator<Crime> spotCrimeIter = mSpotCrimeMarkers.keySet().iterator();
-					while (spotCrimeIter != null && spotCrimeIter.hasNext()) {
-						Crime c = spotCrimeIter.next();
-						if (marker.equals(mSpotCrimeMarkers.get(c))) {
-							found = true;
+
+			mMapCrimeClusterManager = new ClusterManager<CrimeClusterItem>(this, mMap);
+			mMapCrimeClusterManager.setRenderer(
+					new CrimeMapClusterRenderer(this, mMap, mMapCrimeClusterManager));
+			mMapCrimeClusterManager.setOnClusterItemInfoWindowClickListener(
+					new ClusterManager.OnClusterItemInfoWindowClickListener<CrimeClusterItem>() {
+
+						@Override
+						public void onClusterItemInfoWindowClick(CrimeClusterItem item) {
+							Intent details = new Intent(MainActivity.this, ReportDetailsActivity.class);
 							details.putExtra(ReportDetailsActivity.EXTRA_REPORT_TYPE,
 									ReportDetailsActivity.TYPE_SPOTCRIME);
-							details.putExtra(ReportDetailsActivity.EXTRA_REPORT_ID, c.getId());
-							break;
+							details.putExtra(ReportDetailsActivity.EXTRA_REPORT_ID,
+									item.getCrime().getId());
+							startActivity(details);
 						}
-					}
-					
-					//iterate through records if not found yet
-					if (!found) {
-						Iterator<SocialCrime> socialCrimesIter = mSocialCrimesMarkers.keySet().iterator();
-						while (socialCrimesIter != null && socialCrimesIter.hasNext()) {
-							SocialCrime sc = socialCrimesIter.next();
-							if (marker.equals(mSocialCrimesMarkers.get(sc))) {
-								found = true;
-								details.putExtra(ReportDetailsActivity.EXTRA_REPORT_TYPE,
-										ReportDetailsActivity.TYPE_SOCIALCRIME);
-								details.putExtra(ReportDetailsActivity.EXTRA_REPORT_ID, sc.getUrl());
-								break;
-							}
+					});
+			
+			mMapSocialCrimeClusterManager = new ClusterManager<SocialCrimeClusterItem>(this, mMap);
+			mMapSocialCrimeClusterManager.setRenderer(
+					new SocialCrimeMapClusterRenderer(this, mMap, mMapSocialCrimeClusterManager));
+			mMapSocialCrimeClusterManager.setOnClusterItemInfoWindowClickListener(
+					new ClusterManager.OnClusterItemInfoWindowClickListener<SocialCrimeClusterItem>() {
+
+						@Override
+						public void onClusterItemInfoWindowClick(SocialCrimeClusterItem item) {
+							Intent details = new Intent(MainActivity.this, ReportDetailsActivity.class);
+							details.putExtra(ReportDetailsActivity.EXTRA_REPORT_TYPE,
+									ReportDetailsActivity.TYPE_SOCIALCRIME);
+							details.putExtra(ReportDetailsActivity.EXTRA_REPORT_ID,
+									item.getSocialCrime().getUrl());
+							startActivity(details);
 						}
-					}
-					
-					if (found) {
-						startActivity(details);
-					}
-				}
-			});
+					});
 			
 			mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
 				
 				@Override
-				public void onCameraChange(CameraPosition position) {
-					if (mUserScrollingMap && mTrackUser) {
-						mTrackUser = false;
-					}
+				public void onCameraChange(CameraPosition cameraPosition) {
+					mMapCrimeClusterManager.onCameraChange(cameraPosition);
+					mMapSocialCrimeClusterManager.onCameraChange(cameraPosition);
+				}
+			});
+			
+			mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+				
+				@Override
+				public boolean onMarkerClick(Marker marker) {
+					//return true to the handle of the event of at least one, false otherwise
+					return mMapCrimeClusterManager.onMarkerClick(marker)
+							|| mMapSocialCrimeClusterManager.onMarkerClick(marker);
+				}
+			});
+			
+			mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+				
+				@Override
+				public void onInfoWindowClick(Marker marker) {
+					mMapCrimeClusterManager.onInfoWindowClick(marker);
+					mMapSocialCrimeClusterManager.onInfoWindowClick(marker);
 				}
 			});
 			
@@ -361,7 +374,10 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 				
 				@Override
 				public void onMapLoaded() {
-					loadOnEntourage();
+					//just load if set, if not, the rest has been loaded at onPostCreate()
+					if (mEntourageManager.isSet()) {
+						loadEntourage();
+					}
 				}
 			});
 		} else {
@@ -523,7 +539,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		}
 	}
 	
-	private void loadOnEntourage() {
+	private void loadEntourage() {
 
 		boolean entourageSet = mEntourageManager.isSet();
 		
@@ -578,7 +594,6 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		boolean firstUpdate = mUserLocation == null;
 		mUserLocation = location;
 		drawUser();
-
 		
 		if (firstUpdate) {
 			loadNearbySpotCrime();
@@ -665,7 +680,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 						//add non-duplicates and ones within the timeframe
 						if (!old && notOther && !mSpotCrimeRecords.containsKey(crime.getId())) {
 							mSpotCrimeRecords.put(crime.getId(), crime);
-							mSpotCrimeMarkers.put(crime, addCrimeMarker(crime, crimeDateTime));
+							mMapCrimeClusterManager.addItem(new CrimeClusterItem(crime));
 						}
 					}
 					
@@ -674,11 +689,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 						boolean old = SpotCrimeUtils.getDateTimeFromCrime(crime).isBefore(limit);
 						
 						if (old) {
-							//remove stored marker
-							if (mSpotCrimeMarkers.containsKey(crime)) {
-								mSpotCrimeMarkers.get(crime).remove();
-								mSpotCrimeMarkers.remove(crime);
-							}
+							mMapCrimeClusterManager.removeItem(new CrimeClusterItem(crime));
 							
 							//remove stored record
 							if (mSpotCrimeRecords.containsKey(crime.getId())) {
@@ -686,6 +697,8 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 							}
 						}
 					}
+					
+					mMapCrimeClusterManager.cluster();
 				}
 			}
 
@@ -695,32 +708,6 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		
 		SpotCrimeClient spotCrime = SpotCrimeClient.getInstance(TapShieldApplication.SPOTCRIME_CONFIG);
 		spotCrime.request(request, callback);
-	}
-	
-	private Marker addCrimeMarker(Crime crime, DateTime crimeDateTime) {
-		//by passing the crime DateTime it avoids parsing another time for adding the marker info
-		
-		final String type = crime.getType();
-		final int markerDrawableResource = SpotCrimeUtils.getDrawableOfType(type, true);
-		final String timeDifference = DateTimeUtils.getTimeLabelFor(crimeDateTime);
-		
-		//set snippet with mandatory time label and source (optional address if not null)
-		final String source = getString(R.string.ts_misc_credits_spotcrime);
-		final String address = crime.getAddress() != null ?
-				CrimeInfoWindowAdapter.SEPARATOR + crime.getAddress() : new String();
-		final String snippet = timeDifference
-				+ CrimeInfoWindowAdapter.SEPARATOR + source + address;
-		
-		LatLng position = new LatLng(crime.getLatitude(), crime.getLongitude());
-		MarkerOptions markerOptions = new MarkerOptions()
-				.draggable(false)
-				.icon(BitmapDescriptorFactory.fromResource(markerDrawableResource))
-				.anchor(0.5f, 1.0f)
-				.alpha(getOpacityOffTimeframeAt(crimeDateTime.getMillis()))
-				.position(position)
-				.title(type)
-				.snippet(snippet);
-		return mMap.addMarker(markerOptions);
 	}
 	
 	private void loadNearbySocialCrimes() {
@@ -756,8 +743,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 
 					if (!old && !mSocialCrimesRecords.containsKey(crime.getUrl())) {
 						mSocialCrimesRecords.put(crime.getUrl(), crime);;
-						mSocialCrimesMarkers.put(crime,
-								addSocialCrimeMarker(crime, crime.getDate()));
+						mMapSocialCrimeClusterManager.addItem(new SocialCrimeClusterItem(crime));
 					}
 				}
 
@@ -766,18 +752,16 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 					boolean old = crime.getDate().isBefore(limit);
 
 					if (old) {
-						//remove stored marker
-						if (mSocialCrimesMarkers.containsKey(crime)) {
-							mSocialCrimesMarkers.get(crime).remove();
-							mSocialCrimesMarkers.remove(crime);
-						}
-
+						mMapSocialCrimeClusterManager.removeItem(new SocialCrimeClusterItem(crime));
+						
 						//remove stored record
 						if (mSocialCrimesRecords.containsKey(crime.getUrl())) {
 							mSocialCrimesRecords.remove(crime.getUrl());
 						}
 					}
 				}
+				
+				mMapSocialCrimeClusterManager.cluster();
 			}
 
 			@Override
@@ -788,29 +772,6 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		JavelinSocialReportingManager socialReporting = mJavelin.getSocialReportingManager();
 		socialReporting.getReportsAt(mUserLocation.getLatitude(), mUserLocation.getLongitude(),
 				TapShieldApplication.SOCIAL_CRIMES_RADIUS, callback);
-	}
-	
-	private Marker addSocialCrimeMarker(SocialCrime crime, DateTime crimeDateTime) {
-		//by passing the crime DateTime it avoids parsing another time for adding the marker info
-
-		final String type = crime.getTypeName();
-		final int markerDrawableResource = SocialReportsUtils.getDrawableOfType(type, true);
-		final String timeDifference = DateTimeUtils.getTimeLabelFor(crimeDateTime);
-
-		//set snippet with mandatory time label and source
-		final String source = getString(R.string.ts_misc_credits_socialcrimes);
-		final String snippet = timeDifference + CrimeInfoWindowAdapter.SEPARATOR + source;
-		
-		LatLng position = new LatLng(crime.getLatitude(), crime.getLongitude());
-		MarkerOptions markerOptions = new MarkerOptions()
-				.draggable(false)
-				.icon(BitmapDescriptorFactory.fromResource(markerDrawableResource))
-				.anchor(0.5f, 1.0f)
-				.alpha(getOpacityOffTimeframeAt(crimeDateTime.getMillis()))
-				.position(position)
-				.title(type)
-				.snippet(snippet);
-		return mMap.addMarker(markerOptions);
 	}
 	
 	private void drawUser() {
@@ -909,21 +870,5 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 			UiUtils.toastShort(this, getString(R.string.ts_main_toast_yank_enabled));
 			break;
 		}
-	}
-	
-	private float getOpacityOffTimeframeAt(long atMillis) {
-		float opacity = 1.0f;
-		float opacityMin = TapShieldApplication.CRIMES_MARKER_OPACITY_MINIMUM;
-		float opacityRange = 1.0f - opacityMin;
-		int timeRangeHours = TapShieldApplication.CRIMES_PERIOD_HOURS;
-		long timeMax = new DateTime()
-				//.minusHours(timeRangeHours)
-				.minusDays(14)
-				.getMillis();
-		long timeRange = new DateTime().getMillis() - timeMax;
-		float timeRangeRatio = (float) (((double) (atMillis - timeMax)) / (double) timeRange);
-		float opacityRangeRatio = opacityRange * timeRangeRatio;
-		opacity = opacityMin + opacityRangeRatio;
-		return opacity;
 	}
 }

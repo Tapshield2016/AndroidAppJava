@@ -1,9 +1,9 @@
 package com.tapshield.android.ui.activity;
 
+import android.app.ActionBar;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 import com.tapshield.android.R;
 import com.tapshield.android.api.JavelinClient;
 import com.tapshield.android.app.TapShieldApplication;
+import com.tapshield.android.utils.UiUtils;
 
 public class WebHelpActivity extends BaseFragmentActivity {
 
@@ -23,6 +24,9 @@ public class WebHelpActivity extends BaseFragmentActivity {
 	protected void onCreate(Bundle savedInstance) {
 		super.onCreate(savedInstance);
 		setContentView(R.layout.activity_webhelp);
+		
+		ActionBar actionBar = getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
 		
 		mLoading = (ProgressBar) findViewById(R.id.webhelp_progressbar);
 		
@@ -55,5 +59,17 @@ public class WebHelpActivity extends BaseFragmentActivity {
 				.agency
 				.infoUrl;
 		mWebView.loadUrl(infoUrl);
+	}
+	
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			UiUtils.startActivityNoStack(this, MainActivity.class);
+			return true;
+		}
+		
+		return false;
 	}
 }
