@@ -46,4 +46,18 @@
         <item name="android:gravity">left|center_vertical</item>
         <item name="android:background">@drawable/ts_background_imagebutton</item>
     </style>
+    
+    <style name="TapShieldMapClusterTextBase" parent="@android:style/TextAppearance">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center_horizontal|top</item>
+    </style>
+    
+    <style name="TapShieldMapClusterTextRed" parent="@style/TapShieldMapClusterTextBase">
+        <item name="android:textColor">@color/ts_alert_red</item>
+    </style>
+    
+    <style name="TapShieldMapClusterTextBlue" parent="@style/TapShieldMapClusterTextBase">
+        <item name="android:textColor">@color/ts_brand_light</item>
+    </style>
 </resources>
