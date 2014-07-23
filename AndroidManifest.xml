@@ -180,6 +180,10 @@
             android:name="com.tapshield.android.ui.activity.WebHelpActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.tapshield.android.ui.activity.ResetPasscodePasswordActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
 
         <!-- SERVICES -->
         <service

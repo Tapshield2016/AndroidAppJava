@@ -20,6 +20,7 @@ import com.tapshield.android.api.JavelinUserManager.OnUserLogOutListener;
 import com.tapshield.android.api.JavelinUserManager.OnUserSignUpListener;
 import com.tapshield.android.api.model.User;
 import com.tapshield.android.app.TapShieldApplication;
+import com.tapshield.android.utils.StringUtils;
 import com.tapshield.android.utils.UiUtils;
 
 public class EmailConfirmationFragment extends BaseFragment 
@@ -107,13 +108,16 @@ public class EmailConfirmationFragment extends BaseFragment
 	private void verifyEmail() {
 		String oldEmail = mUser.email.trim();
 		String newEmail = mEmail.getText().toString().trim();
+		boolean emailInvalidStructure = !StringUtils.isEmailValid(newEmail);
 		boolean emailChanged = !oldEmail.equals(newEmail);
 		boolean requiredDomain = mUser.agency.requiredDomainEmails;
 		boolean wrongDomain = requiredDomain && !newEmail.endsWith(mUser.agency.domain);
 		
 		//if different email, update local user reference and logout
 		//otherwise, attempt to log in with the local reference of the user
-		if (wrongDomain) {
+		if (emailInvalidStructure) {
+			mEmail.setError("Email structure is invalid. Example: user@where.com");
+		}else if (wrongDomain) {
 			String prefix = getActivity()
 					.getString(R.string.ts_fragment_requiredinfo_error_domainrequired_prefix);
 			mEmail.setError(prefix + " " + mUser.agency.domain);

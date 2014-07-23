@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/ts_common_spacing_s">
+    
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="It seems that you forgot your passcode, you can use your password at this point to disarm the alert, by entering it below. If you also forgot your password, press \'Reset Password\' to have us send you an email to reset it, but keep in mind that by doing so, you will have to log in to verify your identity."/>
+    
+    <EditText
+        android:id="@+id/dialog_dialpad_forgotpasscode_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/ts_common_spacing_xs"
+        android:inputType="textPassword"
+        android:hint="Password"/>
+
+</LinearLayout>
