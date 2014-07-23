@@ -2,6 +2,7 @@ package com.tapshield.android.utils;
 
 import java.util.List;
 
+import org.joda.time.DateTime;
 import org.json.JSONObject;
 
 import android.content.Context;
@@ -232,5 +233,16 @@ public class MapUtils {
 		if (mMap == null) {
 			mMap = map;
 		}
+	}
+	
+	public static float getOpacityOffTimeframeAt(long at, int rangeHours, float opacityMin) {
+		float opacity = 1.0f;
+		float opacityRange = 1.0f - opacityMin;
+		long timeMax = new DateTime().minusHours(rangeHours).getMillis();
+		long timeRange = new DateTime().getMillis() - timeMax;
+		float timeRangeRatio = (float) (((double) (at - timeMax)) / (double) timeRange);
+		float opacityRangeRatio = opacityRange * timeRangeRatio;
+		opacity = opacityMin + opacityRangeRatio;
+		return opacity;
 	}
 }
