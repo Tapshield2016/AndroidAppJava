@@ -285,7 +285,8 @@
     <string name="ts_menu_login_signup_googleplus">Google+</string>
     <string name="ts_menu_login_signup_linkedin">LinkedIn</string>
     <string name="ts_menu_login_signup_email">Email</string>
-    <string name="ts_menu_yank">Yank</string>
+    <string name="ts_menu_yank_enabled">Yank enabled</string>
+    <string name="ts_menu_yank_disabled">Yank disabled</string>
     <string name="ts_menu_next">Next</string>
     <string name="ts_menu_verify">Verify</string>
     <string name="ts_menu_alert">Alert</string>
@@ -352,4 +353,11 @@
         \n\nAmazon Web Services SDK for Android 1.7: Licensed under the Apache License, Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0
         \n\nApache Commons IO: Licensed under the Apache License, Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0
     </string>
+    
+    <!-- accessibility -->
+    <string name="ts_access_main_button_entourage">Entourage, track your location until a destination, notifying selected contacts.</string>
+    <string name="ts_access_main_button_locateme">Center map on your location</string>
+    <string name="ts_access_main_button_report">Report tips about a crime, area, or suspicious activity.</string>
+    <string name="ts_access_main_button_alert">Send an alert to authorities within your organization\'s boundaries.</string>
+    <string name="ts_access_main_button_chat">Chat with authorities within your organization\'s boundaries.</string>
 </resources>
