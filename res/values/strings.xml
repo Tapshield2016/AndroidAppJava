@@ -360,4 +360,6 @@
     <string name="ts_access_main_button_report">Report tips about a crime, area, or suspicious activity.</string>
     <string name="ts_access_main_button_alert">Send an alert to authorities within your organization\'s boundaries.</string>
     <string name="ts_access_main_button_chat">Chat with authorities within your organization\'s boundaries.</string>
+    <string name="ts_access_alert_button_call">Call authorities if within your organization\'s boundaries.</string>
+    <string name="ts_access_chat_button_send">Send message</string>
 </resources>
