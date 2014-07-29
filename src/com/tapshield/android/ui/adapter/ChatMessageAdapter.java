@@ -113,8 +113,16 @@ public class ChatMessageAdapter extends BaseAdapter {
 		
 
 		String statusValue = new String();
+		StringBuilder accessibilityDescriptionBuilder = new StringBuilder();
+		
+		accessibilityDescriptionBuilder
+				.append("Chat message: ")
+				.append(chatMessage.message)
+				.append(". ");
+		
 		if (chatMessage.transmitting) {
 			statusValue = "sending...";
+			accessibilityDescriptionBuilder.append("Currently sending.");
 		} else {
 			//using gmt-approx (utc) to convert to current timezone
 			//NOTE: AWS (DDB) STORES TIMESTAMPS IN SECONDS. THUS, timestamp TIMES 1000 (s -> ms)
@@ -135,6 +143,10 @@ public class ChatMessageAdapter extends BaseAdapter {
 			} else {
 				statusValue = local.toString("hh:mm aa");
 			}
+			
+			accessibilityDescriptionBuilder
+					.append("Sent ")
+					.append(statusValue);
 		}
 		
 		message.setText(chatMessage.message);
@@ -150,6 +162,11 @@ public class ChatMessageAdapter extends BaseAdapter {
 		} else {
 			icon.setImageResource(R.drawable.ic_launcher);
 		}
+		
+		String accessibilityDescription = accessibilityDescriptionBuilder.toString();
+		
+		icon.setContentDescription(accessibilityDescription);
+		convertView.setContentDescription(accessibilityDescription);
 		
 		return convertView;
 	}
