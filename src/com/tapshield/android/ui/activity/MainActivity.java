@@ -40,6 +40,8 @@ import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.maps.android.clustering.ClusterManager;
+import com.google.maps.android.clustering.algo.GridBasedAlgorithm;
+import com.google.maps.android.clustering.algo.PreCachingAlgorithmDecorator;
 import com.tapshield.android.R;
 import com.tapshield.android.api.JavelinClient;
 import com.tapshield.android.api.JavelinSocialReportingManager;
@@ -309,6 +311,9 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 			mMap.setInfoWindowAdapter(new CrimeInfoWindowAdapter(this));
 
 			mMapCrimeClusterManager = new ClusterManager<CrimeClusterItem>(this, mMap);
+			mMapCrimeClusterManager.setAlgorithm(
+					new PreCachingAlgorithmDecorator<CrimeClusterItem>(
+							new GridBasedAlgorithm<CrimeClusterItem>()));
 			mMapCrimeClusterManager.setRenderer(
 					new CrimeMapClusterRenderer(this, mMap, mMapCrimeClusterManager));
 			mMapCrimeClusterManager.setOnClusterItemInfoWindowClickListener(
@@ -326,6 +331,9 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 					});
 			
 			mMapSocialCrimeClusterManager = new ClusterManager<SocialCrimeClusterItem>(this, mMap);
+			mMapSocialCrimeClusterManager.setAlgorithm(
+					new PreCachingAlgorithmDecorator<SocialCrimeClusterItem>(
+							new GridBasedAlgorithm<SocialCrimeClusterItem>()));
 			mMapSocialCrimeClusterManager.setRenderer(
 					new SocialCrimeMapClusterRenderer(this, mMap, mMapSocialCrimeClusterManager));
 			mMapSocialCrimeClusterManager.setOnClusterItemInfoWindowClickListener(
