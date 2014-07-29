@@ -37,11 +37,10 @@
             android:id="@+id/fragment_alert_text_status"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/ts_alert_authorities"
+            android:text="@string/ts_alert_connecting"
             android:textColor="@color/ts_alert_red"
             android:textSize="@dimen/ts_fragment_alert_card_text_status"
-            android:gravity="center"
-            android:visibility="invisible"/>
+            android:gravity="center"/>
         
         <LinearLayout
             android:layout_width="match_parent"

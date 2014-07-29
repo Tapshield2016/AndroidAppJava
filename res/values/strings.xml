@@ -195,10 +195,11 @@
     <string name="ts_chat_edit_hint">Enter a message</string>
 
     <!-- alert -->
+    <string name="ts_alert_connecting">Reaching authorities&#8230;</string>
     <string name="ts_alert_authorities">Authorities notified</string>
     <string name="ts_alert_details">Add details</string>
     <string name="ts_alert_redial">Redial</string>
-    <string name="ts_alert_twilio_connecting">Connecting&#8230;</string>
+    <string name="ts_alert_twilio_connecting">Calling&#8230;</string>
     <string name="ts_alert_twilio_ended">Call Ended</string>
     <string name="ts_alert_twilio_error">Call Failed</string>
 
