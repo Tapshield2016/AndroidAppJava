@@ -32,7 +32,8 @@
             android:layout_alignParentLeft="true"
             android:src="@drawable/ts_icon_entourage"
             android:scaleType="fitCenter"
-            android:background="@drawable/ts_background_card"/>
+            android:background="@drawable/ts_background_card"
+            android:contentDescription="@string/ts_access_main_button_entourage"/>
         
         <!-- top right corner button -->
         <ImageButton
@@ -44,7 +45,8 @@
             android:layout_alignParentRight="true"
             android:src="@drawable/ts_icon_locateme"
             android:scaleType="fitCenter"
-            android:background="@drawable/ts_background_card"/>
+            android:background="@drawable/ts_background_card"
+            android:contentDescription="@string/ts_access_main_button_locateme"/>
         
         <!-- have the automatictextswitcher widget show above top buttons -->
         <com.tapshield.android.ui.view.TickerTextSwitcher
@@ -73,7 +75,8 @@
                 cb:text="@string/ts_main_circlebutton_report"
                 cb:textColor="#fff"
                 cb:textColorStateList="@color/ts_circlebutton_text"
-                cb:textSize="@dimen/circlebutton_secondary_text_size" />
+                cb:textSize="@dimen/circlebutton_secondary_text_size"
+                android:contentDescription="@string/ts_access_main_button_report" />
             
             <com.tapshield.android.ui.view.CircleButton
                 android:id="@+id/main_circlebutton_alert"
@@ -86,7 +89,8 @@
                 cb:text="@string/ts_main_circlebutton_alert"
                 cb:textColor="#fff"
                 cb:textColorStateList="@color/ts_circlebutton_text"
-                cb:textSize="@dimen/circlebutton_primary_text_size" />
+                cb:textSize="@dimen/circlebutton_primary_text_size"
+                android:contentDescription="@string/ts_access_main_button_alert" />
             
             <com.tapshield.android.ui.view.CircleButton
                 android:id="@+id/main_circlebutton_chat"
@@ -99,7 +103,8 @@
                 cb:text="@string/ts_main_circlebutton_chat"
                 cb:textColor="#fff"
                 cb:textColorStateList="@color/ts_circlebutton_text"
-                cb:textSize="@dimen/circlebutton_secondary_text_size" />
+                cb:textSize="@dimen/circlebutton_secondary_text_size"
+                android:contentDescription="@string/ts_access_main_button_chat" />
         </LinearLayout>
     </RelativeLayout>
     
