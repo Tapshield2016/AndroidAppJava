@@ -145,7 +145,7 @@ public class ChatMessageAdapter extends BaseAdapter {
 			}
 			
 			accessibilityDescriptionBuilder
-					.append("Sent ")
+					.append(userCreated ? "Sent " : " Received ")
 					.append(statusValue);
 		}
 		
