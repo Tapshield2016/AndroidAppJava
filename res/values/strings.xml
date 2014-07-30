@@ -347,10 +347,10 @@
     <string name="ts_about_message">TapShield is the market leader in mobile personal safety. TapShield designs, develops and markets enterprise-grade mobile solutions designed for college campuses and global enterprises that significantly improve emergency alerting and response. Learn more at www.tapshield.com!</string>
     <string name="ts_about_dialog_thirdparty_title">Third-Party Libraries and Licenses</string>
     <string name="ts_about_dialog_thirdparty_message">
-        Jan Muller - CropImage: Licensed under the MIT License at http://opensource.org/licenses/mit-license.php
-        \n\nTwilio SDK for Android: Licensed under the MIT License at http://opensource.org/licenses/mit-license.php
+        Twilio SDK for Android: Licensed under the MIT License at http://opensource.org/licenses/mit-license.php
         \n\nJoda-Time v2.2: Licensed under the Apache License, Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0
         \n\nAmazon Web Services SDK for Android 1.7: Licensed under the Apache License, Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0
         \n\nApache Commons IO: Licensed under the Apache License, Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0
+        \n\nSoundCloud - Android Crop: Licensed under the Apache License, Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0
     </string>
 </resources>

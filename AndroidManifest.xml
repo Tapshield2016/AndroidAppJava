@@ -85,7 +85,8 @@
 
 
         <!-- library application to handle image cropping -->
-        <activity android:name="eu.janmuller.android.simplecropimage.CropImage" />
+        <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
+
         <activity
             android:name="com.tapshield.android.ui.activity.MainActivity"
             android:configChanges="orientation|keyboardHidden"
