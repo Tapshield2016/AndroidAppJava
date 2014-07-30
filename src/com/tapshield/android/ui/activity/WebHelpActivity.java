@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 
 import com.tapshield.android.R;
 import com.tapshield.android.api.JavelinClient;
+import com.tapshield.android.api.model.Agency;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.utils.UiUtils;
 
@@ -19,14 +20,22 @@ public class WebHelpActivity extends BaseFragmentActivity {
 	private ProgressBar mLoading;
 	private WebView mWebView;
 	private WebViewClient mClient;
+	private String mInfoUrl;
 	
 	@Override
 	protected void onCreate(Bundle savedInstance) {
 		super.onCreate(savedInstance);
 		setContentView(R.layout.activity_webhelp);
 		
+		Agency agency = JavelinClient
+				.getInstance(this, TapShieldApplication.JAVELIN_CONFIG)
+				.getUserManager()
+				.getUser()
+				.agency;
+		
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setTitle(agency.name);
 		
 		mLoading = (ProgressBar) findViewById(R.id.webhelp_progressbar);
 		
@@ -47,18 +56,19 @@ public class WebHelpActivity extends BaseFragmentActivity {
 		
 		mWebView = (WebView) findViewById(R.id.webhelp_webview);
 		mWebView.setWebViewClient(mClient);
+		
+		mInfoUrl = agency.infoUrl;
 	}
 	
 	@Override
 	protected void onStart() {
 		super.onStart();
-		String infoUrl = JavelinClient
-				.getInstance(this, TapShieldApplication.JAVELIN_CONFIG)
-				.getUserManager()
-				.getUser()
-				.agency
-				.infoUrl;
-		mWebView.loadUrl(infoUrl);
+		
+		if (mInfoUrl != null) {
+			mWebView.loadUrl(mInfoUrl);
+		} else {
+			finish();
+		}
 	}
 	
 	@Override

@@ -5,6 +5,7 @@ import java.util.List;
 import android.app.ActionBar;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 
 import com.tapshield.android.R;
@@ -14,12 +15,14 @@ import com.tapshield.android.api.JavelinMassAlertManager.OnMassAlertUpdateListen
 import com.tapshield.android.api.model.MassAlert;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.manager.EmergencyManager;
+import com.tapshield.android.manager.Notifier;
 import com.tapshield.android.ui.adapter.MassAlertAdapter;
 import com.tapshield.android.utils.UiUtils;
 
 public class MassAlertsActivity extends BaseFragmentActivity implements OnMassAlertUpdateListener {
 
 	private JavelinMassAlertManager mManager;
+	private View mEmpty;
 	private ListView mList;
 	private MassAlertAdapter mAdapter;
 	private Runnable mUpdater;
@@ -35,6 +38,7 @@ public class MassAlertsActivity extends BaseFragmentActivity implements OnMassAl
 		mManager = JavelinClient.getInstance(MassAlertsActivity.this,
 				TapShieldApplication.JAVELIN_CONFIG).getMassAlertManager();
 		
+		mEmpty = findViewById(R.id.massalerts_empty);
 		mList = (ListView) findViewById(R.id.massalerts_list);
 		//pass null list since it will be defaulted to an empty one until manager delivers
 		mAdapter = new MassAlertAdapter(MassAlertsActivity.this,
@@ -49,8 +53,12 @@ public class MassAlertsActivity extends BaseFragmentActivity implements OnMassAl
 			@Override
 			public void run() {
 				mAdapter.notifyDataSetChanged();
+				//isEmpty() was not overridden, use getCount() instead to check for [non]empty dataset
+				mEmpty.setVisibility(mAdapter.getCount() == 0 ? View.VISIBLE : View.GONE);
 			}
 		};
+		
+		Notifier.getInstance(this).dismiss(Notifier.NOTIFICATION_MASS);
 	}
 	
 	@Override

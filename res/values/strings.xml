@@ -2,7 +2,25 @@
 <resources>
 
     <string name="app_name">TapShield</string>
-    <string name="ts_home">Home</string>
+    <string name="ts_screen_home">Home</string>
+    <string name="ts_screen_alert">Alert</string>
+    <string name="ts_screen_chat">Chat</string>
+    <string name="ts_screen_report_list">Report: Pick type</string>
+    <string name="ts_screen_report_details">Report Details</string>
+    <string name="ts_screen_profile">Profile</string>
+    <string name="ts_screen_profile_basic">Profile: Basic Info</string>
+    <string name="ts_screen_profile_appearance">Profile: Appearance</string>
+    <string name="ts_screen_profile_medical">Profile: Medical Info</string>
+    <string name="ts_screen_profile_emergency">Profile: Emergency Contact</string>
+    <string name="ts_screen_settings">Settings</string>
+    <string name="ts_screen_about">About TapShield</string>
+    <string name="ts_screen_oob">Out of Bounds or Hours</string>
+    <string name="ts_screen_security">Change Passcode or Password</string>
+    <string name="ts_screen_notifications">Notifications</string>
+    <string name="ts_screen_entourage_destination">Entourage: Pick Destination</string>
+    <string name="ts_screen_entourage_route">Entourage: Pick Route</string>
+    <string name="ts_screen_entourage_etacontacts">Entourage: Set ETA and Contacts</string>
+    
     <string name="ts_no_org_emergency_number">911</string>
 
     <!-- common -->
@@ -193,6 +211,9 @@
 
     <!-- chat -->
     <string name="ts_chat_edit_hint">Enter a message</string>
+    
+    <!-- notifications / mass alerts -->
+    <string name="ts_massalerts_empty">No notifications so far</string>
 
     <!-- alert -->
     <string name="ts_alert_connecting">Reaching authorities&#8230;</string>
@@ -363,4 +384,5 @@
     <string name="ts_access_main_button_chat">Chat with authorities within your organization\'s boundaries.</string>
     <string name="ts_access_alert_button_call">Call authorities if within your organization\'s boundaries.</string>
     <string name="ts_access_chat_button_send">Send message</string>
+    <string name="ts_access_profile_picture">Set or change profile picture.</string>
 </resources>
