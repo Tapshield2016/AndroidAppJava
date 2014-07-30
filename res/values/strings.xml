@@ -211,6 +211,9 @@
 
     <!-- chat -->
     <string name="ts_chat_edit_hint">Enter a message</string>
+    
+    <!-- notifications / mass alerts -->
+    <string name="ts_massalerts_empty">No notifications so far</string>
 
     <!-- alert -->
     <string name="ts_alert_connecting">Reaching authorities&#8230;</string>
