@@ -1,6 +1,7 @@
 package com.tapshield.android.ui.activity;
 
 import android.os.Bundle;
+import android.telephony.PhoneNumberUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -32,7 +33,7 @@ public class OutOfBoundsActivity extends BaseFragmentActivity implements OnClick
 		
 		mButton = (Button) findViewById(R.id.outofbounds_button);
 		mButton.setOnClickListener(this);
-		mButton.setText("Dial " + mSecondaryPhone);
+		mButton.setText("Dial " + PhoneNumberUtils.formatNumber(mSecondaryPhone));
 	}
 
 	@Override

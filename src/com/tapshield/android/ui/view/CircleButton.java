@@ -91,6 +91,9 @@ public class CircleButton extends RelativeLayout {
 				CircleButton.this.performClick();
 			}
 		});
+		
+		//set CircleButton content description to underlying button intercepting tap actions
+		mButton.setContentDescription(getContentDescription());
 	}
 	
 	@Override

@@ -182,7 +182,7 @@ public class Notifier {
 			stackBuilder.addNextIntent(intent);
 		}
 		
-		return stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+		return stackBuilder.getPendingIntent(1, PendingIntent.FLAG_UPDATE_CURRENT);
 	}
 	
 	public void notify(int notificationId) {

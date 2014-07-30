@@ -195,10 +195,11 @@
     <string name="ts_chat_edit_hint">Enter a message</string>
 
     <!-- alert -->
+    <string name="ts_alert_connecting">Reaching authorities&#8230;</string>
     <string name="ts_alert_authorities">Authorities notified</string>
     <string name="ts_alert_details">Add details</string>
     <string name="ts_alert_redial">Redial</string>
-    <string name="ts_alert_twilio_connecting">Connecting&#8230;</string>
+    <string name="ts_alert_twilio_connecting">Calling&#8230;</string>
     <string name="ts_alert_twilio_ended">Call Ended</string>
     <string name="ts_alert_twilio_error">Call Failed</string>
 
@@ -285,7 +286,8 @@
     <string name="ts_menu_login_signup_googleplus">Google+</string>
     <string name="ts_menu_login_signup_linkedin">LinkedIn</string>
     <string name="ts_menu_login_signup_email">Email</string>
-    <string name="ts_menu_yank">Yank</string>
+    <string name="ts_menu_yank_enabled">Yank enabled</string>
+    <string name="ts_menu_yank_disabled">Yank disabled</string>
     <string name="ts_menu_next">Next</string>
     <string name="ts_menu_verify">Verify</string>
     <string name="ts_menu_alert">Alert</string>
@@ -346,10 +348,19 @@
     <string name="ts_about_message">TapShield is the market leader in mobile personal safety. TapShield designs, develops and markets enterprise-grade mobile solutions designed for college campuses and global enterprises that significantly improve emergency alerting and response. Learn more at www.tapshield.com!</string>
     <string name="ts_about_dialog_thirdparty_title">Third-Party Libraries and Licenses</string>
     <string name="ts_about_dialog_thirdparty_message">
-        Jan Muller - CropImage: Licensed under the MIT License at http://opensource.org/licenses/mit-license.php
-        \n\nTwilio SDK for Android: Licensed under the MIT License at http://opensource.org/licenses/mit-license.php
+        Twilio SDK for Android: Licensed under the MIT License at http://opensource.org/licenses/mit-license.php
         \n\nJoda-Time v2.2: Licensed under the Apache License, Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0
         \n\nAmazon Web Services SDK for Android 1.7: Licensed under the Apache License, Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0
         \n\nApache Commons IO: Licensed under the Apache License, Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0
+        \n\nSoundCloud - Android Crop: Licensed under the Apache License, Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0
     </string>
+    
+    <!-- accessibility -->
+    <string name="ts_access_main_button_entourage">Entourage, track your location until a destination, notifying selected contacts.</string>
+    <string name="ts_access_main_button_locateme">Center map on your location</string>
+    <string name="ts_access_main_button_report">Report tips about a crime, area, or suspicious activity.</string>
+    <string name="ts_access_main_button_alert">Send an alert to authorities within your organization\'s boundaries.</string>
+    <string name="ts_access_main_button_chat">Chat with authorities within your organization\'s boundaries.</string>
+    <string name="ts_access_alert_button_call">Call authorities if within your organization\'s boundaries.</string>
+    <string name="ts_access_chat_button_send">Send message</string>
 </resources>
