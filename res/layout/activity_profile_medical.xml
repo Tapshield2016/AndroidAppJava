@@ -21,7 +21,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/ts_brand_dark"
-            android:inputType="textCapSentences"/>
+            android:inputType="textCapSentences"
+            android:hint="@string/ts_profile_medical_allergies"/>
         
         <TextView
             android:layout_width="match_parent"
@@ -34,6 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/ts_brand_dark"
-            android:inputType="textCapSentences"/>
+            android:inputType="textCapSentences"
+            android:hint="@string/ts_profile_medical_medication"/>
     </LinearLayout>
 </ScrollView>

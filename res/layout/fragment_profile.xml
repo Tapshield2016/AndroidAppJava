@@ -41,7 +41,8 @@
 	                android:layout_height="match_parent"
 	                android:src="@drawable/ts_avatar_default"
 	                android:padding="0dp"
-	                android:scaleType="fitCenter"/>
+	                android:scaleType="fitCenter"
+	                android:contentDescription="@string/ts_access_profile_picture"/>
                 
                 <TextView
                     android:layout_width="match_parent"
@@ -49,7 +50,8 @@
                     android:layout_gravity="bottom"
                     android:gravity="center"
                     android:text="@string/ts_common_edit"
-                    android:textColor="@color/ts_brand_dark"/>
+                    android:textColor="@color/ts_brand_dark"
+                    android:contentDescription="@string/ts_access_profile_picture"/>
             </FrameLayout>
             
             <LinearLayout

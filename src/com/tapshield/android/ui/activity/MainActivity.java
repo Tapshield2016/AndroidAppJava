@@ -148,7 +148,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 			@Override
 			public void onDrawerClosed(View drawerView) {
 				super.onDrawerClosed(drawerView);
-				getActionBar().setTitle(R.string.ts_home);
+				getActionBar().setTitle(R.string.ts_screen_home);
 				invalidateOptionsMenu();
 			}
 		};
@@ -466,6 +466,11 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		
 		mCrimesHandler.post(mSpotCrimesUpdater);
 		mCrimesHandler.post(mSocialCrimesUpdater);
+		
+		if (mEmergencyManager.isRunning()) {
+			Intent alert = new Intent(this, AlertActivity.class);
+			startActivity(alert);
+		}
 	}
 	
 	@Override
@@ -554,7 +559,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(!entourageSet);
 		actionBar.setHomeButtonEnabled(!entourageSet);
-		actionBar.setTitle(R.string.ts_home);
+		actionBar.setTitle(R.string.ts_screen_home);
 		actionBar.setDisplayShowTitleEnabled(!entourageSet);
 		actionBar.setDisplayShowCustomEnabled(entourageSet);
 
