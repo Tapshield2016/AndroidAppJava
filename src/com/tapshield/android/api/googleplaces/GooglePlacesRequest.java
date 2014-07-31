@@ -4,37 +4,43 @@ import com.tapshield.android.utils.StringUtils;
 
 public class GooglePlacesRequest {
 
-	public static final String TYPE_SEARCH = "textsearch";
+	private static final String TYPE_SEARCH = "textsearch";
+	private static final String TYPE_NEARBY = "nearbysearch";
 	
-	public static final String OUTPUT_JSON = "json";
-	public static final String OUTPUT_XML = "xml";
+	private static final String OUTPUT_JSON = "json";
+	private static final String OUTPUT_XML = "xml";
 	
 	private static final String PARAM_KEY = "key";
 	private static final String PARAM_LOCATION = "location";
 	private static final String PARAM_RADIUS = "radius";
+	private static final String PARAM_NAME = "name";
 	private static final String PARAM_QUERY = "query";
 	private static final String PARAM_SENSOR = "sensor";
 	
 	private String mType = TYPE_SEARCH;
 	private String mOutput = OUTPUT_JSON;
 	private String mKey;
-	private String mQuery;
+	private String mToSearchFor;
 	private String mLocation;
 	private int mRadius = -1;
 	private boolean mSensor = true;
 	
-	public GooglePlacesRequest(GooglePlacesConfig config, String query) {
+	public GooglePlacesRequest(GooglePlacesConfig config) {
 		mKey = config.key();
-		setQuery(query);
 	}
 	
-	public GooglePlacesRequest setType(String type) {
-		mType = type;
+	public GooglePlacesRequest setTypeNearby() {
+		mType = TYPE_NEARBY;
 		return this;
 	}
 	
-	public GooglePlacesRequest setQuery(String query) {
-		mQuery = query.trim().replaceAll(StringUtils.REGEX_WHITESPACES, "+");
+	public GooglePlacesRequest setTypeSearch() {
+		mType = TYPE_SEARCH;
+		return this;
+	}
+	
+	public GooglePlacesRequest setSearch(String search) {
+		mToSearchFor = search.trim().replaceAll(StringUtils.REGEX_WHITESPACES, "+");
 		return this;
 	}
 	
@@ -55,8 +61,9 @@ public class GooglePlacesRequest {
 			suffix = addGetParam(suffix, PARAM_KEY, mKey);
 		}
 		
-		if (mQuery != null && !mQuery.isEmpty()) {
-			suffix = addGetParam(suffix, PARAM_QUERY, mQuery);
+		if (mToSearchFor != null && !mToSearchFor.isEmpty()) {
+			suffix = addGetParam(suffix,
+					mType == TYPE_NEARBY ? PARAM_NAME : PARAM_QUERY, mToSearchFor);
 		}
 		
 		if (mLocation != null && !mLocation.isEmpty() && mRadius > 0) {

@@ -1,5 +1,6 @@
 package com.tapshield.android.utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.joda.time.DateTime;
@@ -19,6 +20,7 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
@@ -244,5 +246,13 @@ public class MapUtils {
 		float opacityRangeRatio = opacityRange * timeRangeRatio;
 		opacity = opacityMin + opacityRangeRatio;
 		return opacity;
+	}
+	
+	public static LatLngBounds getBoundsOfLocations(List<Location> locations) {
+		LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
+		for (Location l : locations) {
+			boundsBuilder.include(new LatLng(l.getLatitude(), l.getLongitude()));
+		}
+		return boundsBuilder.build();
 	}
 }

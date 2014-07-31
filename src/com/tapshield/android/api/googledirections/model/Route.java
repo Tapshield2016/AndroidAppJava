@@ -112,7 +112,7 @@ public class Route {
 		return mLegs.get(mLegs.size() - 1).mEndLocation.mLon;
 	}
 	
-	private String overviewPolyline() {
+	public String overviewPolyline() {
 		return mOverview.mPoints;
 	}
 
