@@ -94,11 +94,13 @@ public class PickDestinationPlaceFragment extends BasePickDestinationFragment
 	
 	private void searchPlacesFor(String query) {
 		setListShown(false);
+		/*
 		GooglePlacesRequest r =
 				new GooglePlacesRequest(TapShieldApplication.GOOGLEPLACES_CONFIG, query);
 		GooglePlacesClient
 				.get(TapShieldApplication.GOOGLEPLACES_CONFIG)
 				.request(r, this);
+		*/
 	}
 	
 	@Override
