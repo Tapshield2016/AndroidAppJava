@@ -152,7 +152,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.tapshield.android.ui.activity.ReportActivity"
-            android:label="@string/ts_screen_report_details"
+            android:label="@string/ts_screen_report"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity

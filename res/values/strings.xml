@@ -6,6 +6,7 @@
     <string name="ts_screen_alert">Alert</string>
     <string name="ts_screen_chat">Chat</string>
     <string name="ts_screen_report_list">Report: Pick type</string>
+    <string name="ts_screen_report">Submit Tip</string>
     <string name="ts_screen_report_details">Report Details</string>
     <string name="ts_screen_profile">Profile</string>
     <string name="ts_screen_profile_basic">Profile: Basic Info</string>
