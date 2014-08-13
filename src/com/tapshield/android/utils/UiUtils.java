@@ -10,6 +10,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -50,6 +51,45 @@ public class UiUtils {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static boolean checkLocationServicesEnabled(final Activity activity) {
+		
+		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(activity)
+				.setCancelable(false)
+				.setMessage(R.string.ts_dialog_location_services_disabled_message)
+				.setNegativeButton(R.string.ts_common_cancel, new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						activity.finish();
+					}
+				})
+				.setPositiveButton(R.string.ts_common_settings, new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						Intent settings = new Intent(Settings.ACTION_SETTINGS);
+						activity.startActivity(settings);
+					}
+				});
+		
+		boolean networkEnabled = GeoUtils.isProviderEnabled(GeoUtils.PROVIDER_NETWORK, activity);
+		boolean gpsEnabled = GeoUtils.isProviderEnabled(GeoUtils.PROVIDER_GPS, activity);
+
+		if (!networkEnabled) {
+			dialogBuilder.setTitle(R.string.ts_dialog_location_services_disabled_title_network);
+		} else if (!gpsEnabled) {
+			dialogBuilder.setTitle(R.string.ts_dialog_location_services_disabled_title_gps);
+		}
+		
+		boolean locationServicesEnabled = networkEnabled && gpsEnabled;
+		
+		if (!locationServicesEnabled) {
+			dialogBuilder.create().show();
+		}
+		
+		return locationServicesEnabled;
 	}
 	
 	/**
