@@ -42,8 +42,8 @@ public class CrimeInfoWindowAdapter implements InfoWindowAdapter {
 			title.setText(marker.getTitle());
 			date.setText(data[0]);
 			
-			boolean sourcePresent = data != null && data.length >= 2 && data[1] != null;
-			boolean addressPresent = data != null && data.length >= 3 && data[2] != null;
+			boolean sourcePresent = data != null && data.length >= 2 && data[1] != null && !data[1].isEmpty();
+			boolean addressPresent = data != null && data.length >= 3 && data[2] != null && !data[2].isEmpty();
 	
 			if (sourcePresent) {
 				source.setText(data[1]);
