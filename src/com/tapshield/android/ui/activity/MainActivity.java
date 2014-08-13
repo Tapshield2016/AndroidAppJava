@@ -464,6 +464,12 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		mTracker.start();
 		mTracker.addLocationListener(this);
 		
+		boolean locationServicesEnabled = UiUtils.checkLocationServicesEnabled(this);
+		
+		if (!locationServicesEnabled) {
+			return;
+		}
+		
 		mCrimesHandler.post(mSpotCrimesUpdater);
 		mCrimesHandler.post(mSocialCrimesUpdater);
 		
