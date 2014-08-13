@@ -44,8 +44,10 @@ public class CrimeInfoWindowAdapter implements InfoWindowAdapter {
 			
 			boolean sourcePresent = data != null && data.length >= 2 && data[1] != null && !data[1].isEmpty();
 			boolean addressPresent = data != null && data.length >= 3 && data[2] != null && !data[2].isEmpty();
-	
-			if (sourcePresent) {
+			
+			//if source is spotcrime, ignore it, since it's suposedly unnecessary
+			if (sourcePresent
+					&& !data[1].equals(mContext.getString(R.string.ts_misc_credits_spotcrime))) {
 				source.setText(data[1]);
 				source.setVisibility(View.VISIBLE);
 			}
