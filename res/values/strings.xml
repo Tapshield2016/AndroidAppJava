@@ -44,6 +44,7 @@
     <string name="ts_common_next">Next</string>
     <string name="ts_common_edit">Edit</string>
     <string name="ts_common_error">Error</string>
+    <string name="ts_common_settings">Settings</string>
 
     <!-- main -->
     <string name="ts_main_dialog_disconnected_title">No Network Data Connection</string>
@@ -350,6 +351,10 @@
     <string name="ts_misc_credits_socialcrimes">User-submitted</string>
     <string name="ts_misc_feedback_email">feedback@tapshield.com</string>
     <string name="ts_misc_feedback_subject">TapShield Android App Feedback</string>
+
+    <string name="ts_dialog_location_services_disabled_title_network">Location Services Disabled</string>
+    <string name="ts_dialog_location_services_disabled_title_gps">GPS Disabled</string>
+    <string name="ts_dialog_location_services_disabled_message">Enable it by tapping \'Settings\' below and go into Location settings.</string>
 
     <!-- settings -->
     <string name="ts_settings_category">Settings</string>
