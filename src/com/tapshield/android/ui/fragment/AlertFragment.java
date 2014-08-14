@@ -149,6 +149,14 @@ public class AlertFragment extends Fragment implements OnClickListener, OnStatus
 	public void onResume() {
 		super.onResume();
 		
+		if (mEmergencyManager.isNotified()) {
+			mCardStatus.setText(R.string.ts_alert_authorities);
+		}
+		
+		if (mEmergencyManager.isCompleted()) {
+			setCompletionMessage();
+		}
+		
 		mTwilio.addOnStatusChangeListener(this);
 		promptUserForTwilioFailure();
 		
