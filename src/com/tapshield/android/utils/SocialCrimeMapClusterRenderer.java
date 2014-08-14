@@ -60,7 +60,7 @@ public class SocialCrimeMapClusterRenderer extends DefaultClusterRenderer<Social
 				.alpha(
 						MapUtils.getOpacityOffTimeframeAt(
 								crimeDateTime.getMillis(),
-								TapShieldApplication.CRIMES_PERIOD_HOURS,
+								new DateTime().minusHours(TapShieldApplication.CRIMES_PERIOD_HOURS).getMillis(),
 								TapShieldApplication.CRIMES_MARKER_OPACITY_MINIMUM))
 				.title(type)
 				.snippet(snippet);
