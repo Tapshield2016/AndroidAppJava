@@ -50,10 +50,11 @@ public class CrimeMapClusterRenderer extends DefaultClusterRenderer<CrimeCluster
 
 		//set snippet with mandatory time label and source (optional address if not null)
 		final String source = mContext.getString(R.string.ts_misc_credits_spotcrime);
-		final String address = item.getCrime().getAddress() != null ?
-				CrimeInfoWindowAdapter.SEPARATOR + item.getCrime().getAddress() : new String();
-				final String snippet = timeDifference
-						+ CrimeInfoWindowAdapter.SEPARATOR + source + address;
+		final String address = item.getCrime().getAddress() != null
+				? item.getCrime().getAddress() : new String();
+		final String snippet = timeDifference
+						+ CrimeInfoWindowAdapter.SEPARATOR + source
+						+ CrimeInfoWindowAdapter.SEPARATOR + address;
 
 		markerOptions
 				.draggable(false)
@@ -62,7 +63,7 @@ public class CrimeMapClusterRenderer extends DefaultClusterRenderer<CrimeCluster
 				.alpha(
 						MapUtils.getOpacityOffTimeframeAt(
 								crimeDateTime.getMillis(),
-								TapShieldApplication.CRIMES_PERIOD_HOURS,
+								new DateTime().minusHours(TapShieldApplication.CRIMES_PERIOD_HOURS).getMillis(),
 								TapShieldApplication.CRIMES_MARKER_OPACITY_MINIMUM))
 				.title(type)
 				.snippet(snippet);
