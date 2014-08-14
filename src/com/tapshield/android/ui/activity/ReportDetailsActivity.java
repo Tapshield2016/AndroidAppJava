@@ -148,9 +148,7 @@ public class ReportDetailsActivity extends BaseFragmentActivity
 		LayoutParams mediaLayout = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT,
 				Gravity.CENTER);
 		
-		if (urlAudio != null) {
-			
-		} else if (urlImage != null) {
+		if (urlImage != null) {
 			ImageView image = new ImageView(this);
 			image.setScaleType(ScaleType.CENTER_INSIDE);
 			mMediaContainer.addView(image, mediaLayout);
@@ -176,6 +174,9 @@ public class ReportDetailsActivity extends BaseFragmentActivity
 			controller.setMediaPlayer(video);
 			
 			mMediaContainer.addView(video, 0, mediaLayout);
+		} else if (urlAudio != null) {
+			//audio not supported for the time being
+			mMediaLoading.setVisibility(View.GONE);
 		}
 	}
 	

@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.location.Location;
+import android.location.LocationManager;
 import android.util.Log;
 
 import com.tapshield.android.api.model.Agency;
@@ -11,6 +12,15 @@ import com.tapshield.android.api.model.DispatchCenter;
 import com.tapshield.android.api.model.Region;
 
 public class GeoUtils {
+
+	public static final String PROVIDER_GPS = LocationManager.GPS_PROVIDER;
+	public static final String PROVIDER_NETWORK = LocationManager.NETWORK_PROVIDER;
+	
+	public static boolean isProviderEnabled(final String provider, final Context context) {
+		LocationManager locationManager = (LocationManager) context
+				.getSystemService(Context.LOCATION_SERVICE);
+		return locationManager.isProviderEnabled(provider);
+	}
 
 	public static boolean isThereOverhang(Context c, Location l, List<Location> boundaries) {
 		float minDistance = minDistanceBetweenLocationAndEdges(l, boundaries);

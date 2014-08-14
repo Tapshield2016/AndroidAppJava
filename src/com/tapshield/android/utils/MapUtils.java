@@ -235,12 +235,16 @@ public class MapUtils {
 		}
 	}
 	
-	public static float getOpacityOffTimeframeAt(long at, int rangeHours, float opacityMin) {
+	public static float getOpacityOffTimeframeAt(long at, long pastLimit, float opacityMin) {
+		
+		if (at <= pastLimit) {
+			return opacityMin;
+		}
+		
 		float opacity = 1.0f;
 		float opacityRange = 1.0f - opacityMin;
-		long timeMax = new DateTime().minusHours(rangeHours).getMillis();
-		long timeRange = new DateTime().getMillis() - timeMax;
-		float timeRangeRatio = (float) (((double) (at - timeMax)) / (double) timeRange);
+		long timeRange = new DateTime().getMillis() - pastLimit;
+		float timeRangeRatio = (float) (((double) (at - pastLimit)) / (double) timeRange);
 		float opacityRangeRatio = opacityRange * timeRangeRatio;
 		opacity = opacityMin + opacityRangeRatio;
 		return opacity;

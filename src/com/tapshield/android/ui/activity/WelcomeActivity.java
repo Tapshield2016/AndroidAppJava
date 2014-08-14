@@ -13,6 +13,7 @@ import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.ui.adapter.WelcomeFragmentPagerAdapter;
 import com.tapshield.android.ui.fragment.LoginFragment;
 import com.tapshield.android.ui.view.PageIndicator;
+import com.tapshield.android.utils.UiUtils;
 
 public class WelcomeActivity extends BaseFragmentActivity {
 
@@ -81,6 +82,8 @@ public class WelcomeActivity extends BaseFragmentActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		
+		UiUtils.checkLocationServicesEnabled(this);
 		
 		JavelinUserManager userManager = JavelinClient.getInstance(this,
 				TapShieldApplication.JAVELIN_CONFIG).getUserManager();

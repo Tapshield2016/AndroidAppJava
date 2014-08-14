@@ -55,12 +55,15 @@ public class TapShieldApplication extends Application {
 			.build();
 
 	public static final int CRIMES_PERIOD_HOURS = 24;
-	public static final float CRIMES_MARKER_OPACITY_MINIMUM = 0.1f;
+	public static final float CRIMES_MARKER_OPACITY_MINIMUM = 0.2f;
+	public static final int SPOTCRIME_RECORDS_MIN = 10;
+	public static final int SPOTCRIME_RECORDS_MAX = 500;
 	public static final int SPOTCRIME_UPDATE_FREQUENCY_SECONDS = 60;
-	public static final int SOCIAL_CRIMES_UPDATE_FREQUENCY_SECONDS = 15;
 	public static final float SPOTCRIME_RADIUS = 0.25f;
+	public static final int SPOTCRIME_EXTRA_PERIOD_DAYS = 14;
+	public static final int SPOTCRIME_EXTRA_RECORDS_MAX = 50;
+	public static final int SOCIAL_CRIMES_UPDATE_FREQUENCY_SECONDS = 15;
 	public static final float SOCIAL_CRIMES_RADIUS = 2.0f;
-	
 	
 	public enum TrackerName {
 	    APP_TRACKER // Tracker used only in this app.
