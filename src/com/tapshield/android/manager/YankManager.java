@@ -69,6 +69,7 @@ public class YankManager {
 	public void setEnabled(boolean toEnabled) {
 		if ((toEnabled && isEnabled())
 				|| (!toEnabled && isDisabled())) {
+			notifyListener();
 			return;
 		}
 		
@@ -194,7 +195,6 @@ public class YankManager {
 	
 	public void setListener(YankListener l) {
 		mListener = l;
-		
 	}
 	
 	public void removeListener(YankListener l) {
