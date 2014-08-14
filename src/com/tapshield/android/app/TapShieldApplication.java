@@ -55,7 +55,7 @@ public class TapShieldApplication extends Application {
 			.build();
 
 	public static final int CRIMES_PERIOD_HOURS = 24;
-	public static final float CRIMES_MARKER_OPACITY_MINIMUM = 0.1f;
+	public static final float CRIMES_MARKER_OPACITY_MINIMUM = 0.2f;
 	public static final int SPOTCRIME_RECORDS_MIN = 10;
 	public static final int SPOTCRIME_RECORDS_MAX = 500;
 	public static final int SPOTCRIME_UPDATE_FREQUENCY_SECONDS = 60;
