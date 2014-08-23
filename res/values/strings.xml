@@ -231,9 +231,10 @@
     <string name="ts_reporting_location_dialog_message">Getting location for the report&#8230;</string>
     <string name="ts_reporting_dialog_message_error">Oops! There was an issue. Try again later.</string>
     <string name="ts_reporting_toast_successful">Reported!</string>
-    <string name="ts_reporting_media_header">Add Image or Video</string>
+    <string name="ts_reporting_media_header_add">Add Image or Video</string>
+    <string name="ts_reporting_media_header_change_prefix">Change</string>
     <string name="ts_reporting_media_audio">Audio</string>
-    <string name="ts_reporting_media_image">Picture</string>
+    <string name="ts_reporting_media_image">Image</string>
     <string name="ts_reporting_media_video">Video</string>
     <string name="ts_reporting_media_notification_title">TapShield</string>
     <string name="ts_reporting_media_notification_preparing_message">Preparing report</string>
