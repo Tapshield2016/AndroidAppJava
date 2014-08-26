@@ -20,7 +20,6 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.tapshield.android.R;
 import com.tapshield.android.api.googledirections.model.Route;
 import com.tapshield.android.manager.EntourageManager;
