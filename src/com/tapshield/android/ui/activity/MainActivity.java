@@ -64,6 +64,7 @@ import com.tapshield.android.model.CrimeClusterItem;
 import com.tapshield.android.model.SocialCrimeClusterItem;
 import com.tapshield.android.ui.adapter.CrimeInfoWindowAdapter;
 import com.tapshield.android.ui.adapter.NavigationListAdapter.NavigationItem;
+import com.tapshield.android.ui.dialog.SetDisarmCodeDialog;
 import com.tapshield.android.ui.fragment.NavigationFragment;
 import com.tapshield.android.ui.fragment.NavigationFragment.OnNavigationItemClickListener;
 import com.tapshield.android.ui.view.CircleButton;
@@ -112,6 +113,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 	
 	private AlertDialog mYankDialog;
 	private AlertDialog mDisconnectedDialog;
+	private SetDisarmCodeDialog mSetDisarmCodeDialog;
 
 	private boolean mTrackUser = true;
 	private boolean mResuming = false;
@@ -439,11 +441,24 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		} else {
 			mUserBelongsToAgency = userManager.getUser().belongsToAgency();
 
+			boolean needDisarmCode = userManager.getUser().getDisarmCode() == null
+					|| userManager.getUser().getDisarmCode().isEmpty();
 			boolean verifyPhone  = mUserBelongsToAgency && !userManager.getUser().isPhoneNumberVerified();
 			boolean acceptedContidions = LocalTermConditionAgreement.getTermConditionsAccepted(this);
 			
 			if (!mUserBelongsToAgency) {
 				mChat.setEnabled(false);
+			}
+			
+			if (needDisarmCode) {
+				if (mSetDisarmCodeDialog == null) {
+					mSetDisarmCodeDialog = new SetDisarmCodeDialog();
+				}
+				
+				if (!mSetDisarmCodeDialog.isVisible()) {
+					mSetDisarmCodeDialog.show(getFragmentManager(),
+							SetDisarmCodeDialog.class.getSimpleName());
+				}
 			}
 			
 			if (verifyPhone || !acceptedContidions) {
