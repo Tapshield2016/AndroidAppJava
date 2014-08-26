@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.location.LocationListener;
 import com.tapshield.android.R;
@@ -172,9 +173,20 @@ public class EmergencyManager implements LocationListener, OnStatusChangeListene
 		Log.i("tapshield", "EmergencyManager startEmergency called with " + mType);
 	
 		mJavelinAlert.setOnDispatcherAlertedListener(mDispatcherAlertedListener);
-		
-		mAgency = mJavelin.getUserManager().getUser().agency;
-		mAgencyBoundaries = mAgency.getBoundaries();
+
+		try {
+			mAgency = mJavelin.getUserManager().getUser().agency;
+			mAgencyBoundaries = mAgency.getBoundaries();
+		} catch (NullPointerException e) {
+			cancel();
+			Intent home = new Intent(mContext, MainActivity.class);
+			home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+			mContext.startActivity(home);
+			Toast.makeText(mContext,
+					"There was an issue with the your data (or the organization\'s)," +
+					" please try again.", Toast.LENGTH_LONG).show();
+			return;
+		}
 		
 		startTracker();
 		HardwareUtils.vibrateStop(mContext);

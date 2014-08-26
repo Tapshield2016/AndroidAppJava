@@ -119,7 +119,7 @@ public class AlertFragment extends Fragment implements OnClickListener, OnStatus
 			@Override
 			public void onReceive(Context context, Intent intent) {
 				toggleCard(true);
-				mCardStatus.setVisibility(View.VISIBLE);
+				mCardStatus.setText(R.string.ts_alert_authorities);
 			}
 		};
 		
@@ -148,6 +148,14 @@ public class AlertFragment extends Fragment implements OnClickListener, OnStatus
 	@Override
 	public void onResume() {
 		super.onResume();
+		
+		if (mEmergencyManager.isNotified()) {
+			mCardStatus.setText(R.string.ts_alert_authorities);
+		}
+		
+		if (mEmergencyManager.isCompleted()) {
+			setCompletionMessage();
+		}
 		
 		mTwilio.addOnStatusChangeListener(this);
 		promptUserForTwilioFailure();

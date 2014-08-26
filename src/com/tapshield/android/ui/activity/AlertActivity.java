@@ -15,6 +15,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.tapshield.android.R;
+import com.tapshield.android.api.JavelinClient;
+import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.location.LocationTracker;
 import com.tapshield.android.manager.EmergencyManager;
 import com.tapshield.android.ui.adapter.AlertFragmentPagerAdapter;
@@ -36,6 +38,25 @@ public class AlertActivity extends BaseFragmentActivity
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_alertswipe);
+
+		//attempt to set 'Alert: <agency name>' e.g.: 'Alert: TapShield' as activity title
+		
+		String agencyName = null;
+		
+		try {
+			agencyName = JavelinClient
+					.getInstance(this, TapShieldApplication.JAVELIN_CONFIG)
+					.getUserManager()
+					.getUser()
+					.agency
+					.name;
+		} catch (Exception e) {
+			agencyName = null;
+		}
+		
+		if (agencyName != null && !agencyName.isEmpty()) {
+			getActionBar().setTitle(getString(R.string.ts_screen_alert) + ": " + agencyName);
+		}
 		
 		mEmergencyManager = EmergencyManager.getInstance(this);
 		mMapFrame = (FrameLayout) findViewById(R.id.alert_frame);

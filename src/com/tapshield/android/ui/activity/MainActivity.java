@@ -40,6 +40,8 @@ import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.maps.android.clustering.ClusterManager;
+import com.google.maps.android.clustering.algo.GridBasedAlgorithm;
+import com.google.maps.android.clustering.algo.PreCachingAlgorithmDecorator;
 import com.tapshield.android.R;
 import com.tapshield.android.api.JavelinClient;
 import com.tapshield.android.api.JavelinSocialReportingManager;
@@ -114,15 +116,22 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 	private boolean mTrackUser = true;
 	private boolean mResuming = false;
 	private boolean mUserBelongsToAgency = false;
+
+	//crimes (spotcrime, social crimes)
+	
+	private Handler mCrimesHandler = new Handler();
 	
 	private ConcurrentMap<Integer, Crime> mSpotCrimeRecords = new ConcurrentHashMap<Integer, Crime>();
+	private Runnable mSpotCrimesUpdater;
 	private boolean mSpotCrimeError = false;
+	private boolean mSpotCrimeWideSearch = false;
+	private long mSpotCrimeSince = new DateTime()
+			.minusHours(TapShieldApplication.CRIMES_PERIOD_HOURS)
+			.getMillis();
+	private int mSpotCrimeNumRecords = TapShieldApplication.SPOTCRIME_RECORDS_MAX;
 	
 	private ConcurrentMap<String, SocialCrime> mSocialCrimesRecords = new ConcurrentHashMap<String, SocialCrime>();
 	private boolean mSocialCrimesError = false;
-	
-	private Handler mCrimesHandler = new Handler();
-	private Runnable mSpotCrimesUpdater;
 	private Runnable mSocialCrimesUpdater;
 	
 	@Override
@@ -146,7 +155,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 			@Override
 			public void onDrawerClosed(View drawerView) {
 				super.onDrawerClosed(drawerView);
-				getActionBar().setTitle(R.string.ts_home);
+				getActionBar().setTitle(R.string.ts_screen_home);
 				invalidateOptionsMenu();
 			}
 		};
@@ -309,6 +318,9 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 			mMap.setInfoWindowAdapter(new CrimeInfoWindowAdapter(this));
 
 			mMapCrimeClusterManager = new ClusterManager<CrimeClusterItem>(this, mMap);
+			mMapCrimeClusterManager.setAlgorithm(
+					new PreCachingAlgorithmDecorator<CrimeClusterItem>(
+							new GridBasedAlgorithm<CrimeClusterItem>()));
 			mMapCrimeClusterManager.setRenderer(
 					new CrimeMapClusterRenderer(this, mMap, mMapCrimeClusterManager));
 			mMapCrimeClusterManager.setOnClusterItemInfoWindowClickListener(
@@ -326,6 +338,9 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 					});
 			
 			mMapSocialCrimeClusterManager = new ClusterManager<SocialCrimeClusterItem>(this, mMap);
+			mMapSocialCrimeClusterManager.setAlgorithm(
+					new PreCachingAlgorithmDecorator<SocialCrimeClusterItem>(
+							new GridBasedAlgorithm<SocialCrimeClusterItem>()));
 			mMapSocialCrimeClusterManager.setRenderer(
 					new SocialCrimeMapClusterRenderer(this, mMap, mMapSocialCrimeClusterManager));
 			mMapSocialCrimeClusterManager.setOnClusterItemInfoWindowClickListener(
@@ -456,8 +471,19 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		mTracker.start();
 		mTracker.addLocationListener(this);
 		
+		boolean locationServicesEnabled = UiUtils.checkLocationServicesEnabled(this);
+		
+		if (!locationServicesEnabled) {
+			return;
+		}
+		
 		mCrimesHandler.post(mSpotCrimesUpdater);
 		mCrimesHandler.post(mSocialCrimesUpdater);
+		
+		if (mEmergencyManager.isRunning()) {
+			Intent alert = new Intent(this, AlertActivity.class);
+			startActivity(alert);
+		}
 	}
 	
 	@Override
@@ -546,7 +572,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(!entourageSet);
 		actionBar.setHomeButtonEnabled(!entourageSet);
-		actionBar.setTitle(R.string.ts_home);
+		actionBar.setTitle(R.string.ts_screen_home);
 		actionBar.setDisplayShowTitleEnabled(!entourageSet);
 		actionBar.setDisplayShowCustomEnabled(entourageSet);
 
@@ -636,19 +662,14 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 			return;
 		}
 		
-		final long since = new DateTime()
-				//.minusHours(TapShieldApplication.CRIMES_PERIOD_HOURS)
-				.minusDays(14)
-				.getMillis();
-		
 		SpotCrimeRequest request =
 				new SpotCrimeRequest(TapShieldApplication.SPOTCRIME_CONFIG,
 						mUserLocation.getLatitude(), mUserLocation.getLongitude(),
 						TapShieldApplication.SPOTCRIME_RADIUS)
-				.setSince(since)
+				.setSince(mSpotCrimeSince)
 				.setSortBy(SpotCrimeRequest.SORT_BY_DATE)
 				.setSortOrder(SpotCrimeRequest.SORT_ORDER_DESCENDING)
-				.setMaxRecords(500);
+				.setMaxRecords(mSpotCrimeNumRecords);
 		
 		SpotCrimeCallback callback = new SpotCrimeCallback() {
 			
@@ -662,43 +683,32 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 					if (isFinishing() || results == null || mMap == null) {
 						return;
 					}
-
-					DateTime limit = new DateTime()
-							//.minusHours(TapShieldApplication.CRIMES_PERIOD_HOURS);
-							.minusDays(14);
 					
-					//add new ones (records and markers)
-					for (Crime crime : results) {
-						DateTime crimeDateTime = SpotCrimeUtils.getDateTimeFromCrime(crime);
-						boolean old = crimeDateTime.isBefore(limit);
-						boolean notOther = !crime
-								.getType()
-								.trim()
-								.toLowerCase(Locale.getDefault())
-								.equals(SpotCrimeClient.TYPE_OTHER);
+					/*
+					make a wide search if
+					-first fetch (current list empty and no previous wide search), and
+					-fetched less than 'spotcrime records min'
+					*/
+					if (mSpotCrimeRecords.isEmpty() && !mSpotCrimeWideSearch
+							&& results.size() < TapShieldApplication.SPOTCRIME_RECORDS_MIN) {
 						
-						//add non-duplicates and ones within the timeframe
-						if (!old && notOther && !mSpotCrimeRecords.containsKey(crime.getId())) {
-							mSpotCrimeRecords.put(crime.getId(), crime);
-							mMapCrimeClusterManager.addItem(new CrimeClusterItem(crime));
-						}
+						//avoid further assigning the same values, set 'wide search' flag to true
+						mSpotCrimeWideSearch = true;
+						
+						//to make wide search, from now on set 'since' flag for 'spotcrime extra days'
+						mSpotCrimeSince = new DateTime()
+								.minusDays(TapShieldApplication.SPOTCRIME_EXTRA_PERIOD_DAYS)
+								.getMillis();
+						//to make wide search, from now on set 'max' for 'spotcrime extra records max'
+						mSpotCrimeNumRecords = TapShieldApplication.SPOTCRIME_EXTRA_RECORDS_MAX;
+						
+						//call a new search (to use wide search params)
+						//  and return before handling results
+						loadNearbySpotCrime();
+						return;
 					}
 					
-					//remove old ones
-					for (Crime crime : mSpotCrimeRecords.values()) {
-						boolean old = SpotCrimeUtils.getDateTimeFromCrime(crime).isBefore(limit);
-						
-						if (old) {
-							mMapCrimeClusterManager.removeItem(new CrimeClusterItem(crime));
-							
-							//remove stored record
-							if (mSpotCrimeRecords.containsKey(crime.getId())) {
-								mSpotCrimeRecords.remove(crime.getId());
-							}
-						}
-					}
-					
-					mMapCrimeClusterManager.cluster();
+					handleSpotCrimeResults(results);
 				}
 			}
 
@@ -708,6 +718,43 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		
 		SpotCrimeClient spotCrime = SpotCrimeClient.getInstance(TapShieldApplication.SPOTCRIME_CONFIG);
 		spotCrime.request(request, callback);
+	}
+	
+	private void handleSpotCrimeResults(List<Crime> results) {
+		DateTime limit = new DateTime(mSpotCrimeSince);
+		
+		//add new ones (records and markers)
+		for (Crime crime : results) {
+			DateTime crimeDateTime = SpotCrimeUtils.getDateTimeFromCrime(crime);
+			boolean old = crimeDateTime.isBefore(limit);
+			boolean notOther = !crime
+					.getType()
+					.trim()
+					.toLowerCase(Locale.getDefault())
+					.equals(SpotCrimeClient.TYPE_OTHER);
+			
+			//add non-duplicates and ones within the timeframe
+			if (!old && notOther && !mSpotCrimeRecords.containsKey(crime.getId())) {
+				mSpotCrimeRecords.put(crime.getId(), crime);
+				mMapCrimeClusterManager.addItem(new CrimeClusterItem(crime));
+			}
+		}
+		
+		//remove old ones
+		for (Crime crime : mSpotCrimeRecords.values()) {
+			boolean old = SpotCrimeUtils.getDateTimeFromCrime(crime).isBefore(limit);
+			
+			if (old) {
+				mMapCrimeClusterManager.removeItem(new CrimeClusterItem(crime));
+				
+				//remove stored record
+				if (mSpotCrimeRecords.containsKey(crime.getId())) {
+					mSpotCrimeRecords.remove(crime.getId());
+				}
+			}
+		}
+		
+		mMapCrimeClusterManager.cluster();
 	}
 	
 	private void loadNearbySocialCrimes() {

@@ -46,6 +46,7 @@
             android:layout_height="50dp"
             android:background="@drawable/ts_background_imagebutton"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_send"/>
+            android:src="@drawable/ic_send"
+            android:contentDescription="@string/ts_access_chat_button_send"/>
     </LinearLayout>
 </RelativeLayout>

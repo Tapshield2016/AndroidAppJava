@@ -22,7 +22,8 @@
                 android:layout_margin="@dimen/ts_common_spacing_xxs"
                 android:src="@drawable/ts_avatar_default"
                 android:scaleType="centerInside"
-                android:background="@drawable/ts_button_rect"/>
+                android:background="@drawable/ts_button_rect"
+                android:contentDescription="@string/ts_access_profile_picture"/>
             
             <TextView
                 android:id="@+id/fullprofile_text_name"

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.tapshield.android"
-    android:versionCode="121"
-    android:versionName="2.0.4.5" >
+    android:versionCode="127"
+    android:versionName="2.0.5.2" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -85,7 +85,8 @@
 
 
         <!-- library application to handle image cropping -->
-        <activity android:name="eu.janmuller.android.simplecropimage.CropImage" />
+        <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
+
         <activity
             android:name="com.tapshield.android.ui.activity.MainActivity"
             android:configChanges="orientation|keyboardHidden"
@@ -109,79 +110,99 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name="com.tapshield.android.ui.activity.FullProfileActivity"
+            android:label="@string/ts_screen_profile"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.tapshield.android.ui.activity.OrganizationSelectionActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
-        <activity android:name="com.tapshield.android.ui.activity.ChatActivity" />
+        <activity
+            android:name="com.tapshield.android.ui.activity.ChatActivity"
+            android:label="@string/ts_screen_chat"/>
         <activity
             android:name="com.tapshield.android.ui.activity.MassAlertsActivity"
+            android:label="@string/ts_screen_notifications"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.tapshield.android.ui.activity.AlertActivity"
+            android:label="@string/ts_screen_alert"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.tapshield.android.ui.activity.PickDestinationActivity"
+            android:label="@string/ts_screen_entourage_destination"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.tapshield.android.ui.activity.PickRouteActivity"
+            android:label="@string/ts_screen_entourage_route"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.tapshield.android.ui.activity.PickArrivalContacts"
+            android:label="@string/ts_screen_entourage_etacontacts"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.tapshield.android.ui.activity.ReportListActivity"
+            android:label="@string/ts_screen_report_list"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.tapshield.android.ui.activity.ReportActivity"
+            android:label="@string/ts_screen_report"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.tapshield.android.ui.activity.ReportDetailsActivity"
+            android:label="@string/ts_screen_report_details"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.tapshield.android.ui.activity.BasicInfoActivity"
+            android:label="@string/ts_screen_profile_basic"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.tapshield.android.ui.activity.AppearanceActivity"
+            android:label="@string/ts_screen_profile_appearance"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.tapshield.android.ui.activity.MedicalActivity"
+            android:label="@string/ts_screen_profile_medical"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.tapshield.android.ui.activity.EmergencyContactActivity"
+            android:label="@string/ts_screen_profile_emergency"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.tapshield.android.ui.activity.SettingsActivity"
+            android:label="@string/ts_screen_settings"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.tapshield.android.ui.activity.AboutActivity"
+            android:label="@string/ts_screen_about"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.tapshield.android.ui.activity.OutOfBoundsActivity"
+            android:label="@string/ts_screen_oob"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.tapshield.android.ui.activity.WebHelpActivity"
+            android:label="@string/app_name"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"/>
         <activity
             android:name="com.tapshield.android.ui.activity.ResetPasscodePasswordActivity"
+            android:label="@string/ts_screen_security"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"/>
 

@@ -2,31 +2,28 @@ package com.tapshield.android.utils;
 
 import java.io.File;
 
-import org.apache.commons.io.FileUtils;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
 
+import com.soundcloud.android.crop.Crop;
 import com.tapshield.android.R;
 import com.tapshield.android.api.model.UserProfile;
-
-import eu.janmuller.android.simplecropimage.CropImage;
 
 public class PictureSetter {
 
 	public static final String ACTION_PICTURE_SET = "com.tapshield.android.intent.ACTION_PICTURE_SETTER_SET";
 	
-	private static final int INTENT_REQUEST_PICTURE_PICK = 1;
-    private static final int INTENT_REQUEST_PICTURE_TAKE = 2;
-	private static final int INTENT_REQUEST_PICTURE_CROP = 3;
+	//making use of request codes of cropping library with pick utility
+	private static final int INTENT_REQUEST_PICTURE_TAKE = 1202;
+	private static final int INTENT_REQUEST_PICTURE_PICK = Crop.REQUEST_PICK;
+	private static final int INTENT_REQUEST_PICTURE_CROP = Crop.REQUEST_CROP;
 	
 	private static Activity mActivity;
 	private static Context mContext;
@@ -57,14 +54,8 @@ public class PictureSetter {
 	    mActivity.startActivityForResult(takePicture, INTENT_REQUEST_PICTURE_TAKE);		
 	}
 	
-	private static void cropPictureFile(File file) {
-		Intent cropper = new Intent(mContext, CropImage.class);
-		cropper.putExtra(CropImage.IMAGE_PATH, file.getPath());
-		cropper.putExtra(CropImage.SCALE, true);
-		cropper.putExtra(CropImage.ASPECT_X, 1);
-		cropper.putExtra(CropImage.ASPECT_Y, 1);
-		
-		mActivity.startActivityForResult(cropper, INTENT_REQUEST_PICTURE_CROP);
+	private static void cropPictureWithUri(Uri source, Uri destination) {
+		new Crop(source).output(destination).asSquare().start(mActivity);
 	}
 	
 	private static void pickPicture() {
@@ -79,13 +70,7 @@ public class PictureSetter {
 		File file = UserProfile.getTemporaryPictureFile(mContext);
 		
 		if (file != null) {
-			
-			Intent intentPhotopicker = new Intent(Intent.ACTION_GET_CONTENT);
-			intentPhotopicker.setType("image/*");
-			mActivity.startActivityForResult(Intent.createChooser(
-					intentPhotopicker,
-					mContext.getString(R.string.ts_fullprofile_picture_chooserintent_title)),
-					INTENT_REQUEST_PICTURE_PICK);
+			Crop.pickImage(mActivity);
 		} else {
 			UiUtils.toastLong(mContext, mContext.getString(R.string.ts_fullprofile_error_sdcard_absent));
 		}
@@ -99,39 +84,22 @@ public class PictureSetter {
 		switch (requestCode) {
 		case INTENT_REQUEST_PICTURE_PICK:
 			if (data != null) {
-				Uri uri = data.getData();
-				
-		        String[] projection = { MediaStore.Images.Media.DATA };
-		        Cursor cursor = mContext.getContentResolver().query(uri, projection, null, null, null);
-		        
-		        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-		        cursor.moveToFirst();
-	            String path = cursor.getString(column_index);
-	            cursor.close();
-	            
-	            File picked = new File(path);
-	            File temp = UserProfile.getTemporaryPictureFile(mContext);
+				Uri uriPicked = data.getData();
+
+				File temp = UserProfile.getTemporaryPictureFile(mContext);
 	            temp.delete();
-	            try {
-	            	FileUtils.copyFile(picked, temp);
-	            } catch (Exception e) {
-	            } finally {
-	            	cropPictureFile(temp);
-	            }
+	            
+	            Uri uriCropped = Uri.fromFile(temp);
+	            
+	            cropPictureWithUri(uriPicked, uriCropped);
 			}
 			break;
 		case INTENT_REQUEST_PICTURE_TAKE:
-			File temp = UserProfile.getTemporaryPictureFile(mContext);
-			cropPictureFile(temp);
+			File taken = UserProfile.getTemporaryPictureFile(mContext);
+			cropPictureWithUri(Uri.fromFile(taken), Uri.fromFile(taken));
 			break;
 		case INTENT_REQUEST_PICTURE_CROP:
-			String path = data.getStringExtra(CropImage.IMAGE_PATH);
-			
-			if (path == null) {
-				return;
-			}
-			
-			final File cropped = new File(path);
+			final File cropped = UserProfile.getTemporaryPictureFile(mContext);
 			new AsyncTask<Void, Void, Void>() {
 
 				@Override
