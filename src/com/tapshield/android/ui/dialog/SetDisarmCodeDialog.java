@@ -1,6 +1,8 @@
 package com.tapshield.android.ui.dialog;
 
 import android.app.DialogFragment;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +21,7 @@ public class SetDisarmCodeDialog extends DialogFragment implements DialpadListen
 
 	private JavelinUserManager mUserManager;
 	private Dialpad mDialpad;
+	private OnCancelListener mCancelListener;
 	
 	public SetDisarmCodeDialog() {
 		setStyle(STYLE_NORMAL, android.R.style.Theme_DeviceDefault_Dialog);
@@ -45,6 +48,15 @@ public class SetDisarmCodeDialog extends DialogFragment implements DialpadListen
 				.getInstance(getActivity(),TapShieldApplication.JAVELIN_CONFIG)
 				.getUserManager();
 	}
+	
+	@Override
+	public void onCancel(DialogInterface dialog) {
+		if (mCancelListener != null) {
+			mCancelListener.onCancel(dialog);
+		} else {
+			super.onCancel(dialog);
+		}
+	}
 
 	@Override
 	public void onInputComplete(String input) {
@@ -70,4 +82,8 @@ public class SetDisarmCodeDialog extends DialogFragment implements DialpadListen
 
 	@Override
 	public void onInputChange(String newInput) {}
+	
+	public void setOnCancelListener(OnCancelListener l) {
+		mCancelListener = l;
+	}
 }

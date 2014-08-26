@@ -427,7 +427,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		
 		mYank.setListener(this);
 		
-		JavelinUserManager userManager = mJavelin.getUserManager();
+		final JavelinUserManager userManager = mJavelin.getUserManager();
 		boolean userPresent = userManager.isPresent();
 		
 		if (!userPresent) {
@@ -441,8 +441,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		} else {
 			mUserBelongsToAgency = userManager.getUser().belongsToAgency();
 
-			boolean needDisarmCode = userManager.getUser().getDisarmCode() == null
-					|| userManager.getUser().getDisarmCode().isEmpty();
+			boolean needDisarmCode = !userManager.getUser().hasDisarmCode();
 			boolean verifyPhone  = mUserBelongsToAgency && !userManager.getUser().isPhoneNumberVerified();
 			boolean acceptedContidions = LocalTermConditionAgreement.getTermConditionsAccepted(this);
 			
@@ -453,6 +452,15 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 			if (needDisarmCode) {
 				if (mSetDisarmCodeDialog == null) {
 					mSetDisarmCodeDialog = new SetDisarmCodeDialog();
+					mSetDisarmCodeDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+						
+						@Override
+						public void onCancel(DialogInterface dialog) {
+							if (!userManager.getUser().hasDisarmCode()) {
+								finish();
+							}
+						}
+					});
 				}
 				
 				if (!mSetDisarmCodeDialog.isVisible()) {
