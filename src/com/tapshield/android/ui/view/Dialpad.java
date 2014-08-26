@@ -74,6 +74,11 @@ public class Dialpad extends LinearLayout implements OnClickListener {
 		mIndicator.setSize(mInputNumber);
 	}
 	
+	public void setMessage(final String message) {
+		mMessageContent = message;
+		mMessage.setText(mMessageContent);
+	}
+	
 	private void add(int number) {
 		if (mInputCounter >= mInputNumber) {
 			return;
