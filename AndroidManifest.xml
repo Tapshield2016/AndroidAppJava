@@ -81,6 +81,11 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyCOLa7om8_AGznekq6jV6pNrCXTCj_JM3E" />
 
+        <!-- tag required by facebook sdk for fb signin -->
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/ts_social_facebook_app_id"/>
+        
         <!-- ACTIVITIES -->
 
 
@@ -203,6 +208,16 @@
         <activity
             android:name="com.tapshield.android.ui.activity.ResetPasscodePasswordActivity"
             android:label="@string/ts_screen_security"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.tapshield.android.ui.activity.GooglePlusLoginActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
+        <!-- activity required by facebook sdk for fb signin -->
+        <activity android:name="com.facebook.LoginActivity"/>
+        <activity
+            android:name="com.tapshield.android.ui.activity.FacebookLoginActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"/>
 

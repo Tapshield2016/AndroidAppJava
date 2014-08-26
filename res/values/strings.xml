@@ -383,6 +383,11 @@
         \n\nSoundCloud - Android Crop: Licensed under the Apache License, Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0
     </string>
     
+    <!-- social -->
+    <string name="ts_social_facebook_app_id">634154063306218</string>
+    <string name="ts_social_facebook">Facebook &#8230;</string>
+    <string name="ts_social_googleplus">Google+ &#8230;</string>
+    
     <!-- accessibility -->
     <string name="ts_access_main_button_entourage">Entourage, track your location until a destination, notifying selected contacts.</string>
     <string name="ts_access_main_button_locateme">Center map on your location</string>
