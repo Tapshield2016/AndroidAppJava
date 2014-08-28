@@ -58,6 +58,7 @@ import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.location.LocationTracker;
 import com.tapshield.android.manager.EmergencyManager;
 import com.tapshield.android.manager.EntourageManager;
+import com.tapshield.android.manager.SessionManager;
 import com.tapshield.android.manager.YankManager;
 import com.tapshield.android.manager.YankManager.YankListener;
 import com.tapshield.android.model.CrimeClusterItem;
@@ -292,6 +293,8 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 						TapShieldApplication.SOCIAL_CRIMES_UPDATE_FREQUENCY_SECONDS * 1000);
 			}
 		};
+		
+		SessionManager.getInstance(this).check(this);
 	}
 	
 	@Override
