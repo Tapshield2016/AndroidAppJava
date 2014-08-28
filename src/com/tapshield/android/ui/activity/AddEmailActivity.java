@@ -1,7 +1,8 @@
 package com.tapshield.android.ui.activity;
 
-import android.content.Intent;
+import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,12 +14,14 @@ import android.widget.TextView;
 import com.tapshield.android.R;
 import com.tapshield.android.api.JavelinClient;
 import com.tapshield.android.api.JavelinUserManager;
+import com.tapshield.android.api.JavelinUserManager.UserEmailsListener;
 import com.tapshield.android.api.model.Agency;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.utils.StringUtils;
 import com.tapshield.android.utils.UiUtils;
 
-public class AddEmailActivity extends BaseFragmentActivity implements OnClickListener {
+public class AddEmailActivity extends BaseFragmentActivity
+		implements OnClickListener, UserEmailsListener {
 
 	private TextView mInstructions;
 	private EditText mEmail;
@@ -28,6 +31,8 @@ public class AddEmailActivity extends BaseFragmentActivity implements OnClickLis
 	
 	private JavelinClient mJavelin;
 	private JavelinUserManager mUserManager;
+	
+	private ProgressDialog mWorkingDialog;
 	
 	@Override
 	protected void onCreate(Bundle savedInstance) {
@@ -46,6 +51,11 @@ public class AddEmailActivity extends BaseFragmentActivity implements OnClickLis
 		mAdd.setOnClickListener(this);
 		mResend.setOnClickListener(this);
 		mComplete.setOnClickListener(this);
+		
+		mWorkingDialog = new ProgressDialog(this);
+		mWorkingDialog.setCancelable(false);
+		mWorkingDialog.setMessage("Working. Please wait...");
+		mWorkingDialog.setIndeterminate(true);
 	}
 	
 	@Override
@@ -76,24 +86,28 @@ public class AddEmailActivity extends BaseFragmentActivity implements OnClickLis
 
 	@Override
 	public void onClick(View v) {
+		
+		String email = mEmail.getText().toString();
+		
+		if (!isEmailValid(email)) {
+			return;
+		}
+		
 		switch (v.getId()) {
 		case R.id.addemail_button_add:
-			if (isEmailValid()) {
-				
-			}
+			addEmail(email);
 			break;
 		case R.id.addemail_button_resend:
+			resendActivation(email);
 			break;
 		case R.id.addemail_button_complete:
-			if (isEmailValid()) {
-				
-			}
+			checkActivation(email);
 			break;
 		}
 	}
 	
-	private boolean isEmailValid() {
-		String email = mEmail.getText().toString().trim();
+	private boolean isEmailValid(String email) {
+		email = email.trim();
 		
 		if (!StringUtils.isEmailValid(email)) {
 			mEmail.setError("Email structure is invalid. Example: user@where.com");
@@ -110,11 +124,51 @@ public class AddEmailActivity extends BaseFragmentActivity implements OnClickLis
 		return true;
 	}
 	
+	private void addEmail(String email) {
+		mAdd.setEnabled(false);
+		mWorkingDialog.show();
+		mUserManager.addEmail(email, this);
+	}
+	
+	private void checkActivation(String email) {
+		mWorkingDialog.show();
+		mUserManager.checkEmailActivation(email, this);
+	}
+	
+	private void resendActivation(String email) {
+		mWorkingDialog.show();
+		mUserManager.sendEmailActivation(email, this);
+	}
+	
+	@Override
+	public void onEmailAdded(boolean successful, String extra) {
+		//re-enable add button if attempt failed
+		mAdd.setEnabled(!successful);
+		mWorkingDialog.dismiss();
+		String message = successful ? "Email added!" : extra;
+		UiUtils.toastShort(this, message);
+	}
+
+	@Override
+	public void onEmailActivationChecked(boolean successful, String extra) {
+		mWorkingDialog.dismiss();
+		UiUtils.toastLong(this, "Email activated? " + extra);
+	}
+
+	@Override
+	public void onEmailActivationRequested(boolean successful, String extra) {
+		mWorkingDialog.dismiss();
+		String message = successful ? "Email verified!" : extra;
+		UiUtils.toastShort(this, message);
+		done();
+	}
+	
 	private void cancel() {
 		finish();
 	}
 	
 	private void done() {
 		UiUtils.startActivityNoStack(this, MainActivity.class);
+		finish();
 	}
 }
