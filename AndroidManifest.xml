@@ -220,7 +220,19 @@
             android:name="com.tapshield.android.ui.activity.FacebookLoginActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"/>
-
+        <activity
+            android:name="com.tapshield.android.ui.activity.AddEmailActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.tapshield.android.ui.activity.VerifyPhoneActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.tapshield.android.ui.activity.SetOrganizationActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
+        
         <!-- SERVICES -->
         <service
             android:name="com.twilio.client.TwilioClientService"

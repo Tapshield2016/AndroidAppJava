@@ -91,6 +91,18 @@
     <string name="ts_organizationselection_searchview_hint">Search All</string>
     <string name="ts_organizationselection_list_empty">No nearby organizations. Tap \'search\' icon to see all organization.</string>
 
+    <string name="ts_setorganization_showall">Show All</string>
+    <string name="ts_setorganization_filter">Filter</string>
+    <string name="ts_setorganization_listempty">No nearby organizations. Tap \'Show All.\'</string>
+    
+    <!-- verifying phone number -->
+    <string name="ts_verifyphone_wait_title">Please wait</string>
+    <string name="ts_verifyphone_wait_message">Verifying code&#8230;</string>
+    <string name="ts_verifyphone_ok">Code verified</string>
+    <string name="ts_verifyphone_error_prefix">Error verifying:</string>
+    <string name="ts_verifyphone_update_error_prefix">Error updating changed number:</string>
+    <string name="ts_verifyphone_instructions">Enter phone number and then tap Re-send SMS to receive the verification code.</string>
+    
     <!-- fragment required info -->
     <string name="ts_fragment_requiredinfo_edit_email_hint">Email Address</string>
     <string name="ts_fragment_requiredinfo_edit_password_hint">Password</string>
@@ -385,8 +397,6 @@
     
     <!-- social -->
     <string name="ts_social_facebook_app_id">634154063306218</string>
-    <string name="ts_social_facebook">Facebook &#8230;</string>
-    <string name="ts_social_googleplus">Google+ &#8230;</string>
     
     <!-- accessibility -->
     <string name="ts_access_main_button_entourage">Entourage, track your location until a destination, notifying selected contacts.</string>
