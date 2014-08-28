@@ -6,8 +6,10 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.facebook.Session;
 import com.facebook.Session.StatusCallback;
@@ -23,6 +25,8 @@ import com.tapshield.android.api.model.User;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.utils.UiUtils;
 
+import elorriaga.leon.android.imageflipanimator.ImageFlipAnimator;
+
 public class FacebookLoginActivity extends Activity
 		implements StatusCallback, OnUserLogInListener {
 
@@ -30,7 +34,8 @@ public class FacebookLoginActivity extends Activity
 	private static final List<String> mPermissions = Arrays.asList("public_profile", "email");
 	
 	private JavelinUserManager mUserManager;
-	
+
+	private ImageView mImage;
 	private LoginButton mSignIn;
 	private UiLifecycleHelper mUiHelper;
 	
@@ -43,6 +48,8 @@ public class FacebookLoginActivity extends Activity
 		mUserManager = JavelinClient
 				.getInstance(this, TapShieldApplication.JAVELIN_CONFIG)
 				.getUserManager();
+		
+		mImage = (ImageView) findViewById(R.id.login_facebook_image);
 		
 		mSignIn = (LoginButton) findViewById(R.id.authButton);
 		mSignIn.setReadPermissions(mPermissions);
@@ -63,6 +70,14 @@ public class FacebookLoginActivity extends Activity
 		
 		mUiHelper = new UiLifecycleHelper(this, this);
 		mUiHelper.onCreate(savedInstanceState);
+		
+		new ImageFlipAnimator()
+				.duration(getResources().getInteger(R.integer.ts_login_social_animation_flip))
+				.imagesResources(
+						R.drawable.ts_logo_shield_white_small,
+						R.drawable.ts_social_facebook_logo_small)
+				.alpha(0.6f, 1.0f, 0.6f)
+				.start(mImage);
 		
 		mSignIn.performClick();
 	}

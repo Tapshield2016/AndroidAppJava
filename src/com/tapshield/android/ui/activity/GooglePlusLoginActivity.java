@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
+import android.widget.ImageView;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
@@ -26,6 +28,8 @@ import com.tapshield.android.api.model.User;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.utils.UiUtils;
 
+import elorriaga.leon.android.imageflipanimator.ImageFlipAnimator;
+
 public class GooglePlusLoginActivity extends Activity
 		implements ConnectionCallbacks, OnConnectionFailedListener, OnUserLogInListener {
 
@@ -34,6 +38,7 @@ public class GooglePlusLoginActivity extends Activity
 	
 	private JavelinUserManager mUserManager;
 	
+	private ImageView mImage;
 	private GoogleApiClient mClient;
 	private boolean mIntentInProgress = false;
 	
@@ -47,6 +52,8 @@ public class GooglePlusLoginActivity extends Activity
 				.getInstance(this, TapShieldApplication.JAVELIN_CONFIG)
 				.getUserManager();
 		
+		mImage = (ImageView) findViewById(R.id.login_googleplus_image);
+		
 		mClient = new GoogleApiClient.Builder(this)
 				.addConnectionCallbacks(this)
 				.addOnConnectionFailedListener(this)
@@ -54,6 +61,14 @@ public class GooglePlusLoginActivity extends Activity
 				.addScope(Plus.SCOPE_PLUS_LOGIN)
 				.build();
 		
+		new ImageFlipAnimator()
+				.duration(getResources().getInteger(R.integer.ts_login_social_animation_flip))
+				.imagesResources(
+						R.drawable.ts_logo_shield_white_small,
+						R.drawable.ts_social_googleplus_logo_small)
+				.alpha(0.6f, 1.0f, 0.6f)
+				.start(mImage);
+
 		signIn();
 	}
 

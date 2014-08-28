@@ -109,4 +109,7 @@
     <!-- about -->
     <dimen name="ts_about_logo_height">130dp</dimen>
     
+    <!-- social -->
+    <dimen name="ts_social_login_network_logo">110dp</dimen>
+    
 </resources>

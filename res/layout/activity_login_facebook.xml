@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#3B5998"
+    android:paddingTop="@dimen/ts_common_spacing_xl">
     
-    <TextView
-	    android:layout_width="match_parent"
-	    android:layout_height="match_parent"
+    <ImageView
+        android:id="@+id/login_facebook_image"
+	    android:layout_width="@dimen/ts_social_login_network_logo"
+        android:layout_height="@dimen/ts_social_login_network_logo"
 	    android:gravity="center"
-	    android:textSize="@dimen/ts_common_text_m"
-	    android:text="@string/ts_social_facebook"
-	    android:textColor="@android:color/white"
-	    android:background="#3B5998"/>
+	    android:layout_gravity="center_horizontal|top"
+	    android:scaleType="fitCenter"/>
     
     <com.facebook.widget.LoginButton
         android:id="@+id/authButton"
