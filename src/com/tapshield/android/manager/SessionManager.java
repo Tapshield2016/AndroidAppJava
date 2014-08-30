@@ -7,7 +7,10 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 
 import com.google.android.gms.location.LocationListener;
@@ -28,6 +31,7 @@ import com.tapshield.android.utils.UiUtils;
 public class SessionManager implements LocationListener, OnAgenciesFetchListener {
 
 	private static final int NOTIFICATION_ID = 1010;
+	private static final String PREFERENCES_KEY_CHECK = "com.tapshield.android.preferences.key_sessionmanager_check";
 	
 	private static SessionManager mInstance;
 	
@@ -35,6 +39,7 @@ public class SessionManager implements LocationListener, OnAgenciesFetchListener
 	private JavelinClient mJavelin;
 	private LocationTracker mTracker;
 	private NotificationManager mNotificationManager;
+	private SharedPreferences mPreferences;
 	
 	private boolean mGotLocation;
 
@@ -44,6 +49,7 @@ public class SessionManager implements LocationListener, OnAgenciesFetchListener
 		mTracker = LocationTracker.getInstance(mContext);
 		mNotificationManager = (NotificationManager) mContext
 				.getSystemService(Context.NOTIFICATION_SERVICE);
+		mPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
 	}
 	
 	public static SessionManager getInstance(Context context) {
@@ -100,6 +106,11 @@ public class SessionManager implements LocationListener, OnAgenciesFetchListener
 	}
 	
 	public void check(final Context context) {
+		//if key is set to false, do not check--default is true for sporadic checks
+		if (!mPreferences.getBoolean(PREFERENCES_KEY_CHECK, true)) {
+			return;
+		}
+		
 		JavelinUserManager userManager = mJavelin.getUserManager();
 		
 		if (userManager == null || !userManager.isPresent()) {
@@ -118,7 +129,16 @@ public class SessionManager implements LocationListener, OnAgenciesFetchListener
 		}
 		
 		if (!isRequiredDomainSupported(user)) {
-			UiUtils.startActivityNoStack(context, AddEmailActivity.class);
+			
+			Bundle extras = null;
+			
+			String unverifiedEmail = getUnverifiedRequirementMatchingEmail(user);
+			if (unverifiedEmail != null) {
+				extras = new Bundle();
+				extras.putString(AddEmailActivity.EXTRA_UNVERIFIED_EMAIL, unverifiedEmail);
+			}
+			
+			UiUtils.startActivityNoStack(context, AddEmailActivity.class, extras);
 			return;
 		}
 		
@@ -126,6 +146,19 @@ public class SessionManager implements LocationListener, OnAgenciesFetchListener
 			UiUtils.startActivityNoStack(context, VerifyPhoneActivity.class);
 			return;
 		}
+		
+		//by getting past the conditional statements, we are past required info, update remote user
+		updateRemoteUser();
+	}
+	
+	public void setSporadicChecks(boolean enableSporadicChecks) {
+		SharedPreferences.Editor editor = mPreferences.edit();
+		editor.putBoolean(PREFERENCES_KEY_CHECK, enableSporadicChecks);
+		editor.commit();
+	}
+	
+	public void updateRemoteUser() {
+		mJavelin.getUserManager().updateRequiredInformation(null);
 	}
 	
 	private boolean isRequiredDomainSupported(final User user) {
@@ -136,11 +169,23 @@ public class SessionManager implements LocationListener, OnAgenciesFetchListener
 		final String domain = user.agency.domain;
 		
 		for (Email email : user.allEmails.getList()) {
-			if (email.get().endsWith(domain)) {
+			if (email.get().endsWith(domain) && email.isActive()) {
 				return true;
 			}
 		}
 		
 		return false;
+	}
+	
+	private String getUnverifiedRequirementMatchingEmail(final User user) {
+		final String domain = user.agency.domain;
+		
+		for (Email email : user.allEmails.getList()) {
+			if (email.get().endsWith(domain) && !email.isActive()) {
+				return email.get();
+			}
+		}
+		
+		return null;
 	}
 }
