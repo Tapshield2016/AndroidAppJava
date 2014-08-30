@@ -1,8 +1,8 @@
 package com.tapshield.android.ui.activity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +23,8 @@ import com.tapshield.android.utils.UiUtils;
 public class AddEmailActivity extends BaseFragmentActivity
 		implements OnClickListener, UserEmailsListener {
 
+	public static final String EXTRA_UNVERIFIED_EMAIL = "com.tapshield.android.extra.unverified_email";
+	
 	private TextView mInstructions;
 	private EditText mEmail;
 	private Button mAdd;
@@ -56,16 +58,27 @@ public class AddEmailActivity extends BaseFragmentActivity
 		mWorkingDialog.setCancelable(false);
 		mWorkingDialog.setMessage("Working. Please wait...");
 		mWorkingDialog.setIndeterminate(true);
-	}
-	
-	@Override
-	protected void onPostCreate(Bundle savedInstanceState) {
-		super.onPostCreate(savedInstanceState);
+		
+		String unverifiedEmail = null;
+		
+		Intent i;
+		if ((i = getIntent()) != null && i.hasExtra(EXTRA_UNVERIFIED_EMAIL)) {
+			unverifiedEmail = i.getStringExtra(EXTRA_UNVERIFIED_EMAIL);
+		}
 		
 		String domain = mUserManager.getUser().agency.domain;
-		String instructions = String.format("The selected organization requires emails ending in" +
-				" '%s', which you don't have. Add a valid email to your account.", domain);
-		mInstructions.setText(instructions);
+		String instructionsPrefix = 
+				String.format("The selected organization requires emails ending in '%s.'", domain);
+		String instructionsSuffix = " Please add one that fulfills the requirement.";
+
+		if (unverifiedEmail != null) {
+			instructionsSuffix = " Please complete the verification of this email that does" +
+					" match the requirement. You should receive an activation email shortly.";
+			mEmail.setText(unverifiedEmail);
+			mResend.performClick();
+		}
+		
+		mInstructions.setText(instructionsPrefix + instructionsSuffix);
 	}
 	
 	@Override
@@ -152,18 +165,20 @@ public class AddEmailActivity extends BaseFragmentActivity
 	@Override
 	public void onEmailActivationChecked(boolean successful, String extra) {
 		mWorkingDialog.dismiss();
-		UiUtils.toastLong(this, "Email activated? " + extra);
+		String message = successful ? "Email verified!" : extra;
+		UiUtils.toastLong(this, message);
+		done();
 	}
 
 	@Override
 	public void onEmailActivationRequested(boolean successful, String extra) {
 		mWorkingDialog.dismiss();
-		String message = successful ? "Email verified!" : extra;
+		String message = successful ? "Check your inbox!" : extra;
 		UiUtils.toastShort(this, message);
-		done();
 	}
 	
 	private void cancel() {
+		mUserManager.removeUserFromOrganization();
 		finish();
 	}
 	
