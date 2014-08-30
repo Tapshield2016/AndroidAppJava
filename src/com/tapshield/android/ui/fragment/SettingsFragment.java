@@ -12,9 +12,11 @@ import com.tapshield.android.R;
 import com.tapshield.android.api.JavelinClient;
 import com.tapshield.android.api.JavelinUserManager.OnUserLogOutListener;
 import com.tapshield.android.app.TapShieldApplication;
+import com.tapshield.android.manager.SessionManager;
 import com.tapshield.android.ui.activity.AboutActivity;
 import com.tapshield.android.ui.activity.MainActivity;
 import com.tapshield.android.ui.activity.ResetPasscodePasswordActivity;
+import com.tapshield.android.ui.activity.SetOrganizationActivity;
 import com.tapshield.android.utils.UiUtils;
 
 public class SettingsFragment extends PreferenceFragment
@@ -63,6 +65,9 @@ public class SettingsFragment extends PreferenceFragment
 			Intent intent = new Intent(getActivity(), ResetPasscodePasswordActivity.class);
 			startActivity(intent);
 		} else if (signout) {
+			SessionManager
+					.getInstance(getActivity())
+					.setSporadicChecks(true);
 			JavelinClient
 					.getInstance(getActivity(), TapShieldApplication.JAVELIN_CONFIG)
 					.getUserManager()

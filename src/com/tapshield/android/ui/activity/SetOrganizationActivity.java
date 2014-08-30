@@ -28,6 +28,7 @@ import com.tapshield.android.api.model.Agency;
 import com.tapshield.android.api.model.User;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.location.LocationTracker;
+import com.tapshield.android.manager.SessionManager;
 import com.tapshield.android.ui.adapter.AgencyListAdapter;
 import com.tapshield.android.utils.UiUtils;
 
@@ -157,6 +158,32 @@ public class SetOrganizationActivity extends BaseFragmentActivity
 		return true;
 	}
 	
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_setorganization_notnow:
+			
+			//no agency selected, notify user, and call done()
+			
+			new AlertDialog.Builder(this)
+					.setTitle(R.string.ts_setorganization_dialog_notnow_title)
+					.setMessage(R.string.ts_setorganization_dialog_notnow_message)
+					.setPositiveButton(R.string.ts_common_ok, new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							SessionManager
+									.getInstance(SetOrganizationActivity.this)
+									.setSporadicChecks(false);
+							done();
+						}
+					})
+					.show();
+			return true;
+		}
+		return false;
+	}
+	
 	private void setDataSet(List<Agency> dataSet) {
 		mAdapter.setItems(dataSet);
 		mEmpty.setVisibility(dataSet.isEmpty() ? View.VISIBLE : View.GONE);
@@ -228,11 +255,13 @@ public class SetOrganizationActivity extends BaseFragmentActivity
 	}
 	
 	private void saveSelectedAgency(final Agency agency) {
+		//do NOT call UserManager.updateRequiredInformation() since it's the SessionManager's
+		// responsibility once all pieces of information have been verified.
+		//only update local cache. 
 		JavelinUserManager userManager = mJavelin.getUserManager();
 		User user = userManager.getUser();
 		user.agency = agency;
 		userManager.setUser(user);
-		userManager.updateRequiredInformation(null);
 	}
 	
 	private void done() {
