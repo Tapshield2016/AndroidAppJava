@@ -41,6 +41,9 @@ public class AddEmailActivity extends BaseFragmentActivity
 		super.onCreate(savedInstance);
 		setContentView(R.layout.activity_addemail);
 		
+		UiUtils.setStepIndicatorInActionBar(this, 1, 3,
+				R.string.ts_registration_actionbar_title_emailverification);
+		
 		mInstructions = (TextView) findViewById(R.id.addemail_text_instructions);
 		mEmail = (EditText) findViewById(R.id.addemail_edit_email);
 		mAdd = (Button) findViewById(R.id.addemail_button_add);

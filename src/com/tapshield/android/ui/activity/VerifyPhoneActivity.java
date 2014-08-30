@@ -34,6 +34,9 @@ public class VerifyPhoneActivity extends BaseFragmentActivity
 		super.onCreate(savedInstance);
 		setContentView(R.layout.activity_verifyphone);
 		
+		UiUtils.setStepIndicatorInActionBar(this, 2, 3,
+				R.string.ts_registration_actionbar_title_phoneconfirmation);
+		
 		mUserManager = JavelinClient
 				.getInstance(this, TapShieldApplication.JAVELIN_CONFIG)
 				.getUserManager();

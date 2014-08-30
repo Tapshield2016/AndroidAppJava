@@ -1,5 +1,6 @@
 package com.tapshield.android.utils;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tapshield.android.R;
+import com.tapshield.android.ui.view.StepIndicator;
 
 public class UiUtils {
 
@@ -160,5 +162,32 @@ public class UiUtils {
 					.create()
 					.show();
 		}
+	}
+	
+	public static void setStepIndicatorInActionBar(final Activity activity, final int stepCurrent,
+			final int stepCount, final int titleResourceId) {
+		setStepIndicatorInActionBar(activity, stepCurrent, stepCount,
+				activity.getString(titleResourceId));
+	}
+	
+	public static void setStepIndicatorInActionBar(final Activity activity, final int stepCurrent,
+			final int stepCount, final String title) {
+		
+		View actionBarCustomView = activity.getLayoutInflater().inflate(R.layout.actionbar_steps, null);
+		actionBarCustomView.setLayoutParams(new ActionBar.LayoutParams(
+				ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT));
+		
+		TextView stepTitle = (TextView) actionBarCustomView.findViewById(R.id.actionbar_steps_text);
+		StepIndicator stepIndicator = (StepIndicator)
+				actionBarCustomView.findViewById(R.id.actionbar_steps_stepindicator);
+		
+		ActionBar actionBar = activity.getActionBar();
+		actionBar.setDisplayShowTitleEnabled(false);
+		actionBar.setDisplayShowCustomEnabled(true);
+		actionBar.setCustomView(actionBarCustomView);
+		
+		stepIndicator.setCurrentStep(stepCurrent);
+		stepIndicator.setNumSteps(stepCount);
+		stepTitle.setText(title);
 	}
 }

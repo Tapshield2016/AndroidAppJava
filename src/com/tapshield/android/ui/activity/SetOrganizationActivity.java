@@ -55,6 +55,10 @@ public class SetOrganizationActivity extends BaseFragmentActivity
 	protected void onCreate(Bundle savedInstance) {
 		super.onCreate(savedInstance);
 		setContentView(R.layout.activity_setorganization);
+		
+		UiUtils.setStepIndicatorInActionBar(this, 0, 3,
+				R.string.ts_registration_actionbar_title_pickorg);
+		
 		mList = (ListView) findViewById(R.id.setorganization_list);
 		mEmpty = findViewById(R.id.setorganization_empty);
 		
