@@ -106,11 +106,6 @@ public class SessionManager implements LocationListener, OnAgenciesFetchListener
 	}
 	
 	public void check(final Context context) {
-		//if key is set to false, do not check--default is true for sporadic checks
-		if (!mPreferences.getBoolean(PREFERENCES_KEY_CHECK, true)) {
-			return;
-		}
-		
 		JavelinUserManager userManager = mJavelin.getUserManager();
 		
 		if (userManager == null || !userManager.isPresent()) {
@@ -122,6 +117,12 @@ public class SessionManager implements LocationListener, OnAgenciesFetchListener
 		//no set org, background check for nearby ones, otherwise, check for missing required info
 		
 		if (!user.belongsToAgency()) {
+			
+			//if key is set to false, do not check--default is true for sporadic checks
+			if (!mPreferences.getBoolean(PREFERENCES_KEY_CHECK, true)) {
+				return;
+			}
+			
 			mGotLocation = false;
 			mTracker.start();
 			mTracker.addLocationListener(this);
