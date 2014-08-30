@@ -91,9 +91,12 @@
     <string name="ts_organizationselection_searchview_hint">Search All</string>
     <string name="ts_organizationselection_list_empty">No nearby organizations. Tap \'search\' icon to see all organization.</string>
 
+    <string name="ts_setorganization_notnow">Not Now</string>
     <string name="ts_setorganization_showall">Show All</string>
     <string name="ts_setorganization_filter">Filter</string>
     <string name="ts_setorganization_listempty">No nearby organizations. Tap \'Show All.\'</string>
+    <string name="ts_setorganization_dialog_notnow_title">Pick an Organization later</string>
+    <string name="ts_setorganization_dialog_notnow_message">You can always pick an organization later in: \'Menu\' > \'Add or Change Organization\' from the main screen.</string>
     
     <!-- verifying phone number -->
     <string name="ts_verifyphone_wait_title">Please wait</string>

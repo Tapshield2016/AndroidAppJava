@@ -2,6 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     
     <item
+        android:id="@+id/action_setorganization_notnow"
+        android:title="@string/ts_setorganization_notnow"
+        android:showAsAction="always|withText"/>
+    
+    <item
         android:id="@+id/action_setorganization_showall"
         android:title="@string/ts_setorganization_showall"
         android:showAsAction="always|collapseActionView|withText"
