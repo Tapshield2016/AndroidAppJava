@@ -54,7 +54,7 @@
     <string name="ts_welcome_skip">Skip</string>
     <string name="ts_welcome_noaccount">No Account?</string>
     <string name="ts_welcome_forgotpassword">Forgot Password?</string>
-    <string name="ts_welcome_intro_1">View local crime, report tips, and be notified of safety alerts in your area.\n\n\&lt;&lt; Swipe screen</string>
+    <string name="ts_welcome_intro_1">View local crime, report tips, and be notified of safety alerts in your area.\n\n\n\n</string>
     <string name="ts_welcome_intro_2">One tap sends your real-time location and profile info to authorities when you hit "Alert".\nThe app automatically launches a call to dispatchers, too.</string>
     <string name="ts_welcome_intro_3">Going on a run while listening to music?\n\nTurn on Yank™ for an added layer of security. TapShield will automatically send an ‘Alert’ if headphones are pulled out of your device on purpose or by force. Don’t worry; you’ll have 10 seconds to disarm the ‘Alert’!</string>
     <string name="ts_welcome_intro_4">Walk with an Entourage™ Set your route before you go. If you don\'t arrive in time, your safety network is automatically notified.</string>

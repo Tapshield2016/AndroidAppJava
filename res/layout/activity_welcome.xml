@@ -43,4 +43,13 @@
             android:textSize="@dimen/ts_welcome_skip_text"
             android:padding="@dimen/ts_common_spacing_m"/>
     </LinearLayout>
+    
+    <ImageView
+        android:id="@+id/welcome_image_swipe"
+        android:layout_width="@dimen/ts_welcome_swipe_size"
+        android:layout_height="@dimen/ts_welcome_swipe_size"
+        android:layout_centerInParent="true"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ts_icon_swipe_left"
+        android:visibility="invisible"/>
 </RelativeLayout>

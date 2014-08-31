@@ -68,6 +68,7 @@
     
     <!-- welcome -->
     <dimen name="ts_welcome_skip_text">24sp</dimen>
+    <dimen name="ts_welcome_swipe_size">90dp</dimen>
     
     <!-- alert -->
     <dimen name="alert_imagebuttons">64dp</dimen>
