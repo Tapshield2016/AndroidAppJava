@@ -68,10 +68,8 @@ public class WelcomeActivity extends BaseFragmentActivity {
 					mIndicatorAndSkip.setVisibility(View.VISIBLE);
 				}
 				
-				if (mSwipe.getVisibility() != View.GONE && position == 0 && offset > 0.1f) {
-					mSwipeAnimation.setAnimationListener(null);
-					mSwipe.clearAnimation();
-					mSwipe.setVisibility(View.GONE);
+				if (offset > 0.1f) {
+					hideSwipingIndicator();
 				}
 			}
 			
@@ -83,6 +81,7 @@ public class WelcomeActivity extends BaseFragmentActivity {
 			
 			@Override
 			public void onClick(View v) {
+				hideSwipingIndicator();
 				mPager.setCurrentItem(mPagerAdapter.getCount() - 1, true);
 			}
 		});
@@ -136,5 +135,15 @@ public class WelcomeActivity extends BaseFragmentActivity {
 			}
 		}
 		super.onBackPressed();
+	}
+	
+	private void hideSwipingIndicator() {
+		if (mSwipe.getVisibility() == View.GONE) {
+			return;
+		}
+		
+		mSwipeAnimation.setAnimationListener(null);
+		mSwipe.clearAnimation();
+		mSwipe.setVisibility(View.GONE);
 	}
 }
