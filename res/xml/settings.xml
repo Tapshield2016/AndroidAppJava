@@ -6,6 +6,10 @@
         android:title="@string/ts_settings_category" >
         
         <Preference
+            android:title="@string/ts_settings_org_title"
+            android:key="@string/ts_settings_org_key"/>
+        
+        <Preference
             android:title="@string/ts_settings_passcode_title"
             android:summary="@string/ts_settings_passcode_summary"
             android:key="@string/ts_settings_passcode_key"/>

@@ -374,6 +374,8 @@
 
     <!-- settings -->
     <string name="ts_settings_category">Settings</string>
+    <string name="ts_settings_org_title">Add or Change Organization</string>
+    <string name="ts_settings_org_key">com.tapshield.android.settings.org.key</string>
     <string name="ts_settings_passcode_title">Change Your Passcode</string>
     <string name="ts_settings_passcode_summary">Your passcode verifies your identity</string>
     <string name="ts_settings_passcode_key">com.tapshield.android.settings.passcode.key</string>
