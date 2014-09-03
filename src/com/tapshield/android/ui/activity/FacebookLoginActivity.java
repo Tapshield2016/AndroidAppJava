@@ -6,16 +6,15 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.facebook.Session;
+import com.facebook.Session.OpenRequest;
 import com.facebook.Session.StatusCallback;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
-import com.facebook.Session.OpenRequest;
 import com.facebook.widget.LoginButton;
 import com.tapshield.android.R;
 import com.tapshield.android.api.JavelinClient;

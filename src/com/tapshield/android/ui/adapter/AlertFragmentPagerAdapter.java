@@ -1,11 +1,11 @@
 package com.tapshield.android.ui.adapter;
 
-import com.tapshield.android.ui.fragment.AlertFragment;
-import com.tapshield.android.ui.fragment.DialpadFragment;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+
+import com.tapshield.android.ui.fragment.AlertFragment;
+import com.tapshield.android.ui.fragment.DialpadFragment;
 
 public class AlertFragmentPagerAdapter extends FragmentPagerAdapter {
 

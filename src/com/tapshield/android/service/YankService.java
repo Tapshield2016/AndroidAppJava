@@ -1,10 +1,10 @@
 package com.tapshield.android.service;
 
-import com.tapshield.android.manager.YankManager;
-
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+
+import com.tapshield.android.manager.YankManager;
 
 public class YankService extends Service {
 

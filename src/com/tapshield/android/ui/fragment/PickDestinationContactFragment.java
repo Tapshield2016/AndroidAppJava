@@ -17,8 +17,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.TextView;
 import android.widget.SearchView.OnQueryTextListener;
+import android.widget.TextView;
 
 import com.tapshield.android.R;
 import com.tapshield.android.utils.ContactsRetriever;
