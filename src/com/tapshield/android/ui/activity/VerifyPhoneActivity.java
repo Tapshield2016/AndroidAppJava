@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -109,6 +111,23 @@ public class VerifyPhoneActivity extends BaseFragmentActivity
 		mCode.addTextChangedListener(codeWatcher);
 	}
 	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.cancel, menu);
+		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_cancel:
+			mUserManager.clearTemporaryAgency();
+			finish();
+			return true;
+		}
+		return false;
+	}
+	
 	private boolean userChangedPhoneNumber() {
 		String latest = mPhone.getText().toString();
 		String original = mUserManager.getUser().phoneNumber;
@@ -127,6 +146,7 @@ public class VerifyPhoneActivity extends BaseFragmentActivity
 		mDialog.dismiss();
 		if (success) {
 			UiUtils.toastShort(this, getString(R.string.ts_verifyphone_ok));
+			UiUtils.startActivityNoStack(this, MainActivity.class);
 			finish();
 		} else {
 			mCode.setText(new String());

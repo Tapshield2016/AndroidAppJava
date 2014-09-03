@@ -2,10 +2,12 @@ package com.tapshield.android.manager;
 
 import java.util.List;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
@@ -26,6 +28,7 @@ import com.tapshield.android.location.LocationTracker;
 import com.tapshield.android.ui.activity.AddEmailActivity;
 import com.tapshield.android.ui.activity.SetOrganizationActivity;
 import com.tapshield.android.ui.activity.VerifyPhoneActivity;
+import com.tapshield.android.ui.dialog.SetPasscodeDialog;
 import com.tapshield.android.utils.UiUtils;
 
 public class SessionManager implements LocationListener, OnAgenciesFetchListener {
@@ -40,6 +43,7 @@ public class SessionManager implements LocationListener, OnAgenciesFetchListener
 	private LocationTracker mTracker;
 	private NotificationManager mNotificationManager;
 	private SharedPreferences mPreferences;
+	private SetPasscodeDialog mSetPasscodeDialog;
 	
 	private boolean mGotLocation;
 
@@ -105,18 +109,49 @@ public class SessionManager implements LocationListener, OnAgenciesFetchListener
 		}
 	}
 	
-	public void check(final Context context) {
-		JavelinUserManager userManager = mJavelin.getUserManager();
+	public void check(final Activity activity) {
+		final JavelinUserManager userManager = mJavelin.getUserManager();
 		
 		if (userManager == null || !userManager.isPresent()) {
 			return;
 		}
 		
-		User user = userManager.getUser();
+		final User user = userManager.getUser();
+		
+		//request passcode to be set; finish if they fail to provide it
+		if (!user.hasDisarmCode()) {
+			mSetPasscodeDialog = new SetPasscodeDialog();
+			mSetPasscodeDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+
+				@Override
+				public void onCancel(DialogInterface dialog) {
+					if (!user.hasDisarmCode()) {
+						activity.finish();
+					}
+				}
+			});
+			mSetPasscodeDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+
+				@Override
+				public void onDismiss(DialogInterface dialog) {
+					if (user.hasDisarmCode()) {
+						//make a check once passcode/disarm code has been set
+						check(activity);
+					}
+				}
+			});
+
+			if (!mSetPasscodeDialog.isVisible()) {
+				mSetPasscodeDialog.show(activity.getFragmentManager(),
+						SetPasscodeDialog.class.getSimpleName());
+			}
+
+			return;
+		}
 		
 		//no set org, background check for nearby ones, otherwise, check for missing required info
 		
-		if (!user.belongsToAgency()) {
+		if (!user.belongsToAgency() && !userManager.hasTemporaryAgency()) {
 			
 			//if key is set to false, do not check--default is true for sporadic checks
 			if (!mPreferences.getBoolean(PREFERENCES_KEY_CHECK, true)) {
@@ -129,27 +164,37 @@ public class SessionManager implements LocationListener, OnAgenciesFetchListener
 			return;
 		}
 		
-		if (!isRequiredDomainSupported(user)) {
+		if (userManager.hasTemporaryAgency() && !isRequiredDomainSupported(userManager)) {
 			
 			Bundle extras = null;
 			
-			String unverifiedEmail = getUnverifiedRequirementMatchingEmail(user);
+			String unverifiedEmail = getUnverifiedRequirementMatchingEmail(userManager);
 			if (unverifiedEmail != null) {
 				extras = new Bundle();
 				extras.putString(AddEmailActivity.EXTRA_UNVERIFIED_EMAIL, unverifiedEmail);
 			}
 			
-			UiUtils.startActivityNoStack(context, AddEmailActivity.class, extras);
+			UiUtils.startActivityNoStack(activity, AddEmailActivity.class, extras);
 			return;
 		}
 		
-		if (user.belongsToAgency() && !user.isPhoneNumberVerified()) {
-			UiUtils.startActivityNoStack(context, VerifyPhoneActivity.class);
+		if ((user.belongsToAgency() || userManager.hasTemporaryAgency())
+				&& !user.isPhoneNumberVerified()) {
+			//checking activity must be finished so if phone verif step is skipped, can be finished
+			// without returning and prompting the user to the same step into a loop
+			UiUtils.startActivityNoStack(activity, VerifyPhoneActivity.class);
+			activity.finish();
 			return;
+		}
+
+		//at this point a temporary organization is not used anymore, but has to be set as the main org
+		// since everything required has been given
+		if (userManager.hasTemporaryAgency()) {
+			userManager.setTemporaryAgencyAsMain();
 		}
 		
 		//by getting past the conditional statements, we are past required info, update remote user
-		updateRemoteUser();
+		userManager.updateRequiredInformation(null);
 	}
 	
 	public void setSporadicChecks(boolean enableSporadicChecks) {
@@ -158,18 +203,17 @@ public class SessionManager implements LocationListener, OnAgenciesFetchListener
 		editor.commit();
 	}
 	
-	public void updateRemoteUser() {
-		mJavelin.getUserManager().updateRequiredInformation(null);
-	}
-	
-	private boolean isRequiredDomainSupported(final User user) {
-		if (!user.agency.requiredDomainEmails) {
+	private boolean isRequiredDomainSupported(final JavelinUserManager userManager) {
+
+		final Agency tempAgency = userManager.getTemporaryAgency();
+		
+		if (!tempAgency.requiredDomainEmails) {
 			return true;
 		}
 		
-		final String domain = user.agency.domain;
+		final String domain = tempAgency.domain;
 		
-		for (Email email : user.allEmails.getList()) {
+		for (Email email : userManager.getUser().allEmails.getList()) {
 			if (email.get().endsWith(domain) && email.isActive()) {
 				return true;
 			}
@@ -178,10 +222,10 @@ public class SessionManager implements LocationListener, OnAgenciesFetchListener
 		return false;
 	}
 	
-	private String getUnverifiedRequirementMatchingEmail(final User user) {
-		final String domain = user.agency.domain;
+	private String getUnverifiedRequirementMatchingEmail(final JavelinUserManager userManager) {
+		final String domain = userManager.getTemporaryAgency().domain;
 		
-		for (Email email : user.allEmails.getList()) {
+		for (Email email : userManager.getUser().allEmails.getList()) {
 			if (email.get().endsWith(domain) && !email.isActive()) {
 				return email.get();
 			}

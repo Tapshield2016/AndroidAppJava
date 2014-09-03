@@ -69,7 +69,7 @@ public class AddEmailActivity extends BaseFragmentActivity
 			unverifiedEmail = i.getStringExtra(EXTRA_UNVERIFIED_EMAIL);
 		}
 		
-		String domain = mUserManager.getUser().agency.domain;
+		String domain = mUserManager.getTemporaryAgency().domain;
 		String instructionsPrefix = 
 				String.format("The selected organization requires emails ending in '%s.'", domain);
 		String instructionsSuffix = " Please add one that fulfills the requirement.";
@@ -130,7 +130,7 @@ public class AddEmailActivity extends BaseFragmentActivity
 			return false;
 		}
 		
-		Agency agency = mUserManager.getUser().agency;
+		Agency agency = mUserManager.getTemporaryAgency();
 		
 		if (agency.requiredDomainEmails && !email.endsWith(agency.domain)) {
 			mEmail.setError("Email must end with '" + agency.domain + "'");
@@ -181,8 +181,8 @@ public class AddEmailActivity extends BaseFragmentActivity
 	}
 	
 	private void cancel() {
-		mUserManager.removeUserFromOrganization();
-		finish();
+		mUserManager.clearTemporaryAgency();
+		done();
 	}
 	
 	private void done() {

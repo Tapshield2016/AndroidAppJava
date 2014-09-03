@@ -23,9 +23,7 @@ import com.google.android.gms.location.LocationListener;
 import com.tapshield.android.R;
 import com.tapshield.android.api.JavelinClient;
 import com.tapshield.android.api.JavelinClient.OnAgenciesFetchListener;
-import com.tapshield.android.api.JavelinUserManager;
 import com.tapshield.android.api.model.Agency;
-import com.tapshield.android.api.model.User;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.location.LocationTracker;
 import com.tapshield.android.manager.SessionManager;
@@ -93,7 +91,7 @@ public class SetOrganizationActivity extends BaseFragmentActivity
 			
 			@Override
 			public void onCancel(DialogInterface dialog) {
-				finish();
+				done();
 			}
 		});
 		
@@ -109,7 +107,7 @@ public class SetOrganizationActivity extends BaseFragmentActivity
 					dismissLoaderWhenFinished();
 				} else {
 					UiUtils.toastShort(SetOrganizationActivity.this, getString(R.string.ts_organizationselection_toast_loading_error));
-					finish();
+					done();
 				}
 			}
 		});
@@ -251,7 +249,8 @@ public class SetOrganizationActivity extends BaseFragmentActivity
 					dismissLoaderWhenFinished();
 					mEmpty.setVisibility(mNearbyAgencies.isEmpty() ? View.VISIBLE : View.GONE);
 				} else {
-					UiUtils.toastShort(SetOrganizationActivity.this, getString(R.string.ts_organizationselection_toast_loading_error));
+					UiUtils.toastShort(SetOrganizationActivity.this,
+							getString(R.string.ts_organizationselection_toast_loading_error));
 					done();
 				}
 			}
@@ -261,11 +260,8 @@ public class SetOrganizationActivity extends BaseFragmentActivity
 	private void saveSelectedAgency(final Agency agency) {
 		//do NOT call UserManager.updateRequiredInformation() since it's the SessionManager's
 		// responsibility once all pieces of information have been verified.
-		//only update local cache. 
-		JavelinUserManager userManager = mJavelin.getUserManager();
-		User user = userManager.getUser();
-		user.agency = agency;
-		userManager.setUser(user);
+		//only set temporary organization
+		mJavelin.getUserManager().setTemporaryAgency(agency);
 	}
 	
 	private void done() {
@@ -279,5 +275,6 @@ public class SetOrganizationActivity extends BaseFragmentActivity
 		}
 		
 		UiUtils.startActivityNoStack(this, MainActivity.class);
+		finish();
 	}
 }
