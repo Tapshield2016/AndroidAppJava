@@ -96,7 +96,7 @@
     <string name="ts_setorganization_filter">Filter</string>
     <string name="ts_setorganization_listempty">No nearby organizations. Tap \'Show All.\'</string>
     <string name="ts_setorganization_dialog_notnow_title">Pick an Organization later</string>
-    <string name="ts_setorganization_dialog_notnow_message">You can always pick an organization later in: \'Menu\' > \'Add or Change Organization\' from the main screen.</string>
+    <string name="ts_setorganization_dialog_notnow_message">You can always change the organization by going into \'Settings\' and then \'Add or Change Organization\'.</string>
     
     <!-- verifying phone number -->
     <string name="ts_verifyphone_wait_title">Please wait</string>
