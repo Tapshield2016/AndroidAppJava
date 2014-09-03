@@ -65,7 +65,7 @@ import com.tapshield.android.model.CrimeClusterItem;
 import com.tapshield.android.model.SocialCrimeClusterItem;
 import com.tapshield.android.ui.adapter.CrimeInfoWindowAdapter;
 import com.tapshield.android.ui.adapter.NavigationListAdapter.NavigationItem;
-import com.tapshield.android.ui.dialog.SetDisarmCodeDialog;
+import com.tapshield.android.ui.dialog.SetPasscodeDialog;
 import com.tapshield.android.ui.fragment.NavigationFragment;
 import com.tapshield.android.ui.fragment.NavigationFragment.OnNavigationItemClickListener;
 import com.tapshield.android.ui.view.CircleButton;
@@ -114,7 +114,6 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 	
 	private AlertDialog mYankDialog;
 	private AlertDialog mDisconnectedDialog;
-	private SetDisarmCodeDialog mSetDisarmCodeDialog;
 
 	private boolean mTrackUser = true;
 	private boolean mResuming = false;
@@ -293,8 +292,6 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 						TapShieldApplication.SOCIAL_CRIMES_UPDATE_FREQUENCY_SECONDS * 1000);
 			}
 		};
-		
-		SessionManager.getInstance(this).check(this);
 	}
 	
 	@Override
@@ -442,55 +439,12 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 				UiUtils.startActivityNoStack(this, WelcomeActivity.class);
 			}
 		} else {
-			mUserBelongsToAgency = userManager.getUser().belongsToAgency();
-
-			boolean needDisarmCode = !userManager.getUser().hasDisarmCode();
-			boolean verifyPhone  = mUserBelongsToAgency && !userManager.getUser().isPhoneNumberVerified();
-			boolean acceptedContidions = LocalTermConditionAgreement.getTermConditionsAccepted(this);
+			//at this point let the SessionManager class deal with what's missing
+			SessionManager.getInstance(this).check(this);
 			
-			if (!mUserBelongsToAgency) {
-				mChat.setEnabled(false);
-			}
-			
-			if (needDisarmCode) {
-				if (mSetDisarmCodeDialog == null) {
-					mSetDisarmCodeDialog = new SetDisarmCodeDialog();
-					mSetDisarmCodeDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-						
-						@Override
-						public void onCancel(DialogInterface dialog) {
-							if (!userManager.getUser().hasDisarmCode()) {
-								finish();
-							}
-						}
-					});
-				}
-				
-				if (!mSetDisarmCodeDialog.isVisible()) {
-					mSetDisarmCodeDialog.show(getFragmentManager(),
-							SetDisarmCodeDialog.class.getSimpleName());
-				}
-			}
-			
-			if (verifyPhone || !acceptedContidions) {
-				Intent welcome = new Intent(this, WelcomeActivity.class);
-				Intent finishStep = new Intent(this, RegistrationActivity.class);
-				
-				if (verifyPhone) {
-					finishStep.putExtra(RegistrationActivity.EXTRA_SET_STEP,
-							RegistrationActivity.STEP_PHONEVERIFICATION);
-				} else if (!acceptedContidions) {
-					finishStep.putExtra(RegistrationActivity.EXTRA_SET_STEP,
-							RegistrationActivity.STEP_TERMSCONDITIONS);
-				}
-				
-				Intent[] stack = new Intent[]{welcome, finishStep};
-				startActivities(stack);
-			} else {
-				if (getIntent() != null && getIntent().getBooleanExtra(EXTRA_DISCONNECTED, false)) {
-					mDisconnectedDialog = getDisconnectedDialog();
-					mDisconnectedDialog.show();
-				}
+			if (getIntent() != null && getIntent().getBooleanExtra(EXTRA_DISCONNECTED, false)) {
+				mDisconnectedDialog = getDisconnectedDialog();
+				mDisconnectedDialog.show();
 			}
 		}
 		
