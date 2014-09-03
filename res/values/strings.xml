@@ -373,7 +373,7 @@
     <string name="ts_dialog_location_services_disabled_message">Enable it by tapping \'Settings\' below and go into Location settings.</string>
 
     <!-- settings -->
-    <string name="ts_settings_category">Settings</string>
+    <string name="ts_settings_category_account">Account</string>
     <string name="ts_settings_org_title">Add or Change Organization</string>
     <string name="ts_settings_org_key">com.tapshield.android.settings.org.key</string>
     <string name="ts_settings_passcode_title">Change Your Passcode</string>
@@ -381,7 +381,7 @@
     <string name="ts_settings_passcode_key">com.tapshield.android.settings.passcode.key</string>
     <string name="ts_settings_logout_title">Sign Out</string>
     <string name="ts_settings_logout_key">com.tapshield.android.settings.logout.key</string>
-    <string name="ts_settings_other_category">Other</string>
+    <string name="ts_settings_category_other">Other</string>
     <string name="ts_settings_about_title">About TapShield</string>
     <string name="ts_settings_about_key">com.tapshield.android.settings.about.key</string>
     <string name="ts_settings_feedback_title">Feedback</string>

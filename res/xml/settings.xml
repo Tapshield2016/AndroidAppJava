@@ -3,7 +3,7 @@
 
     <PreferenceCategory
         android:layout_width="wrap_content"
-        android:title="@string/ts_settings_category" >
+        android:title="@string/ts_settings_category_account" >
         
         <Preference
             android:title="@string/ts_settings_passcode_title"
@@ -20,7 +20,7 @@
     </PreferenceCategory>
     
     <PreferenceCategory
-        android:title="@string/ts_settings_other_category">
+        android:title="@string/ts_settings_category_other">
         
         <Preference
             android:title="@string/ts_settings_feedback_title"
