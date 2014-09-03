@@ -3,6 +3,7 @@ package com.tapshield.android.ui.dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
+import android.content.DialogInterface.OnDismissListener;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,13 +18,14 @@ import com.tapshield.android.ui.view.Dialpad;
 import com.tapshield.android.ui.view.Dialpad.DialpadListener;
 import com.tapshield.android.utils.UiUtils;
 
-public class SetDisarmCodeDialog extends DialogFragment implements DialpadListener {
+public class SetPasscodeDialog extends DialogFragment implements DialpadListener {
 
 	private JavelinUserManager mUserManager;
 	private Dialpad mDialpad;
 	private OnCancelListener mCancelListener;
+	private OnDismissListener mDismissListener;
 	
-	public SetDisarmCodeDialog() {
+	public SetPasscodeDialog() {
 		setStyle(STYLE_NORMAL, android.R.style.Theme_DeviceDefault_Dialog);
 	}
 	
@@ -57,6 +59,15 @@ public class SetDisarmCodeDialog extends DialogFragment implements DialpadListen
 			super.onCancel(dialog);
 		}
 	}
+	
+	@Override
+	public void onDismiss(DialogInterface dialog) {
+		if (mDismissListener != null) {
+			mDismissListener.onDismiss(dialog);
+		} else {
+			super.onDismiss(dialog);
+		}
+	}
 
 	@Override
 	public void onInputComplete(String input) {
@@ -85,5 +96,9 @@ public class SetDisarmCodeDialog extends DialogFragment implements DialpadListen
 	
 	public void setOnCancelListener(OnCancelListener l) {
 		mCancelListener = l;
+	}
+	
+	public void setOnDismissListener(OnDismissListener l) {
+		mDismissListener = l;
 	}
 }
