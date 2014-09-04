@@ -3,6 +3,8 @@ package com.tapshield.android.ui.fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,6 +43,7 @@ public class LoginFragment extends BaseFragment implements OnClickListener, OnMe
 	private Button mLogin;
 	private TextView mNoAccount;
 	private TextView mForgotPassword;
+	private TextView mDisclaimer;
 	private ProgressDialog mLoggingIn;
 	
 	private boolean mLoginPressed;
@@ -60,6 +63,7 @@ public class LoginFragment extends BaseFragment implements OnClickListener, OnMe
 		mLogin = (Button) root.findViewById(R.id.fragment_login_form_button_login);
 		mNoAccount = (TextView) root.findViewById(R.id.fragment_login_form_text_noaccount);
 		mForgotPassword = (TextView) root.findViewById(R.id.fragment_login_form_text_forgotpassword);
+		mDisclaimer = (TextView) root.findViewById(R.id.fragment_login_text_disclaimer);
 		
 		return root;
 	}
@@ -78,6 +82,9 @@ public class LoginFragment extends BaseFragment implements OnClickListener, OnMe
 		
 		mNoAccount.setOnClickListener(this);
 		mForgotPassword.setOnClickListener(this);
+		
+		mDisclaimer.setText(Html.fromHtml(mDisclaimer.getText().toString()));
+		mDisclaimer.setMovementMethod(LinkMovementMethod.getInstance());
 	}
 	
 	private ProgressDialog getLoggingDialog() {

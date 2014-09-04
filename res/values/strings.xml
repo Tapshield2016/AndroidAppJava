@@ -133,7 +133,7 @@
 
     <!-- fragment semi-profile -->
     <string name="ts_fragment_semiprofile_text_explanation">This information will help us identify you in case of emergency.</string>
-    <string name="ts_fragment_semiprofile_text_disclaimer"><![CDATA[By tapping \'Finish\' you accept to have read, understand, and agree to the <a href=\'http://tapshield.com/eula/\'>End User License Agreement</a>.]]></string>
+    <string name="ts_fragment_semiprofile_text_disclaimer"><![CDATA[By continuing I agree to the <a href=\'http://tapshield.com/eula/\'>End User License Agreement</a>.]]></string>
 
     <!-- full profile -->
     <string name="ts_fullprofile_button_basic">Basic Information</string>
