@@ -135,8 +135,13 @@ public class FacebookLoginActivity extends Activity
 
 	@Override
 	public void onUserLogIn(boolean successful, User user, int errorCode, Throwable e) {
-		String message = successful ? "Fb Signed In!" : "Error: " + e.getMessage();
-		UiUtils.toastShort(this, message);
+		
+		if (successful) {
+			UiUtils.welcomeUser(this);
+		} else {
+			UiUtils.toastShort(this, "Error: " + e.getMessage());
+		}
+		
 		Class<? extends Activity> clss = successful ? MainActivity.class : WelcomeActivity.class;
 		UiUtils.startActivityNoStack(this, clss);
 	}

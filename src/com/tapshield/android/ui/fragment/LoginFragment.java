@@ -199,6 +199,7 @@ public class LoginFragment extends BaseFragment implements OnClickListener, OnMe
 	public void onUserLogIn(boolean successful, User user, int errorCode, Throwable e) {
 		mLoggingIn.dismiss();
 		if (successful) {
+			UiUtils.welcomeUser(getActivity());
 			getActivity().finish();
 		} else {
 			int messageRes = R.string.ts_welcome_fragment_login_toast_login_error_default;

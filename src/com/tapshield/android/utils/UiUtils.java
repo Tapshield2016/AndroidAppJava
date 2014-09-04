@@ -20,6 +20,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tapshield.android.R;
+import com.tapshield.android.api.JavelinClient;
+import com.tapshield.android.api.JavelinUserManager;
+import com.tapshield.android.api.model.User;
+import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.ui.view.StepIndicator;
 
 public class UiUtils {
@@ -189,5 +193,27 @@ public class UiUtils {
 		stepIndicator.setCurrentStep(stepCurrent);
 		stepIndicator.setNumSteps(stepCount);
 		stepTitle.setText(title);
+	}
+	
+	public static void welcomeUser(Context context) {
+		
+		JavelinUserManager userManager = JavelinClient
+				.getInstance(context, TapShieldApplication.JAVELIN_CONFIG)
+				.getUserManager();
+		
+		if (!userManager.isPresent()) {
+			return;
+		}
+		
+		String userFirstName = null;
+		try {
+			userFirstName = userManager.getUser().firstName;
+		} catch (Exception e) {
+			return;
+		}
+		
+		String welcome = context.getString(R.string.ts_misc_welcome_name_prefix) + " "
+				+ userFirstName + context.getString(R.string.ts_misc_welcome_name_suffix);
+		toastLong(context, welcome);
 	}
 }

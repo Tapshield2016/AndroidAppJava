@@ -366,6 +366,9 @@
     <string name="ts_misc_credits_socialcrimes">User-submitted</string>
     <string name="ts_misc_feedback_email">feedback@tapshield.com</string>
     <string name="ts_misc_feedback_subject">TapShield Android App Feedback</string>
+        <!-- the following to go before and after the user name given programatically -->
+    <string name="ts_misc_welcome_name_prefix">Welcome</string>
+    <string name="ts_misc_welcome_name_suffix">!</string>
 
     <string name="ts_dialog_location_services_disabled_title_network">Location Services Disabled</string>
     <string name="ts_dialog_location_services_disabled_title_gps">GPS Disabled</string>
