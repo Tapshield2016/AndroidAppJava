@@ -22,7 +22,7 @@
     <!-- action bar -->
     <dimen name="actionbar_steps_vertical_padding">4dp</dimen>
     <dimen name="actionbar_steps_stepindicator_horizontal_padding">50dp</dimen>
-    <dimen name="actionbar_steps_content_width">250dp</dimen>
+    <dimen name="actionbar_steps_content_width">180dp</dimen>
     <dimen name="actionbar_main_entourage_primary">18sp</dimen>
     <dimen name="actionbar_main_entourage_secondary">14sp</dimen>
     
