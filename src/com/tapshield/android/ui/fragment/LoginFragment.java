@@ -1,8 +1,6 @@
 package com.tapshield.android.ui.fragment;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,6 +10,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.PopupMenu;
 import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.TextView;
 
@@ -33,20 +32,16 @@ public class LoginFragment extends BaseFragment implements OnClickListener, OnMe
 	private JavelinClient mJavelin;
 	private JavelinUserManager mUserManager;
 	
-	private View mSocial;
 	private View mForm;
 	private View mOptions;
 	private Button mLoginOption;
 	private Button mSignUpOption;
-	private Button mGooglePlus;
-	private Button mFacebook;
 	private EditText mEmail;
 	private EditText mPassword;
 	private Button mLogin;
 	private TextView mNoAccount;
 	private TextView mForgotPassword;
 	private ProgressDialog mLoggingIn;
-	private AlertDialog mOrgQuestion;
 	
 	private boolean mLoginPressed;
 	
@@ -56,12 +51,9 @@ public class LoginFragment extends BaseFragment implements OnClickListener, OnMe
 		
 		mForm = root.findViewById(R.id.fragment_login_linear_form);
 		mOptions = root.findViewById(R.id.fragment_login_linear_bottom);
-		mSocial = root.findViewById(R.id.fragment_login_linear_social);
 		
 		mLoginOption = (Button) root.findViewById(R.id.fragment_login_button_login);
 		mSignUpOption = (Button) root.findViewById(R.id.fragment_login_button_signup);
-		mGooglePlus = (Button) root.findViewById(R.id.fragment_login_button_googleplus);
-		mFacebook = (Button) root.findViewById(R.id.fragment_login_button_facebook);
 		
 		mEmail = (EditText) root.findViewById(R.id.fragment_login_form_edit_email);
 		mPassword = (EditText) root.findViewById(R.id.fragment_login_form_edit_password);
@@ -79,13 +71,10 @@ public class LoginFragment extends BaseFragment implements OnClickListener, OnMe
 		mUserManager = mJavelin.getUserManager();
 		
 		mLoggingIn = getLoggingDialog();
-		mOrgQuestion = getOrgQuestionDialog();
 		
 		mLogin.setOnClickListener(this);
 		mLoginOption.setOnClickListener(this);
 		mSignUpOption.setOnClickListener(this);
-		mGooglePlus.setOnClickListener(this);
-		mFacebook.setOnClickListener(this);
 		
 		mNoAccount.setOnClickListener(this);
 		mForgotPassword.setOnClickListener(this);
@@ -100,27 +89,6 @@ public class LoginFragment extends BaseFragment implements OnClickListener, OnMe
 		return d;
 	}
 	
-	private AlertDialog getOrgQuestionDialog() {
-		AlertDialog.Builder b = new AlertDialog.Builder(getActivity())
-				.setMessage(getActivity().getString(R.string.ts_welcome_fragment_login_dialog_orgbelonging_message))
-				.setPositiveButton(R.string.ts_common_yes, new DialogInterface.OnClickListener() {
-					
-					@Override
-					public void onClick(DialogInterface arg0, int arg1) {
-						startRegistration(false);
-					}
-				})
-				.setNegativeButton(R.string.ts_common_no, new DialogInterface.OnClickListener() {
-					
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						startRegistration(true);
-					}
-				})
-				.setCancelable(true);
-		return b.create();
-	}
-
 	@Override
 	public void onClick(View v) {
 
@@ -131,37 +99,20 @@ public class LoginFragment extends BaseFragment implements OnClickListener, OnMe
 		case R.id.fragment_login_form_text_noaccount:
 			mForm.setVisibility(View.INVISIBLE);
 			mOptions.setVisibility(View.VISIBLE);
-			mSocial.setVisibility(View.VISIBLE);
+			mSignUpOption.performClick();
 			break;
 		case R.id.fragment_login_form_text_forgotpassword:
 			requestPasswordReset();
 			break;
 		case R.id.fragment_login_button_login: case R.id.fragment_login_button_signup:
+			
 			mLoginPressed = v.getId() == R.id.fragment_login_button_login;
 
-			//removed social login
-			if (mLoginPressed) {
-				mForm.setVisibility(View.VISIBLE);
-				mOptions.setVisibility(View.INVISIBLE);
-				mSocial.setVisibility(View.INVISIBLE);
-			} else {
-				mOrgQuestion.show();
-			}
-			
-			/*
 			PopupMenu menu = new PopupMenu(getActivity(), v);
 			menu.inflate(R.menu.login_signup);
 			menu.setOnMenuItemClickListener(this);
 			menu.show();
-			*/
-			break;
-		case R.id.fragment_login_button_googleplus:
-			Intent googlePlusSignIn = new Intent(getActivity(), GooglePlusLoginActivity.class);
-			startActivity(googlePlusSignIn);
-			break;
-		case R.id.fragment_login_button_facebook:
-			Intent facebookSignIn = new Intent(getActivity(), FacebookLoginActivity.class);
-			startActivity(facebookSignIn);
+			
 			break;
 		}
 	}
@@ -173,18 +124,17 @@ public class LoginFragment extends BaseFragment implements OnClickListener, OnMe
 			if (mLoginPressed) {
 				mForm.setVisibility(View.VISIBLE);
 				mOptions.setVisibility(View.INVISIBLE);
-				mSocial.setVisibility(View.INVISIBLE);
 			} else {
-				mOrgQuestion.show();
+				startRegistration();
 			}
 			break;
 		case R.id.menu_facebook:
-			break;
-		case R.id.menu_twitter:
+			Intent facebookSignIn = new Intent(getActivity(), FacebookLoginActivity.class);
+			startActivity(facebookSignIn);
 			break;
 		case R.id.menu_googleplus:
-			break;
-		case R.id.menu_linkedin:
+			Intent googlePlusSignIn = new Intent(getActivity(), GooglePlusLoginActivity.class);
+			startActivity(googlePlusSignIn);
 			break;
 		default:
 			return false;
@@ -213,9 +163,8 @@ public class LoginFragment extends BaseFragment implements OnClickListener, OnMe
 		});
 	}
 	
-	private void startRegistration(boolean skipOrgPick) {
+	private void startRegistration() {
 		Intent registration = new Intent(getActivity(), RegistrationActivity.class);
-		registration.putExtra(RegistrationActivity.EXTRA_SKIP_ORG, skipOrgPick);
 		startActivity(registration);
 	}
 	
@@ -262,7 +211,6 @@ public class LoginFragment extends BaseFragment implements OnClickListener, OnMe
 		if (mForm.getVisibility() == View.VISIBLE) {
 			mForm.setVisibility(View.INVISIBLE);
 			mOptions.setVisibility(View.VISIBLE);
-			mSocial.setVisibility(View.VISIBLE);
 			return true;
 		}
 		return false;

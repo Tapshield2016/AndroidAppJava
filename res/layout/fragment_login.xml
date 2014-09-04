@@ -81,32 +81,6 @@
         </LinearLayout>
     </LinearLayout>
     
-    <!-- social options -->
-    
-    <LinearLayout
-        android:id="@+id/fragment_login_linear_social"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_alignTop="@id/fragment_login_linear_form"
-        android:layout_alignBottom="@id/fragment_login_linear_form"
-        android:orientation="vertical"
-        android:gravity="center_horizontal|bottom"
-        android:layout_marginLeft="@dimen/ts_common_spacing_m"
-        android:layout_marginRight="@dimen/ts_common_spacing_m">
-        
-        <Button
-            android:id="@+id/fragment_login_button_googleplus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Google+"/>
-        
-        <Button
-            android:id="@+id/fragment_login_button_facebook"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Facebook"/>
-    </LinearLayout>
-    
     <!-- bottom options -->
     
     <LinearLayout

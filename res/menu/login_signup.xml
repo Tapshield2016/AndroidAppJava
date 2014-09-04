@@ -2,20 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/menu_facebook"
-        android:title="@string/ts_menu_login_signup_facebook"/>
-    
-    <item
-        android:id="@+id/menu_twitter"
-        android:title="@string/ts_menu_login_signup_twitter"/>
-    
-    <item
         android:id="@+id/menu_googleplus"
         android:title="@string/ts_menu_login_signup_googleplus"/>
-
+    
     <item
-        android:id="@+id/menu_linkedin"
-        android:title="@string/ts_menu_login_signup_linkedin"/>
+        android:id="@+id/menu_facebook"
+        android:title="@string/ts_menu_login_signup_facebook"/>
     
     <item
         android:id="@+id/menu_email"
