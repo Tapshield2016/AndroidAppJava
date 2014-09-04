@@ -86,12 +86,11 @@
     
     <!-- selecting organization -->
     <string name="ts_organizationselection_dialog_loading_title">Please wait</string>
-    <string name="ts_organizationselection_dialog_loading_message">Loading organization&#8230;</string>
+    <string name="ts_organizationselection_dialog_loading_message">Retrieving list of organizations&#8230;</string>
     <string name="ts_organizationselection_toast_loading_error">Error retrieving list</string>
     <string name="ts_organizationselection_searchview_hint">Search All</string>
     <string name="ts_organizationselection_list_empty">No nearby organizations. Tap \'search\' icon to see all organization.</string>
 
-    <string name="ts_setorganization_notnow">Not Now</string>
     <string name="ts_setorganization_showall">Show All</string>
     <string name="ts_setorganization_filter">Filter</string>
     <string name="ts_setorganization_listempty">No nearby organizations. Tap \'Show All.\'</string>
