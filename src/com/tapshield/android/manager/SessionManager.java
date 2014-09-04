@@ -14,6 +14,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 
 import com.google.android.gms.location.LocationListener;
 import com.tapshield.android.R;
@@ -26,6 +27,7 @@ import com.tapshield.android.api.model.User.Email;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.location.LocationTracker;
 import com.tapshield.android.ui.activity.AddEmailActivity;
+import com.tapshield.android.ui.activity.MainActivity;
 import com.tapshield.android.ui.activity.SetOrganizationActivity;
 import com.tapshield.android.ui.activity.VerifyPhoneActivity;
 import com.tapshield.android.ui.dialog.SetPasscodeDialog;
@@ -85,6 +87,7 @@ public class SessionManager implements LocationListener, OnAgenciesFetchListener
 			String messageSuffix = " nearby. Tap to " + (num == 1 ? "join" : "pick") + ".";
 			String message = messagePrefix + messageSuffix;
 			
+			/*
 			Intent intent = new Intent(mContext, SetOrganizationActivity.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			
@@ -92,9 +95,29 @@ public class SessionManager implements LocationListener, OnAgenciesFetchListener
 				String serialized = Agency.serializeToString(agencies.get(0));
 				intent.putExtra(SetOrganizationActivity.EXTRA_SET_ORGANIZATION, serialized);
 			}
+			*/
 			
+			Intent parent = new Intent(mContext, MainActivity.class);
+			parent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			Intent pick = new Intent(mContext, SetOrganizationActivity.class);
+			
+			if (num == 1) {
+				String serialized = Agency.serializeToString(agencies.get(0));
+				pick.putExtra(SetOrganizationActivity.EXTRA_SET_ORGANIZATION, serialized);
+			}
+			
+			TaskStackBuilder stackBuilder = TaskStackBuilder.create(mContext)
+					//.addParentStack(MainActivity.class)
+					.addNextIntent(parent)
+					.addNextIntent(pick);
+			
+			PendingIntent pendingIntent = stackBuilder.getPendingIntent(1,
+					PendingIntent.FLAG_UPDATE_CURRENT);
+			
+			/*
 			PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 1, intent,
 					PendingIntent.FLAG_UPDATE_CURRENT);
+			*/
 			
 			Notification notification = new NotificationCompat.Builder(mContext)
 					.setContentTitle(title)
@@ -174,7 +197,8 @@ public class SessionManager implements LocationListener, OnAgenciesFetchListener
 				extras.putString(AddEmailActivity.EXTRA_UNVERIFIED_EMAIL, unverifiedEmail);
 			}
 			
-			UiUtils.startActivityNoStack(activity, AddEmailActivity.class, extras);
+			Intent addEmail = new Intent(activity, AddEmailActivity.class);
+			activity.startActivity(addEmail);
 			return;
 		}
 		

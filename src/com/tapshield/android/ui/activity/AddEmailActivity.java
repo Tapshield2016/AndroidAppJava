@@ -3,7 +3,6 @@ package com.tapshield.android.ui.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -40,6 +39,8 @@ public class AddEmailActivity extends BaseFragmentActivity
 	protected void onCreate(Bundle savedInstance) {
 		super.onCreate(savedInstance);
 		setContentView(R.layout.activity_addemail);
+		
+		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
 		UiUtils.setStepIndicatorInActionBar(this, 1, 3,
 				R.string.ts_registration_actionbar_title_emailverification);
@@ -85,15 +86,9 @@ public class AddEmailActivity extends BaseFragmentActivity
 	}
 	
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.cancel, menu);
-		return true;
-	}
-	
-	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.action_cancel:
+		case android.R.id.home:
 			cancel();
 			return true;
 		}
@@ -182,11 +177,10 @@ public class AddEmailActivity extends BaseFragmentActivity
 	
 	private void cancel() {
 		mUserManager.clearTemporaryAgency();
-		done();
+		finish();
 	}
 	
 	private void done() {
 		UiUtils.startActivityNoStack(this, MainActivity.class);
-		finish();
 	}
 }

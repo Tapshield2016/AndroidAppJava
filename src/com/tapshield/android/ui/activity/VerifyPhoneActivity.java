@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -35,6 +34,8 @@ public class VerifyPhoneActivity extends BaseFragmentActivity
 	protected void onCreate(Bundle savedInstance) {
 		super.onCreate(savedInstance);
 		setContentView(R.layout.activity_verifyphone);
+		
+		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
 		UiUtils.setStepIndicatorInActionBar(this, 2, 3,
 				R.string.ts_registration_actionbar_title_phoneconfirmation);
@@ -112,20 +113,19 @@ public class VerifyPhoneActivity extends BaseFragmentActivity
 	}
 	
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.cancel, menu);
-		return true;
-	}
-	
-	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.action_cancel:
-			mUserManager.clearTemporaryAgency();
-			finish();
+		case android.R.id.home:
+			onBackPressed();
 			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public void onBackPressed() {
+		mUserManager.clearTemporaryAgency();
+		finish();
 	}
 	
 	private boolean userChangedPhoneNumber() {

@@ -54,6 +54,8 @@ public class SetOrganizationActivity extends BaseFragmentActivity
 		super.onCreate(savedInstance);
 		setContentView(R.layout.activity_setorganization);
 		
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+		
 		UiUtils.setStepIndicatorInActionBar(this, 0, 3,
 				R.string.ts_registration_actionbar_title_pickorg);
 		
@@ -91,7 +93,7 @@ public class SetOrganizationActivity extends BaseFragmentActivity
 			
 			@Override
 			public void onCancel(DialogInterface dialog) {
-				done();
+				finish();
 			}
 		});
 		
@@ -107,7 +109,7 @@ public class SetOrganizationActivity extends BaseFragmentActivity
 					dismissLoaderWhenFinished();
 				} else {
 					UiUtils.toastShort(SetOrganizationActivity.this, getString(R.string.ts_organizationselection_toast_loading_error));
-					done();
+					finish();
 				}
 			}
 		});
@@ -163,27 +165,30 @@ public class SetOrganizationActivity extends BaseFragmentActivity
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.action_setorganization_notnow:
-			
-			//no agency selected, notify user, and call done()
-			
-			new AlertDialog.Builder(this)
-					.setTitle(R.string.ts_setorganization_dialog_notnow_title)
-					.setMessage(R.string.ts_setorganization_dialog_notnow_message)
-					.setPositiveButton(R.string.ts_common_ok, new DialogInterface.OnClickListener() {
-						
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							SessionManager
-									.getInstance(SetOrganizationActivity.this)
-									.setSporadicChecks(false);
-							done();
-						}
-					})
-					.show();
+		case android.R.id.home:
+			onBackPressed();
 			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public void onBackPressed() {
+		//stop SessionManager sporadic checks and finish activity
+		new AlertDialog.Builder(this)
+				.setTitle(R.string.ts_setorganization_dialog_notnow_title)
+				.setMessage(R.string.ts_setorganization_dialog_notnow_message)
+				.setPositiveButton(R.string.ts_common_ok, new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						SessionManager
+								.getInstance(SetOrganizationActivity.this)
+								.setSporadicChecks(false);
+						finish();
+					}
+				})
+				.show();
 	}
 	
 	private void setDataSet(List<Agency> dataSet) {
@@ -251,7 +256,7 @@ public class SetOrganizationActivity extends BaseFragmentActivity
 				} else {
 					UiUtils.toastShort(SetOrganizationActivity.this,
 							getString(R.string.ts_organizationselection_toast_loading_error));
-					done();
+					finish();
 				}
 			}
 		});
@@ -265,16 +270,7 @@ public class SetOrganizationActivity extends BaseFragmentActivity
 	}
 	
 	private void done() {
-		done(null);
-	}
-	
-	private void done(String error) {
-		if (error != null) {
-			String message = mJavelin.getUserManager().getUser().agency.name + " set";
-			UiUtils.toastShort(this, message);
-		}
-		
-		UiUtils.startActivityNoStack(this, MainActivity.class);
-		finish();
+		Intent intent = new Intent(this, AddEmailActivity.class);
+		startActivity(intent);
 	}
 }
