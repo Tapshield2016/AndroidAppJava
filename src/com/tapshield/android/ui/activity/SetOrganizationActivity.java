@@ -49,53 +49,77 @@ public class SetOrganizationActivity extends BaseFragmentActivity
 	private boolean mAllLoaded = false;
 	private AlertDialog mLoader;
 	
+	private boolean mAutopick = false;
+	
 	@Override
 	protected void onCreate(Bundle savedInstance) {
 		super.onCreate(savedInstance);
 		setContentView(R.layout.activity_setorganization);
-		
+
 		getActionBar().setDisplayHomeAsUpEnabled(true);
-		
+
 		UiUtils.setStepIndicatorInActionBar(this, 0, 3,
 				R.string.ts_registration_actionbar_title_pickorg);
-		
+
 		mList = (ListView) findViewById(R.id.setorganization_list);
 		mEmpty = findViewById(R.id.setorganization_empty);
-		
+
 		mJavelin = JavelinClient.getInstance(this, TapShieldApplication.JAVELIN_CONFIG);
 		mTracker = LocationTracker.getInstance(this);
-		
+
 		mNearbyAgencies = new ArrayList<Agency>();
 		mAllAgencies = new ArrayList<Agency>();
-		
+
 		mAdapter = new AgencyListAdapter(this, R.layout.item_organizationselection,
 				mNearbyAgencies);
-		
+
 		mList.setOnItemClickListener(this);
 		mList.setAdapter(mAdapter);
-		
-		//check for preset organization
-		Intent i;
-		if ((i = getIntent()) != null && i.hasExtra(EXTRA_SET_ORGANIZATION)) {
-			Agency presetAgency = 
-					Agency.deserializeFromString(i.getStringExtra(EXTRA_SET_ORGANIZATION));
-			saveSelectedAgency(presetAgency);
-			done();
-			return;
-		}
-		
+
 		mLoader = new AlertDialog.Builder(this)
 				.setTitle(R.string.ts_organizationselection_dialog_loading_title)
 				.setMessage(R.string.ts_organizationselection_dialog_loading_message)
 				.create();
-		mLoader.show();
+
 		mLoader.setOnCancelListener(new OnCancelListener() {
-			
+
 			@Override
 			public void onCancel(DialogInterface dialog) {
 				finish();
 			}
 		});
+
+		//do not check for autopick if its a resuming activity
+		if (savedInstance != null) {
+			return;
+		}
+		
+		//check for preset organization
+		Intent i;
+		if ((i = getIntent()) != null && i.hasExtra(EXTRA_SET_ORGANIZATION)) {
+			mAutopick = true;
+			Agency presetAgency = 
+					Agency.deserializeFromString(i.getStringExtra(EXTRA_SET_ORGANIZATION));
+			saveSelectedAgency(presetAgency);
+			done();
+		}
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		//no need to make any further calls and reset autopick flag for when
+		// returning to activity (just resuming)
+		if (mAutopick) {
+			mAutopick = false;
+			return;
+		}
+		
+		mTracker.addLocationListener(this);
+		mTracker.start();
+		
+		mLoader.show();
 		
 		mJavelin.fetchAgencies(new OnAgenciesFetchListener() {
 			
@@ -113,8 +137,13 @@ public class SetOrganizationActivity extends BaseFragmentActivity
 				}
 			}
 		});
-		mTracker.addLocationListener(this);
-		mTracker.start();
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		mTracker.removeLocationListener(this);
+		mTracker.stop();
 	}
 
 	@Override

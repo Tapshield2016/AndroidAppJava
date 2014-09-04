@@ -16,6 +16,7 @@ import com.tapshield.android.api.JavelinUserManager;
 import com.tapshield.android.api.JavelinUserManager.UserEmailsListener;
 import com.tapshield.android.api.model.Agency;
 import com.tapshield.android.app.TapShieldApplication;
+import com.tapshield.android.manager.SessionManager;
 import com.tapshield.android.utils.StringUtils;
 import com.tapshield.android.utils.UiUtils;
 
@@ -83,6 +84,11 @@ public class AddEmailActivity extends BaseFragmentActivity
 		}
 		
 		mInstructions.setText(instructionsPrefix + instructionsSuffix);
+		
+		//if the user emails support the organization (!areUserEmailsNotSupportingOrg()) then finish
+		if (!SessionManager.getInstance(this).areUserEmailsNotSupportingOrg()) {
+			done();
+		}
 	}
 	
 	@Override

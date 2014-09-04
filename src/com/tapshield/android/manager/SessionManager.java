@@ -87,16 +87,6 @@ public class SessionManager implements LocationListener, OnAgenciesFetchListener
 			String messageSuffix = " nearby. Tap to " + (num == 1 ? "join" : "pick") + ".";
 			String message = messagePrefix + messageSuffix;
 			
-			/*
-			Intent intent = new Intent(mContext, SetOrganizationActivity.class);
-			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			
-			if (num == 1) {
-				String serialized = Agency.serializeToString(agencies.get(0));
-				intent.putExtra(SetOrganizationActivity.EXTRA_SET_ORGANIZATION, serialized);
-			}
-			*/
-			
 			Intent parent = new Intent(mContext, MainActivity.class);
 			parent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			Intent pick = new Intent(mContext, SetOrganizationActivity.class);
@@ -107,17 +97,11 @@ public class SessionManager implements LocationListener, OnAgenciesFetchListener
 			}
 			
 			TaskStackBuilder stackBuilder = TaskStackBuilder.create(mContext)
-					//.addParentStack(MainActivity.class)
 					.addNextIntent(parent)
 					.addNextIntent(pick);
 			
 			PendingIntent pendingIntent = stackBuilder.getPendingIntent(1,
 					PendingIntent.FLAG_UPDATE_CURRENT);
-			
-			/*
-			PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 1, intent,
-					PendingIntent.FLAG_UPDATE_CURRENT);
-			*/
 			
 			Notification notification = new NotificationCompat.Builder(mContext)
 					.setContentTitle(title)
@@ -187,7 +171,7 @@ public class SessionManager implements LocationListener, OnAgenciesFetchListener
 			return;
 		}
 		
-		if (userManager.hasTemporaryAgency() && !isRequiredDomainSupported(userManager)) {
+		if (areUserEmailsNotSupportingOrg()) {
 			
 			Bundle extras = null;
 			
@@ -214,6 +198,8 @@ public class SessionManager implements LocationListener, OnAgenciesFetchListener
 		//at this point a temporary organization is not used anymore, but has to be set as the main org
 		// since everything required has been given
 		if (userManager.hasTemporaryAgency()) {
+			final String message = "You just joined " + userManager.getTemporaryAgency().name + "!";
+			UiUtils.toastLong(mContext, message);
 			userManager.setTemporaryAgencyAsMain();
 		}
 		
@@ -225,6 +211,11 @@ public class SessionManager implements LocationListener, OnAgenciesFetchListener
 		SharedPreferences.Editor editor = mPreferences.edit();
 		editor.putBoolean(PREFERENCES_KEY_CHECK, enableSporadicChecks);
 		editor.commit();
+	}
+	
+	public boolean areUserEmailsNotSupportingOrg() {
+		return mJavelin.getUserManager().hasTemporaryAgency()
+				&& !isRequiredDomainSupported(mJavelin.getUserManager());
 	}
 	
 	private boolean isRequiredDomainSupported(final JavelinUserManager userManager) {

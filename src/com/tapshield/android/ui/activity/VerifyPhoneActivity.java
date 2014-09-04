@@ -164,8 +164,4 @@ public class VerifyPhoneActivity extends BaseFragmentActivity
 			UiUtils.toastLong(this, getString(R.string.ts_verifyphone_update_error_prefix) + e.getMessage());
 		}
 	}
-	
-	//on button request code click:
-	//if phone is not in user, update phone number (usermananger.updaterequiredinformation(null))
-	//request code
 }
