@@ -1,5 +1,7 @@
 package com.tapshield.android.utils;
 
+import java.lang.reflect.Field;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -22,6 +24,27 @@ import com.tapshield.android.R;
 
 public class UiUtils {
 
+	public static final void setDefaultFont(Context context,
+            String staticTypefaceFieldName, String fontAssetName) {
+        final Typeface regular = Typeface.createFromAsset(context.getAssets(),
+                fontAssetName);
+        replaceFont(staticTypefaceFieldName, regular);
+    }
+
+    protected static void replaceFont(String staticTypefaceFieldName,
+            final Typeface newTypeface) {
+        try {
+            final Field staticField = Typeface.class
+                    .getDeclaredField(staticTypefaceFieldName);
+            staticField.setAccessible(true);
+            staticField.set(null, newTypeface);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+	
 	public static final void toastShort(Context context, String message) {
 		toast(context, message, Toast.LENGTH_SHORT);
 	}
