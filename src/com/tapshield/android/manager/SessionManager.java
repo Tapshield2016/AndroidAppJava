@@ -201,6 +201,7 @@ public class SessionManager implements LocationListener, OnAgenciesFetchListener
 			final String message = "You just joined " + userManager.getTemporaryAgency().name + "!";
 			UiUtils.toastLong(mContext, message);
 			userManager.setTemporaryAgencyAsMain();
+			userManager.clearTemporaryAgency();
 		}
 		
 		//by getting past the conditional statements, we are past required info, update remote user
