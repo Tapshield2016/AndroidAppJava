@@ -95,8 +95,8 @@
     <dimen name="chat_item_arrow">30dp</dimen>
     
     <!-- organization selection -->
-    <dimen name="ts_organizationselection_text_distance">30sp</dimen>
-    <dimen name="ts_organizationselection_text_name">26sp</dimen>
+    <dimen name="ts_organizationselection_text_distance">18sp</dimen>
+    <dimen name="ts_organizationselection_text_name">24sp</dimen>
     
     <!-- pick destination -->
     <dimen name="ts_item_pickdestination_image_width">75dp</dimen>
