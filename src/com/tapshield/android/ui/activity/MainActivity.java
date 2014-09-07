@@ -437,11 +437,13 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 				UiUtils.startActivityNoStack(this, WelcomeActivity.class);
 			}
 		} else {
+			mUserBelongsToAgency = userManager.getUser().belongsToAgency();
+			
 			//at this point let the SessionManager class deal with what's missing
 			SessionManager.getInstance(this).check(this);
 			
 			//disable chat button if not part of an organzation
-			if (!userManager.getUser().belongsToAgency()) {
+			if (!mUserBelongsToAgency) {
 				mChat.setEnabled(false);
 			}
 			
