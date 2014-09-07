@@ -10,8 +10,10 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tapshield.android.R;
@@ -21,6 +23,9 @@ import com.tapshield.android.api.model.User;
 import com.tapshield.android.api.model.UserProfile;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.utils.PictureSetter;
+
+import elorriaga.leon.android.gaussianblurbitmapgenerator.GaussianBlurBitmapGenerator;
+import elorriaga.leon.android.gaussianblurbitmapgenerator.GaussianBlurBitmapGenerator.OnBitmapBlurredListener;
 
 public class FullProfileActivity extends BaseFragmentActivity implements OnClickListener {
 
@@ -153,6 +158,23 @@ public class FullProfileActivity extends BaseFragmentActivity implements OnClick
 
 		if (picture != null) {
 			mPicture.setImageBitmap(picture);
+			
+			OnBitmapBlurredListener blurListener = new OnBitmapBlurredListener() {
+				
+				@Override
+				public void onBitmapBlurred(Bitmap bitmap) {
+					AlphaAnimation alpha = new AlphaAnimation(0.0f, 0.5f);
+					alpha.setDuration(1000);
+					alpha.setFillAfter(true);
+					
+					ImageView background = (ImageView) findViewById(R.id.fullprofile_image_background);
+					background.setImageBitmap(bitmap);
+					background.setVisibility(View.VISIBLE);
+					background.startAnimation(alpha);
+				}
+			};
+			
+			GaussianBlurBitmapGenerator.blurBitmap(picture, 3, blurListener);
 		} else {
 			mPicture.setImageResource(R.drawable.ic_launcher);
 		}

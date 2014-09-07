@@ -8,31 +8,44 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:background="@drawable/ts_background_gradient">
+            android:background="#333">
+
+            <ImageView
+                android:id="@+id/fullprofile_image_background"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:visibility="invisible"/>
             
-            <ImageButton
-                android:id="@+id/fullprofile_imagebutton_picture"
-                android:layout_width="@dimen/ts_fullprofile_picture"
-                android:layout_height="@dimen/ts_fullprofile_picture"
-                android:layout_margin="@dimen/ts_common_spacing_xxs"
-                android:src="@drawable/ts_avatar_default"
-                android:scaleType="centerInside"
-                android:background="@drawable/ts_button_rect"
-                android:contentDescription="@string/ts_access_profile_picture"/>
+            <LinearLayout
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:orientation="vertical"
+	            android:gravity="center">
+	            
+	            <ImageButton
+	                android:id="@+id/fullprofile_imagebutton_picture"
+	                android:layout_width="@dimen/ts_fullprofile_picture"
+	                android:layout_height="@dimen/ts_fullprofile_picture"
+	                android:layout_margin="@dimen/ts_common_spacing_xxs"
+	                android:src="@drawable/ts_avatar_default"
+	                android:scaleType="centerInside"
+	                android:background="@drawable/ts_button_rect"
+	                android:contentDescription="@string/ts_access_profile_picture"/>
+	            
+	            <TextView
+	                android:id="@+id/fullprofile_text_name"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_margin="@dimen/ts_common_spacing_xxs"
+	                android:textColor="@android:color/white"
+	                android:textSize="@dimen/ts_fullprofile_text_name"/>
+	        </LinearLayout>
             
-            <TextView
-                android:id="@+id/fullprofile_text_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/ts_common_spacing_xxs"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/ts_fullprofile_text_name"/>
-        </LinearLayout>
+        </FrameLayout>
         
         <LinearLayout
 	        android:layout_width="match_parent"
