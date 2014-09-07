@@ -22,6 +22,7 @@ import com.tapshield.android.api.JavelinUserManager;
 import com.tapshield.android.api.model.User;
 import com.tapshield.android.api.model.UserProfile;
 import com.tapshield.android.app.TapShieldApplication;
+import com.tapshield.android.utils.BitmapUtils;
 import com.tapshield.android.utils.PictureSetter;
 
 import elorriaga.leon.android.gaussianblurbitmapgenerator.GaussianBlurBitmapGenerator;
@@ -31,6 +32,7 @@ public class FullProfileActivity extends BaseFragmentActivity implements OnClick
 
 	private ImageButton mPicture;
 	private TextView mName;
+	private Button mPictureButton;
 	private Button mBasic;
 	private Button mContact;
 	private Button mAppearance;
@@ -45,6 +47,7 @@ public class FullProfileActivity extends BaseFragmentActivity implements OnClick
 		setContentView(R.layout.activity_fullprofile);
 		
 		mPicture = (ImageButton) findViewById(R.id.fullprofile_imagebutton_picture);
+		mPictureButton = (Button) findViewById(R.id.fullprofile_button_picture);
 		mName = (TextView) findViewById(R.id.fullprofile_text_name);
 		mBasic = (Button) findViewById(R.id.fullprofile_button_basic);
 		mContact = (Button) findViewById(R.id.fullprofile_button_contact);
@@ -53,6 +56,7 @@ public class FullProfileActivity extends BaseFragmentActivity implements OnClick
 		mEmergencyContact = (Button) findViewById(R.id.fullprofile_button_emergency);
 		
 		mPicture.setOnClickListener(this);
+		mPictureButton.setOnClickListener(this);
 		mBasic.setOnClickListener(this);
 		mContact.setOnClickListener(this);
 		mAppearance.setOnClickListener(this);
@@ -126,6 +130,7 @@ public class FullProfileActivity extends BaseFragmentActivity implements OnClick
 		
 		switch (view.getId()) {
 		case R.id.fullprofile_imagebutton_picture:
+		case R.id.fullprofile_button_picture:
 			PictureSetter.offerOptions(this, this);
 			break;
 		case R.id.fullprofile_button_basic:
@@ -151,13 +156,14 @@ public class FullProfileActivity extends BaseFragmentActivity implements OnClick
 	
 	private void loadPicture() {
 		if (!UserProfile.hasPicture(this)) {
+			setCircleProfilePicture(R.drawable.ts_avatar_default);
 			return;
 		}
 		
 		Bitmap picture = UserProfile.getPicture(this);
 
 		if (picture != null) {
-			mPicture.setImageBitmap(picture);
+			setCircleProfilePicture(picture);
 			
 			OnBitmapBlurredListener blurListener = new OnBitmapBlurredListener() {
 				
@@ -174,10 +180,20 @@ public class FullProfileActivity extends BaseFragmentActivity implements OnClick
 				}
 			};
 			
-			GaussianBlurBitmapGenerator.blurBitmap(picture, 3, blurListener);
+			GaussianBlurBitmapGenerator.blurBitmap(picture, 8, blurListener);
 		} else {
-			mPicture.setImageResource(R.drawable.ic_launcher);
+			setCircleProfilePicture(R.drawable.ts_avatar_default);
 		}
+	}
+	
+	private void setCircleProfilePicture(Bitmap profilePicture) {
+		mPicture.setImageBitmap(BitmapUtils.clipCircle(profilePicture,
+				BitmapUtils.CLIP_RADIUS_DEFAULT));
+	}
+	
+	private void setCircleProfilePicture(int profilePictureResource) {
+		mPicture.setImageBitmap(BitmapUtils.clipCircle(this, profilePictureResource,
+				BitmapUtils.CLIP_RADIUS_DEFAULT));
 	}
 	
 	@Override

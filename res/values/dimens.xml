@@ -63,7 +63,7 @@
     <dimen name="main_top_corner_buttons">64dp</dimen>
     
     <!-- full profile -->
-    <dimen name="ts_fullprofile_picture">75dp</dimen>
+    <dimen name="ts_fullprofile_picture">70dp</dimen>
     <dimen name="ts_fullprofile_text_name">23sp</dimen>
     
     <!-- welcome -->
