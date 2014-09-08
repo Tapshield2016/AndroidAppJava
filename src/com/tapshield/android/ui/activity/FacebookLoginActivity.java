@@ -37,6 +37,7 @@ public class FacebookLoginActivity extends Activity
 	private LoginButton mSignIn;
 	private UiLifecycleHelper mUiHelper;
 	private boolean mRequestedLogOut;
+	private int mNewPermissionRetry;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +83,7 @@ public class FacebookLoginActivity extends Activity
 				.alpha(0.6f, 1.0f, 0.6f)
 				.start(mImage);
 		
+		mNewPermissionRetry = 0;
 		mRequestedLogOut = false;
 		mSignIn.performClick();
 	}
@@ -138,6 +140,13 @@ public class FacebookLoginActivity extends Activity
 			Log.i(TAG, "session open for read (2nd) permissions=" + permissions + " state=" + session.getState());
 			
 			if (!permissions.contains("email")) {
+				mNewPermissionRetry++;
+				
+				if (mNewPermissionRetry >= 3) {
+					onUserLogIn(false, null, 0, new Throwable("Retry facebook sign in again."));
+					return;
+				}
+				
 				try {
 					session.requestNewReadPermissions(new NewPermissionsRequest(this, getPermissions()));
 				} catch (Exception e) {}
