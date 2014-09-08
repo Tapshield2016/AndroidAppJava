@@ -22,7 +22,7 @@
     <!-- action bar -->
     <dimen name="actionbar_steps_vertical_padding">4dp</dimen>
     <dimen name="actionbar_steps_stepindicator_horizontal_padding">50dp</dimen>
-    <dimen name="actionbar_steps_content_width">250dp</dimen>
+    <dimen name="actionbar_steps_content_width">180dp</dimen>
     <dimen name="actionbar_main_entourage_primary">18sp</dimen>
     <dimen name="actionbar_main_entourage_secondary">14sp</dimen>
     
@@ -63,11 +63,12 @@
     <dimen name="main_top_corner_buttons">64dp</dimen>
     
     <!-- full profile -->
-    <dimen name="ts_fullprofile_picture">75dp</dimen>
+    <dimen name="ts_fullprofile_picture">70dp</dimen>
     <dimen name="ts_fullprofile_text_name">23sp</dimen>
     
     <!-- welcome -->
     <dimen name="ts_welcome_skip_text">24sp</dimen>
+    <dimen name="ts_welcome_swipe_size">90dp</dimen>
     
     <!-- alert -->
     <dimen name="alert_imagebuttons">64dp</dimen>
@@ -94,8 +95,8 @@
     <dimen name="chat_item_arrow">30dp</dimen>
     
     <!-- organization selection -->
-    <dimen name="ts_organizationselection_text_distance">30sp</dimen>
-    <dimen name="ts_organizationselection_text_name">26sp</dimen>
+    <dimen name="ts_organizationselection_text_distance">18sp</dimen>
+    <dimen name="ts_organizationselection_text_name">24sp</dimen>
     
     <!-- pick destination -->
     <dimen name="ts_item_pickdestination_image_width">75dp</dimen>
@@ -108,5 +109,8 @@
     
     <!-- about -->
     <dimen name="ts_about_logo_height">130dp</dimen>
+    
+    <!-- social -->
+    <dimen name="ts_social_login_network_logo">110dp</dimen>
     
 </resources>

@@ -18,11 +18,10 @@ import com.tapshield.android.api.googledirections.GoogleDirectionsConfig;
 import com.tapshield.android.api.googleplaces.GooglePlacesConfig;
 import com.tapshield.android.api.spotcrime.SpotCrimeConfig;
 import com.tapshield.android.manager.Notifier;
+import com.tapshield.android.utils.UiUtils;
 
 public class TapShieldApplication extends Application {
 
-	public static final String GOOGLE_PLUS_CLIENT_ID = "825930152848.apps.googleusercontent.com";
-	
 	public static JavelinConfig JAVELIN_CONFIG =
 			new JavelinConfig.Builder()
 			.baseUrl("https://api.tapshield.com/")
@@ -86,6 +85,11 @@ public class TapShieldApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		
+		final String fontAssetName = "Roboto-Light.ttf";
+		UiUtils.setDefaultFont(this, "DEFAULT", fontAssetName);
+		UiUtils.setDefaultFont(this, "MONOSPACE", fontAssetName);
+		UiUtils.setDefaultFont(this, "SANS_SERIF", fontAssetName);
 		
 		JavelinClient javelin = JavelinClient.getInstance(this, JAVELIN_CONFIG);
 		JavelinUserManager userManager = javelin.getUserManager();

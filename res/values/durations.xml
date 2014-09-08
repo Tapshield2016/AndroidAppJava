@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="ts_chat_overlay_animation_milli">750</integer>
+    <integer name="ts_login_social_animation_flip">900</integer>
 </resources>

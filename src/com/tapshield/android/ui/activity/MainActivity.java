@@ -58,6 +58,7 @@ import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.location.LocationTracker;
 import com.tapshield.android.manager.EmergencyManager;
 import com.tapshield.android.manager.EntourageManager;
+import com.tapshield.android.manager.SessionManager;
 import com.tapshield.android.manager.YankManager;
 import com.tapshield.android.manager.YankManager.YankListener;
 import com.tapshield.android.model.CrimeClusterItem;
@@ -71,7 +72,6 @@ import com.tapshield.android.ui.view.TickerTextSwitcher;
 import com.tapshield.android.utils.ConnectivityMonitor;
 import com.tapshield.android.utils.ConnectivityMonitor.ConnectivityMonitorListener;
 import com.tapshield.android.utils.CrimeMapClusterRenderer;
-import com.tapshield.android.utils.LocalTermConditionAgreement;
 import com.tapshield.android.utils.MapUtils;
 import com.tapshield.android.utils.SocialCrimeMapClusterRenderer;
 import com.tapshield.android.utils.SpotCrimeUtils;
@@ -425,7 +425,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		
 		mYank.setListener(this);
 		
-		JavelinUserManager userManager = mJavelin.getUserManager();
+		final JavelinUserManager userManager = mJavelin.getUserManager();
 		boolean userPresent = userManager.isPresent();
 		
 		if (!userPresent) {
@@ -437,34 +437,17 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 				UiUtils.startActivityNoStack(this, WelcomeActivity.class);
 			}
 		} else {
+			//at this point let the SessionManager class deal with what's missing
+			SessionManager.getInstance(this).check(this);
+			
 			mUserBelongsToAgency = userManager.getUser().belongsToAgency();
-
-			boolean verifyPhone  = mUserBelongsToAgency && !userManager.getUser().isPhoneNumberVerified();
-			boolean acceptedContidions = LocalTermConditionAgreement.getTermConditionsAccepted(this);
 			
-			if (!mUserBelongsToAgency) {
-				mChat.setEnabled(false);
-			}
+			//enable/disable chat button if part or not of an organzation
+			mChat.setEnabled(mUserBelongsToAgency);
 			
-			if (verifyPhone || !acceptedContidions) {
-				Intent welcome = new Intent(this, WelcomeActivity.class);
-				Intent finishStep = new Intent(this, RegistrationActivity.class);
-				
-				if (verifyPhone) {
-					finishStep.putExtra(RegistrationActivity.EXTRA_SET_STEP,
-							RegistrationActivity.STEP_PHONEVERIFICATION);
-				} else if (!acceptedContidions) {
-					finishStep.putExtra(RegistrationActivity.EXTRA_SET_STEP,
-							RegistrationActivity.STEP_TERMSCONDITIONS);
-				}
-				
-				Intent[] stack = new Intent[]{welcome, finishStep};
-				startActivities(stack);
-			} else {
-				if (getIntent() != null && getIntent().getBooleanExtra(EXTRA_DISCONNECTED, false)) {
-					mDisconnectedDialog = getDisconnectedDialog();
-					mDisconnectedDialog.show();
-				}
+			if (getIntent() != null && getIntent().getBooleanExtra(EXTRA_DISCONNECTED, false)) {
+				mDisconnectedDialog = getDisconnectedDialog();
+				mDisconnectedDialog.show();
 			}
 		}
 		
@@ -831,7 +814,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 	}
 	
 	private AlertDialog getYankDialog() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this)
+		return new AlertDialog.Builder(this)
 				.setCancelable(true)
 				.setTitle(R.string.ts_main_dialog_yank_title)
 				.setMessage(R.string.ts_main_dialog_yank_message)
@@ -839,10 +822,17 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 					
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
+						mYankDialog.cancel();
+					}
+				})
+				.setOnCancelListener(new DialogInterface.OnCancelListener() {
+					
+					@Override
+					public void onCancel(DialogInterface dialog) {
 						mYank.setEnabled(false);
 					}
-				});
-		return builder.create();
+				})
+				.create();
 	}
 	
 	private AlertDialog getDisconnectedDialog() {

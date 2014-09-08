@@ -2,9 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/ts_common_spacing_s"
-    android:paddingTop="@dimen/ts_common_spacing_m"
-    android:paddingBottom="@dimen/ts_common_spacing_m"
     android:orientation="horizontal" >
     
     <TextView
@@ -12,8 +9,13 @@
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="match_parent"
-        android:gravity="center_horizontal"
-        android:text="TapShield"
+        android:layout_marginLeft="@dimen/ts_common_spacing_m"
+        android:layout_marginTop="@dimen/ts_common_spacing_m"
+        android:layout_marginBottom="@dimen/ts_common_spacing_m"
+        android:gravity="center_vertical"
+        android:text="name"
+        android:ellipsize="marquee"
+        android:maxLines="1"
         android:textSize="@dimen/ts_organizationselection_text_name"
         android:textColor="@color/ts_gray_dark"/>
 
@@ -21,8 +23,9 @@
         android:id="@+id/item_organizationselection_distance"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_marginRight="@dimen/ts_common_spacing_m"
         android:gravity="center"
-        android:text="13 mi"
+        android:text="xx mi"
         android:textSize="@dimen/ts_organizationselection_text_distance"
         android:textColor="@color/ts_brand_dark"/>
 </LinearLayout>

@@ -16,6 +16,7 @@
             android:layout_margin="@dimen/ts_common_spacing_s"
             android:gravity="center"
             android:text="@string/ts_fragment_requiredinfo_text_phonenotice"
+            android:textSize="@dimen/ts_common_text_m"
             android:textColor="@color/ts_gray_dark"/>
         
         <EditText
@@ -39,28 +40,5 @@
             android:drawableLeft="@drawable/ic_create_password"
             android:textColor="@color/ts_brand_light"
             android:textColorHint="@color/ts_gray_dark"/>
-
-        <EditText
-            android:id="@+id/fragment_requiredinfo_edit_passcode"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:maxLength="4"
-            android:inputType="numberPassword"
-            android:hint="@string/ts_fragment_requiredinfo_edit_passcode_hint"
-            android:drawableLeft="@drawable/ic_create_password"
-            android:textColor="@color/ts_brand_light"
-            android:textColorHint="@color/ts_gray_dark"/>
-        
-        <EditText
-            android:id="@+id/fragment_requiredinfo_edit_phone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:inputType="phone"
-            android:hint="@string/ts_fragment_requiredinfo_edit_phone_hint"
-            android:drawableLeft="@drawable/ic_create_phone"
-            android:textColor="@color/ts_brand_light"
-            android:textColorHint="@color/ts_gray_dark"
-            android:visibility="gone"/>
     </LinearLayout>
 </ScrollView>

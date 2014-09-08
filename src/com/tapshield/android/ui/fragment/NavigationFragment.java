@@ -1,7 +1,6 @@
 package com.tapshield.android.ui.fragment;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import android.app.Fragment;
@@ -30,7 +29,8 @@ public class NavigationFragment extends Fragment implements OnItemClickListener 
 	public static final int NAV_ID_ABOUT = 5;
 	
 	private ListView mList;
-	public NavigationItem[] ITEMS;
+	private NavigationListAdapter mAdapter;
+	private List<NavigationItem> mItems;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -43,32 +43,37 @@ public class NavigationFragment extends Fragment implements OnItemClickListener 
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		
-		addNavigationItems();
-		
-		NavigationListAdapter adapter = new NavigationListAdapter(
+		mItems = new ArrayList<NavigationItem>();
+		mAdapter = new NavigationListAdapter(
 				getActivity(),
-				Arrays.asList(ITEMS),
+				mItems,
 				R.layout.item_navigation,
 				R.id.item_navigation_image,
 				R.id.item_navigation_text);
 		
-		mList.setAdapter(adapter);
+		mList.setAdapter(mAdapter);
 		mList.setDivider(null);
 		mList.setDividerHeight(0);
 		mList.setOnItemClickListener(this);
 	}
 	
-	private void addNavigationItems() {
+	@Override
+	public void onResume() {
+		super.onResume();
+		setNavigationItems();
+	}
+	
+	private void setNavigationItems() {
 		
-		List<NavigationItem> navigationItems = new ArrayList<NavigationItem>();
+		mItems.clear();
 		
-		navigationItems.add(new NavigationItem(
+		mItems.add(new NavigationItem(
 				NAV_ID_PROFILE, R.drawable.ts_icon_nav_profile, "Profile"));
-		navigationItems.add(new NavigationItem(
+		mItems.add(new NavigationItem(
 				NAV_ID_HOME, R.drawable.ts_icon_nav_home, "Home"));
-		navigationItems.add(new NavigationItem(
+		mItems.add(new NavigationItem(
 				NAV_ID_NOTIFICATION, R.drawable.ts_icon_nav_notifications, "Notifications"));
-		navigationItems.add(new NavigationItem(
+		mItems.add(new NavigationItem(
 				NAV_ID_SETTINGS, R.drawable.ts_icon_nav_settings, "Settings"));
 		
 		JavelinUserManager userManager = JavelinClient
@@ -78,19 +83,18 @@ public class NavigationFragment extends Fragment implements OnItemClickListener 
 		if (userManager.isPresent()
 				&& userManager.getUser().agency != null
 				&& userManager.getUser().agency.infoUrl != null) {
-			navigationItems.add(new NavigationItem(
+			mItems.add(new NavigationItem(
 					NAV_ID_HELP, R.drawable.ts_icon_nav_help,
 					userManager.getUser().agency.name));
 		}
 		
-		ITEMS = new NavigationItem[navigationItems.size()];
-		navigationItems.toArray(ITEMS);
+		mAdapter.notifyDataSetChanged();
 	}
 	
 	@Override
 	public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 		OnNavigationItemClickListener listener = (OnNavigationItemClickListener) getActivity();
-		listener.onNavigationItemClick(ITEMS[position]);
+		listener.onNavigationItemClick(mItems.get(position));
 	}
 	
 	public interface OnNavigationItemClickListener {

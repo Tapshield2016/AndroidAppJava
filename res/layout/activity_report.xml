@@ -89,10 +89,11 @@
         <!-- media -->
         
         <TextView
+            android:id="@+id/report_text_header_media"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/ts_common_spacing_m"
-            android:text="@string/ts_reporting_media_header"
+            android:text="@string/ts_reporting_media_header_add"
             style="@style/TapShieldHeader"/>
         
         <LinearLayout

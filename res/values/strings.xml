@@ -54,7 +54,7 @@
     <string name="ts_welcome_skip">Skip</string>
     <string name="ts_welcome_noaccount">No Account?</string>
     <string name="ts_welcome_forgotpassword">Forgot Password?</string>
-    <string name="ts_welcome_intro_1">View local crime, report tips, and be notified of safety alerts in your area.\n\n\&lt;&lt; Swipe screen</string>
+    <string name="ts_welcome_intro_1">View local crime, report tips, and be notified of safety alerts in your area.\n\n\n\n</string>
     <string name="ts_welcome_intro_2">One tap sends your real-time location and profile info to authorities when you hit "Alert".\nThe app automatically launches a call to dispatchers, too.</string>
     <string name="ts_welcome_intro_3">Going on a run while listening to music?\n\nTurn on Yank™ for an added layer of security. TapShield will automatically send an ‘Alert’ if headphones are pulled out of your device on purpose or by force. Don’t worry; you’ll have 10 seconds to disarm the ‘Alert’!</string>
     <string name="ts_welcome_intro_4">Walk with an Entourage™ Set your route before you go. If you don\'t arrive in time, your safety network is automatically notified.</string>
@@ -86,11 +86,25 @@
     
     <!-- selecting organization -->
     <string name="ts_organizationselection_dialog_loading_title">Please wait</string>
-    <string name="ts_organizationselection_dialog_loading_message">Loading organization&#8230;</string>
+    <string name="ts_organizationselection_dialog_loading_message">Retrieving list of organizations&#8230;</string>
     <string name="ts_organizationselection_toast_loading_error">Error retrieving list</string>
     <string name="ts_organizationselection_searchview_hint">Search All</string>
     <string name="ts_organizationselection_list_empty">No nearby organizations. Tap \'search\' icon to see all organization.</string>
 
+    <string name="ts_setorganization_showall">Show All</string>
+    <string name="ts_setorganization_filter">Filter</string>
+    <string name="ts_setorganization_listempty">No nearby organizations. Tap \'Show All.\'</string>
+    <string name="ts_setorganization_dialog_notnow_title">Pick an Organization later</string>
+    <string name="ts_setorganization_dialog_notnow_message">You can always change the organization by going into \'Settings\' and then \'Add or Change Organization\'.</string>
+    
+    <!-- verifying phone number -->
+    <string name="ts_verifyphone_wait_title">Please wait</string>
+    <string name="ts_verifyphone_wait_message">Verifying code&#8230;</string>
+    <string name="ts_verifyphone_ok">Code verified</string>
+    <string name="ts_verifyphone_error_prefix">Error verifying:</string>
+    <string name="ts_verifyphone_update_error_prefix">Error updating changed number:</string>
+    <string name="ts_verifyphone_instructions">Enter phone number and then tap Re-send SMS to receive the verification code.</string>
+    
     <!-- fragment required info -->
     <string name="ts_fragment_requiredinfo_edit_email_hint">Email Address</string>
     <string name="ts_fragment_requiredinfo_edit_password_hint">Password</string>
@@ -119,7 +133,7 @@
 
     <!-- fragment semi-profile -->
     <string name="ts_fragment_semiprofile_text_explanation">This information will help us identify you in case of emergency.</string>
-    <string name="ts_fragment_semiprofile_text_disclaimer"><![CDATA[By tapping \'Finish\' you accept to have read, understand, and agree to the <a href=\'http://tapshield.com/eula/\'>End User License Agreement</a>.]]></string>
+    <string name="ts_fragment_semiprofile_text_disclaimer"><![CDATA[By continuing I agree to the <a href=\'http://tapshield.com/eula/\'>End User License Agreement</a>.]]></string>
 
     <!-- full profile -->
     <string name="ts_fullprofile_button_basic">Basic Information</string>
@@ -231,9 +245,10 @@
     <string name="ts_reporting_location_dialog_message">Getting location for the report&#8230;</string>
     <string name="ts_reporting_dialog_message_error">Oops! There was an issue. Try again later.</string>
     <string name="ts_reporting_toast_successful">Reported!</string>
-    <string name="ts_reporting_media_header">Add media</string>
+    <string name="ts_reporting_media_header_add">Add Image or Video</string>
+    <string name="ts_reporting_media_header_change_prefix">Change</string>
     <string name="ts_reporting_media_audio">Audio</string>
-    <string name="ts_reporting_media_image">Picture</string>
+    <string name="ts_reporting_media_image">Image</string>
     <string name="ts_reporting_media_video">Video</string>
     <string name="ts_reporting_media_notification_title">TapShield</string>
     <string name="ts_reporting_media_notification_preparing_message">Preparing report</string>
@@ -351,19 +366,24 @@
     <string name="ts_misc_credits_socialcrimes">User-submitted</string>
     <string name="ts_misc_feedback_email">feedback@tapshield.com</string>
     <string name="ts_misc_feedback_subject">TapShield Android App Feedback</string>
+        <!-- the following to go before and after the user name given programatically -->
+    <string name="ts_misc_welcome_name_prefix">Welcome</string>
+    <string name="ts_misc_welcome_name_suffix">!</string>
 
     <string name="ts_dialog_location_services_disabled_title_network">Location Services Disabled</string>
     <string name="ts_dialog_location_services_disabled_title_gps">GPS Disabled</string>
     <string name="ts_dialog_location_services_disabled_message">Enable it by tapping \'Settings\' below and go into Location settings.</string>
 
     <!-- settings -->
-    <string name="ts_settings_category">Settings</string>
+    <string name="ts_settings_category_account">Account</string>
+    <string name="ts_settings_org_title">Add or Change Organization</string>
+    <string name="ts_settings_org_key">com.tapshield.android.settings.org.key</string>
     <string name="ts_settings_passcode_title">Change Your Passcode</string>
     <string name="ts_settings_passcode_summary">Your passcode verifies your identity</string>
     <string name="ts_settings_passcode_key">com.tapshield.android.settings.passcode.key</string>
     <string name="ts_settings_logout_title">Sign Out</string>
     <string name="ts_settings_logout_key">com.tapshield.android.settings.logout.key</string>
-    <string name="ts_settings_other_category">Other</string>
+    <string name="ts_settings_category_other">Other</string>
     <string name="ts_settings_about_title">About TapShield</string>
     <string name="ts_settings_about_key">com.tapshield.android.settings.about.key</string>
     <string name="ts_settings_feedback_title">Feedback</string>
@@ -381,6 +401,9 @@
         \n\nApache Commons IO: Licensed under the Apache License, Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0
         \n\nSoundCloud - Android Crop: Licensed under the Apache License, Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0
     </string>
+    
+    <!-- social -->
+    <string name="ts_social_facebook_app_id">412321438904850</string>
     
     <!-- accessibility -->
     <string name="ts_access_main_button_entourage">Entourage, track your location until a destination, notifying selected contacts.</string>
