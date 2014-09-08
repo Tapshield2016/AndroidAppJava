@@ -38,6 +38,7 @@ public class FacebookLoginActivity extends Activity
 	private ImageView mImage;
 	private LoginButton mSignIn;
 	private UiLifecycleHelper mUiHelper;
+	private boolean mRequestedLogOut;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +84,7 @@ public class FacebookLoginActivity extends Activity
 				.alpha(0.6f, 1.0f, 0.6f)
 				.start(mImage);
 		
+		mRequestedLogOut = false;
 		mSignIn.performClick();
 	}
 	
@@ -141,6 +143,9 @@ public class FacebookLoginActivity extends Activity
 			}
 	    } else if (state.isClosed()) {
 	        Log.i(TAG, "Logged out...");
+	        if (!mRequestedLogOut) {
+	        	mSignIn.performClick();
+	        }
 	    }	
 	}
 
@@ -151,6 +156,7 @@ public class FacebookLoginActivity extends Activity
 			UiUtils.welcomeUser(this);
 			Session session = Session.getActiveSession();
 			if (session != null && session.isOpened()) {
+				mRequestedLogOut = true;
 				session.closeAndClearTokenInformation();
 			}
 		} else {
