@@ -16,6 +16,7 @@ import com.tapshield.android.api.JavelinUserManager.OnPhoneNumberVerificationSms
 import com.tapshield.android.api.JavelinUserManager.OnUserRequiredInformationUpdateListener;
 import com.tapshield.android.api.model.User;
 import com.tapshield.android.app.TapShieldApplication;
+import com.tapshield.android.utils.StringUtils;
 import com.tapshield.android.utils.UiUtils;
 
 public class VerifyPhoneActivity extends BaseFragmentActivity
@@ -105,7 +106,7 @@ public class VerifyPhoneActivity extends BaseFragmentActivity
 		};
 		
 		String phone = mUserManager.getUser().phoneNumber;
-		if (phone != null) {
+		if (phone != null && StringUtils.isPhoneNumberValid(phone)) {
 			mPhone.setText(phone);
 		}
 		mPhone.addTextChangedListener(phoneWatcher);
