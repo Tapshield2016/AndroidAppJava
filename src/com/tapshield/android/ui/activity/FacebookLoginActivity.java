@@ -1,6 +1,5 @@
 package com.tapshield.android.ui.activity;
 
-import java.util.Arrays;
 import java.util.List;
 
 import android.app.Activity;
@@ -31,7 +30,6 @@ public class FacebookLoginActivity extends Activity
 		implements StatusCallback, OnUserLogInListener {
 
 	private static final String TAG = "ts:facebook";
-	private static final List<String> mPermissions = Arrays.asList("public_profile", "email");
 	
 	private JavelinUserManager mUserManager;
 
@@ -53,7 +51,7 @@ public class FacebookLoginActivity extends Activity
 		mImage = (ImageView) findViewById(R.id.login_facebook_image);
 		
 		mSignIn = (LoginButton) findViewById(R.id.authButton);
-		mSignIn.setReadPermissions(mPermissions);
+		mSignIn.setReadPermissions(getPermissions());
 		mSignIn.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -61,10 +59,10 @@ public class FacebookLoginActivity extends Activity
 				Session s = Session.getActiveSession();
 				if (!s.isClosed() && !s.isOpened()) {
 					OpenRequest openRequest = new OpenRequest(FacebookLoginActivity.this)
-							.setPermissions(mPermissions)
+							.setPermissions(getPermissions())
 							.setCallback(FacebookLoginActivity.this);
 
-					Log.i(TAG, "permissions=" + mPermissions.toString());
+					Log.i(TAG, "permissions=" + getPermissions().toString());
 					s.openForRead(openRequest);
 					Log.i(TAG, "session open for read (1st) permissions=" + s.getPermissions());
 				} else {
@@ -127,6 +125,11 @@ public class FacebookLoginActivity extends Activity
 		mUiHelper.onActivityResult(requestCode, resultCode, data);
 	}
 	
+	private String[] getPermissions() {
+		//return new String[]{"email", "public_profile"};
+		return new String[]{"email"};
+	}
+	
 	@Override
 	public void call(Session session, SessionState state, Exception exception) {
 		if (state.isOpened()) {
@@ -134,8 +137,10 @@ public class FacebookLoginActivity extends Activity
 			List<String> permissions = session.getPermissions();
 			Log.i(TAG, "session open for read (2nd) permissions=" + permissions + " state=" + session.getState());
 			
-			if (permissions.isEmpty()) {
-				session.requestNewReadPermissions(new NewPermissionsRequest(this, mPermissions));
+			if (!permissions.contains("email")) {
+				try {
+					session.requestNewReadPermissions(new NewPermissionsRequest(this, getPermissions()));
+				} catch (Exception e) {}
 			} else {
 				final String accessToken = session.getAccessToken();
 		        Log.i(TAG, "Facebook access token=" + accessToken);
