@@ -2,6 +2,7 @@ package com.tapshield.android.ui.activity;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
@@ -110,6 +111,7 @@ public class VerifyPhoneActivity extends BaseFragmentActivity
 			mPhone.setText(phone);
 		}
 		mPhone.addTextChangedListener(phoneWatcher);
+		mPhone.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 		mCode.addTextChangedListener(codeWatcher);
 	}
 	
