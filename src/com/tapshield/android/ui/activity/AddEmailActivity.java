@@ -164,6 +164,10 @@ public class AddEmailActivity extends BaseFragmentActivity
 		mWorkingDialog.dismiss();
 		String message = successful ? "Email added!" : extra;
 		UiUtils.toastShort(this, message);
+		
+		if (successful) {
+			UiUtils.hideKeyboard(this);
+		}
 	}
 
 	@Override
@@ -171,7 +175,9 @@ public class AddEmailActivity extends BaseFragmentActivity
 		mWorkingDialog.dismiss();
 		String message = successful ? "Email verified!" : extra;
 		UiUtils.toastLong(this, message);
-		done();
+		if (successful) {
+			done();
+		}
 	}
 
 	@Override
