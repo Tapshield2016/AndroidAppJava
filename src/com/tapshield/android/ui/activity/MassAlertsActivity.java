@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.ListView;
 
 import com.tapshield.android.R;
@@ -46,6 +47,9 @@ public class MassAlertsActivity extends BaseFragmentActivity implements OnMassAl
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		//set indeterminate progress indicator in the action bar
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.activity_massalerts);
 
 		ActionBar actionBar = getActionBar();
@@ -148,7 +152,7 @@ public class MassAlertsActivity extends BaseFragmentActivity implements OnMassAl
 		
 		@Override
 		protected void onPreExecute() {
-			//start spinning progress off action bar
+			setProgressBarIndeterminateVisibility(true);
 		}
 		
 		@Override
@@ -177,7 +181,7 @@ public class MassAlertsActivity extends BaseFragmentActivity implements OnMassAl
 			}
 			
 			updateList();
-			//stop spinning progress off action bar
+			setProgressBarIndeterminateVisibility(false);
 		}
 	}
 	
