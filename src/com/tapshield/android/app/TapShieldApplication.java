@@ -22,8 +22,6 @@ import com.tapshield.android.utils.UiUtils;
 
 public class TapShieldApplication extends Application {
 
-	public static final String GOOGLE_PLUS_CLIENT_ID = "825930152848.apps.googleusercontent.com";
-	
 	public static JavelinConfig JAVELIN_CONFIG =
 			new JavelinConfig.Builder()
 			.baseUrl("https://dev.tapshield.com/")
