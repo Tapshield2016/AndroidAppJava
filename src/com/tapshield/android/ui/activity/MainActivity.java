@@ -442,10 +442,8 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 			//at this point let the SessionManager class deal with what's missing
 			SessionManager.getInstance(this).check(this);
 			
-			//disable chat button if not part of an organzation
-			if (!mUserBelongsToAgency) {
-				mChat.setEnabled(false);
-			}
+			//enable/disable chat button if part or not of an organzation
+			mChat.setEnabled(mUserBelongsToAgency);
 			
 			if (getIntent() != null && getIntent().getBooleanExtra(EXTRA_DISCONNECTED, false)) {
 				mDisconnectedDialog = getDisconnectedDialog();
