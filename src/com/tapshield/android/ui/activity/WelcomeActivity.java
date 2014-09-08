@@ -3,6 +3,9 @@ package com.tapshield.android.ui.activity;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -24,6 +27,8 @@ public class WelcomeActivity extends BaseFragmentActivity {
 	private TextView mSkip;
 	private PageIndicator mPageIndicator;
 	private LinearLayout mIndicatorAndSkip;
+	private ImageView mSwipe;
+	private Animation mSwipeAnimation;
 	
 	@Override
 	protected void onCreate(Bundle b) {
@@ -31,6 +36,7 @@ public class WelcomeActivity extends BaseFragmentActivity {
 		setContentView(R.layout.activity_welcome);
 		mPager = (ViewPager) findViewById(R.id.welcome_pager);
 		mSkip = (TextView) findViewById(R.id.welcome_text_skip);
+		mSwipe = (ImageView) findViewById(R.id.welcome_image_swipe);
 		mPageIndicator = (PageIndicator) findViewById(R.id.welcome_pageindicator);
 		mIndicatorAndSkip = (LinearLayout) findViewById(R.id.welcome_linear_indicatorskip);
 		
@@ -49,7 +55,7 @@ public class WelcomeActivity extends BaseFragmentActivity {
 			}
 			
 			@Override
-			public void onPageScrolled(int position, float offset, int arg2) {
+			public void onPageScrolled(int position, float offset, int offsetPixels) {
 				//hide if it's already scrolling to last position
 				//  (which is count() - 1 - another 1 since it is the previous + offset)
 				if (position >= mPagerAdapter.getCount() - 2
@@ -61,6 +67,10 @@ public class WelcomeActivity extends BaseFragmentActivity {
 						&& mIndicatorAndSkip.getVisibility() == View.INVISIBLE) {
 					mIndicatorAndSkip.setVisibility(View.VISIBLE);
 				}
+				
+				if (offset > 0.1f) {
+					hideSwipingIndicator();
+				}
 			}
 			
 			@Override
@@ -71,12 +81,30 @@ public class WelcomeActivity extends BaseFragmentActivity {
 			
 			@Override
 			public void onClick(View v) {
+				hideSwipingIndicator();
 				mPager.setCurrentItem(mPagerAdapter.getCount() - 1, true);
 			}
 		});
 		
 		mPageIndicator.setNumPages(mPagerAdapter.getCount());
 		getActionBar().hide();
+		
+		mSwipeAnimation = AnimationUtils.loadAnimation(this, R.anim.swipe);
+		mSwipeAnimation.setAnimationListener(new Animation.AnimationListener() {
+			
+			@Override
+			public void onAnimationStart(Animation animation) {}
+			
+			@Override
+			public void onAnimationRepeat(Animation animation) {}
+			
+			@Override
+			public void onAnimationEnd(Animation animation) {
+				mSwipeAnimation.reset();
+				mSwipeAnimation.start();
+			}
+		});
+		mSwipe.startAnimation(mSwipeAnimation);
 	}
 	
 	@Override
@@ -107,5 +135,15 @@ public class WelcomeActivity extends BaseFragmentActivity {
 			}
 		}
 		super.onBackPressed();
+	}
+	
+	private void hideSwipingIndicator() {
+		if (mSwipe.getVisibility() == View.GONE) {
+			return;
+		}
+		
+		mSwipeAnimation.setAnimationListener(null);
+		mSwipe.clearAnimation();
+		mSwipe.setVisibility(View.GONE);
 	}
 }

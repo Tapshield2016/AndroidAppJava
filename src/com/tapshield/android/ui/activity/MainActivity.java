@@ -816,7 +816,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 	}
 	
 	private AlertDialog getYankDialog() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this)
+		return new AlertDialog.Builder(this)
 				.setCancelable(true)
 				.setTitle(R.string.ts_main_dialog_yank_title)
 				.setMessage(R.string.ts_main_dialog_yank_message)
@@ -824,10 +824,17 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 					
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
+						mYankDialog.cancel();
+					}
+				})
+				.setOnCancelListener(new DialogInterface.OnCancelListener() {
+					
+					@Override
+					public void onCancel(DialogInterface dialog) {
 						mYank.setEnabled(false);
 					}
-				});
-		return builder.create();
+				})
+				.create();
 	}
 	
 	private AlertDialog getDisconnectedDialog() {

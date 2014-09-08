@@ -6,6 +6,7 @@
         <item name="android:actionBarStyle">@style/TapShieldActionBar</item>
         <item name="android:actionMenuTextColor">@color/ts_brand_light</item>
         <item name="android:windowBackground">@color/ts_activity_background</item>
+        <item name="android:typeface">normal</item>
         <!-- <item name="android:homeAsUpIndicator">@drawable/ic_up</item> -->
     </style>
     
