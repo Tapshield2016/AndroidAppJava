@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.facebook.Session;
+import com.facebook.Session.NewPermissionsRequest;
 import com.facebook.Session.OpenRequest;
 import com.facebook.Session.StatusCallback;
 import com.facebook.SessionState;
@@ -58,9 +59,13 @@ public class FacebookLoginActivity extends Activity
 			public void onClick(View v) {
 				Session s = Session.getActiveSession();
 				if (!s.isClosed() && !s.isOpened()) {
-					s.openForRead(new OpenRequest(FacebookLoginActivity.this)
+					OpenRequest openRequest = new OpenRequest(FacebookLoginActivity.this)
 							.setPermissions(mPermissions)
-							.setCallback(FacebookLoginActivity.this));
+							.setCallback(FacebookLoginActivity.this);
+
+					Log.i(TAG, "permissions=" + mPermissions.toString());
+					s.openForRead(openRequest);
+					Log.i(TAG, "session open for read (1st) permissions=" + s.getPermissions());
 				} else {
 					Session.openActiveSession(FacebookLoginActivity.this, true, FacebookLoginActivity.this);
 				}
@@ -124,10 +129,16 @@ public class FacebookLoginActivity extends Activity
 	public void call(Session session, SessionState state, Exception exception) {
 		if (state.isOpened()) {
 			Log.i(TAG, "Logged in...");
+			List<String> permissions = session.getPermissions();
+			Log.i(TAG, "session open for read (2nd) permissions=" + permissions + " state=" + session.getState());
 			
-			final String accessToken = session.getAccessToken();
-	        Log.i(TAG, "Facebook access token=" + accessToken);
-			mUserManager.logInWithFacebook(accessToken, this);
+			if (permissions.isEmpty()) {
+				session.requestNewReadPermissions(new NewPermissionsRequest(this, mPermissions));
+			} else {
+				final String accessToken = session.getAccessToken();
+		        Log.i(TAG, "Facebook access token=" + accessToken);
+				mUserManager.logInWithFacebook(accessToken, this);
+			}
 	    } else if (state.isClosed()) {
 	        Log.i(TAG, "Logged out...");
 	    }	
@@ -138,6 +149,10 @@ public class FacebookLoginActivity extends Activity
 		
 		if (successful) {
 			UiUtils.welcomeUser(this);
+			Session session = Session.getActiveSession();
+			if (session != null && session.isOpened()) {
+				session.closeAndClearTokenInformation();
+			}
 		} else {
 			UiUtils.toastShort(this, "Error: " + e.getMessage());
 		}
