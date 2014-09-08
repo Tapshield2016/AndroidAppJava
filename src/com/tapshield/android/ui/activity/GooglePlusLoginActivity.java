@@ -40,6 +40,7 @@ public class GooglePlusLoginActivity extends Activity
 	private ImageView mImage;
 	private GoogleApiClient mClient;
 	private boolean mIntentInProgress = false;
+	private boolean mSignInClicked;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +69,7 @@ public class GooglePlusLoginActivity extends Activity
 				.alpha(0.6f, 1.0f, 0.6f)
 				.start(mImage);
 
+		mSignInClicked = true; //creating this activity means it was user-requested
 		signIn();
 	}
 
@@ -88,6 +90,12 @@ public class GooglePlusLoginActivity extends Activity
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == REQUEST_SIGN_IN) {
+
+			if (resultCode != RESULT_OK) {
+				mSignInClicked = false;
+				onUserLogIn(false, null, 0, new Throwable("Cancelled."));
+			}
+			
 			mIntentInProgress = false;
 			
 			if (!mClient.isConnecting()) {
@@ -153,6 +161,7 @@ public class GooglePlusLoginActivity extends Activity
 	@Override
 	public void onConnected(Bundle b) {
 		Log.i(TAG, "Connected");
+		mSignInClicked = false;
 		new TokenRetriever().execute(
 				Plus.AccountApi.getAccountName(mClient),
 				"oauth2:" + Scopes.PLUS_LOGIN + " " + Scopes.PROFILE + " email");
@@ -166,9 +175,9 @@ public class GooglePlusLoginActivity extends Activity
 
 	@Override
 	public void onConnectionFailed(ConnectionResult result) {
-		Log.i(TAG, "Connection failed");
+		Log.i(TAG, "Connection failed (" + result.getErrorCode() + ") " + mIntentInProgress);
 		
-		if (!mIntentInProgress && result.hasResolution()) {
+		if (!mIntentInProgress && result.hasResolution() && mSignInClicked) {
 			try {
 				mIntentInProgress = true;
 				startIntentSenderForResult(result.getResolution().getIntentSender(),
