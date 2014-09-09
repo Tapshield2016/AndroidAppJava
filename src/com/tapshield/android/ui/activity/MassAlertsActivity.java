@@ -158,29 +158,33 @@ public class MassAlertsActivity extends BaseFragmentActivity implements OnMassAl
 		@Override
 		protected void onPostExecute(List<RssItem> result) {
 			
-			//after letting parent class (RssFeedReaderAsync) deal with the feed, build MassAlert items
-			
-			mItemsRss.clear();
-			
-			Log.i("ts:mass", "RssItem count=" + result.size());
-			for (RssItem rssItem : result) {
-				
-				//java Date to jodatime DateTime
-				DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-				String date = new DateTime(rssItem.getPubDate()).toString(dtf);
-				
-				Log.i("ts:mass", String.format("url=%s date=%s org=%s des=%s", rssItem.getLink(), date, rssItem.getTitle(), rssItem.getDescription()));
-				
-				MassAlert item = new MassAlert(
-						rssItem.getLink(),
-						date,
-						mJavelin.getUserManager().getUser().agency.name,
-						rssItem.getDescription());
-				
-				mItemsRss.add(item);
+			if (result != null) {
+
+				//after letting parent class (RssFeedReaderAsync) deal with the feed, build MassAlert items
+
+				mItemsRss.clear();
+
+				Log.i("ts:mass", "RssItem count=" + result.size());
+				for (RssItem rssItem : result) {
+
+					//java Date to jodatime DateTime
+					DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+					String date = new DateTime(rssItem.getPubDate()).toString(dtf);
+
+					Log.i("ts:mass", String.format("url=%s date=%s org=%s des=%s", rssItem.getLink(), date, rssItem.getTitle(), rssItem.getDescription()));
+
+					MassAlert item = new MassAlert(
+							rssItem.getLink(),
+							date,
+							mJavelin.getUserManager().getUser().agency.name,
+							rssItem.getDescription());
+
+					mItemsRss.add(item);
+				}
+
+				updateList();
 			}
 			
-			updateList();
 			setProgressBarIndeterminateVisibility(false);
 		}
 	}
