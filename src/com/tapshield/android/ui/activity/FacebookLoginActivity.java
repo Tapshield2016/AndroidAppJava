@@ -1,10 +1,15 @@
 package com.tapshield.android.ui.activity;
 
+import java.security.MessageDigest;
 import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -37,6 +42,7 @@ public class FacebookLoginActivity extends Activity
 	private LoginButton mSignIn;
 	private UiLifecycleHelper mUiHelper;
 	private boolean mRequestedLogOut;
+	private boolean mSecondChance;
 	private int mNewPermissionRetry;
 	
 	@Override
@@ -63,9 +69,9 @@ public class FacebookLoginActivity extends Activity
 							.setPermissions(getPermissions())
 							.setCallback(FacebookLoginActivity.this);
 
-					Log.i(TAG, "permissions=" + getPermissions().toString());
+					Log.i(TAG, "permissions getter returning=" + getPermissions().toString());
 					s.openForRead(openRequest);
-					Log.i(TAG, "session open for read (1st) permissions=" + s.getPermissions());
+					Log.i(TAG, "opening session for read permissions=" + s.getPermissions());
 				} else {
 					Session.openActiveSession(FacebookLoginActivity.this, true, FacebookLoginActivity.this);
 				}
@@ -85,7 +91,21 @@ public class FacebookLoginActivity extends Activity
 		
 		mNewPermissionRetry = 0;
 		mRequestedLogOut = false;
+		mSecondChance = true;
 		mSignIn.performClick();
+		
+		try {
+			PackageInfo info = getPackageManager().getPackageInfo(getPackageName(),  PackageManager.GET_SIGNATURES);
+
+			for (Signature signature : info.signatures)
+			{
+				MessageDigest md = MessageDigest.getInstance("SHA");
+				md.update(signature.toByteArray());
+				Log.d("ts:facebook", "hashkey=" + Base64.encodeToString(md.digest(), Base64.DEFAULT));
+			}
+		} catch (Exception e) {
+			Log.d("ts:facebook", "Error getting keyhash: " + e.getMessage());
+		}
 	}
 	
 	@Override
@@ -128,22 +148,22 @@ public class FacebookLoginActivity extends Activity
 	}
 	
 	private String[] getPermissions() {
-		//return new String[]{"email", "public_profile"};
 		return new String[]{"email"};
 	}
 	
 	@Override
 	public void call(Session session, SessionState state, Exception exception) {
+		Log.i(TAG, "Session=" + session);
 		if (state.isOpened()) {
 			Log.i(TAG, "Logged in...");
 			List<String> permissions = session.getPermissions();
-			Log.i(TAG, "session open for read (2nd) permissions=" + permissions + " state=" + session.getState());
+			Log.i(TAG, "session open for read (2nd) permissions=" + permissions);
 			
 			if (!permissions.contains("email")) {
 				mNewPermissionRetry++;
 				
 				if (mNewPermissionRetry >= 3) {
-					onUserLogIn(false, null, 0, new Throwable("Retry facebook sign in again."));
+					onUserLogIn(false, null, 0, new Throwable("Retry Facebook sign in."));
 					return;
 				}
 				
@@ -152,13 +172,20 @@ public class FacebookLoginActivity extends Activity
 				} catch (Exception e) {}
 			} else {
 				final String accessToken = session.getAccessToken();
-		        Log.i(TAG, "Facebook access token=" + accessToken);
+		        Log.i(TAG, "Facebook access token retrieved.");
 				mUserManager.logInWithFacebook(accessToken, this);
 			}
 	    } else if (state.isClosed()) {
-	        Log.i(TAG, "Logged out...");
+	        Log.i(TAG, "Logged out..." + state.toString());
+
 	        if (!mRequestedLogOut) {
-	        	mSignIn.performClick();
+	        	if (mSecondChance) {
+	        		mSecondChance = false;
+	        		session.closeAndClearTokenInformation();
+	        		mSignIn.performClick();
+	        	} else {
+	        		onUserLogIn(false, null, 0, new Throwable("Check your login for Facebook."));
+	        	}
 	        }
 	    }	
 	}
