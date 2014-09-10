@@ -796,6 +796,10 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 			@Override
 			public void onDetails(boolean ok, int code, SocialCrime socialCrime,
 					String errorIfNotOk) {}
+
+			@Override
+			public void onDelete(boolean ok, int code, SocialCrime socialCrime,
+					String errorIfNotOk) {}
 		};
 		
 		JavelinSocialReportingManager socialReporting = mJavelin.getSocialReportingManager();

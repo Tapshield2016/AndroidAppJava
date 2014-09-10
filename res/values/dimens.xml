@@ -86,7 +86,7 @@
     
     <!-- crime details -->
     <dimen name="details_image_type">64dp</dimen>
-    <dimen name="details_text_type_textsize">18sp</dimen>
+    <dimen name="details_text_type_textsize">22sp</dimen>
     
     <!-- chat -->
     <dimen name="chat_item_margin">14dp</dimen>

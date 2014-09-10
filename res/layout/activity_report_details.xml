@@ -40,6 +40,7 @@
             android:id="@+id/report_text_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textSize="@dimen/ts_common_text_m"
             android:textColor="@color/ts_gray_dark"
             android:drawableLeft="@drawable/ic_drawer"
             android:visibility="gone"/>
@@ -48,6 +49,7 @@
             android:id="@+id/report_text_datetime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textSize="@dimen/ts_common_text_m"
             android:textColor="@color/ts_gray_dark"
             android:drawableLeft="@drawable/ic_time"/>     
         
@@ -56,14 +58,27 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/ts_common_spacing_m"
             android:text="@string/ts_common_description"
+            android:textSize="@dimen/ts_common_text_m"
             style="@style/TapShieldHeader"/>
         
         <TextView
             android:id="@+id/report_text_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textSize="@dimen/ts_common_text_m"
             android:layout_margin="@dimen/ts_common_spacing_s"
             android:textColor="@color/ts_gray_dark"/>
+        
+        <TextView
+            android:id="@+id/report_text_yourreport"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/ts_reporting_text_yourreport"
+            android:textColor="@color/ts_brand_dark"
+            android:textSize="@dimen/ts_common_text_m"
+            android:layout_margin="@dimen/ts_common_spacing_xs"
+            android:visibility="gone"/>
         
         <FrameLayout
 			android:id="@+id/report_media_container"

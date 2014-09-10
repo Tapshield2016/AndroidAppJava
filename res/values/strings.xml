@@ -43,6 +43,7 @@
     <string name="ts_common_prev">Prev</string>
     <string name="ts_common_next">Next</string>
     <string name="ts_common_edit">Edit</string>
+    <string name="ts_common_delete">Delete</string>
     <string name="ts_common_error">Error</string>
     <string name="ts_common_settings">Settings</string>
 
@@ -241,6 +242,7 @@
     <string name="ts_alert_twilio_error">Call Failed</string>
 
     <!-- reporting -->
+    <string name="ts_reporting_text_yourreport">Your report</string>
     <string name="ts_reporting_checkbox_anonymous">Report anonymously</string>
     <string name="ts_reporting_location_dialog_message">Getting location for the report&#8230;</string>
     <string name="ts_reporting_dialog_message_error">Oops! There was an issue. Try again later.</string>
@@ -254,6 +256,8 @@
     <string name="ts_reporting_media_notification_preparing_message">Preparing report</string>
     <string name="ts_reporting_media_notification_uploading_message">Uploading report</string>
     <string name="ts_reporting_media_notification_error_message">Error reporting. Tap to retry.</string>
+    <string name="ts_reporting_dialog_loading_message">Obtaining report details&#8230;</string>
+    <string name="ts_reporting_dialog_delete_message">Deleting</string>
     <string name="ts_reporting_dialog_media_options_title">Media Attachment</string>
     <string name="ts_reporting_dialog_media_options_message_existing">What type of media would you like to pick?</string>
     <string name="ts_reporting_dialog_media_options_message_new">What type of media would you like to create?</string>
