@@ -113,8 +113,7 @@
         android:id="@+id/main_drawer"
         android:layout_width="280dp"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="#333">
+        android:layout_gravity="start">
     
         <fragment
             android:id="@+id/main_fragment_navigation"
