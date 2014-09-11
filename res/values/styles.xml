@@ -32,8 +32,7 @@
     
     <style name="TapShieldButton" parent="@android:style/Widget.Holo.Light.Button">
         <item name="android:background">@drawable/ts_background_button</item>
-        <item name="android:textColor">@color/ts_brand_light</item>
-        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@color/ts_textcolor_button</item>
     </style>
     
     <style name="TapShieldHoloLightTheme.Trasparent">
