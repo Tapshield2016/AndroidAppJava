@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Fragment;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +19,7 @@ import android.widget.ListView;
 import com.tapshield.android.R;
 import com.tapshield.android.api.JavelinClient;
 import com.tapshield.android.api.JavelinUserManager;
+import com.tapshield.android.api.model.UserProfile;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.ui.adapter.NavigationListAdapter;
 import com.tapshield.android.ui.adapter.NavigationListAdapter.NavigationItem;
@@ -31,6 +36,7 @@ public class NavigationFragment extends Fragment implements OnItemClickListener 
 	private ListView mList;
 	private NavigationListAdapter mAdapter;
 	private List<NavigationItem> mItems;
+	private BroadcastReceiver mProfilePictureReceiver;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,7 +48,6 @@ public class NavigationFragment extends Fragment implements OnItemClickListener 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		
 		mItems = new ArrayList<NavigationItem>();
 		mAdapter = new NavigationListAdapter(
 				getActivity(),
@@ -55,12 +60,28 @@ public class NavigationFragment extends Fragment implements OnItemClickListener 
 		mList.setDivider(null);
 		mList.setDividerHeight(0);
 		mList.setOnItemClickListener(this);
+		
+		mProfilePictureReceiver = new BroadcastReceiver() {
+			
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				setNavigationItems();
+			}
+		};
 	}
 	
 	@Override
 	public void onResume() {
 		super.onResume();
 		setNavigationItems();
+		IntentFilter profilePictureUpdated = new IntentFilter(UserProfile.ACTION_USER_PICTURE_UPDATED);
+		getActivity().registerReceiver(mProfilePictureReceiver, profilePictureUpdated);
+	}
+	
+	@Override
+	public void onPause() {
+		getActivity().unregisterReceiver(mProfilePictureReceiver);
+		super.onPause();
 	}
 	
 	private void setNavigationItems() {
