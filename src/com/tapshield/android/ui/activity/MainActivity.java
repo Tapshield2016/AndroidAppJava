@@ -525,6 +525,15 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		return false;
 	}
 	
+	@Override
+	public void onBackPressed() {
+		if (mDrawerLayout.isDrawerOpen(mDrawer)) {
+			mDrawerLayout.closeDrawer(mDrawer);
+		} else {
+			super.onBackPressed();
+		}
+	}
+	
 	private void moveCameraToUser(boolean animate) {
 		if (mUserLocation == null) {
 			return;
