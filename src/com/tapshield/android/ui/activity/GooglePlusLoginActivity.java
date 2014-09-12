@@ -208,7 +208,7 @@ public class GooglePlusLoginActivity extends Activity
 		UiUtils.startActivityNoStack(this, clss);
 	}
 	
-	private void attachProfileToUser(User user) {
+	private void attachProfileToUser(final User user) {
 		if (Plus.PeopleApi.getCurrentPerson(mClient) != null) {
 			Person currentPerson = Plus.PeopleApi.getCurrentPerson(mClient);
 
