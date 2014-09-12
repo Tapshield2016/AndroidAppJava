@@ -230,8 +230,10 @@ public class FacebookLoginActivity extends Activity
 					return;
 				}
 				
+				
+				final String birthdayRegex = "\\d{2}/\\d{2}/\\d{4}";
 				String birthday = graphUser.getBirthday();
-				if (birthday != null && !birthday.isEmpty()) {
+				if (birthday != null && !birthday.isEmpty() && birthday.matches(birthdayRegex)) {
 					user.profile.setDateOfBirth(birthday);
 				}
 				
