@@ -32,6 +32,7 @@ import com.tapshield.android.api.JavelinClient;
 import com.tapshield.android.api.JavelinSocialReportingManager.SocialReportingListener;
 import com.tapshield.android.api.model.SocialCrime;
 import com.tapshield.android.api.model.SocialCrime.SocialCrimes;
+import com.tapshield.android.api.model.User;
 import com.tapshield.android.api.spotcrime.SpotCrimeClient;
 import com.tapshield.android.api.spotcrime.SpotCrimeClient.SpotCrimeCallback;
 import com.tapshield.android.api.spotcrime.model.Crime;
@@ -52,6 +53,7 @@ public class ReportDetailsActivity extends BaseFragmentActivity
 	
 	private JavelinClient mJavelin;
 	private ImageView mTypeImage;
+	private TextView mViewed;
 	private TextView mTypeText;
 	private TextView mDateTime;
 	private TextView mPlace;
@@ -72,6 +74,7 @@ public class ReportDetailsActivity extends BaseFragmentActivity
 		
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
+		mViewed = (TextView) findViewById(R.id.report_text_viewed);
 		mTypeImage = (ImageView) findViewById(R.id.report_image_type);
 		mTypeText = (TextView) findViewById(R.id.report_text_type);
 		mDateTime = (TextView) findViewById(R.id.report_text_datetime);
@@ -281,6 +284,12 @@ public class ReportDetailsActivity extends BaseFragmentActivity
 				mCurrentUserIsTheReporter = true;
 				invalidateOptionsMenu();
 				mYourReport.setVisibility(View.VISIBLE);
+			}
+			
+			if (socialCrime.isViewed()) {
+				final String message = String.format("Viewed by dispatcher (%s).", socialCrime.getViewedByName());
+				mViewed.setText(message);
+				mViewed.setVisibility(View.VISIBLE);
 			}
 			
 			setDetails(socialCrime.getTypeName(), DateTimeUtils.getTimeLabelFor(socialCrime.getDate()),

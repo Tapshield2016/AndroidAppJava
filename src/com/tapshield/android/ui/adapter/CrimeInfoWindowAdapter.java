@@ -1,8 +1,10 @@
 package com.tapshield.android.ui.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
@@ -31,29 +33,35 @@ public class CrimeInfoWindowAdapter implements InfoWindowAdapter {
 		String snippet = null;
 		
 		if (marker != null && (snippet = marker.getSnippet()) != null) {
-			String[] data = snippet.split(SEPARATOR);//0:date, 1:source [, 2:address ]
+			String[] data = snippet.split(SEPARATOR);//0:viewed-flag 1:date, 2:source [, 3:address]
 			
 			infoWindow = LayoutInflater.from(mContext).inflate(R.layout.infowindow_crime, null);
+			ImageView viewed = (ImageView) infoWindow.findViewById(R.id.infowindow_crime_image_viewed);
 			TextView title = (TextView) infoWindow.findViewById(R.id.infowindow_crime_text_title);
 			TextView date = (TextView) infoWindow.findViewById(R.id.infowindow_crime_text_date);
 			TextView address = (TextView) infoWindow.findViewById(R.id.infowindow_crime_text_address);
 			TextView source = (TextView) infoWindow.findViewById(R.id.infowindow_crime_text_source);
 			
 			title.setText(marker.getTitle());
-			date.setText(data[0]);
 			
-			boolean sourcePresent = data != null && data.length >= 2 && data[1] != null && !data[1].isEmpty();
-			boolean addressPresent = data != null && data.length >= 3 && data[2] != null && !data[2].isEmpty();
+			if (Boolean.parseBoolean(data[0])) {
+				viewed.setVisibility(View.VISIBLE);
+			}
+			
+			date.setText(data[1]);
+			
+			boolean sourcePresent = data != null && data.length >= 3 && data[2] != null && !data[2].isEmpty();
+			boolean addressPresent = data != null && data.length >= 4 && data[3] != null && !data[3].isEmpty();
 			
 			//if source is spotcrime, ignore it, since it's suposedly unnecessary
 			if (sourcePresent
-					&& !data[1].equals(mContext.getString(R.string.ts_misc_credits_spotcrime))) {
-				source.setText(data[1]);
+					&& !data[2].equals(mContext.getString(R.string.ts_misc_credits_spotcrime))) {
+				source.setText(data[2]);
 				source.setVisibility(View.VISIBLE);
 			}
 			
 			if (addressPresent) {
-				address.setText(data[2]);
+				address.setText(data[3]);
 				address.setVisibility(View.VISIBLE);
 			}
 		}

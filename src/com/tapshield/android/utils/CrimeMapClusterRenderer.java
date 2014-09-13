@@ -52,9 +52,10 @@ public class CrimeMapClusterRenderer extends DefaultClusterRenderer<CrimeCluster
 		final String source = mContext.getString(R.string.ts_misc_credits_spotcrime);
 		final String address = item.getCrime().getAddress() != null
 				? item.getCrime().getAddress() : new String();
-		final String snippet = timeDifference
-						+ CrimeInfoWindowAdapter.SEPARATOR + source
-						+ CrimeInfoWindowAdapter.SEPARATOR + address;
+		final String snippet = Boolean.toString(false)
+				+ CrimeInfoWindowAdapter.SEPARATOR + timeDifference
+				+ CrimeInfoWindowAdapter.SEPARATOR + source
+				+ CrimeInfoWindowAdapter.SEPARATOR + address;
 
 		markerOptions
 				.draggable(false)

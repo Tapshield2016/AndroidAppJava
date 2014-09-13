@@ -51,7 +51,9 @@ public class SocialCrimeMapClusterRenderer extends DefaultClusterRenderer<Social
 
 		//set snippet with mandatory time label and source
 		final String source = mContext.getString(R.string.ts_misc_credits_socialcrimes);
-		final String snippet = timeDifference + CrimeInfoWindowAdapter.SEPARATOR + source;
+		final String snippet = item.getSocialCrime().isViewed()
+				+ CrimeInfoWindowAdapter.SEPARATOR + timeDifference
+				+ CrimeInfoWindowAdapter.SEPARATOR + source;
 		
 		markerOptions
 				.draggable(false)
