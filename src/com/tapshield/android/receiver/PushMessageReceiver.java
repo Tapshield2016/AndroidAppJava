@@ -10,6 +10,7 @@ import com.tapshield.android.api.JavelinAlertManager;
 import com.tapshield.android.api.JavelinChatManager;
 import com.tapshield.android.api.JavelinClient;
 import com.tapshield.android.api.JavelinMassAlertManager;
+import com.tapshield.android.api.JavelinSocialReportingManager;
 import com.tapshield.android.api.JavelinUserManager;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.manager.EmergencyManager;
@@ -23,6 +24,7 @@ public class PushMessageReceiver extends WakefulBroadcastReceiver {
 	private static final String TYPE_ALERT_RECEIVED = "alert-received";
 	private static final String TYPE_MESSAGE_AVAILABLE = "chat-message-available";
 	private static final String TYPE_MASS_ALERT = "mass-alert";
+	private static final String TYPE_CRIME_TIP = "crime-tip";
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -74,6 +76,10 @@ public class PushMessageReceiver extends WakefulBroadcastReceiver {
 			Log.i("javelin", "Mass alert available");
 			JavelinMassAlertManager massAlertManager = javelin.getMassAlertManager();
 			massAlertManager.fetch();
+		} else if (type.equals(TYPE_CRIME_TIP)) {
+			Log.i("javelin", "Tip-related message received");
+			JavelinSocialReportingManager socialReporting = javelin.getSocialReportingManager();
+			socialReporting.notifyMessage(message, alertId, extras);
 		}
 	}
 }

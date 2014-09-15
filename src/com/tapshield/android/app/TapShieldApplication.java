@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import android.app.Application;
+import android.os.Bundle;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
@@ -13,6 +14,7 @@ import com.tapshield.android.api.JavelinChatManager.OnNewIncomingChatMessagesLis
 import com.tapshield.android.api.JavelinClient;
 import com.tapshield.android.api.JavelinConfig;
 import com.tapshield.android.api.JavelinMassAlertManager.OnNewMassAlertListener;
+import com.tapshield.android.api.JavelinSocialReportingManager.SocialReportingMessageListener;
 import com.tapshield.android.api.JavelinUserManager;
 import com.tapshield.android.api.googledirections.GoogleDirectionsConfig;
 import com.tapshield.android.api.googleplaces.GooglePlacesConfig;
@@ -148,6 +150,14 @@ public class TapShieldApplication extends Application {
 			@Override
 			public void onNewMassAlert() {
 				Notifier.getInstance(TapShieldApplication.this).notify(Notifier.NOTIFICATION_MASS);
+			}
+		});
+		
+		javelin.getSocialReportingManager().addMessageListener(new SocialReportingMessageListener() {
+			
+			@Override
+			public void onMessageReceive(String message, String id, Bundle extras) {
+				Notifier.getInstance(TapShieldApplication.this).notifyCrimeTip(message, id, extras);
 			}
 		});
 	}

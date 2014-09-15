@@ -8,10 +8,13 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationCompat.BigTextStyle;
 import android.support.v4.app.TaskStackBuilder;
 
 import com.tapshield.android.R;
+import com.tapshield.android.api.JavelinSocialReportingManager;
 import com.tapshield.android.ui.activity.AlertActivity;
 import com.tapshield.android.ui.activity.ChatActivity;
 import com.tapshield.android.ui.activity.MainActivity;
@@ -27,6 +30,7 @@ public class Notifier {
 	public static final int NOTIFICATION_CHAT = 60;
 	public static final int NOTIFICATION_MASS = 70;
 	public static final int NOTIFICATION_TWILIO_FAILURE = 80;
+	public static final int NOTIFICATION_CRIME_TIP = 90;
 	
 	private static Notifier mInstance;
 	private Context mContext;
@@ -174,6 +178,21 @@ public class Notifier {
 				.build();
 	}
 	
+	private Notification buildCrimeTip(final String message, final String id, final Bundle extras) {
+		
+		String title = extras.getString(JavelinSocialReportingManager.KEY_PUSHMESSAGE_TITLE,
+				mContext.getString(R.string.app_name));
+		
+		return getCommonBuilder()
+				.setContentTitle(title)
+				.setContentText(message)
+				.setPriority(NotificationCompat.PRIORITY_DEFAULT)
+				.setAutoCancel(true)
+				.setStyle(new BigTextStyle()
+						.bigText(message))
+				.build();
+	}
+	
 	private PendingIntent getPendingIntentWithBackStack(Class<? extends Activity>... activitiesClasses) {
 		TaskStackBuilder stackBuilder = TaskStackBuilder.create(mContext);
 		
@@ -187,6 +206,14 @@ public class Notifier {
 	
 	public void notify(int notificationId) {
 		notify(notificationId, null);
+	}
+	
+	public void notifyCrimeTip(final String message, final String id, final Bundle extras) {
+		getManager();
+		Notification notification = buildCrimeTip(message, id, extras);
+		if (notification != null) {
+			mNotificationManager.notify(NOTIFICATION_CRIME_TIP, notification);
+		}
 	}
 	
 	public void notifyChat(List<String> chatMessages) {
