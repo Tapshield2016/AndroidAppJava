@@ -24,7 +24,7 @@ public class PushMessageReceiver extends WakefulBroadcastReceiver {
 	private static final String TYPE_ALERT_RECEIVED = "alert-received";
 	private static final String TYPE_MESSAGE_AVAILABLE = "chat-message-available";
 	private static final String TYPE_MASS_ALERT = "mass-alert";
-	private static final String TYPE_CRIME_TIP = "crime-tip";
+	private static final String TYPE_CRIME_TIP = "crime-report";
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {

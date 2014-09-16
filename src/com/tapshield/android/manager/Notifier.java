@@ -30,7 +30,7 @@ public class Notifier {
 	public static final int NOTIFICATION_CHAT = 60;
 	public static final int NOTIFICATION_MASS = 70;
 	public static final int NOTIFICATION_TWILIO_FAILURE = 80;
-	public static final int NOTIFICATION_CRIME_TIP = 90;
+	public static final int NOTIFICATION_CRIME_REPORT = 90;
 	
 	private static Notifier mInstance;
 	private Context mContext;
@@ -178,7 +178,7 @@ public class Notifier {
 				.build();
 	}
 	
-	private Notification buildCrimeTip(final String message, final String id, final Bundle extras) {
+	private Notification buildCrimeReport(final String message, final String id, final Bundle extras) {
 		
 		String title = extras.getString(JavelinSocialReportingManager.KEY_PUSHMESSAGE_TITLE,
 				mContext.getString(R.string.app_name));
@@ -208,11 +208,11 @@ public class Notifier {
 		notify(notificationId, null);
 	}
 	
-	public void notifyCrimeTip(final String message, final String id, final Bundle extras) {
+	public void notifyCrimeReport(final String message, final String id, final Bundle extras) {
 		getManager();
-		Notification notification = buildCrimeTip(message, id, extras);
+		Notification notification = buildCrimeReport(message, id, extras);
 		if (notification != null) {
-			mNotificationManager.notify(NOTIFICATION_CRIME_TIP, notification);
+			mNotificationManager.notify(NOTIFICATION_CRIME_REPORT, notification);
 		}
 	}
 	

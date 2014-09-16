@@ -157,7 +157,7 @@ public class TapShieldApplication extends Application {
 			
 			@Override
 			public void onMessageReceive(String message, String id, Bundle extras) {
-				Notifier.getInstance(TapShieldApplication.this).notifyCrimeTip(message, id, extras);
+				Notifier.getInstance(TapShieldApplication.this).notifyCrimeReport(message, id, extras);
 			}
 		});
 	}
