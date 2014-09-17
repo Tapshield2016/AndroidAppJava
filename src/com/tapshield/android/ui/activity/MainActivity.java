@@ -1,7 +1,9 @@
 package com.tapshield.android.ui.activity;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -39,8 +41,11 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.clustering.Cluster;
+import com.google.maps.android.clustering.ClusterItem;
 import com.google.maps.android.clustering.ClusterManager;
-import com.google.maps.android.clustering.algo.GridBasedAlgorithm;
+import com.google.maps.android.clustering.algo.NonHierarchicalDistanceBasedAlgorithm;
 import com.google.maps.android.clustering.algo.PreCachingAlgorithmDecorator;
 import com.tapshield.android.R;
 import com.tapshield.android.api.JavelinClient;
@@ -74,6 +79,7 @@ import com.tapshield.android.utils.ConnectivityMonitor.ConnectivityMonitorListen
 import com.tapshield.android.utils.CrimeMapClusterRenderer;
 import com.tapshield.android.utils.MapUtils;
 import com.tapshield.android.utils.SocialCrimeMapClusterRenderer;
+import com.tapshield.android.utils.SocialReportsUtils;
 import com.tapshield.android.utils.SpotCrimeUtils;
 import com.tapshield.android.utils.UiUtils;
 
@@ -82,6 +88,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 
 	public static final String EXTRA_DISCONNECTED = "com.tapshield.android.extra.disconnected";
 	
+	private static final float DECLUSTER_RADIUS = 0.00005f;
 	private static final String KEY_RESUME = "resuming";
 
 	private ActionBarDrawerToggle mDrawerToggle;
@@ -116,6 +123,12 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 	private boolean mTrackUser = true;
 	private boolean mResuming = false;
 	private boolean mUserBelongsToAgency = false;
+	
+	private Marker[] mDeclusteredMarkers = null;
+	private boolean mDeclusteredGroup = false;
+	private CameraPosition mDeclusteredCameraPosition = null;
+	private Map<Marker, SocialCrime> mDeclusteredSocialCrimeMap = new HashMap<Marker, SocialCrime>();
+	private Map<Marker, Crime> mDeclusteredCrimeMap = new HashMap<Marker, Crime>();
 
 	//crimes (spotcrime, social crimes)
 	
@@ -229,8 +242,9 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 			
 			@Override
 			public void onClick(View v) {
-				mTrackUser = true;
+				setTrackUser(true);
 				moveCameraToUser(true);
+				clearDecluster();
 			}
 		});
 		
@@ -320,40 +334,54 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 			mMapCrimeClusterManager = new ClusterManager<CrimeClusterItem>(this, mMap);
 			mMapCrimeClusterManager.setAlgorithm(
 					new PreCachingAlgorithmDecorator<CrimeClusterItem>(
-							new GridBasedAlgorithm<CrimeClusterItem>()));
+							new NonHierarchicalDistanceBasedAlgorithm<CrimeClusterItem>()));
 			mMapCrimeClusterManager.setRenderer(
 					new CrimeMapClusterRenderer(this, mMap, mMapCrimeClusterManager));
+			mMapCrimeClusterManager.setOnClusterClickListener(
+					new ClusterManager.OnClusterClickListener<CrimeClusterItem>() {
+
+						@Override
+						public boolean onClusterClick(Cluster<CrimeClusterItem> cluster) {
+							//returning true means it has to be declustered
+							if (focusOnCluster(cluster)) {
+								declusterCrimeCluster(cluster);
+							}
+							return true;
+						}
+					});
 			mMapCrimeClusterManager.setOnClusterItemInfoWindowClickListener(
 					new ClusterManager.OnClusterItemInfoWindowClickListener<CrimeClusterItem>() {
 
 						@Override
 						public void onClusterItemInfoWindowClick(CrimeClusterItem item) {
-							Intent details = new Intent(MainActivity.this, ReportDetailsActivity.class);
-							details.putExtra(ReportDetailsActivity.EXTRA_REPORT_TYPE,
-									ReportDetailsActivity.TYPE_SPOTCRIME);
-							details.putExtra(ReportDetailsActivity.EXTRA_REPORT_ID,
-									item.getCrime().getId());
-							startActivity(details);
+							getCrimeDetails(item.getCrime());
 						}
 					});
 			
 			mMapSocialCrimeClusterManager = new ClusterManager<SocialCrimeClusterItem>(this, mMap);
 			mMapSocialCrimeClusterManager.setAlgorithm(
 					new PreCachingAlgorithmDecorator<SocialCrimeClusterItem>(
-							new GridBasedAlgorithm<SocialCrimeClusterItem>()));
+							new NonHierarchicalDistanceBasedAlgorithm<SocialCrimeClusterItem>()));
 			mMapSocialCrimeClusterManager.setRenderer(
 					new SocialCrimeMapClusterRenderer(this, mMap, mMapSocialCrimeClusterManager));
+			mMapSocialCrimeClusterManager.setOnClusterClickListener(
+					new ClusterManager.OnClusterClickListener<SocialCrimeClusterItem>() {
+
+						@Override
+						public boolean onClusterClick(Cluster<SocialCrimeClusterItem> cluster) {
+							//returning true means it has to be declustered
+							if (focusOnCluster(cluster)) {
+								declusterSocialCrimeCluster(cluster);
+							}
+							return true;
+						}
+					});
 			mMapSocialCrimeClusterManager.setOnClusterItemInfoWindowClickListener(
 					new ClusterManager.OnClusterItemInfoWindowClickListener<SocialCrimeClusterItem>() {
 
 						@Override
 						public void onClusterItemInfoWindowClick(SocialCrimeClusterItem item) {
-							Intent details = new Intent(MainActivity.this, ReportDetailsActivity.class);
-							details.putExtra(ReportDetailsActivity.EXTRA_REPORT_TYPE,
-									ReportDetailsActivity.TYPE_SOCIALCRIME);
-							details.putExtra(ReportDetailsActivity.EXTRA_REPORT_ID,
-									item.getSocialCrime().getUrl());
-							startActivity(details);
+							getSocialCrimeDetails(item.getSocialCrime());
 						}
 					});
 			
@@ -361,6 +389,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 				
 				@Override
 				public void onCameraChange(CameraPosition cameraPosition) {
+					removeDeclusteredGroup(cameraPosition);
 					mMapCrimeClusterManager.onCameraChange(cameraPosition);
 					mMapSocialCrimeClusterManager.onCameraChange(cameraPosition);
 				}
@@ -380,6 +409,13 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 				
 				@Override
 				public void onInfoWindowClick(Marker marker) {
+
+					if (mDeclusteredCrimeMap.containsKey(marker)) {
+						getCrimeDetails(mDeclusteredCrimeMap.get(marker));
+					} else if (mDeclusteredSocialCrimeMap.containsKey(marker)) {
+						getSocialCrimeDetails(mDeclusteredSocialCrimeMap.get(marker));
+					}
+					
 					mMapCrimeClusterManager.onInfoWindowClick(marker);
 					mMapSocialCrimeClusterManager.onInfoWindowClick(marker);
 				}
@@ -534,6 +570,18 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		}
 	}
 	
+	private void setTrackUser(boolean enabled) {
+		mTrackUser = enabled;
+		int iconResource = mTrackUser ? R.drawable.ts_icon_locateme : R.drawable.ts_icon_locateme_disabled;
+		mLocateMe.setImageResource(iconResource);
+	}
+	
+	private void animateZoomInCameraTo(double latitude, double longitude, float newZoom) {
+		LatLng to = new LatLng(latitude, longitude);
+		CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(to, newZoom);
+		mMap.animateCamera(cameraUpdate, 500, null);
+	}
+	
 	private void moveCameraToUser(boolean animate) {
 		if (mUserLocation == null) {
 			return;
@@ -601,7 +649,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 			actionBar.setCustomView(entourageActionBarView);
 			
 			//allow entourage to handle the map, user can tap 'locate me' if needed
-			mTrackUser = false;
+			setTrackUser(false);
 			mEntourageManager.drawOnMap(mMap);
 		}
 	}
@@ -733,6 +781,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		}
 		
 		//remove old ones
+		/*
 		for (Crime crime : mSpotCrimeRecords.values()) {
 			boolean old = SpotCrimeUtils.getDateTimeFromCrime(crime).isBefore(limit);
 			
@@ -745,6 +794,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 				}
 			}
 		}
+		*/
 		
 		mMapCrimeClusterManager.cluster();
 	}
@@ -786,6 +836,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 				}
 
 				//remove old ones (markers and records)
+				/*
 				for (SocialCrime crime : mSocialCrimesRecords.values()) {
 					boolean old = crime.getDate().isBefore(limit);
 
@@ -798,6 +849,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 						}
 					}
 				}
+				*/
 				
 				mMapSocialCrimeClusterManager.cluster();
 			}
@@ -824,6 +876,183 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 			//do not animate if it is just resuming
 			moveCameraToUser(!mResuming);
 		}
+	}
+	
+	private void getCrimeDetails(Crime crime) {
+		Intent details = new Intent(MainActivity.this, ReportDetailsActivity.class);
+		details.putExtra(ReportDetailsActivity.EXTRA_REPORT_TYPE,
+				ReportDetailsActivity.TYPE_SPOTCRIME);
+		details.putExtra(ReportDetailsActivity.EXTRA_REPORT_ID,
+				crime.getId());
+		startActivity(details);
+	}
+	
+	private void getSocialCrimeDetails(SocialCrime socialCrime) {
+		Intent details = new Intent(MainActivity.this, ReportDetailsActivity.class);
+		details.putExtra(ReportDetailsActivity.EXTRA_REPORT_TYPE,
+				ReportDetailsActivity.TYPE_SOCIALCRIME);
+		details.putExtra(ReportDetailsActivity.EXTRA_REPORT_ID,
+				socialCrime.getUrl());
+		startActivity(details);
+	}
+	
+	private boolean focusOnCluster(Cluster<? extends ClusterItem> cluster) {
+		
+		clearDecluster();
+		
+		//stop tracking user
+		setTrackUser(false);
+		
+		float zoom = mMap.getCameraPosition().zoom;
+		float zoomMax = mMap.getMaxZoomLevel();
+		
+		if (zoom >= zoomMax) {
+			//if max level, decluster group
+			return true;
+		} else {
+			//else:
+			// get the remaining zoom levels to reach max, get part of it (e.g. a fourth of it)
+			// increase to 1 of floored down to 0
+			// add remaining value to current zoom value
+			// exception: if zoom difference is about 'difToFullZoom' and
+			//   cluster contains items with the same position, then decluster
+			final float difToFullZoom = 3;
+			
+			float zoomDif = zoomMax - zoom;
+			float zoomNew;
+			
+			//exception
+			if (zoomDif <= difToFullZoom) {
+				zoomNew = zoomMax;
+			} else {
+			
+				int zoomDifPart = (int) (Math.floor(zoomDif) / 4f);
+				
+				if (zoomDifPart <= 0) {
+					zoomDifPart = 1;
+				}
+				zoomNew = zoom + zoomDifPart;
+			}
+			animateZoomInCameraTo(cluster.getPosition().latitude,
+					cluster.getPosition().longitude, zoomNew);
+		}
+		return false;
+	}
+	
+	private void removeDeclusteredGroup(final CameraPosition camera) {
+		if (!mDeclusteredGroup || mDeclusteredCameraPosition == null) {
+			return;
+		}
+		
+		Location clusterPosition = new Location("");
+		clusterPosition.setLatitude(mDeclusteredCameraPosition.target.latitude);
+		clusterPosition.setLongitude(mDeclusteredCameraPosition.target.longitude);
+		
+		Location cameraPosition = new Location("");
+		cameraPosition.setLatitude(camera.target.latitude);
+		cameraPosition.setLongitude(camera.target.longitude);
+		
+		boolean clusterFarFromCamera = clusterPosition.distanceTo(cameraPosition) >= 25;
+		
+		//remove declustered items if user wants to be tracked, zoom changed, or distance
+		//  of the cluster is over X amount
+		if (mTrackUser
+				|| camera.zoom != mDeclusteredCameraPosition.zoom
+				|| clusterFarFromCamera) {
+			clearDecluster();
+		}
+	}
+	
+	private void setDecluster(final int size) {
+		mDeclusteredGroup = true;
+		mDeclusteredCameraPosition = mMap.getCameraPosition();
+		mDeclusteredMarkers = new Marker[size];
+	}
+	
+	private void clearDecluster() {
+		mDeclusteredCameraPosition = null;
+		mDeclusteredGroup = false;
+		if (mDeclusteredMarkers != null) {
+			for (Marker m : mDeclusteredMarkers) {
+				m.remove();
+			}
+		}
+		
+		if (mDeclusteredCrimeMap != null) {
+			mDeclusteredCrimeMap.clear();
+		}
+		
+		if (mDeclusteredSocialCrimeMap != null) {
+			mDeclusteredSocialCrimeMap.clear();
+		}
+	}
+	
+	private void declusterSocialCrimeCluster(Cluster<SocialCrimeClusterItem> cluster) {
+		
+		//get size and pass all cluster items to array for iteration
+		final int size = cluster.getSize();
+		final SocialCrimeClusterItem[] items = new SocialCrimeClusterItem[size];
+		cluster.getItems().toArray(items);
+
+		//initialize decluster flags
+		setDecluster(size);
+		
+		//get final variables to be used
+		final float radius = DECLUSTER_RADIUS;
+		final float eachAngle = 360f/(float)size;
+		
+		
+		for (int i = 0; i < cluster.getSize(); i++) {
+			
+			//build marker options, set radial position, create marker via map and store reference
+			
+			MarkerOptions defaultOptions = SocialReportsUtils.getMarkerOptionsOf(this,
+					items[i].getSocialCrime(), false);
+			
+			defaultOptions.position(
+					getCircleLatLngWithAngle(eachAngle * i, cluster.getPosition(), radius));
+			
+			mDeclusteredMarkers[i] = mMap.addMarker(defaultOptions);
+			mDeclusteredSocialCrimeMap.put(mDeclusteredMarkers[i], items[i].getSocialCrime());
+		}
+	}
+	
+	private void declusterCrimeCluster(Cluster<CrimeClusterItem> cluster) {
+
+		//get size and pass all cluster items to array for iteration
+		final int size = cluster.getSize();
+		final CrimeClusterItem[] items = new CrimeClusterItem[size];
+		cluster.getItems().toArray(items);
+
+		//initialize decluster flags
+		setDecluster(size);
+		
+		//get final variables to be used
+		final float radius = DECLUSTER_RADIUS;
+		final float eachAngle = 360f/(float)size;
+
+		for (int i = 0; i < cluster.getSize(); i++) {
+
+			//build marker options, set radial position, create marker via map and store reference
+
+			MarkerOptions defaultOptions = SpotCrimeUtils.getMarkerOptionsOf(this,
+					items[i].getCrime(), false);
+
+			LatLng pos = getCircleLatLngWithAngle(eachAngle * i, cluster.getPosition(), radius);
+
+			defaultOptions.position(pos);
+
+			mDeclusteredMarkers[i] = mMap.addMarker(defaultOptions);
+			mDeclusteredCrimeMap.put(mDeclusteredMarkers[i], items[i].getCrime());
+		}
+	}
+	
+	private LatLng getCircleLatLngWithAngle(float angle, LatLng center, float radius) {
+		//lat:y, lon:x (y uses sin, x uses cos)
+		float radians = (float) (angle * Math.PI / 180f);
+		return new LatLng(
+				center.latitude + radius * Math.sin(radians),
+				center.longitude + radius * Math.cos(radians));
 	}
 	
 	private AlertDialog getYankDialog() {

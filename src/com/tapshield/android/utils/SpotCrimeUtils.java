@@ -5,9 +5,16 @@ import java.util.Locale;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 
+import android.content.Context;
+
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.tapshield.android.R;
 import com.tapshield.android.api.spotcrime.SpotCrimeClient;
 import com.tapshield.android.api.spotcrime.model.Crime;
+import com.tapshield.android.app.TapShieldApplication;
+import com.tapshield.android.ui.adapter.CrimeInfoWindowAdapter;
 
 public class SpotCrimeUtils {
 
@@ -43,5 +50,43 @@ public class SpotCrimeUtils {
 	
 	public static DateTime getDateTimeFromCrime(Crime crime) {
 		return DateTimeFormat.forPattern(FORMAT_CRIME_DATE).parseDateTime(crime.getDate());
+	}
+	
+	public final static MarkerOptions getMarkerOptionsOf(Context context, Crime crime,
+			boolean attachPosition) {
+		
+		final DateTime crimeDateTime = SpotCrimeUtils.getDateTimeFromCrime(crime);
+		final String type = crime.getType();
+		final int markerDrawableResource = SpotCrimeUtils.getDrawableOfType(type, true);
+		final String timeLabel = DateTimeUtils.getTimeLabelFor(crimeDateTime);
+
+		//set snippet with mandatory time label and source (optional address if not null)
+		final String source = context.getString(R.string.ts_misc_credits_spotcrime);
+		final String address = crime.getAddress() != null ? crime.getAddress() : new String();
+		final String snippet = Boolean.toString(false)
+				+ CrimeInfoWindowAdapter.SEPARATOR + timeLabel
+				+ CrimeInfoWindowAdapter.SEPARATOR + source
+				+ CrimeInfoWindowAdapter.SEPARATOR + address;
+
+		final float alpha = MapUtils.getOpacityOffTimeframeAt(
+				crimeDateTime.getMillis(),
+				new DateTime()
+						.minusHours(TapShieldApplication.CRIMES_PERIOD_HOURS)
+						.getMillis(),
+				TapShieldApplication.CRIMES_MARKER_OPACITY_MINIMUM);
+		
+		MarkerOptions options = new MarkerOptions()
+				.draggable(false)
+				.icon(BitmapDescriptorFactory.fromResource(markerDrawableResource))
+				.anchor(0.5f, 1.0f)
+				.alpha(alpha)
+				.title(type)
+				.snippet(snippet);
+		
+		if (attachPosition) {
+			options.position(new LatLng(crime.getLatitude(), crime.getLongitude()));
+		}
+		
+		return options;
 	}
 }

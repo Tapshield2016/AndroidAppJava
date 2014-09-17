@@ -1,7 +1,5 @@
 package com.tapshield.android.utils;
 
-import org.joda.time.DateTime;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
@@ -16,9 +14,7 @@ import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import com.google.maps.android.ui.IconGenerator;
 import com.tapshield.android.R;
-import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.model.SocialCrimeClusterItem;
-import com.tapshield.android.ui.adapter.CrimeInfoWindowAdapter;
 
 public class SocialCrimeMapClusterRenderer extends DefaultClusterRenderer<SocialCrimeClusterItem> {
 
@@ -44,28 +40,16 @@ public class SocialCrimeMapClusterRenderer extends DefaultClusterRenderer<Social
 	@Override
 	protected void onBeforeClusterItemRendered(SocialCrimeClusterItem item,
 			MarkerOptions markerOptions) {
-		final DateTime crimeDateTime = item.getSocialCrime().getDate();
-		final String type = item.getSocialCrime().getTypeName();
-		final int markerDrawableResource = SocialReportsUtils.getDrawableOfType(type, true);
-		final String timeDifference = DateTimeUtils.getTimeLabelFor(crimeDateTime);
-
-		//set snippet with mandatory time label and source
-		final String source = mContext.getString(R.string.ts_misc_credits_socialcrimes);
-		final String snippet = item.getSocialCrime().isViewed()
-				+ CrimeInfoWindowAdapter.SEPARATOR + timeDifference
-				+ CrimeInfoWindowAdapter.SEPARATOR + source;
+		MarkerOptions defaultOptions = SocialReportsUtils.getMarkerOptionsOf(mContext,
+				item.getSocialCrime(), false);
 		
 		markerOptions
-				.draggable(false)
-				.icon(BitmapDescriptorFactory.fromResource(markerDrawableResource))
-				.anchor(0.5f, 1.0f)
-				.alpha(
-						MapUtils.getOpacityOffTimeframeAt(
-								crimeDateTime.getMillis(),
-								new DateTime().minusHours(TapShieldApplication.CRIMES_PERIOD_HOURS).getMillis(),
-								TapShieldApplication.CRIMES_MARKER_OPACITY_MINIMUM))
-				.title(type)
-				.snippet(snippet);
+				.draggable(defaultOptions.isDraggable())
+				.icon(defaultOptions.getIcon())
+				.anchor(defaultOptions.getAnchorU(), defaultOptions.getAnchorV())
+				.alpha(defaultOptions.getAlpha())
+				.title(defaultOptions.getTitle())
+				.snippet(defaultOptions.getSnippet());
 	}
 	
 	@Override
