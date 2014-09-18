@@ -6,6 +6,7 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.google.gson.Gson;
 import com.tapshield.android.api.JavelinComms;
 import com.tapshield.android.api.JavelinComms.JavelinCommsCallback;
 import com.tapshield.android.api.JavelinComms.JavelinCommsRequestResponse;
@@ -45,9 +46,11 @@ public class GooglePlacesClient {
 						JSONObject jsonResponse = response.jsonResponse;
 						JSONArray results = jsonResponse.getJSONArray(JSON_RESULTS);
 						
+						Gson gson = new Gson();
+						
 						for (int i = 0; i < results.length(); i++) {
 							JSONObject jsonPlace = results.getJSONObject(i);
-							Place place = Place.fromJson(jsonPlace);
+							Place place = gson.fromJson(jsonPlace.toString(), Place.class);
 							places.add(place);
 						}
 					} catch (Exception e) {

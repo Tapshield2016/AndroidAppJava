@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+    <fragment
+		android:id="@+id/entourage_destination_fragment_map"
+		android:name="com.google.android.gms.maps.SupportMapFragment"
+		class="com.google.android.gms.maps.SupportMapFragment"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"/>
+    
+    <ImageView
+        android:id="@+id/entourage_destination_image_pin"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/ts_pin_entourage_destination"
+        android:scaleType="centerInside"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/ts_common_spacing_xxs"
+        android:layout_margin="@dimen/ts_common_spacing_xs"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/ts_background_card">
+        
+        <AutoCompleteTextView
+	        android:id="@+id/entourage_destination_autocomplete_search"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:hint="@string/ts_entourage_destination_search_hint"/>
+    </FrameLayout>
+</RelativeLayout>
