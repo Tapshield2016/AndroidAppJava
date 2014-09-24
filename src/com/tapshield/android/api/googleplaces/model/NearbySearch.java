@@ -9,9 +9,6 @@ public class NearbySearch extends Search {
 	
 	private static final String PARAM_KEYWORD = "keyword";
 	private static final String PARAM_NAME = "name";
-	private static final String PARAM_RANKBY = "rankby";
-	private static final String PARAM_LOCATION = "location";
-	private static final String PARAM_RADIUS = "radius";
 	
 	public NearbySearch(double latitude, double longitude, int radiusMeters) {
 		this(Double.toString(latitude), Double.toString(longitude), radiusMeters);
@@ -22,11 +19,6 @@ public class NearbySearch extends Search {
 		addParam(PARAM_RANKBY, RANKBY_PROMINENCE);
 		addParam(PARAM_LOCATION, latitude + "," + longitude);
 		addParam(PARAM_RADIUS, Integer.toString(radiusMeters));
-	}
-	
-	@Override
-	public boolean hasParams() {
-		return getParams() != null && !getParams().isEmpty();
 	}
 	
 	public NearbySearch rankby(String rankby) {

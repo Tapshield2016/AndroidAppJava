@@ -12,8 +12,6 @@ public class AutocompleteSearch extends Search {
 	public static final String TYPES_CITIES = "(cities)";
 	
 	private static final String PARAM_INPUT = "input";
-	private static final String PARAM_LOCATION = "location";
-	private static final String PARAM_RADIUS = "radius";
 	private static final String PARAM_TYPES = "types";
 
 	private static final String DEFAULT_NO_LOC_BIASING_COORDINATES_LAT = "0";

@@ -9,6 +9,10 @@ import com.tapshield.android.utils.StringUtils;
 //Base class that will provide methods to different search types in order to return 
 public abstract class Search {
 
+	protected static final String PARAM_RANKBY = "rankby";
+	protected static final String PARAM_LOCATION = "location";
+	protected static final String PARAM_RADIUS = "radius";
+	
 	private static final String GET_PARAM_SEPARATOR = "&";
 	private static final String GET_PARAM_EQUAL = "=";
 
