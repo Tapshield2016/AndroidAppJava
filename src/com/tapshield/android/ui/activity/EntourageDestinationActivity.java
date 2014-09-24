@@ -18,15 +18,17 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.tapshield.android.R;
-import com.tapshield.android.api.googleplaces.GooglePlacesClient;
-import com.tapshield.android.api.googleplaces.GooglePlacesClient.GooglePlacesListener;
-import com.tapshield.android.api.googleplaces.GooglePlacesRequest;
+import com.tapshield.android.api.googleplaces.GooglePlaces;
+import com.tapshield.android.api.googleplaces.model.AutocompletePlace;
+import com.tapshield.android.api.googleplaces.model.AutocompleteSearch;
+import com.tapshield.android.api.googleplaces.model.NearbySearch;
 import com.tapshield.android.api.googleplaces.model.Place;
+import com.tapshield.android.api.googleplaces.model.TextSearch;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.location.LocationTracker;
 
 public class EntourageDestinationActivity extends BaseFragmentActivity
-		implements LocationListener, GooglePlacesListener {
+		implements LocationListener, GooglePlaces.GooglePlacesListener {
 
 	private GoogleMap mMap;
 	private AutoCompleteTextView mSearch;
@@ -36,7 +38,7 @@ public class EntourageDestinationActivity extends BaseFragmentActivity
 	private Location mLocation;
 	private LocationTracker mTracker;
 	
-	private GooglePlacesClient mPlacesApi;
+	private int FLAG_SEARCH_COUNT = 1;
 	
 	@Override
 	protected void onCreate(Bundle savedInstance) {
@@ -50,16 +52,27 @@ public class EntourageDestinationActivity extends BaseFragmentActivity
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				if (s.length() >= mSearch.getThreshold()) {
-					GooglePlacesRequest request = 
-							new GooglePlacesRequest(
-									TapShieldApplication.GOOGLEPLACES_CONFIG, s.toString())
-							.setType(GooglePlacesRequest.TYPE_SEARCH);
 					
 					if (mLocation != null) {
-						request.setLocation(mLocation.getLatitude(), mLocation.getLongitude(), 500);
+						
+						AutocompleteSearch autocomplete = new AutocompleteSearch(s.toString())
+								.location(mLocation.getLatitude(), mLocation.getLongitude(), 500);
+						
+						TextSearch text = new TextSearch(s.toString())
+								.location(mLocation.getLatitude(), mLocation.getLongitude(), 500);
+						
+						NearbySearch nearby = new NearbySearch(
+								mLocation.getLatitude(), mLocation.getLongitude(), 500)
+								.rankby(NearbySearch.RANKBY_DISTANCE)
+								.keyword(s.toString());
+						
+						GooglePlaces places = new GooglePlaces()
+								.config(TapShieldApplication.GOOGLEPLACES_CONFIG);
+						
+						places.autocomplete(autocomplete, EntourageDestinationActivity.this);
+						places.searchText(text, EntourageDestinationActivity.this);
+						places.searchNearby(nearby, EntourageDestinationActivity.this);
 					}
-					
-					mPlacesApi.request(request, EntourageDestinationActivity.this);
 				}
 			}
 			
@@ -74,11 +87,9 @@ public class EntourageDestinationActivity extends BaseFragmentActivity
 		mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mData);
 		
 		mSearch.setAdapter(mAdapter);
-		mSearch.setThreshold(1);
+		mSearch.setThreshold(4);
 		
 		mTracker = LocationTracker.getInstance(this);
-		
-		mPlacesApi = GooglePlacesClient.get(TapShieldApplication.GOOGLEPLACES_CONFIG);
 	}
 	
 	@Override
@@ -113,10 +124,10 @@ public class EntourageDestinationActivity extends BaseFragmentActivity
 		//drawUserLocation();
 	}
 
-	//google places response
 	@Override
-	public void onFinish(boolean ok, List<Place> places, String errorIfNotOk) {
-		Log.i("googleplaces", "ok=" + ok + " places=" + places + " err=" + errorIfNotOk);
+	public void onPlacesSearchEnd(boolean ok, List<Place> places, String error) {
+		Log.i("googleplaces", "search #" + FLAG_SEARCH_COUNT++);
+		Log.i("googleplaces", "ok=" + ok + " places=" + places + " err=" + error);
 		if (ok) {
 			mData.clear();
 			
@@ -124,6 +135,23 @@ public class EntourageDestinationActivity extends BaseFragmentActivity
 			for (Place place : places) {
 				mData.add(place.name());
 				Log.i("googleplaces", "    " + place.name());
+			}
+			
+			mAdapter.notifyDataSetChanged();
+		}
+	}
+
+	@Override
+	public void onPlacesAutocompleteEnd(boolean ok, List<AutocompletePlace> places, String error) {
+		Log.i("googleplaces", "search #" + FLAG_SEARCH_COUNT++);
+		Log.i("googleplaces", "ok=" + ok + " places=" + places + " err=" + error);
+		if (ok) {
+			mData.clear();
+			
+			Log.i("googleplaces", "====================================");
+			for (AutocompletePlace place : places) {
+				mData.add(place.description());
+				Log.i("googleplaces", "    " + place.description());
 			}
 			
 			mAdapter.notifyDataSetChanged();
