@@ -17,6 +17,7 @@ import com.tapshield.android.api.googleplaces.model.AutocompleteSearch;
 import com.tapshield.android.api.googleplaces.model.NearbySearch;
 import com.tapshield.android.api.googleplaces.model.Place;
 import com.tapshield.android.api.googleplaces.model.Search;
+import com.tapshield.android.api.googleplaces.model.TextSearch;
 
 public class GooglePlaces {
 
@@ -39,11 +40,9 @@ public class GooglePlaces {
 		search(nearbySearch, l);
 	}
 	
-	/*
 	public void searchText(TextSearch textSearch, final GooglePlacesListener l) {
 		search(textSearch, l);
 	}
-	*/
 	
 	private void search(final Search search, final GooglePlacesListener l) {
 		if (l == null) {
