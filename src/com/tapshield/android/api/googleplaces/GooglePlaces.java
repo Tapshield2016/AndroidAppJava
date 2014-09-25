@@ -39,6 +39,10 @@ public class GooglePlaces {
 		return this;
 	}
 	
+	public void detailsOf(AutocompletePlace autocompletePlace, final GooglePlacesListener l) {
+		detailsOf(autocompletePlace.placeId(), l);
+	}
+	
 	public void detailsOf(Place place, final GooglePlacesListener l) {
 		detailsOf(place.placeId(), l);
 	}
