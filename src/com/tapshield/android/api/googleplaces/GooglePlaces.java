@@ -23,10 +23,13 @@ public class GooglePlaces {
 
 	private static final String TAG = "googleplaces";
 	
+	private static final String TYPE_DETAILS = "details";
+	
 	public static final String OUTPUT_JSON = "json";
 	public static final String OUTPUT_XML = "xml";
 	
 	private static final String PARAM_KEY = "key";
+	private static final String PARAM_PLACEID = "placeid";
 	
 	private GooglePlacesConfig mConfig;
 	private String mOutput = OUTPUT_JSON;
@@ -34,6 +37,46 @@ public class GooglePlaces {
 	public GooglePlaces config(GooglePlacesConfig config) {
 		mConfig = config;
 		return this;
+	}
+	
+	public void detailsOf(Place place, final GooglePlacesListener l) {
+		detailsOf(place.placeId(), l);
+	}
+	
+	public void detailsOf(String placeId, final GooglePlacesListener l) {
+		JavelinCommsCallback internalCallback = new JavelinCommsCallback() {
+			
+			@Override
+			public void onEnd(JavelinCommsRequestResponse response) {
+				boolean ok = response.successful;
+				Place place = null;
+				String error = null;
+				
+				if (ok) {
+					Gson gson = new Gson();
+					
+					try {
+						place = gson.fromJson(response.response, Place.class);
+					} catch (Exception e) {
+						ok = false;
+						place = null;
+						error = e.getMessage();
+					}
+				} else {
+					error = response.response;
+				}
+				
+				l.onPlacesDetailsEnd(ok, place, error);
+			}
+		};
+		
+		JavelinComms.httpGet(getDetailsUrl(placeId), null, null, null, internalCallback);
+	}
+	
+	private String getDetailsUrl(String placeId) {
+		return mConfig.url() + TYPE_DETAILS + "/" + mOutput + "?"
+				+ PARAM_KEY + "=" + mConfig.key()
+				+ PARAM_PLACEID + "=" + placeId;
 	}
 	
 	public void searchNearby(NearbySearch nearbySearch, final GooglePlacesListener l) {
@@ -53,10 +96,11 @@ public class GooglePlaces {
 
 			@Override
 			public void onEnd(JavelinCommsRequestResponse response) {
+				boolean ok = response.successful;
 				List<Place> places = null;
 				String error = null;
 
-				if (response.successful) {
+				if (ok) {
 					try {
 						places = new ArrayList<Place>();
 
@@ -71,20 +115,19 @@ public class GooglePlaces {
 							places.add(place);
 						}
 					} catch (Exception e) {
+						ok = false;
 						places = null;
-						error = e.toString();
+						error = e.getMessage();
 					}
 				} else {
 					error = response.response;
 				}
 
-				l.onPlacesSearchEnd(response.successful, places, error);
+				l.onPlacesSearchEnd(ok, places, error);
 			}
 		};
 
-		String url = getUrl(search);
-		JavelinComms.httpGet(url, null, null, null, internalCallback);
-		Log.i(TAG, "url=" + url);
+		JavelinComms.httpGet(getSearchUrl(search), null, null, null, internalCallback);
 	}
 	
 	public void autocomplete(final AutocompleteSearch autocompleteSearch, final GooglePlacesListener l) {
@@ -96,10 +139,11 @@ public class GooglePlaces {
 
 			@Override
 			public void onEnd(JavelinCommsRequestResponse response) {
+				boolean ok = response.successful;
 				List<AutocompletePlace> places = null;
 				String error = null;
 
-				if (response.successful) {
+				if (ok) {
 					try {
 						places = new ArrayList<AutocompletePlace>();
 
@@ -115,30 +159,32 @@ public class GooglePlaces {
 							places.add(place);
 						}
 					} catch (Exception e) {
+						ok = false;
 						places = null;
-						error = e.toString();
+						error = e.getMessage();
 					}
 				} else {
 					error = response.response;
 				}
 
-				l.onPlacesAutocompleteEnd(response.successful, places, error);
+				l.onPlacesAutocompleteEnd(ok, places, error);
 			}
 		};
 
-		String url = getUrl(autocompleteSearch);
+		String url = getSearchUrl(autocompleteSearch);
 		JavelinComms.httpGet(url, null, null, null, internalCallback);
 		Log.i(TAG, "url=" + url);
 	}
 	
-	private String getUrl(Search search) {
+	private String getSearchUrl(Search search) {
 		return mConfig.url() + search.getType() + "/" + mOutput + "?"
 				+ PARAM_KEY + "=" + mConfig.key()
 				+ search.getParams();
 	}
-
+	
 	public interface GooglePlacesListener {
 		void onPlacesSearchEnd(boolean ok, List<Place> places, String error);
 		void onPlacesAutocompleteEnd(boolean ok, List<AutocompletePlace> places, String error);
+		void onPlacesDetailsEnd(boolean ok, Place place, String error);
 	}
 }
