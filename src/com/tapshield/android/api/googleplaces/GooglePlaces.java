@@ -30,6 +30,7 @@ public class GooglePlaces {
 	
 	private static final String PARAM_KEY = "key";
 	private static final String PARAM_PLACEID = "placeid";
+	private static final String KEY_RESULTS_DETAILS = "result";
 	
 	private GooglePlacesConfig mConfig;
 	private String mOutput = OUTPUT_JSON;
@@ -60,7 +61,8 @@ public class GooglePlaces {
 					Gson gson = new Gson();
 					
 					try {
-						place = gson.fromJson(response.response, Place.class);
+						JSONObject result = response.jsonResponse.getJSONObject(KEY_RESULTS_DETAILS);
+						place = gson.fromJson(result.toString(), Place.class);
 					} catch (Exception e) {
 						ok = false;
 						place = null;
@@ -78,9 +80,11 @@ public class GooglePlaces {
 	}
 	
 	private String getDetailsUrl(String placeId) {
-		return mConfig.url() + TYPE_DETAILS + "/" + mOutput + "?"
+		String url = mConfig.url() + TYPE_DETAILS + "/" + mOutput + "?"
 				+ PARAM_KEY + "=" + mConfig.key()
-				+ PARAM_PLACEID + "=" + placeId;
+				+ "&" + PARAM_PLACEID + "=" + placeId;
+		Log.i(TAG, "details url=" + url);
+		return url;
 	}
 	
 	public void searchNearby(NearbySearch nearbySearch, final GooglePlacesListener l) {
