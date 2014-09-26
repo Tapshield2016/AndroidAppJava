@@ -6,8 +6,6 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.tapshield.android.api.JavelinComms;
 import com.tapshield.android.api.JavelinComms.JavelinCommsCallback;
@@ -21,8 +19,6 @@ import com.tapshield.android.api.googleplaces.model.TextSearch;
 
 public class GooglePlaces {
 
-	private static final String TAG = "googleplaces";
-	
 	private static final String TYPE_DETAILS = "details";
 	
 	public static final String OUTPUT_JSON = "json";
@@ -80,11 +76,9 @@ public class GooglePlaces {
 	}
 	
 	private String getDetailsUrl(String placeId) {
-		String url = mConfig.url() + TYPE_DETAILS + "/" + mOutput + "?"
+		return mConfig.url() + TYPE_DETAILS + "/" + mOutput + "?"
 				+ PARAM_KEY + "=" + mConfig.key()
 				+ "&" + PARAM_PLACEID + "=" + placeId;
-		Log.i(TAG, "details url=" + url);
-		return url;
 	}
 	
 	public void searchNearby(NearbySearch nearbySearch, final GooglePlacesListener l) {
@@ -181,7 +175,6 @@ public class GooglePlaces {
 
 		String url = getSearchUrl(autocompleteSearch);
 		JavelinComms.httpGet(url, null, null, null, internalCallback);
-		Log.i(TAG, "url=" + url);
 	}
 	
 	private String getSearchUrl(Search search) {
