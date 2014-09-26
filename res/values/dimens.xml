@@ -84,6 +84,11 @@
     <dimen name="ts_entourage_pickarrivalcontacts_image">110dp</dimen>
     <integer name="ts_entourage_route_width">20</integer>
     
+    <dimen name="ts_entourage_destination_item_autocomplete_icon">40dp</dimen>
+    <dimen name="ts_entourage_destination_item_autocomplete_icon_padding">5dp</dimen>
+    <dimen name="ts_entourage_destination_item_autocomplete_text_primary">18sp</dimen>
+    <dimen name="ts_entourage_destination_item_autocomplete_text_secondary">15sp</dimen>
+    
     <!-- crime details -->
     <dimen name="details_image_type">64dp</dimen>
     <dimen name="details_text_type_textsize">22sp</dimen>
