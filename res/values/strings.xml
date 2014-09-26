@@ -304,7 +304,7 @@
     <string name="ts_entourage_destination_search_hint">Place or Contact</string>
     <string name="ts_entourage_destination_dialog_confirmation_title">Confirm Destination</string>
     <string name="ts_entourage_destination_dialog_confirmation_message">Is this place you destination for Entourage?</string>
-    <string name="ts_entourage_destination_dialog_locating_message">Obtaining Location of the Place&#8230;</string>
+    <string name="ts_entourage_destination_dialog_locating_message">Obtaining Location(s)&#8230;</string>
     
     <!-- entourage warning - call and boundaries -->
     <string name="ts_entourage_warning_limitations_and_boundaries_title">Warning</string>

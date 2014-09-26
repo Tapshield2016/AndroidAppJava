@@ -22,6 +22,7 @@ public class ContactPlaceAutoCompleteAdapter extends BaseAdapter implements Filt
 	private Filter mFilter;
 	private List<Contact> mContacts;
 	private List<AutocompletePlace> mPlaces;
+	private String mSearchLabel;
 	
 	public ContactPlaceAutoCompleteAdapter(Context context,
 			List<Contact> contacts, List<AutocompletePlace> places) {
@@ -33,7 +34,8 @@ public class ContactPlaceAutoCompleteAdapter extends BaseAdapter implements Filt
 	
 	@Override
 	public int getCount() {
-		return mContacts.size() + mPlaces.size();
+		//plus both data set sizes, we add another extra item to do a general search of the input 
+		return 1 + mContacts.size() + mPlaces.size();
 	}
 	
 	@Override
@@ -53,21 +55,39 @@ public class ContactPlaceAutoCompleteAdapter extends BaseAdapter implements Filt
 		places[delta] being the place with relative index
 		 */
 		
-		int delta = position - mContacts.size();
-		return isContact(position) ? mContacts.get(position) : mPlaces.get(delta);
+		if (isFirst(position)) {
+			return mSearchLabel;
+		}
+		
+		int delta = position - mContacts.size() - getOffset();
+		return isContact(position) ? mContacts.get(position - getOffset()) : mPlaces.get(delta);
+	}
+	
+	public boolean isFirst(int position) {
+		return position == 0;
 	}
 	
 	public boolean isContact(int position) {
-		return !mContacts.isEmpty() && position < mContacts.size();
+		return !isFirst(position) && !mContacts.isEmpty() && position - getOffset() < mContacts.size();
 	}
 	
 	public boolean isPlace(int position) {
-		return !isContact(position);
+		return !isFirst(position) && !isContact(position) && !mPlaces.isEmpty();
+	}
+	
+	//offset added by permanent items on the list (search suggestion at 0)
+	private int getOffset() {
+		return 1;
 	}
 	
 	@Override
 	public long getItemId(int position) {
 		return position;
+	}
+	
+	public void setSearchTerm(String searchTerm) {
+		mSearchLabel = String.format("Search for '%s'", searchTerm);
+		notifyDataSetChanged();
 	}
 	
 	@Override
@@ -121,17 +141,24 @@ public class ContactPlaceAutoCompleteAdapter extends BaseAdapter implements Filt
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		}
 		
-		int layoutRes =
-				isContact(position)
-				? R.layout.item_autocomplete_contact
-				: R.layout.item_autocomplete_place;
+		//set default layout (first item--search) and then check for other cases (contact or place)
+		int layoutRes = R.layout.item_autocomplete_search;
+		
+		if (isContact(position)) {
+			layoutRes = R.layout.item_autocomplete_contact;
+		} else if (isPlace(position)) {
+			layoutRes = R.layout.item_autocomplete_place;
+		}
 		
 		view = inflater.inflate(layoutRes, null);
 		
 		Object item = getItem(position);
 		
-		//contact or place
-		if (isContact(position)) {
+		//first (search), contact, or place
+		if (isFirst(position)) {
+			TextView label = (TextView) view.findViewById(R.id.item_autocomplete_search_label);
+			label.setText(mSearchLabel);
+		} else if (isContact(position)) {
 			
 			Contact contact = (Contact) item;
 			
@@ -144,7 +171,7 @@ public class ContactPlaceAutoCompleteAdapter extends BaseAdapter implements Filt
 					contact.address().size() >= 2
 					? contact.address().size() + " Addresses"
 					: contact.address().get(0));
-		} else {
+		} else if (isPlace(position)){
 			AutocompletePlace place = (AutocompletePlace) item;
 			
 			TextView description = (TextView) view.findViewById(R.id.item_autocomplete_place_description);

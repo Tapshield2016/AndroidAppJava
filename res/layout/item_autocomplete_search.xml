@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="@dimen/ts_common_spacing_xs">
+    
+    <ImageView
+        android:layout_width="@dimen/ts_entourage_destination_item_autocomplete_icon"
+        android:layout_height="@dimen/ts_entourage_destination_item_autocomplete_icon"
+        android:padding="@dimen/ts_entourage_destination_item_autocomplete_icon_padding"
+        android:src="@drawable/ic_actionbar_search"
+        android:scaleType="fitCenter"/>
+    
+    <TextView
+            android:id="@+id/item_autocomplete_search_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="@dimen/ts_entourage_destination_item_autocomplete_text_secondary"
+            android:layout_margin="@dimen/ts_common_spacing_xxs"
+            android:maxLines="2"
+            android:ellipsize="end"/>
+</LinearLayout>

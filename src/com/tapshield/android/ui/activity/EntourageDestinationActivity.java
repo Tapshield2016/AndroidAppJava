@@ -25,12 +25,15 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.LatLngBoundsCreator;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.tapshield.android.R;
 import com.tapshield.android.api.googleplaces.GooglePlaces;
 import com.tapshield.android.api.googleplaces.model.AutocompletePlace;
 import com.tapshield.android.api.googleplaces.model.AutocompleteSearch;
+import com.tapshield.android.api.googleplaces.model.NearbySearch;
 import com.tapshield.android.api.googleplaces.model.Place;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.location.LocationTracker;
@@ -58,6 +61,7 @@ public class EntourageDestinationActivity extends BaseFragmentActivity
 	private ContactPlaceAutoCompleteAdapter mAdapter;
 
 	private Marker mMarker;
+	private List<Marker> mSearchMarkers = new ArrayList<Marker>();
 	private boolean mCameraUpdated = false;
 	
 	private AlertDialog mConfirmationDialog;
@@ -109,7 +113,17 @@ public class EntourageDestinationActivity extends BaseFragmentActivity
 				Log.i(TAG, "index=" + position + " contact=" + mAdapter.isContact(position)
 						+ " contacts=" + mContactsFiltered.size() + " places=" + mPlaces.size());
 				
-				if (mAdapter.isContact(position)) {
+				if (mAdapter.isFirst(position)) {
+					//SHOW SEARCHING DIALOG
+					
+					NearbySearch nearby = new NearbySearch(
+							mLocation.getLatitude(), mLocation.getLongitude(), 20000)
+							.rankby(NearbySearch.RANKBY_DISTANCE)
+							.keyword(mSearch.getText().toString());
+					
+					mPlacesApi.searchNearby(nearby, EntourageDestinationActivity.this);
+					
+				} else if (mAdapter.isContact(position)) {
 					
 					final Contact contact = (Contact) mAdapter.getItem(position);
 					final String address = contact.address().get(0);
@@ -141,6 +155,8 @@ public class EntourageDestinationActivity extends BaseFragmentActivity
 				}
 				
 				clearSearch();
+				clearSearchMarkers();
+				UiUtils.hideKeyboard(EntourageDestinationActivity.this);
 				mLocatingDialog = getLocatingDialog();
 				mLocatingDialog.show();
 			}
@@ -200,6 +216,14 @@ public class EntourageDestinationActivity extends BaseFragmentActivity
 			controls.setRotateGesturesEnabled(false);
 			controls.setTiltGesturesEnabled(false);
 			controls.setIndoorLevelPickerEnabled(false);
+			
+			mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+				
+				@Override
+				public boolean onMarkerClick(Marker marker) {
+					return false;
+				}
+			});
 		}
 	}
 	
@@ -245,6 +269,12 @@ public class EntourageDestinationActivity extends BaseFragmentActivity
 		mSearch.setText("");
 	}
 	
+	private void clearSearchMarkers() {
+		for (Marker m : mSearchMarkers) {
+			m.remove();
+		}
+	}
+	
 	private void clearMarker() {
 		if (mMarker != null) {
 			mMarker.remove();
@@ -252,19 +282,19 @@ public class EntourageDestinationActivity extends BaseFragmentActivity
 		}
 	}
 	
-	private void createMarker(String title, String snippet, LatLng position) {
+	private Marker createMarker(String title, String snippet, LatLng position) {
 		MarkerOptions options = new MarkerOptions()
 				.anchor(0.5f, 1.0f)
 				.title(title)
 				.snippet(snippet)
 				.icon(BitmapDescriptorFactory.defaultMarker())
 				.position(position);
-		mMarker = mMap.addMarker(options);
+		return mMap.addMarker(options);
 	}
 	
 	private void moveMarker(String title, String snippet, LatLng position) {
 		if (mMarker == null) {
-			createMarker(title, snippet, position);
+			mMarker = createMarker(title, snippet, position);
 		} else {
 			mMarker.setTitle(title);
 			mMarker.setSnippet(snippet);
@@ -296,21 +326,14 @@ public class EntourageDestinationActivity extends BaseFragmentActivity
 	private void onUserInput(String input) {
 		if (input.length() >= mSearch.getThreshold()) {
 			
+			mAdapter.setSearchTerm(input);
+			
 			if (mLocation != null) {
 
 				filterContacts(input);
 				
 				AutocompleteSearch autocomplete = new AutocompleteSearch(input)
 						.location(mLocation.getLatitude(), mLocation.getLongitude(), 500);
-				
-				/*
-				NearbySearch nearby = new NearbySearch(
-						mLocation.getLatitude(), mLocation.getLongitude(), 20000)
-						.rankby(NearbySearch.RANKBY_DISTANCE)
-						.keyword(s.toString());
-				
-				places.searchNearby(nearby, EntourageDestinationActivity.this);
-				*/
 				
 				mPlacesApi.autocomplete(autocomplete, EntourageDestinationActivity.this);
 			}
@@ -330,7 +353,33 @@ public class EntourageDestinationActivity extends BaseFragmentActivity
 	}
 
 	@Override
-	public void onPlacesSearchEnd(boolean ok, List<Place> places, String error) {}
+	public void onPlacesSearchEnd(boolean ok, List<Place> places, String error) {
+		
+		mLocatingDialog.dismiss();
+		
+		if (ok) {
+			
+			if (places == null || places.isEmpty()) {
+				UiUtils.toastShort(this, "No results!");
+				return;
+			}
+
+			LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
+
+			//clear and store newly created markers
+			mSearchMarkers.clear();
+			LatLng position;
+			for (Place place : places) {
+				position = new LatLng(place.latitude(), place.longitude());
+				mSearchMarkers.add(createMarker(place.name(), place.address(), position));
+				boundsBuilder.include(position);
+			}
+
+			CameraUpdate cameraUpdate = CameraUpdateFactory
+					.newLatLngBounds(boundsBuilder.build(), 50);
+			mMap.animateCamera(cameraUpdate);
+		}
+	}
 
 	@Override
 	public void onPlacesAutocompleteEnd(boolean ok, List<AutocompletePlace> places, String error) {
@@ -343,7 +392,9 @@ public class EntourageDestinationActivity extends BaseFragmentActivity
 
 	@Override
 	public void onPlacesDetailsEnd(boolean ok, Place place, String error) {
+		
 		mLocatingDialog.dismiss();
+		
 		if (ok) {
 			LatLng position = new LatLng(place.latitude(), place.longitude());
 			
