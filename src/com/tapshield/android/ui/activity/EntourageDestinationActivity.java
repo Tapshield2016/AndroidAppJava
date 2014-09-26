@@ -2,43 +2,69 @@ package com.tapshield.android.ui.activity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.location.Address;
 import android.location.Location;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ImageButton;
 
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.tapshield.android.R;
 import com.tapshield.android.api.googleplaces.GooglePlaces;
 import com.tapshield.android.api.googleplaces.model.AutocompletePlace;
 import com.tapshield.android.api.googleplaces.model.AutocompleteSearch;
-import com.tapshield.android.api.googleplaces.model.NearbySearch;
 import com.tapshield.android.api.googleplaces.model.Place;
-import com.tapshield.android.api.googleplaces.model.TextSearch;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.location.LocationTracker;
+import com.tapshield.android.ui.adapter.ContactPlaceAutoCompleteAdapter;
+import com.tapshield.android.ui.view.CustomAutoCompleteTextView;
+import com.tapshield.android.ui.view.CustomAutoCompleteTextView.SelectionConverter;
+import com.tapshield.android.utils.ContactsRetriever;
+import com.tapshield.android.utils.ContactsRetriever.Contact;
+import com.tapshield.android.utils.GeoUtils.GeocoderAsync;
+import com.tapshield.android.utils.GeoUtils.GeocoderAsyncListener;
+import com.tapshield.android.utils.UiUtils;
 
 public class EntourageDestinationActivity extends BaseFragmentActivity
 		implements LocationListener, GooglePlaces.GooglePlacesListener {
 
+	private static final String TAG = "ts-entourage";
+	
 	private GoogleMap mMap;
-	private AutoCompleteTextView mSearch;
-	private ArrayAdapter<String> mAdapter;
-	private List<String> mData;
+	private CustomAutoCompleteTextView mSearch;
+	
+	private GooglePlaces mPlacesApi;
+	private List<AutocompletePlace> mPlaces = new ArrayList<AutocompletePlace>();
+	private List<Contact> mContacts = new ArrayList<Contact>();
+	private List<Contact> mContactsFiltered = new ArrayList<Contact>();
+	private ContactPlaceAutoCompleteAdapter mAdapter;
+
+	private Marker mMarker;
+	private boolean mCameraUpdated = false;
+	
+	private AlertDialog mConfirmationDialog;
+	private ProgressDialog mLocatingDialog;
 	
 	private Location mLocation;
 	private LocationTracker mTracker;
-	
-	private int FLAG_SEARCH_COUNT = 1;
 	
 	@Override
 	protected void onCreate(Bundle savedInstance) {
@@ -46,34 +72,15 @@ public class EntourageDestinationActivity extends BaseFragmentActivity
 		setContentView(R.layout.activity_entourage_destination);
 		getActionBar().hide();
 		
-		mSearch = (AutoCompleteTextView) findViewById(R.id.entourage_destination_autocomplete_search);
+		mPlacesApi = new GooglePlaces()
+				.config(TapShieldApplication.GOOGLEPLACES_CONFIG);
+		
+		mSearch = (CustomAutoCompleteTextView) findViewById(R.id.entourage_destination_autocomplete_search);
 		mSearch.addTextChangedListener(new TextWatcher() {
 			
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				if (s.length() >= mSearch.getThreshold()) {
-					
-					if (mLocation != null) {
-						
-						AutocompleteSearch autocomplete = new AutocompleteSearch(s.toString())
-								.location(mLocation.getLatitude(), mLocation.getLongitude(), 500);
-						
-						TextSearch text = new TextSearch(s.toString())
-								.location(mLocation.getLatitude(), mLocation.getLongitude(), 500);
-						
-						NearbySearch nearby = new NearbySearch(
-								mLocation.getLatitude(), mLocation.getLongitude(), 500)
-								.rankby(NearbySearch.RANKBY_DISTANCE)
-								.keyword(s.toString());
-						
-						GooglePlaces places = new GooglePlaces()
-								.config(TapShieldApplication.GOOGLEPLACES_CONFIG);
-						
-						places.autocomplete(autocomplete, EntourageDestinationActivity.this);
-						places.searchText(text, EntourageDestinationActivity.this);
-						places.searchNearby(nearby, EntourageDestinationActivity.this);
-					}
-				}
+				onUserInput(s.toString());
 			}
 			
 			@Override
@@ -83,13 +90,100 @@ public class EntourageDestinationActivity extends BaseFragmentActivity
 			public void afterTextChanged(Editable s) {}
 		});
 
-		mData = new ArrayList<String>();
-		mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mData);
+		mAdapter = new ContactPlaceAutoCompleteAdapter(this, mContactsFiltered, mPlaces);
 		
 		mSearch.setAdapter(mAdapter);
-		mSearch.setThreshold(4);
+		mSearch.setThreshold(3);
+		mSearch.setSelectionConverter(new SelectionConverter() {
+			
+			@Override
+			public String toString(Object selectedItem) {
+				return mSearch.getText().toString();
+			}
+		});
+		mSearch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+
+				Log.i(TAG, "index=" + position + " contact=" + mAdapter.isContact(position)
+						+ " contacts=" + mContactsFiltered.size() + " places=" + mPlaces.size());
+				
+				if (mAdapter.isContact(position)) {
+					
+					final Contact contact = (Contact) mAdapter.getItem(position);
+					final String address = contact.address().get(0);
+					
+					//get location from the address via Geocoder util
+					GeocoderAsyncListener listener = new GeocoderAsyncListener() {
+
+						@Override
+						public void onGeocoderAsyncFinish(boolean hasResults,
+								List<Address> results) {
+							mLocatingDialog.dismiss();
+							if (hasResults) {
+								LatLng position = new LatLng(results.get(0).getLatitude(),
+										results.get(0).getLongitude());
+								moveMarker(contact.name(), address, position);
+								moveCamera(position);
+							} else {
+								UiUtils.toastShort(EntourageDestinationActivity.this, "Invalid Address");
+							}
+						}
+					};
+
+					GeocoderAsync.fromLocationName(EntourageDestinationActivity.this, address, 1,
+							listener);
+				} else {
+					//autocomplete places do not have location data, retrieve details on click to show marker
+					AutocompletePlace place = mPlaces.get(position);
+					mPlacesApi.detailsOf(place, EntourageDestinationActivity.this);
+				}
+				
+				clearSearch();
+				mLocatingDialog = getLocatingDialog();
+				mLocatingDialog.show();
+			}
+		});
+		
+		ImageButton clearSearch = (ImageButton)
+				findViewById(R.id.entourage_destination_imagebutton_discard);
+		
+		clearSearch.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				clearSearch();
+			}
+		});
+		
+		ImageButton done = (ImageButton)
+				findViewById(R.id.entourage_destination_imagebutton_done);
+		done.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				mConfirmationDialog.show();
+			}
+		});
 		
 		mTracker = LocationTracker.getInstance(this);
+		
+		mConfirmationDialog = getConfirmationDialog();
+		mLocatingDialog = getLocatingDialog();
+		
+		
+		ContactsRetriever.ContactsRetrieverListener contactsRetrieverListener =
+				new ContactsRetriever.ContactsRetrieverListener() {
+			
+			@Override
+			public void onContactsRetrieval(List<Contact> contacts) {
+				mContacts = contacts;
+				onUserInput(mSearch.getText().toString());
+			}
+		};
+		
+		new ContactsRetriever(this, contactsRetrieverListener).execute(ContactsRetriever.TYPE_POSTAL);
 	}
 	
 	@Override
@@ -97,7 +191,16 @@ public class EntourageDestinationActivity extends BaseFragmentActivity
 		super.onPostCreate(savedInstanceState);
 		
 		mMap = ((SupportMapFragment)
-				getSupportFragmentManager().findFragmentById(R.id.entourage_destination_fragment_map)).getMap();
+				getSupportFragmentManager()
+				.findFragmentById(R.id.entourage_destination_fragment_map))
+				.getMap();
+		
+		if (mMap != null) {
+			UiSettings controls = mMap.getUiSettings();
+			controls.setRotateGesturesEnabled(false);
+			controls.setTiltGesturesEnabled(false);
+			controls.setIndoorLevelPickerEnabled(false);
+		}
 	}
 	
 	@Override
@@ -113,48 +216,141 @@ public class EntourageDestinationActivity extends BaseFragmentActivity
 		mTracker.stop();
 		super.onPause();
 	}
+	
+	private AlertDialog getConfirmationDialog() {
+		return new AlertDialog.Builder(this)
+				.setTitle(R.string.ts_entourage_destination_dialog_confirmation_title)
+				.setMessage(R.string.ts_entourage_destination_dialog_confirmation_message)
+				.setPositiveButton(R.string.ts_common_yes, new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						UiUtils.toastShort(EntourageDestinationActivity.this, "Destination set!");
+						finish();
+					}
+				})
+				.setNeutralButton(R.string.ts_common_cancel, null)
+				.create();
+	}
+	
+	private ProgressDialog getLocatingDialog() {
+		ProgressDialog d = new ProgressDialog(this);
+		d.setIndeterminate(true);
+		d.setCancelable(false);
+		d.setMessage(getString(R.string.ts_entourage_destination_dialog_locating_message));
+		return d;
+	}
+	
+	private void clearSearch() {
+		mSearch.setText("");
+	}
+	
+	private void clearMarker() {
+		if (mMarker != null) {
+			mMarker.remove();
+			mMarker = null;
+		}
+	}
+	
+	private void createMarker(String title, String snippet, LatLng position) {
+		MarkerOptions options = new MarkerOptions()
+				.anchor(0.5f, 1.0f)
+				.title(title)
+				.snippet(snippet)
+				.icon(BitmapDescriptorFactory.defaultMarker())
+				.position(position);
+		mMarker = mMap.addMarker(options);
+	}
+	
+	private void moveMarker(String title, String snippet, LatLng position) {
+		if (mMarker == null) {
+			createMarker(title, snippet, position);
+		} else {
+			mMarker.setTitle(title);
+			mMarker.setSnippet(snippet);
+			mMarker.setPosition(position);
+		}
+	}
+	
+	private void moveCamera(LatLng position) {
+		CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(position);
+		mMap.animateCamera(cameraUpdate);
+	}
+	
+	private void filterContacts(String query) {
+		query = query.trim().toLowerCase(Locale.getDefault());
+		
+		mContactsFiltered.clear();
+		
+		String name;
+		for (Contact contact : mContacts) {
+			name = contact.name().trim().toLowerCase(Locale.getDefault());
+			if (name.contains(query)) {
+				mContactsFiltered.add(contact);
+			}
+		}
+		
+		mAdapter.notifyDataSetChanged();
+	}
+	
+	private void onUserInput(String input) {
+		if (input.length() >= mSearch.getThreshold()) {
+			
+			if (mLocation != null) {
 
+				filterContacts(input);
+				
+				AutocompleteSearch autocomplete = new AutocompleteSearch(input)
+						.location(mLocation.getLatitude(), mLocation.getLongitude(), 500);
+				
+				/*
+				NearbySearch nearby = new NearbySearch(
+						mLocation.getLatitude(), mLocation.getLongitude(), 20000)
+						.rankby(NearbySearch.RANKBY_DISTANCE)
+						.keyword(s.toString());
+				
+				places.searchNearby(nearby, EntourageDestinationActivity.this);
+				*/
+				
+				mPlacesApi.autocomplete(autocomplete, EntourageDestinationActivity.this);
+			}
+		}
+	}
+	
 	@Override
 	public void onLocationChanged(Location l) {
 		mLocation = l;
-		
 		CameraUpdate update = CameraUpdateFactory
 				.newLatLngZoom(new LatLng(l.getLatitude(), l.getLongitude()), 15);
-		mMap.moveCamera(update);
-		//drawUserLocation();
+		if (!mCameraUpdated) {
+			mCameraUpdated = true;
+			mMap.moveCamera(update);
+		}
+		//drawUserLocation(); ?
 	}
 
 	@Override
-	public void onPlacesSearchEnd(boolean ok, List<Place> places, String error) {
-		Log.i("googleplaces", "search #" + FLAG_SEARCH_COUNT++);
-		Log.i("googleplaces", "ok=" + ok + " places=" + places + " err=" + error);
+	public void onPlacesSearchEnd(boolean ok, List<Place> places, String error) {}
+
+	@Override
+	public void onPlacesAutocompleteEnd(boolean ok, List<AutocompletePlace> places, String error) {
 		if (ok) {
-			mData.clear();
-			
-			Log.i("googleplaces", "====================================");
-			for (Place place : places) {
-				mData.add(place.name());
-				Log.i("googleplaces", "    " + place.name());
-			}
-			
+			mPlaces.clear();
+			mPlaces.addAll(places);
 			mAdapter.notifyDataSetChanged();
 		}
 	}
 
 	@Override
-	public void onPlacesAutocompleteEnd(boolean ok, List<AutocompletePlace> places, String error) {
-		Log.i("googleplaces", "search #" + FLAG_SEARCH_COUNT++);
-		Log.i("googleplaces", "ok=" + ok + " places=" + places + " err=" + error);
+	public void onPlacesDetailsEnd(boolean ok, Place place, String error) {
+		mLocatingDialog.dismiss();
 		if (ok) {
-			mData.clear();
+			LatLng position = new LatLng(place.latitude(), place.longitude());
 			
-			Log.i("googleplaces", "====================================");
-			for (AutocompletePlace place : places) {
-				mData.add(place.description());
-				Log.i("googleplaces", "    " + place.description());
-			}
+			moveMarker(place.name(), place.address(), position);
+			moveCamera(position);
 			
-			mAdapter.notifyDataSetChanged();
+			mMarker.showInfoWindow();
 		}
 	}
 }
