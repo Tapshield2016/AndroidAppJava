@@ -18,49 +18,59 @@
         android:src="@drawable/ts_pin_entourage_destination"
         android:scaleType="centerInside"/>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/ts_common_spacing_xxs"
         android:layout_margin="@dimen/ts_common_spacing_xs"
         android:layout_alignParentTop="true"
-        android:background="@drawable/ts_background_card"
-        android:orientation="horizontal"
         android:gravity="center_vertical">
-        
+
         <FrameLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
-    
-            <com.tapshield.android.ui.view.CustomAutoCompleteTextView
-	            android:id="@+id/entourage_destination_autocomplete_search"
-	            android:layout_width="match_parent"
-	            android:layout_height="wrap_content"
-	            android:layout_gravity="center_vertical"
-	            android:paddingRight="45dp"
-	            android:hint="@string/ts_entourage_destination_search_hint"
-	            android:maxLines="1"/>
-	        
-	        <ImageButton
-	            android:id="@+id/entourage_destination_imagebutton_discard"
-	            android:layout_width="45dp"
-	            android:layout_height="45dp"
-	            android:layout_gravity="right|center_vertical"
-	            android:src="@drawable/ic_actionbar_discard"
-	            android:background="@drawable/ts_background_imagebutton"
-	            android:visibility="gone"/>
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@+id/entourage_destination_frame_buttons"
+            android:layout_centerVertical="true"
+            android:background="@drawable/ts_background_card"
+            android:padding="@dimen/ts_common_spacing_xxs">
             
+            <com.tapshield.android.ui.view.CustomAutoCompleteTextView
+                android:id="@+id/entourage_destination_autocomplete_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingRight="45dp"
+                android:hint="@string/ts_entourage_destination_search_hint"
+                android:maxLines="1"/>
         </FrameLayout>
         
-        <ImageButton
-            android:id="@+id/entourage_destination_imagebutton_done"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:src="@drawable/ic_actionbar_done"
-            android:background="@drawable/ts_background_imagebutton"/>
+        <FrameLayout
+            android:id="@id/entourage_destination_frame_buttons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:background="@drawable/ts_background_card"
+            android:layout_margin="@dimen/ts_common_spacing_xxs"
+            android:layout_alignParentRight="true">
+            
+            <ImageButton
+                android:id="@+id/entourage_destination_imagebutton_discard"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/ic_actionbar_discard"
+                android:background="@drawable/ts_background_imagebutton"
+                android:visibility="gone"/>
+            
+            <ImageButton
+                android:id="@+id/entourage_destination_imagebutton_done"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/ic_actionbar_done"
+                android:background="@drawable/ts_background_imagebutton"/>
+        </FrameLayout>
         
-    </LinearLayout>
+    </RelativeLayout>
     
     <android.support.v4.view.ViewPager
         android:id="@+id/entourage_destination_pager"
