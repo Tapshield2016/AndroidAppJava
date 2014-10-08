@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
 import com.google.android.gms.location.LocationListener;
@@ -374,11 +375,11 @@ public class EntourageDestinationActivity extends BaseFragmentActivity
 		case FREE:
 			//hide result pager
 			visPager = View.GONE;
-			animResPager = R.anim.slide_out_up;
+			animResPager = R.anim.slide_out_dn;
 			
 			//show clean search bar
 			visBar = View.VISIBLE;
-			animResBar = R.anim.slide_in_up;
+			animResBar = R.anim.slide_in_dn;
 			mSearch.setText("");
 			clearNearbyMarkers();
 			mCameraUpdated = false;
@@ -396,11 +397,17 @@ public class EntourageDestinationActivity extends BaseFragmentActivity
 			break;
 		}
 		
-		mPlacesPager.setVisibility(visPager);
-		mPlacesPager.startAnimation(AnimationUtils.loadAnimation(this, animResPager));
+		if (mPlacesPager.getVisibility() != visPager) {
+			mPlacesPager.setVisibility(visPager);
+			mPlacesPager.startAnimation(AnimationUtils.loadAnimation(this, animResPager));
+		}
 		
-		mSearch.setVisibility(visBar);
-		mSearch.startAnimation(AnimationUtils.loadAnimation(this, animResBar));
+		FrameLayout searchContainer = (FrameLayout) mSearch.getParent();
+		
+		if (searchContainer.getVisibility() != visBar) {
+			searchContainer.setVisibility(visBar);
+			searchContainer.startAnimation(AnimationUtils.loadAnimation(this, animResBar));
+		}
 	}
 	
 	private void filterContacts(String query) {
