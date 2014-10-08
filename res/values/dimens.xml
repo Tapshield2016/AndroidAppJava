@@ -89,6 +89,7 @@
     <dimen name="ts_entourage_destination_item_autocomplete_text_primary">18sp</dimen>
     <dimen name="ts_entourage_destination_item_autocomplete_text_secondary">15sp</dimen>
     
+    <dimen name="ts_entourage_destination_pager_place_height">80dp</dimen>
     <!-- crime details -->
     <dimen name="details_image_type">64dp</dimen>
     <dimen name="details_text_type_textsize">22sp</dimen>

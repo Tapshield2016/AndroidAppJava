@@ -48,7 +48,8 @@
 	            android:layout_height="45dp"
 	            android:layout_gravity="right|center_vertical"
 	            android:src="@drawable/ic_actionbar_discard"
-	            android:background="@drawable/ts_background_imagebutton"/>
+	            android:background="@drawable/ts_background_imagebutton"
+	            android:visibility="gone"/>
             
         </FrameLayout>
         
@@ -60,4 +61,11 @@
             android:background="@drawable/ts_background_imagebutton"/>
         
     </LinearLayout>
+    
+    <android.support.v4.view.ViewPager
+        android:id="@+id/entourage_destination_pager"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_alignParentBottom="true"/>
+    
 </RelativeLayout>
