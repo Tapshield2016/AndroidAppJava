@@ -7,6 +7,7 @@ import java.util.Locale;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.location.Address;
 import android.location.Location;
 import android.os.Bundle;
@@ -60,6 +61,7 @@ public class EntourageDestinationActivity extends BaseFragmentActivity
 	private EntourageDestinationPagerAdapter mPagerAdapter;
 	private ContactPlaceAutoCompleteAdapter mAutoCompleteAdapter;
 	private AlertDialog mConfirmationDialog;
+	private AlertDialog mModeDialog;
 	private ProgressDialog mLocatingDialog;
 	
 	private GooglePlaces mPlacesApi;
@@ -148,8 +150,9 @@ public class EntourageDestinationActivity extends BaseFragmentActivity
 							if (hasResults) {
 								LatLng position = new LatLng(results.get(0).getLatitude(),
 										results.get(0).getLongitude());
-								moveDetailsMarker(contact.name(), address, position);
+								moveDetailsMarker(contact.name(), address, position, true);
 								moveCamera(position);
+								setNavMode(NavMode.PAGED_RESULTS);
 							} else {
 								UiUtils.toastShort(EntourageDestinationActivity.this, "Invalid Address");
 							}
@@ -208,13 +211,15 @@ public class EntourageDestinationActivity extends BaseFragmentActivity
 			
 			@Override
 			public void onClick(View v) {
-				mConfirmationDialog.show();
+				//mConfirmationDialog.show();
+				mModeDialog.show();
 			}
 		});
 		
 		mTracker = LocationTracker.getInstance(this);
 		
 		mConfirmationDialog = getConfirmationDialog();
+		mModeDialog = getModeDialog();
 		mLocatingDialog = getLocatingDialog();
 		
 		
@@ -228,7 +233,8 @@ public class EntourageDestinationActivity extends BaseFragmentActivity
 			}
 		};
 		
-		new ContactsRetriever(this, contactsRetrieverListener).execute(ContactsRetriever.TYPE_POSTAL);
+		new ContactsRetriever(this, contactsRetrieverListener)
+				.execute(ContactsRetriever.TYPE_POSTAL | ContactsRetriever.TYPE_PHOTO);
 	}
 	
 	@Override
@@ -297,6 +303,30 @@ public class EntourageDestinationActivity extends BaseFragmentActivity
 				.create();
 	}
 	
+	private AlertDialog getModeDialog() {
+		return new AlertDialog.Builder(this)
+				.setTitle(R.string.ts_fragment_pickdestination_dialog_mode_title)
+				.setMessage(R.string.ts_fragment_pickdestination_dialog_mode_message)
+				.setPositiveButton(R.string.ts_fragment_pickdestination_dialog_mode_button_driving,
+						new DialogInterface.OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								startRouteSelection(PickRouteActivity.MODE_DRIVING);
+							}
+						})
+				.setNeutralButton(R.string.ts_fragment_pickdestination_dialog_mode_button_walking,
+						new DialogInterface.OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								startRouteSelection(PickRouteActivity.MODE_WALKING);
+							}
+						})
+				.setNegativeButton(R.string.ts_common_cancel, null)
+				.create();
+	}
+	
 	private ProgressDialog getLocatingDialog() {
 		ProgressDialog d = new ProgressDialog(this);
 		d.setIndeterminate(true);
@@ -332,13 +362,18 @@ public class EntourageDestinationActivity extends BaseFragmentActivity
 		}
 	}
 	
-	private void moveDetailsMarker(String title, String snippet, LatLng position) {
+	private void moveDetailsMarker(String title, String snippet, LatLng position,
+			boolean showInfoWindow) {
 		if (mDetailsMarker == null) {
 			mDetailsMarker = createMarker(title, snippet, position);
 		} else {
 			mDetailsMarker.setTitle(title);
 			mDetailsMarker.setSnippet(snippet);
 			mDetailsMarker.setPosition(position);
+		}
+		
+		if (showInfoWindow) {
+			mDetailsMarker.showInfoWindow();
 		}
 	}
 	
@@ -485,7 +520,16 @@ public class EntourageDestinationActivity extends BaseFragmentActivity
 			
 			CameraUpdate cameraUpdate = CameraUpdateFactory
 					.newLatLngBounds(boundsBuilder.build(), 200);
-			mMap.animateCamera(cameraUpdate);
+			mMap.animateCamera(cameraUpdate, 400, new GoogleMap.CancelableCallback() {
+				
+				@Override
+				public void onFinish() {
+					moveCamera(mNearbyMarkers.get(0).getPosition());
+				}
+				
+				@Override
+				public void onCancel() {}
+			});
 			
 			//update list and notify page adapter
 			mNearbyPlaces.clear();
@@ -511,10 +555,20 @@ public class EntourageDestinationActivity extends BaseFragmentActivity
 		if (ok) {
 			LatLng position = new LatLng(place.latitude(), place.longitude());
 			
-			moveDetailsMarker(place.name(), place.address(), position);
+			moveDetailsMarker(place.name(), place.address(), position, true);
 			moveCamera(position);
 			
-			mDetailsMarker.showInfoWindow();
+			setNavMode(NavMode.PAGED_RESULTS);
 		}
+	}
+	
+	private void startRouteSelection(final int mode) {
+		LatLng mapCenter = mMap.getCameraPosition().target;
+		String destination = mapCenter.latitude + "," + mapCenter.longitude;
+		
+		Intent pickRoute = new Intent(this, PickRouteActivity.class);
+		pickRoute.putExtra(PickRouteActivity.EXTRA_MODE, mode);
+		pickRoute.putExtra(PickRouteActivity.EXTRA_DESTINATION, destination);
+		startActivity(pickRoute);
 	}
 }
