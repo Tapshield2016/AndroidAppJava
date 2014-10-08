@@ -1,5 +1,7 @@
 package com.tapshield.android.api.googleplaces.model;
 
+import java.util.List;
+
 import com.google.gson.annotations.SerializedName;
 
 public class Place {
@@ -21,6 +23,9 @@ public class Place {
 	
 	@SerializedName("rating")
 	private float mRating = 0f;
+	
+	@SerializedName("photos")
+	private List<Photo> mPhotos;
 	
 	public boolean hasAddress() {
 		return mAddress != null;
@@ -62,6 +67,14 @@ public class Place {
 		return mRating;
 	}
 	
+	public boolean hasPhotos() {
+		return mPhotos != null && !mPhotos.isEmpty();
+	}
+	
+	public List<Photo> photos() {
+		return mPhotos;
+	}
+	
 	private class Geometry {
 		@SerializedName("location")
 		private Location mLocation;
@@ -73,5 +86,36 @@ public class Place {
 		
 		@SerializedName("lng")
 		private double mLongitude;
+	}
+	
+	public class Photo {
+		
+		@SerializedName("photo_reference")
+		private String mRef;
+		
+		@SerializedName("height")
+		private int mHeight;
+		
+		@SerializedName("width")
+		private int mWidth;
+		
+		@SerializedName("html_attributions")
+		private String[] mHtmlAttributions;
+		
+		public String reference() {
+			return mRef;
+		}
+		
+		public int height() {
+			return mHeight;
+		}
+		
+		public int width() {
+			return mWidth;
+		}
+		
+		public String[] htmlAttributions() {
+			return mHtmlAttributions;
+		}
 	}
 }
