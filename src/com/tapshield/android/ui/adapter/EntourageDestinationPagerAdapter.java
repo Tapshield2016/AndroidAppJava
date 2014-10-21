@@ -37,6 +37,12 @@ public class EntourageDestinationPagerAdapter extends FragmentStatePagerAdapter 
 		
 		return f;
 	}
+	
+	//this method forces a instantiation of items
+	@Override
+	public int getItemPosition(Object object) {
+		return POSITION_NONE;
+	}
 
 	@Override
 	public int getCount() {
