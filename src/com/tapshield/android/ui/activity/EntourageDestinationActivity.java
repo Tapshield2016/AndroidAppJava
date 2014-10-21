@@ -255,6 +255,23 @@ public class EntourageDestinationActivity extends BaseFragmentActivity
 				
 				@Override
 				public boolean onMarkerClick(Marker marker) {
+					
+					//inefficient for-loop to retrieve index of a marker and set page to that result
+					//eventually switch to use a Map to keep marker-to-index entries 
+					
+					int page = -1;
+					
+					for (int i = 0; i < mNearbyMarkers.size(); i++) {
+						if (mNearbyMarkers.get(i).equals(marker)) {
+							page = i;
+							break;
+						}
+					}
+					
+					if (page >= 0) {
+						mPlacesPager.setCurrentItem(page);
+					}
+					
 					return false;
 				}
 			});
