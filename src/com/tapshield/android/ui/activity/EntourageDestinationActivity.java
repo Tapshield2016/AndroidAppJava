@@ -60,7 +60,6 @@ public class EntourageDestinationActivity extends BaseFragmentActivity
 	private ViewPager mPlacesPager;
 	private EntourageDestinationPagerAdapter mPagerAdapter;
 	private ContactPlaceAutoCompleteAdapter mAutoCompleteAdapter;
-	private AlertDialog mConfirmationDialog;
 	private AlertDialog mModeDialog;
 	private ProgressDialog mLocatingDialog;
 	
@@ -152,6 +151,7 @@ public class EntourageDestinationActivity extends BaseFragmentActivity
 										results.get(0).getLongitude());
 								moveDetailsMarker(contact.name(), address, position, true);
 								moveCamera(position);
+								clearNearby();
 								setNavMode(NavMode.PAGED_RESULTS);
 							} else {
 								UiUtils.toastShort(EntourageDestinationActivity.this, "Invalid Address");
@@ -163,7 +163,8 @@ public class EntourageDestinationActivity extends BaseFragmentActivity
 							listener);
 				} else {
 					//autocomplete places do not have location data, retrieve details on click to show marker
-					AutocompletePlace place = mAutocompletePlaces.get(position);
+					//AutocompletePlace place = mAutocompletePlaces.get(position);
+					AutocompletePlace place = (AutocompletePlace) mAutoCompleteAdapter.getItem(position);
 					mPlacesApi.detailsOf(place, EntourageDestinationActivity.this);
 				}
 				
@@ -211,14 +212,12 @@ public class EntourageDestinationActivity extends BaseFragmentActivity
 			
 			@Override
 			public void onClick(View v) {
-				//mConfirmationDialog.show();
 				mModeDialog.show();
 			}
 		});
 		
 		mTracker = LocationTracker.getInstance(this);
 		
-		mConfirmationDialog = getConfirmationDialog();
 		mModeDialog = getModeDialog();
 		mLocatingDialog = getLocatingDialog();
 		
@@ -287,22 +286,6 @@ public class EntourageDestinationActivity extends BaseFragmentActivity
 		}
 	}
 	
-	private AlertDialog getConfirmationDialog() {
-		return new AlertDialog.Builder(this)
-				.setTitle(R.string.ts_entourage_destination_dialog_confirmation_title)
-				.setMessage(R.string.ts_entourage_destination_dialog_confirmation_message)
-				.setPositiveButton(R.string.ts_common_yes, new DialogInterface.OnClickListener() {
-					
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						UiUtils.toastShort(EntourageDestinationActivity.this, "Destination set!");
-						finish();
-					}
-				})
-				.setNeutralButton(R.string.ts_common_cancel, null)
-				.create();
-	}
-	
 	private AlertDialog getModeDialog() {
 		return new AlertDialog.Builder(this)
 				.setTitle(R.string.ts_fragment_pickdestination_dialog_mode_title)
@@ -338,11 +321,17 @@ public class EntourageDestinationActivity extends BaseFragmentActivity
 	private void clearSearch() {
 		mSearch.setText("");
 	}
+
+	private void clearNearby() {
+		mNearbyPlaces.clear();
+		mPagerAdapter.notifyDataSetChanged();
+	}
 	
 	private void clearNearbyMarkers() {
 		for (Marker m : mNearbyMarkers) {
 			m.remove();
 		}
+		mNearbyMarkers.clear();
 	}
 	
 	private Marker createMarker(String title, String snippet, LatLng position) {
@@ -408,6 +397,8 @@ public class EntourageDestinationActivity extends BaseFragmentActivity
 		
 		switch (mNavMode) {
 		case FREE:
+			clearNearby();
+			
 			//hide result pager
 			visPager = View.GONE;
 			animResPager = R.anim.slide_out_dn;
@@ -510,7 +501,7 @@ public class EntourageDestinationActivity extends BaseFragmentActivity
 			LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
 
 			//clear and store newly created markers
-			mNearbyMarkers.clear();
+			clearNearbyMarkers();
 			LatLng position;
 			for (Place place : places) {
 				position = new LatLng(place.latitude(), place.longitude());
@@ -557,7 +548,7 @@ public class EntourageDestinationActivity extends BaseFragmentActivity
 			
 			moveDetailsMarker(place.name(), place.address(), position, true);
 			moveCamera(position);
-			
+			clearNearby();
 			setNavMode(NavMode.PAGED_RESULTS);
 		}
 	}
