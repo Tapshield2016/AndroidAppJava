@@ -35,7 +35,7 @@ public class ContactPlaceAutoCompleteAdapter extends BaseAdapter implements Filt
 	@Override
 	public int getCount() {
 		//plus both data set sizes, we add another extra item to do a general search of the input 
-		return 1 + mContacts.size() + mPlaces.size();
+		return getOffset() + mContacts.size() + mPlaces.size();
 	}
 	
 	@Override
@@ -53,6 +53,8 @@ public class ContactPlaceAutoCompleteAdapter extends BaseAdapter implements Filt
 		position = 2 (index 0 and 1 for contacts, while 2+ for places)
 		delta = position - contacts.size() = 0
 		places[delta] being the place with relative index
+		
+		offset is the number of permanent objects on the list (such as 'search' suggestion)
 		 */
 		
 		if (isFirst(position)) {
