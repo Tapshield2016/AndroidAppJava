@@ -99,7 +99,7 @@ public class EmergencyManager implements LocationListener, OnStatusChangeListene
 					mContext.sendBroadcast(actionEmergencyStarted);
 					unscheduleAlertIdUpdater();
 				} else {
-					mJavelinAlert.create(mType, mLatestLocation);
+					mJavelinAlert.create(getType(), mLatestLocation);
 				}
 			}
 		};
@@ -130,7 +130,7 @@ public class EmergencyManager implements LocationListener, OnStatusChangeListene
 		mScheduledFor = mScheduledAt + millisInTheFuture;
 		
 		Intent actionIntent = new Intent(ACTION_EMERGENCY);
-		actionIntent.putExtra(EXTRA_TYPE, mType);
+		actionIntent.putExtra(EXTRA_TYPE, getType());
 		mBroadcastPendingIntent = PendingIntent.getBroadcast(mContext, 0, actionIntent, 0);
 		mAlarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, mScheduledFor, mBroadcastPendingIntent);
 		
@@ -170,7 +170,7 @@ public class EmergencyManager implements LocationListener, OnStatusChangeListene
 		new ServerReacher(listener).execute(TapShieldApplication.JAVELIN_CONFIG.getBaseUrl());
 		
 		mType = type;
-		Log.i("tapshield", "EmergencyManager startEmergency called with " + mType);
+		Log.i("tapshield", "EmergencyManager startEmergency called with " + getType());
 	
 		mJavelinAlert.setOnDispatcherAlertedListener(mDispatcherAlertedListener);
 
@@ -422,7 +422,7 @@ public class EmergencyManager implements LocationListener, OnStatusChangeListene
 			// 2. if within cutoff distance of the boundaries, with good accuracy
 			if (inside && insideForCutoff) {
 				callIfNotChat();
-				mJavelinAlert.create(mType, mLatestLocation);
+				mJavelinAlert.create(getType(), mLatestLocation);
 			} else {
 				cancelAndWarn();
 			}
@@ -443,9 +443,13 @@ public class EmergencyManager implements LocationListener, OnStatusChangeListene
 		}
 	}
 	
+	public int getType() {
+		return mType;
+	}
+	
 	private void callIfNotChat() {
 		//start twilio if an emergency other than chat
-		if (mType != TYPE_CHAT) {
+		if (getType() != TYPE_CHAT) {
 			call();
 		}
 	}
