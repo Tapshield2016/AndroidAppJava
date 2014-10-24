@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
+import com.tapshield.android.R;
 import com.tapshield.android.api.JavelinAlertManager;
 import com.tapshield.android.api.JavelinChatManager;
 import com.tapshield.android.api.JavelinClient;
@@ -55,7 +56,8 @@ public class PushMessageReceiver extends WakefulBroadcastReceiver {
 		} else if (type.equals(TYPE_COMPLETED)) {
 			Log.i("javelin", "Alert completed - id=" + alertId);
 			
-			String title = extras.getString(EXTRA_TITLE, "Completed");
+			String title = extras.getString(EXTRA_TITLE,
+					context.getString(R.string.ts_notification_message_alert_completed));
 			
 			//on completion, notify, BUT force-disarm the alert via JavelinAlertManager#cancel()
 			JavelinAlertManager alertManager = javelin.getAlertManager();
