@@ -14,14 +14,18 @@ import com.tapshield.android.api.JavelinSocialReportingManager;
 import com.tapshield.android.api.JavelinUserManager;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.manager.EmergencyManager;
+import com.tapshield.android.ui.activity.MainActivity;
+import com.tapshield.android.utils.UiUtils;
 
 public class PushMessageReceiver extends WakefulBroadcastReceiver {
 
 	private static final String EXTRA_TYPE = "alert_type"; 
 	private static final String EXTRA_ALERT_ID = "alert_id";
 	private static final String EXTRA_MESSAGE = "message";
+	private static final String EXTRA_TITLE = "title";
 	
 	private static final String TYPE_ALERT_RECEIVED = "alert-received";
+	private static final String TYPE_COMPLETED = "alert-completed";
 	private static final String TYPE_MESSAGE_AVAILABLE = "chat-message-available";
 	private static final String TYPE_MASS_ALERT = "mass-alert";
 	private static final String TYPE_CRIME_TIP = "crime-report";
@@ -48,6 +52,16 @@ public class PushMessageReceiver extends WakefulBroadcastReceiver {
 			Log.i("javelin", "Alert acknowledged - id available (" + alertId + ")");
 			JavelinAlertManager alertManager = javelin.getAlertManager();
 			alertManager.notifyId(alertId);
+		} else if (type.equals(TYPE_COMPLETED)) {
+			Log.i("javelin", "Alert completed - id=" + alertId);
+			
+			String title = extras.getString(EXTRA_TITLE, "Completed");
+			
+			//on completion, notify, BUT force-disarm the alert via JavelinAlertManager#cancel()
+			JavelinAlertManager alertManager = javelin.getAlertManager();
+			alertManager.notifyCompletion();
+			alertManager.cancel();
+			UiUtils.startActivityNoStack(context, MainActivity.class);
 		} else if (type.equals(TYPE_MESSAGE_AVAILABLE)) {
 			JavelinUserManager userManager = javelin.getUserManager();
 			JavelinAlertManager alertManager = javelin.getAlertManager();
