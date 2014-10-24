@@ -77,6 +77,7 @@ import com.tapshield.android.ui.view.TickerTextSwitcher;
 import com.tapshield.android.utils.ConnectivityMonitor;
 import com.tapshield.android.utils.ConnectivityMonitor.ConnectivityMonitorListener;
 import com.tapshield.android.utils.CrimeMapClusterRenderer;
+import com.tapshield.android.utils.EmergencyManagerUtils;
 import com.tapshield.android.utils.MapUtils;
 import com.tapshield.android.utils.SocialCrimeMapClusterRenderer;
 import com.tapshield.android.utils.SocialReportsUtils;
@@ -499,7 +500,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		mCrimesHandler.post(mSpotCrimesUpdater);
 		mCrimesHandler.post(mSocialCrimesUpdater);
 		
-		if (mEmergencyManager.isRunning()) {
+		if (EmergencyManagerUtils.isRealEmergencyActive(mEmergencyManager)) {
 			Intent alert = new Intent(this, AlertActivity.class);
 			startActivity(alert);
 		}

@@ -26,6 +26,7 @@ import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.location.LocationTracker;
 import com.tapshield.android.manager.EmergencyManager;
 import com.tapshield.android.ui.adapter.ChatMessageAdapter;
+import com.tapshield.android.utils.EmergencyManagerUtils;
 import com.tapshield.android.utils.UiUtils;
 
 public class ChatActivity extends BaseFragmentActivity implements OnNewChatMessageListener {
@@ -96,8 +97,6 @@ public class ChatActivity extends BaseFragmentActivity implements OnNewChatMessa
 			@Override
 			public void onReceive(Context context, Intent intent) {
 				UiUtils.startActivityNoStack(ChatActivity.this, MainActivity.class);
-				UiUtils.toastLong(ChatActivity.this,
-						getString(R.string.ts_notification_message_alert_completed));
 			}
 		};
 	}
@@ -186,7 +185,10 @@ public class ChatActivity extends BaseFragmentActivity implements OnNewChatMessa
 	}
 	
 	private void showOverlayOnAlert(boolean animate) {
-		if (mEmergencyManager.isRunning() && mAlertOverlay.getVisibility() != View.VISIBLE) {
+		//check for type chat since it will be considered a more passive emergency
+		if (mEmergencyManager.isRunning()
+				&& mEmergencyManager.getType() != EmergencyManager.TYPE_CHAT
+				&& mAlertOverlay.getVisibility() != View.VISIBLE) {
 			
 			mAlertOverlay.setVisibility(View.VISIBLE);
 			
@@ -206,7 +208,15 @@ public class ChatActivity extends BaseFragmentActivity implements OnNewChatMessa
 	
 	@Override
 	public void onBackPressed() {
-		UiUtils.startActivityNoStack(this,
-				mEmergencyManager.isRunning() ? AlertActivity.class : MainActivity.class);
+		
+		Class<? extends BaseFragmentActivity> to = AlertActivity.class;
+		
+		//check for type chat since it will be considered a more passive emergency 
+		if (!mEmergencyManager.isRunning()
+				|| EmergencyManagerUtils.isPassiveEmergencyActive(mEmergencyManager)) {
+			to = MainActivity.class;
+		}
+		
+		UiUtils.startActivityNoStack(this, to);
 	}
 }

@@ -22,6 +22,7 @@ import com.tapshield.android.api.googleplaces.GooglePlacesConfig;
 import com.tapshield.android.api.spotcrime.SpotCrimeConfig;
 import com.tapshield.android.manager.EmergencyManager;
 import com.tapshield.android.manager.Notifier;
+import com.tapshield.android.ui.activity.ChatActivity;
 import com.tapshield.android.utils.UiUtils;
 
 public class TapShieldApplication extends Application {
@@ -108,7 +109,7 @@ public class TapShieldApplication extends Application {
 	}
 	
 	private void registerListeners() {
-		JavelinClient javelin = JavelinClient.getInstance(this, JAVELIN_CONFIG);
+		final JavelinClient javelin = JavelinClient.getInstance(this, JAVELIN_CONFIG);
 		
 		javelin.getAlertManager().setAlertListener(new AlertListener() {
 			
@@ -120,6 +121,9 @@ public class TapShieldApplication extends Application {
 			@Override
 			public void onCompleted() {
 				Notifier.getInstance(TapShieldApplication.this).notify(Notifier.NOTIFICATION_COMPLETED);
+				
+				//force-disarm and notify via broadcast interested parties 
+				javelin.getAlertManager().cancel();
 				
 				Intent broadcast = new Intent(EmergencyManager.ACTION_EMERGENCY_COMPLETE);
 				sendBroadcast(broadcast);

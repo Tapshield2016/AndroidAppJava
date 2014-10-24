@@ -58,12 +58,9 @@ public class PushMessageReceiver extends WakefulBroadcastReceiver {
 			
 			String title = extras.getString(EXTRA_TITLE,
 					context.getString(R.string.ts_notification_message_alert_completed));
-			
-			//on completion, notify, BUT force-disarm the alert via JavelinAlertManager#cancel()
+
 			JavelinAlertManager alertManager = javelin.getAlertManager();
-			alertManager.notifyCompletion();
-			alertManager.cancel();
-			UiUtils.startActivityNoStack(context, MainActivity.class);
+			alertManager.notifyCompletion(alertId);
 		} else if (type.equals(TYPE_MESSAGE_AVAILABLE)) {
 			JavelinUserManager userManager = javelin.getUserManager();
 			JavelinAlertManager alertManager = javelin.getAlertManager();
