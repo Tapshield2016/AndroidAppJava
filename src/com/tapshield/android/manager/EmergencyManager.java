@@ -236,13 +236,6 @@ public class EmergencyManager implements LocationListener, OnStatusChangeListene
 		mCompleted = false;
 		
 		mLatestLocation = null;
-		
-		/*
-		 * IS THIS GOING TO BE NECESSARY?
-		if (App.IN_APP_EMERGENCY_DIALOG_SHOWED) {
-			App.IN_APP_EMERGENCY_DIALOG_SHOWED = false;
-		}
-		*/
 	}
 	
 	public long getElapsed() {
