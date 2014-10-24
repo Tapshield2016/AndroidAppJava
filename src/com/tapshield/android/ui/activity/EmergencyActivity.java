@@ -119,8 +119,6 @@ public class EmergencyActivity extends BaseFragmentActivity {
 			@Override
 			public void onReceive(Context context, Intent intent) {
 				UiUtils.startActivityNoStack(EmergencyActivity.this, MainActivity.class);
-				UiUtils.toastLong(EmergencyActivity.this,
-						getString(R.string.ts_notification_message_alert_completed));
 			}
 		};
 
