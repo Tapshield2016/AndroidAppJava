@@ -43,6 +43,7 @@ public class ChatActivity extends BaseFragmentActivity implements OnNewChatMessa
 	private LocationTracker mTracker;
 	
 	private BroadcastReceiver mSuccessfulAlertReceiver;
+	private BroadcastReceiver mCompletionReceiver;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +90,16 @@ public class ChatActivity extends BaseFragmentActivity implements OnNewChatMessa
 				showOverlayOnAlert(true);
 			}
 		};
+		
+		mCompletionReceiver = new BroadcastReceiver() {
+			
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				UiUtils.startActivityNoStack(ChatActivity.this, MainActivity.class);
+				UiUtils.toastLong(ChatActivity.this,
+						getString(R.string.ts_notification_message_alert_completed));
+			}
+		};
 	}
 	
 	@Override
@@ -101,8 +112,11 @@ public class ChatActivity extends BaseFragmentActivity implements OnNewChatMessa
 		mTracker.start();
 		showOverlayOnAlert(false);
 		
-		IntentFilter filter = new IntentFilter(EmergencyManager.ACTION_EMERGENCY_SUCCESS);
-		registerReceiver(mSuccessfulAlertReceiver, filter);
+		IntentFilter alertedFilter = new IntentFilter(EmergencyManager.ACTION_EMERGENCY_SUCCESS);
+		registerReceiver(mSuccessfulAlertReceiver, alertedFilter);
+		
+		IntentFilter completionFilter=  new IntentFilter(EmergencyManager.ACTION_EMERGENCY_COMPLETE);
+		registerReceiver(mCompletionReceiver, completionFilter);
 	}
 	
 	@Override
@@ -110,6 +124,7 @@ public class ChatActivity extends BaseFragmentActivity implements OnNewChatMessa
 		super.onPause();
 		
 		unregisterReceiver(mSuccessfulAlertReceiver);
+		unregisterReceiver(mCompletionReceiver);
 		
 		mChatManager.notifyNotSeeing();
 		mChatManager.removeOnNewChatMessageListener(this);

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import android.app.Application;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -19,6 +20,7 @@ import com.tapshield.android.api.JavelinUserManager;
 import com.tapshield.android.api.googledirections.GoogleDirectionsConfig;
 import com.tapshield.android.api.googleplaces.GooglePlacesConfig;
 import com.tapshield.android.api.spotcrime.SpotCrimeConfig;
+import com.tapshield.android.manager.EmergencyManager;
 import com.tapshield.android.manager.Notifier;
 import com.tapshield.android.utils.UiUtils;
 
@@ -118,6 +120,9 @@ public class TapShieldApplication extends Application {
 			@Override
 			public void onCompleted() {
 				Notifier.getInstance(TapShieldApplication.this).notify(Notifier.NOTIFICATION_COMPLETED);
+				
+				Intent broadcast = new Intent(EmergencyManager.ACTION_EMERGENCY_COMPLETE);
+				sendBroadcast(broadcast);
 			}
 			
 			@Override
