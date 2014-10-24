@@ -121,12 +121,6 @@ public class TapShieldApplication extends Application {
 			@Override
 			public void onCompleted() {
 				Notifier.getInstance(TapShieldApplication.this).notify(Notifier.NOTIFICATION_COMPLETED);
-				
-				//force-disarm and notify via broadcast interested parties 
-				javelin.getAlertManager().cancel();
-				
-				Intent broadcast = new Intent(EmergencyManager.ACTION_EMERGENCY_COMPLETE);
-				sendBroadcast(broadcast);
 			}
 			
 			@Override
