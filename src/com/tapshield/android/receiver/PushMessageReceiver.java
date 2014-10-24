@@ -61,6 +61,13 @@ public class PushMessageReceiver extends WakefulBroadcastReceiver {
 
 			JavelinAlertManager alertManager = javelin.getAlertManager();
 			alertManager.notifyCompletion(alertId);
+			
+			//force-disarm
+			EmergencyManager.getInstance(context).cancel();
+			
+			//notify via broadcast interested parties
+			Intent broadcast = new Intent(EmergencyManager.ACTION_EMERGENCY_COMPLETE);
+			context.sendBroadcast(broadcast);
 		} else if (type.equals(TYPE_MESSAGE_AVAILABLE)) {
 			JavelinUserManager userManager = javelin.getUserManager();
 			JavelinAlertManager alertManager = javelin.getAlertManager();
@@ -77,7 +84,7 @@ public class PushMessageReceiver extends WakefulBroadcastReceiver {
 			
 			if (complete) {
 				Log.i("javelin", "Complete message received");
-				emergencyManager.notifyCompletion();
+				//emergencyManager.notifyCompletion();
 			}
 			
 			Log.i("javelin", "Message(s) available");
