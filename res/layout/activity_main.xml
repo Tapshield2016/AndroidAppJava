@@ -24,29 +24,29 @@
         
         <!-- top left corner button -->
         <ImageButton
-            android:id="@+id/main_imagebutton_entourage"
-            android:layout_width="@dimen/main_top_corner_buttons"
-            android:layout_height="@dimen/main_top_corner_buttons"
-            android:layout_margin="@dimen/activity_main_circlebutton_margin"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:src="@drawable/ts_icon_entourage"
-            android:scaleType="fitCenter"
-            android:background="@drawable/ts_background_card"
-            android:contentDescription="@string/ts_access_main_button_entourage"/>
-        
-        <!-- top right corner button -->
-        <ImageButton
             android:id="@+id/main_imagebutton_locateuser"
             android:layout_width="@dimen/main_top_corner_buttons"
             android:layout_height="@dimen/main_top_corner_buttons"
             android:layout_margin="@dimen/activity_main_circlebutton_margin"
             android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentLeft="true"
             android:src="@drawable/ts_icon_locateme"
             android:scaleType="fitCenter"
             android:background="@drawable/ts_background_card"
             android:contentDescription="@string/ts_access_main_button_locateme"/>
+        
+        <!-- top right corner button -->
+        <ImageButton
+            android:id="@+id/main_imagebutton_yank"
+            android:layout_width="@dimen/main_top_corner_buttons"
+            android:layout_height="@dimen/main_top_corner_buttons"
+            android:layout_margin="@dimen/activity_main_circlebutton_margin"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_actionbar_yank"
+            android:scaleType="fitCenter"
+            android:background="@drawable/ts_background_card"
+            android:contentDescription="@string/ts_main_dialog_yank_title"/>        
         
         <!-- have the automatictextswitcher widget show above top buttons -->
         <com.tapshield.android.ui.view.TickerTextSwitcher
@@ -85,7 +85,7 @@
                 android:layout_weight="0.4"
                 cb:background="@drawable/ts_background_circlebutton"
                 cb:icon="@drawable/ts_icon_talk"
-                cb:iconPaddingTop="@dimen/ts_common_spacing_s"
+                cb:iconPaddingTop="@dimen/ts_common_spacing_m"
                 cb:text="@string/ts_main_circlebutton_alert"
                 cb:textColor="#fff"
                 cb:textColorStateList="@color/ts_circlebutton_text"
@@ -93,14 +93,14 @@
                 android:contentDescription="@string/ts_access_main_button_alert" />
             
             <com.tapshield.android.ui.view.CircleButton
-                android:id="@+id/main_circlebutton_chat"
+                android:id="@+id/main_circlebutton_track"
                 android:layout_width="@dimen/circlebutton_secondary_size"
                 android:layout_height="@dimen/circlebutton_secondary_size"
                 android:layout_weight="0.3"
                 cb:background="@drawable/ts_background_circlebutton"
-                cb:icon="@drawable/ts_icon_chat"
+                cb:icon="@drawable/ts_icon_entourage_white"
                 cb:iconPaddingTop="@dimen/ts_common_spacing_s"
-                cb:text="@string/ts_main_circlebutton_chat"
+                cb:text="@string/ts_main_circlebutton_track"
                 cb:textColor="#fff"
                 cb:textColorStateList="@color/ts_circlebutton_text"
                 cb:textSize="@dimen/circlebutton_secondary_text_size"

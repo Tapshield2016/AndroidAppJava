@@ -221,6 +221,7 @@
     <string name="ts_main_circlebutton_report">Inform</string>
     <string name="ts_main_circlebutton_alert">Talk</string>
     <string name="ts_main_circlebutton_chat">Chat</string>
+    <string name="ts_main_circlebutton_track">Track</string>
     <string name="ts_main_dialog_yank_title">Yank</string>
     <string name="ts_main_dialog_yank_message">To enable Yank, plug your headset in. Yank will allow you start an alert any time by pulling the headset out when enabled.</string>
     <string name="ts_main_toast_yank_enabled">Yank enabled</string>

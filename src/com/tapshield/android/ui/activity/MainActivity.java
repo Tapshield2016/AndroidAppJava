@@ -23,6 +23,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -99,10 +100,10 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 	private FrameLayout mDrawer;
 	private Location mUserLocation;
 	private GoogleMap mMap;
-	private ImageButton mEntourage;
+	private ImageButton mYankToggle;
 	private ImageButton mLocateMe;
-	private CircleButton mEmergency;
-	private CircleButton mChat;
+	private CircleButton mTalk;
+	private CircleButton mTrack;
 	private CircleButton mReport;
 	private TickerTextSwitcher mConnectionTicker;
 	private TalkOptionsDialog mTalkOptionsDialog;
@@ -182,10 +183,10 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		
 		mDrawer = (FrameLayout) findViewById(R.id.main_drawer);
 		
-		mEntourage = (ImageButton) findViewById(R.id.main_imagebutton_entourage);
 		mLocateMe = (ImageButton) findViewById(R.id.main_imagebutton_locateuser);
-		mEmergency = (CircleButton) findViewById(R.id.main_circlebutton_alert);
-		mChat = (CircleButton) findViewById(R.id.main_circlebutton_chat);
+		mYankToggle = (ImageButton) findViewById(R.id.main_imagebutton_yank);
+		mTalk = (CircleButton) findViewById(R.id.main_circlebutton_alert);
+		mTrack = (CircleButton) findViewById(R.id.main_circlebutton_track);
 		mReport = (CircleButton) findViewById(R.id.main_circlebutton_report);
 		mConnectionTicker = (TickerTextSwitcher) findViewById(R.id.main_ticker);
 		mTalkOptionsDialog = new TalkOptionsDialog();
@@ -261,7 +262,16 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 
 		mYankDialog = getYankDialog();
 		
-		mEntourage.setOnClickListener(new OnClickListener() {
+		mYankToggle.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				//toggle yank, i.e. set enable if disabled
+				mYank.setEnabled(mYank.isDisabled());
+			}
+		});
+		
+		mTrack.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -283,7 +293,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 			}
 		});
 		
-		mEmergency.setOnClickListener(new OnClickListener() {
+		mTalk.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -305,14 +315,6 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 					UiUtils.MakePhoneCall(MainActivity.this, defaultEmergencyNumber);
 				}
 				*/
-			}
-		});
-		
-		mChat.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				UiUtils.startActivityNoStack(MainActivity.this, ChatActivity.class);
 			}
 		});
 		
@@ -503,6 +505,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		registerReceiver(mLogoUpdatedReceiver, filter);
 		
 		mYank.setListener(this);
+		setYankToggleIcon();
 		
 		final JavelinUserManager userManager = mJavelin.getUserManager();
 		boolean userPresent = userManager.isPresent();
@@ -522,7 +525,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 			mUserBelongsToAgency = userManager.getUser().belongsToAgency();
 			
 			//enable/disable chat button if part or not of an organzation
-			mChat.setEnabled(mUserBelongsToAgency);
+			mTalkOptionsDialog.setOptionEnable(TalkOptionsDialog.OPTION_CHAT, mUserBelongsToAgency);
 			
 			if (getIntent() != null && getIntent().getBooleanExtra(EXTRA_DISCONNECTED, false)) {
 				mDisconnectedDialog = getDisconnectedDialog();
@@ -579,8 +582,12 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		if (!mDrawerLayout.isDrawerOpen(mDrawer)) {
-			int yankMenu = mYank.isEnabled() ? R.menu.yank : R.menu.yank_disabled;
-			getMenuInflater().inflate(yankMenu, menu);
+			/*
+			 * placeholder for eventual entourage (people) menu item to display right-side drawer
+			 * 
+			int menuRes = R.menu.entourage_people_placeholder;
+			getMenuInflater().inflate(menuRes, menu);
+			*/
 		}
 		return true;
 	}
@@ -596,12 +603,6 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 				mDrawerLayout.openDrawer(mDrawer);
 			}
 			return true;
-		case R.id.action_yank:
-			mYank.setEnabled(false);
-			break;
-		case R.id.action_yank_disabled:
-			mYank.setEnabled(true);
-			break;
 		}
 		return false;
 	}
@@ -613,6 +614,12 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		} else {
 			super.onBackPressed();
 		}
+	}
+	
+	private void setYankToggleIcon() {
+		int resId = mYank.isEnabled() ?
+				R.drawable.ic_actionbar_yank : R.drawable.ic_actionbar_yank_disabled;
+		mYankToggle.setImageResource(resId);
 	}
 	
 	private void setTrackUser(boolean enabled) {
@@ -1177,13 +1184,16 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 	@Override
 	public void onStatusChange(int newStatus) {
 		
-		invalidateOptionsMenu();
+		Log.i("tapshield", "Yank status=" + newStatus);
+		
+		setYankToggleIcon();
 		
 		switch (newStatus) {
 		case YankManager.Status.DISABLED:
 			UiUtils.toastShort(this, getString(R.string.ts_main_toast_yank_disabled));
 			break;
 		case YankManager.Status.WAITING_HEADSET:
+			mYankDialog.dismiss();
 			mYankDialog.show();
 			break;
 		case YankManager.Status.ENABLED:

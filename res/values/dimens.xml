@@ -40,10 +40,10 @@
     
     <dimen name="activity_main_circlebutton_margin">25dp</dimen>
     
-    <dimen name="circlebutton_primary_size">120dp</dimen>
-    <dimen name="circlebutton_secondary_size">75dp</dimen>
-    <dimen name="circlebutton_primary_text_size">20sp</dimen>
-    <dimen name="circlebutton_secondary_text_size">15sp</dimen>
+    <dimen name="circlebutton_primary_size">105dp</dimen>
+    <dimen name="circlebutton_primary_text_size">17sp</dimen>
+    <dimen name="circlebutton_secondary_size">65dp</dimen>
+    <dimen name="circlebutton_secondary_text_size">12sp</dimen>
     
     <!-- dialpad -->
     
@@ -60,7 +60,7 @@
     
     <!-- top corner buttons over map -->
     
-    <dimen name="main_top_corner_buttons">64dp</dimen>
+    <dimen name="main_top_corner_buttons">54dp</dimen>
     
     <!-- full profile -->
     <dimen name="ts_fullprofile_picture">70dp</dimen>

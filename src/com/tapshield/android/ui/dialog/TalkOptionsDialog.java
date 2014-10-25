@@ -14,6 +14,10 @@ import android.view.Window;
 import android.widget.Button;
 
 import com.tapshield.android.R;
+import com.tapshield.android.api.JavelinClient;
+import com.tapshield.android.api.JavelinUserManager;
+import com.tapshield.android.api.model.User;
+import com.tapshield.android.app.TapShieldApplication;
 
 public class TalkOptionsDialog extends DialogFragment implements OnClickListener {
 
@@ -49,6 +53,24 @@ public class TalkOptionsDialog extends DialogFragment implements OnClickListener
 		m911.setOnClickListener(this);
 		mChat.setOnClickListener(this);
 	}
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		
+		JavelinUserManager userManager = JavelinClient
+				.getInstance(getActivity(), TapShieldApplication.JAVELIN_CONFIG)
+				.getUserManager();
+		
+		if (userManager.isPresent() && userManager.getUser().belongsToAgency()) {
+			
+			String alertMode = userManager.getUser().agency.alertModeName;
+			
+			if (alertMode != null && !alertMode.isEmpty()) {
+				mOrg.setText(alertMode);
+			}
+		}
+	}
 
 	@Override
 	public void onClick(View v) {
@@ -64,10 +86,33 @@ public class TalkOptionsDialog extends DialogFragment implements OnClickListener
 			notifyListeners(OPTION_CHAT);
 			break;
 		}
+		
+		dismiss();
 	}
-	
+
 	public void show(Activity activity) {
 		show(activity.getFragmentManager(), TalkOptionsDialog.class.getSimpleName());
+	}
+	
+	public void setOptionEnable(int option, boolean enable) {
+		
+		Button b = null;
+		
+		switch (option) {
+		case OPTION_911:
+			b = m911;
+			break;
+		case OPTION_ORG:
+			b = mOrg;
+			break;
+		case OPTION_CHAT:
+			b = mChat;
+			break;
+		}
+		
+		if (b != null) {
+			b.setEnabled(enable);
+		}
 	}
 	
 	public boolean addListener(TalkOptionsListener l) {
