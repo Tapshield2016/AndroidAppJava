@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:orientation="vertical">
+        
+        <Button
+            android:id="@+id/dialog_talk_options_org"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Campus Police Plus"
+            android:gravity="left|center_vertical"
+            android:drawableLeft="@drawable/ic_action_call_suboption"
+            android:padding="@dimen/ts_common_spacing_m"
+            android:drawablePadding="10dp"/>
+        
+        <Button
+            android:id="@+id/dialog_talk_options_911"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="9-1-1"
+            android:gravity="left|center_vertical"
+            android:drawableLeft="@drawable/ts_icon_911"
+            android:padding="@dimen/ts_common_spacing_m"
+            android:drawablePadding="10dp"/>
+        
+        <Button
+            android:id="@+id/dialog_talk_options_chat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Chat"
+            android:gravity="left|center_vertical"
+            android:drawableLeft="@drawable/ts_icon_chat"
+            android:padding="@dimen/ts_common_spacing_m"
+            android:drawablePadding="10dp"/>
+    </LinearLayout>
+</FrameLayout>

@@ -84,7 +84,7 @@
                 android:layout_height="@dimen/circlebutton_primary_size"
                 android:layout_weight="0.4"
                 cb:background="@drawable/ts_background_circlebutton"
-                cb:icon="@drawable/ts_icon_alert"
+                cb:icon="@drawable/ts_icon_talk"
                 cb:iconPaddingTop="@dimen/ts_common_spacing_s"
                 cb:text="@string/ts_main_circlebutton_alert"
                 cb:textColor="#fff"
