@@ -70,6 +70,8 @@ import com.tapshield.android.model.CrimeClusterItem;
 import com.tapshield.android.model.SocialCrimeClusterItem;
 import com.tapshield.android.ui.adapter.CrimeInfoWindowAdapter;
 import com.tapshield.android.ui.adapter.NavigationListAdapter.NavigationItem;
+import com.tapshield.android.ui.dialog.TalkOptionsDialog;
+import com.tapshield.android.ui.dialog.TalkOptionsDialog.TalkOptionsListener;
 import com.tapshield.android.ui.fragment.NavigationFragment;
 import com.tapshield.android.ui.fragment.NavigationFragment.OnNavigationItemClickListener;
 import com.tapshield.android.ui.view.CircleButton;
@@ -103,6 +105,8 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 	private CircleButton mChat;
 	private CircleButton mReport;
 	private TickerTextSwitcher mConnectionTicker;
+	private TalkOptionsDialog mTalkOptionsDialog;
+	private TalkOptionsListener mTalkOptionsListener;
 	
 	private EmergencyManager mEmergencyManager;
 	private JavelinClient mJavelin;
@@ -184,6 +188,36 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		mChat = (CircleButton) findViewById(R.id.main_circlebutton_chat);
 		mReport = (CircleButton) findViewById(R.id.main_circlebutton_report);
 		mConnectionTicker = (TickerTextSwitcher) findViewById(R.id.main_ticker);
+		mTalkOptionsDialog = new TalkOptionsDialog();
+		mTalkOptionsListener = new TalkOptionsListener() {
+			
+			@Override
+			public void onOptionSelect(int option) {
+				switch (option) {
+				case TalkOptionsDialog.OPTION_ORG:
+					
+					if (mUserBelongsToAgency) {
+						
+						long duration = (long)
+								getResources().getInteger(R.integer.timer_emergency_requested_millis);
+						mEmergencyManager.start(duration, EmergencyManager.TYPE_START_REQUESTED);
+						UiUtils.startActivityNoStack(MainActivity.this, AlertActivity.class);
+					} else {
+						
+						String defaultEmergencyNumber = getString(R.string.ts_no_org_emergency_number);
+						UiUtils.MakePhoneCall(MainActivity.this, defaultEmergencyNumber);
+					}
+					break;
+				case TalkOptionsDialog.OPTION_911:
+					UiUtils.MakePhoneCall(MainActivity.this,
+							getString(R.string.ts_no_org_emergency_number));
+					break;
+				case TalkOptionsDialog.OPTION_CHAT:
+					UiUtils.startActivityNoStack(MainActivity.this, ChatActivity.class);
+					break;
+				}
+			}
+		};
 		
 		mEmergencyManager = EmergencyManager.getInstance(this);
 		mJavelin = JavelinClient.getInstance(this, TapShieldApplication.JAVELIN_CONFIG);
@@ -224,7 +258,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 				loadAgencyLogo();
 			}
 		};
-		
+
 		mYankDialog = getYankDialog();
 		
 		mEntourage.setOnClickListener(new OnClickListener() {
@@ -254,6 +288,11 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 			@Override
 			public void onClick(View v) {
 				
+				if (!mTalkOptionsDialog.isVisible()) {
+					mTalkOptionsDialog.show(MainActivity.this);
+				}
+				
+				/*
 				if (mUserBelongsToAgency) {
 				
 					long duration = (long)
@@ -265,6 +304,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 					String defaultEmergencyNumber = getString(R.string.ts_no_org_emergency_number);
 					UiUtils.MakePhoneCall(MainActivity.this, defaultEmergencyNumber);
 				}
+				*/
 			}
 		});
 		
@@ -455,6 +495,8 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 	protected void onResume() {
 		super.onResume();
 		
+		mTalkOptionsDialog.addListener(mTalkOptionsListener);
+		
 		mConnectionMonitor.addListener(mConnectionMonitorListener);
 		
 		IntentFilter filter = new IntentFilter(JavelinUserManager.ACTION_AGENCY_LOGOS_UPDATED);
@@ -510,6 +552,8 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 	protected void onPause() {
 		super.onPause();
 
+		mTalkOptionsDialog.removeListener(mTalkOptionsListener);
+		
 		mConnectionMonitor.removeListener(mConnectionMonitorListener);
 		
 		mCrimesHandler.removeCallbacks(mSpotCrimesUpdater);
