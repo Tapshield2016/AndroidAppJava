@@ -8,10 +8,13 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationCompat.BigTextStyle;
 import android.support.v4.app.TaskStackBuilder;
 
 import com.tapshield.android.R;
+import com.tapshield.android.api.JavelinSocialReportingManager;
 import com.tapshield.android.ui.activity.AlertActivity;
 import com.tapshield.android.ui.activity.ChatActivity;
 import com.tapshield.android.ui.activity.MainActivity;
@@ -27,6 +30,7 @@ public class Notifier {
 	public static final int NOTIFICATION_CHAT = 60;
 	public static final int NOTIFICATION_MASS = 70;
 	public static final int NOTIFICATION_TWILIO_FAILURE = 80;
+	public static final int NOTIFICATION_CRIME_REPORT = 90;
 	
 	private static Notifier mInstance;
 	private Context mContext;
@@ -70,7 +74,7 @@ public class Notifier {
 	private Notification buildConnecting() {
 		return getCommonBuilder()
 				.setContentText(mContext.getString(R.string.ts_notification_message_alert_connecting))
-				.setContentIntent(getPendingIntentWithBackStack(MainActivity.class, AlertActivity.class))
+				.setContentIntent(getPendingIntentWithBackStack(MainActivity.class))
 				.setAutoCancel(false)
 				.setOngoing(true)
 				.build();
@@ -79,7 +83,7 @@ public class Notifier {
 	private Notification buildEstablished() {
 		return getCommonBuilder()
 				.setContentText(mContext.getString(R.string.ts_notification_message_alert_established))
-				.setContentIntent(getPendingIntentWithBackStack(MainActivity.class, AlertActivity.class))
+				.setContentIntent(getPendingIntentWithBackStack(MainActivity.class))
 				.setAutoCancel(false)
 				.setOngoing(true)
 				.setOnlyAlertOnce(true)
@@ -89,9 +93,8 @@ public class Notifier {
 	private Notification buildCompleted() {
 		return getCommonBuilder()
 				.setContentText(mContext.getString(R.string.ts_notification_message_alert_completed))
-				.setContentIntent(getPendingIntentWithBackStack(MainActivity.class, AlertActivity.class))
-				.setAutoCancel(false)
-				.setOngoing(true)
+				.setAutoCancel(true)
+				.setOngoing(false)
 				.build();
 	}
 	
@@ -126,7 +129,7 @@ public class Notifier {
 				.setPriority(NotificationCompat.PRIORITY_MAX)
 				.setContentTitle(title)
 				.setContentText(content)
-				//.setContentIntent(getPendingIntentWithBackStack(MainActivity.class, AlertActivity.class, ChatActivity.class))
+				.setContentIntent(getPendingIntentWithBackStack(MainActivity.class, ChatActivity.class))
 				.setContentIntent(pendingIntent)
 				.setAutoCancel(true);
 
@@ -174,6 +177,21 @@ public class Notifier {
 				.build();
 	}
 	
+	private Notification buildCrimeReport(final String message, final String id, final Bundle extras) {
+		
+		String title = extras.getString(JavelinSocialReportingManager.KEY_PUSHMESSAGE_TITLE,
+				mContext.getString(R.string.app_name));
+		
+		return getCommonBuilder()
+				.setContentTitle(title)
+				.setContentText(message)
+				.setPriority(NotificationCompat.PRIORITY_DEFAULT)
+				.setAutoCancel(true)
+				.setStyle(new BigTextStyle()
+						.bigText(message))
+				.build();
+	}
+	
 	private PendingIntent getPendingIntentWithBackStack(Class<? extends Activity>... activitiesClasses) {
 		TaskStackBuilder stackBuilder = TaskStackBuilder.create(mContext);
 		
@@ -187,6 +205,14 @@ public class Notifier {
 	
 	public void notify(int notificationId) {
 		notify(notificationId, null);
+	}
+	
+	public void notifyCrimeReport(final String message, final String id, final Bundle extras) {
+		getManager();
+		Notification notification = buildCrimeReport(message, id, extras);
+		if (notification != null) {
+			mNotificationManager.notify(NOTIFICATION_CRIME_REPORT, notification);
+		}
 	}
 	
 	public void notifyChat(List<String> chatMessages) {

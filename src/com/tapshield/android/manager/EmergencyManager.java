@@ -46,6 +46,7 @@ public class EmergencyManager implements LocationListener, OnStatusChangeListene
 	public static final int TYPE_START_REQUESTED = 3;
 	public static final int TYPE_HEADSET_UNPLUGGED = 4;
 	public static final int TYPE_CHAT = 5;
+	public static final int TYPE_911 = 6;
 	
 	private static enum InternalStatus {
 		INITIALIZED,
@@ -99,7 +100,7 @@ public class EmergencyManager implements LocationListener, OnStatusChangeListene
 					mContext.sendBroadcast(actionEmergencyStarted);
 					unscheduleAlertIdUpdater();
 				} else {
-					mJavelinAlert.create(mType, mLatestLocation);
+					mJavelinAlert.create(getType(), mLatestLocation);
 				}
 			}
 		};
@@ -130,7 +131,7 @@ public class EmergencyManager implements LocationListener, OnStatusChangeListene
 		mScheduledFor = mScheduledAt + millisInTheFuture;
 		
 		Intent actionIntent = new Intent(ACTION_EMERGENCY);
-		actionIntent.putExtra(EXTRA_TYPE, mType);
+		actionIntent.putExtra(EXTRA_TYPE, getType());
 		mBroadcastPendingIntent = PendingIntent.getBroadcast(mContext, 0, actionIntent, 0);
 		mAlarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, mScheduledFor, mBroadcastPendingIntent);
 		
@@ -170,7 +171,7 @@ public class EmergencyManager implements LocationListener, OnStatusChangeListene
 		new ServerReacher(listener).execute(TapShieldApplication.JAVELIN_CONFIG.getBaseUrl());
 		
 		mType = type;
-		Log.i("tapshield", "EmergencyManager startEmergency called with " + mType);
+		Log.i("tapshield", "EmergencyManager startEmergency called with " + getType());
 	
 		mJavelinAlert.setOnDispatcherAlertedListener(mDispatcherAlertedListener);
 
@@ -236,13 +237,6 @@ public class EmergencyManager implements LocationListener, OnStatusChangeListene
 		mCompleted = false;
 		
 		mLatestLocation = null;
-		
-		/*
-		 * IS THIS GOING TO BE NECESSARY?
-		if (App.IN_APP_EMERGENCY_DIALOG_SHOWED) {
-			App.IN_APP_EMERGENCY_DIALOG_SHOWED = false;
-		}
-		*/
 	}
 	
 	public long getElapsed() {
@@ -421,8 +415,8 @@ public class EmergencyManager implements LocationListener, OnStatusChangeListene
 			// 1. far enough of the boundaries (greater than cutoff distance), OR
 			// 2. if within cutoff distance of the boundaries, with good accuracy
 			if (inside && insideForCutoff) {
-				callIfNotChat();
-				mJavelinAlert.create(mType, mLatestLocation);
+				callOnProperTypes();
+				mJavelinAlert.create(getType(), mLatestLocation);
 			} else {
 				cancelAndWarn();
 			}
@@ -443,9 +437,14 @@ public class EmergencyManager implements LocationListener, OnStatusChangeListene
 		}
 	}
 	
-	private void callIfNotChat() {
+	public int getType() {
+		return mType;
+	}
+	
+	//certain types need the call not to be made
+	private void callOnProperTypes() {
 		//start twilio if an emergency other than chat
-		if (mType != TYPE_CHAT) {
+		if (getType() != TYPE_CHAT && getType() != TYPE_911) {
 			call();
 		}
 	}
@@ -510,6 +509,17 @@ public class EmergencyManager implements LocationListener, OnStatusChangeListene
 				Log.i("twilio", "requesting redial");
 				requestRedial();
 			}
+		}
+	}
+
+	/**
+	 * Utility method that notifies back-end of the duration of an emergency call if an
+	 * alert has been created
+	 * @param seconds back-end accepts an integer value to set number of seconds the call lasted
+	 */
+	public void updateCallDuration(int seconds) {
+		if (isRunning() && mAlerted && getType() == TYPE_911) {
+			mJavelinAlert.setEmergencyCallDuration(seconds);
 		}
 	}
 	

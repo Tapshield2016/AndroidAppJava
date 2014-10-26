@@ -18,9 +18,6 @@ import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.ui.fragment.BaseFragment;
 import com.tapshield.android.ui.fragment.BaseFragment.OnUserActionRequestedListener;
 import com.tapshield.android.ui.fragment.EmailConfirmationFragment;
-import com.tapshield.android.ui.fragment.OrganizationSelectionFragment;
-import com.tapshield.android.ui.fragment.PhoneConfirmationFragment;
-import com.tapshield.android.ui.fragment.ProfileFragment;
 import com.tapshield.android.ui.fragment.RequiredInfoFragment;
 import com.tapshield.android.ui.view.StepIndicator;
 import com.tapshield.android.utils.PictureSetter;
@@ -28,13 +25,7 @@ import com.tapshield.android.utils.PictureSetter;
 public class RegistrationActivity extends BaseFragmentActivity
 		implements OnUserActionRequestedListener {
 	
-	public static final String EXTRA_SKIP_ORG = "com.tapshield.android.extra.skip_org";
-	public static final String EXTRA_SET_STEP = "com.tapshield.android.extra.set_step";
-	
-	public static final int STEP_PHONEVERIFICATION = 3;
-	public static final int STEP_TERMSCONDITIONS = 4;
-	
-	private static final int NUM_FRAGMENTS = 5;
+	private static final int NUM_FRAGMENTS = 2;
 	private static final int mFragmentContainer = R.id.registration_container;
 
 	private TextView mStepTitle;
@@ -62,24 +53,6 @@ public class RegistrationActivity extends BaseFragmentActivity
 		actionBar.setDisplayShowTitleEnabled(false);
 		actionBar.setDisplayShowCustomEnabled(true);
 		actionBar.setCustomView(actionBarCustomView);
-
-		Intent i = getIntent();
-		if (i != null) {
-			Bundle e = i.getExtras();
-			if (e != null && e.containsKey(EXTRA_SKIP_ORG)) {
-				boolean skipOrg = e.getBoolean(EXTRA_SKIP_ORG, false);
-				if (skipOrg) {
-					mIndex = 1;
-				}
-			}
-			
-			if (e != null && e.containsKey(EXTRA_SET_STEP)) {
-				int index = e.getInt(EXTRA_SET_STEP, -1);
-				if (index >= 1) {
-					mIndex = index;
-				}
-			}
-		}
 		
 		setFragmentByIndex();
 		mStepIndicator.setNumSteps(NUM_FRAGMENTS);
@@ -122,9 +95,7 @@ public class RegistrationActivity extends BaseFragmentActivity
 	}
 	
 	private void setFragmentByIndex(Bundle extras) {
-		boolean finish = mIndex < 0;
-		
-		if (finish) {
+		if (mIndex < 0) {
 			finish();
 			return;
 		}
@@ -161,24 +132,12 @@ public class RegistrationActivity extends BaseFragmentActivity
 		BaseFragment f = null;
 		switch (mIndex) {
 		case 0:
-			f = new OrganizationSelectionFragment();
-			f.setTitle(getString(R.string.ts_registration_actionbar_title_pickorg));
-			break;
-		case 1:
 			f = new RequiredInfoFragment();
 			f.setTitle(getString(R.string.ts_registration_actionbar_title_createaccount));
 			break;
-		case 2:
+		case 1:
 			f = new EmailConfirmationFragment();
 			f.setTitle(getString(R.string.ts_registration_actionbar_title_emailverification));
-			break;
-		case 3:
-			f = new PhoneConfirmationFragment();
-			f.setTitle(getString(R.string.ts_registration_actionbar_title_phoneconfirmation));
-			break;
-		case 4:
-			f = new ProfileFragment();
-			f.setTitle(getString(R.string.ts_registration_actionbar_title_profile));
 			break;
 		}
 		return f;
@@ -193,27 +152,12 @@ public class RegistrationActivity extends BaseFragmentActivity
 	@Override
 	public void onProceed(Bundle extras) {
 		mIndex++;
-		
-		//if phone confirmation should be shown but no agency/organization is related to the user
-		// then skip to profile fragment for partial information
-		if (mIndex == 3) {
-			boolean skipPhoneConfirmation = !JavelinClient
-					.getInstance(this, TapShieldApplication.JAVELIN_CONFIG)
-					.getUserManager()
-					.getUser()
-					.belongsToAgency();
-			
-			if (skipPhoneConfirmation) {
-				mIndex++;
-			}
-		}
-		
 		setFragmentByIndex(extras);
 	}
 	
 	@Override
 	public void onReturn() {
-		if (mIndex >= 2) {
+		if (mIndex >= 1) {
 			promptToCancel();
 			return;
 		}
@@ -231,7 +175,7 @@ public class RegistrationActivity extends BaseFragmentActivity
 		
 		int messageResource = R.string.ts_registration_dialog_cancel_simple_message;
 		
-		if (mIndex >= 2) {
+		if (mIndex >= 1) {
 			messageResource = R.string.ts_registration_dialog_cancel_aftercreation_message;
 		}
 		

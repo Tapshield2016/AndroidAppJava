@@ -68,6 +68,7 @@ public class ReportActivity extends BaseFragmentActivity
 	
 	private static final String DATETIME_FORMAT = "MM/dd/yyyy HH:mm";
 	
+	private TextView mHeaderMedia;
 	private TextView mTypeText;
 	private ImageView mTypeImage;
 	private TextView mDatetime;
@@ -97,6 +98,7 @@ public class ReportActivity extends BaseFragmentActivity
 		
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
+		mHeaderMedia = (TextView) findViewById(R.id.report_text_header_media);
 		mTypeText = (TextView) findViewById(R.id.report_text_type);
 		mTypeImage = (ImageView) findViewById(R.id.report_image_type);
 		mDatetime = (TextView) findViewById(R.id.report_text_datetime);
@@ -203,8 +205,15 @@ public class ReportActivity extends BaseFragmentActivity
 		
 		container.removeAllViews();
 		
+		//set default message for the media header, then if media present, set based on type
+		String headerMessageResourceId = getString(R.string.ts_reporting_media_header_add);
+		
 		if (mediaSelected) {
 
+			//prefix to message when media is set
+			headerMessageResourceId =
+					getString(R.string.ts_reporting_media_header_change_prefix) + " ";
+			
 			FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
 					FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT,
 					Gravity.CENTER);
@@ -217,14 +226,20 @@ public class ReportActivity extends BaseFragmentActivity
 				image.setScaleType(ScaleType.CENTER_INSIDE);
 				image.setImageURI(mMediaUri);
 				container.addView(image);
+				
+				headerMessageResourceId += getString(R.string.ts_reporting_media_image);
 			} else if (type == MediaType.VIDEO) {
 				VideoView video = new VideoView(this);
 				video.setVideoURI(mMediaUri);
 				video.setLayoutParams(params);
 				container.addView(video);
 				video.start();
+				
+				headerMessageResourceId += getString(R.string.ts_reporting_media_video);
 			}
 		}
+		
+		mHeaderMedia.setText(headerMessageResourceId);
 	}
 	
 	private ProgressDialog getReportingDialog() {

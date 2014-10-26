@@ -7,6 +7,8 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
 import android.content.Context;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,6 +95,9 @@ public class MassAlertAdapter extends BaseAdapter {
 		
 		message.setText(alert.message);
 		time.setText(currentDate.toString(mDateTimeFormatPattern));
+		
+		message.setText(Html.fromHtml(message.getText().toString()));
+		message.setMovementMethod(LinkMovementMethod.getInstance());
 		
 		return view;
 	}

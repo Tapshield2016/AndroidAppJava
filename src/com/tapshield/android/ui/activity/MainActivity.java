@@ -1,7 +1,9 @@
 package com.tapshield.android.ui.activity;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -21,6 +23,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,8 +42,11 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.clustering.Cluster;
+import com.google.maps.android.clustering.ClusterItem;
 import com.google.maps.android.clustering.ClusterManager;
-import com.google.maps.android.clustering.algo.GridBasedAlgorithm;
+import com.google.maps.android.clustering.algo.NonHierarchicalDistanceBasedAlgorithm;
 import com.google.maps.android.clustering.algo.PreCachingAlgorithmDecorator;
 import com.tapshield.android.R;
 import com.tapshield.android.api.JavelinClient;
@@ -58,12 +64,15 @@ import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.location.LocationTracker;
 import com.tapshield.android.manager.EmergencyManager;
 import com.tapshield.android.manager.EntourageManager;
+import com.tapshield.android.manager.SessionManager;
 import com.tapshield.android.manager.YankManager;
 import com.tapshield.android.manager.YankManager.YankListener;
 import com.tapshield.android.model.CrimeClusterItem;
 import com.tapshield.android.model.SocialCrimeClusterItem;
 import com.tapshield.android.ui.adapter.CrimeInfoWindowAdapter;
 import com.tapshield.android.ui.adapter.NavigationListAdapter.NavigationItem;
+import com.tapshield.android.ui.dialog.TalkOptionsDialog;
+import com.tapshield.android.ui.dialog.TalkOptionsDialog.TalkOptionsListener;
 import com.tapshield.android.ui.fragment.NavigationFragment;
 import com.tapshield.android.ui.fragment.NavigationFragment.OnNavigationItemClickListener;
 import com.tapshield.android.ui.view.CircleButton;
@@ -71,9 +80,10 @@ import com.tapshield.android.ui.view.TickerTextSwitcher;
 import com.tapshield.android.utils.ConnectivityMonitor;
 import com.tapshield.android.utils.ConnectivityMonitor.ConnectivityMonitorListener;
 import com.tapshield.android.utils.CrimeMapClusterRenderer;
-import com.tapshield.android.utils.LocalTermConditionAgreement;
+import com.tapshield.android.utils.EmergencyManagerUtils;
 import com.tapshield.android.utils.MapUtils;
 import com.tapshield.android.utils.SocialCrimeMapClusterRenderer;
+import com.tapshield.android.utils.SocialReportsUtils;
 import com.tapshield.android.utils.SpotCrimeUtils;
 import com.tapshield.android.utils.UiUtils;
 
@@ -82,6 +92,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 
 	public static final String EXTRA_DISCONNECTED = "com.tapshield.android.extra.disconnected";
 	
+	private static final float DECLUSTER_RADIUS = 0.00005f;
 	private static final String KEY_RESUME = "resuming";
 
 	private ActionBarDrawerToggle mDrawerToggle;
@@ -89,12 +100,14 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 	private FrameLayout mDrawer;
 	private Location mUserLocation;
 	private GoogleMap mMap;
-	private ImageButton mEntourage;
+	private ImageButton mYankToggle;
 	private ImageButton mLocateMe;
-	private CircleButton mEmergency;
-	private CircleButton mChat;
+	private CircleButton mTalk;
+	private CircleButton mTrack;
 	private CircleButton mReport;
 	private TickerTextSwitcher mConnectionTicker;
+	private TalkOptionsDialog mTalkOptionsDialog;
+	private TalkOptionsListener mTalkOptionsListener;
 	
 	private EmergencyManager mEmergencyManager;
 	private JavelinClient mJavelin;
@@ -116,6 +129,12 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 	private boolean mTrackUser = true;
 	private boolean mResuming = false;
 	private boolean mUserBelongsToAgency = false;
+	
+	private Marker[] mDeclusteredMarkers = null;
+	private boolean mDeclusteredGroup = false;
+	private CameraPosition mDeclusteredCameraPosition = null;
+	private Map<Marker, SocialCrime> mDeclusteredSocialCrimeMap = new HashMap<Marker, SocialCrime>();
+	private Map<Marker, Crime> mDeclusteredCrimeMap = new HashMap<Marker, Crime>();
 
 	//crimes (spotcrime, social crimes)
 	
@@ -164,12 +183,38 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		
 		mDrawer = (FrameLayout) findViewById(R.id.main_drawer);
 		
-		mEntourage = (ImageButton) findViewById(R.id.main_imagebutton_entourage);
 		mLocateMe = (ImageButton) findViewById(R.id.main_imagebutton_locateuser);
-		mEmergency = (CircleButton) findViewById(R.id.main_circlebutton_alert);
-		mChat = (CircleButton) findViewById(R.id.main_circlebutton_chat);
+		mYankToggle = (ImageButton) findViewById(R.id.main_imagebutton_yank);
+		mTalk = (CircleButton) findViewById(R.id.main_circlebutton_alert);
+		mTrack = (CircleButton) findViewById(R.id.main_circlebutton_track);
 		mReport = (CircleButton) findViewById(R.id.main_circlebutton_report);
 		mConnectionTicker = (TickerTextSwitcher) findViewById(R.id.main_ticker);
+		mTalkOptionsDialog = new TalkOptionsDialog();
+		mTalkOptionsListener = new TalkOptionsListener() {
+			
+			@Override
+			public void onOptionSelect(int option) {
+				switch (option) {
+				case TalkOptionsDialog.OPTION_ORG:
+					
+					if (mUserBelongsToAgency) {
+						mEmergencyManager.startNow(EmergencyManager.TYPE_START_REQUESTED);
+						UiUtils.startActivityNoStack(MainActivity.this, AlertActivity.class);
+					} else {
+						UiUtils.MakePhoneCall(MainActivity.this,
+								EmergencyManagerUtils.getEmergencyNumber(MainActivity.this));
+					}
+					break;
+				case TalkOptionsDialog.OPTION_911:
+					UiUtils.MakePhoneCall(MainActivity.this,
+							EmergencyManagerUtils.getEmergencyNumber(MainActivity.this));
+					break;
+				case TalkOptionsDialog.OPTION_CHAT:
+					UiUtils.startActivityNoStack(MainActivity.this, ChatActivity.class);
+					break;
+				}
+			}
+		};
 		
 		mEmergencyManager = EmergencyManager.getInstance(this);
 		mJavelin = JavelinClient.getInstance(this, TapShieldApplication.JAVELIN_CONFIG);
@@ -210,18 +255,33 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 				loadAgencyLogo();
 			}
 		};
-		
+
 		mYankDialog = getYankDialog();
 		
-		mEntourage.setOnClickListener(new OnClickListener() {
+		mYankToggle.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				//toggle yank, i.e. set enable if disabled
+				mYank.setEnabled(mYank.isDisabled());
+			}
+		});
+		
+		mTrack.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				//Skip selection activities if Entourage is already set (running)
+				
+				/*
 				Class<? extends Activity> clss = EntourageManager.get(MainActivity.this).isSet() ?
 						PickArrivalContacts.class : PickDestinationActivity.class;
 				Intent activity = new Intent(MainActivity.this, clss);
 				startActivity(activity);
+				*/
+				
+				startActivity(
+						new Intent(MainActivity.this, EntourageDestinationActivity.class));
 			}
 		});
 		
@@ -229,35 +289,20 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 			
 			@Override
 			public void onClick(View v) {
-				mTrackUser = true;
+				setTrackUser(true);
 				moveCameraToUser(true);
+				clearDecluster();
 			}
 		});
 		
-		mEmergency.setOnClickListener(new OnClickListener() {
+		mTalk.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				
-				if (mUserBelongsToAgency) {
-				
-					long duration = (long)
-							getResources().getInteger(R.integer.timer_emergency_requested_millis);
-					mEmergencyManager.start(duration, EmergencyManager.TYPE_START_REQUESTED);
-					UiUtils.startActivityNoStack(MainActivity.this, AlertActivity.class);
-				} else {
-					
-					String defaultEmergencyNumber = getString(R.string.ts_no_org_emergency_number);
-					UiUtils.MakePhoneCall(MainActivity.this, defaultEmergencyNumber);
+				if (!mTalkOptionsDialog.isVisible()) {
+					mTalkOptionsDialog.show(MainActivity.this);
 				}
-			}
-		});
-		
-		mChat.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				UiUtils.startActivityNoStack(MainActivity.this, ChatActivity.class);
 			}
 		});
 		
@@ -320,40 +365,54 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 			mMapCrimeClusterManager = new ClusterManager<CrimeClusterItem>(this, mMap);
 			mMapCrimeClusterManager.setAlgorithm(
 					new PreCachingAlgorithmDecorator<CrimeClusterItem>(
-							new GridBasedAlgorithm<CrimeClusterItem>()));
+							new NonHierarchicalDistanceBasedAlgorithm<CrimeClusterItem>()));
 			mMapCrimeClusterManager.setRenderer(
 					new CrimeMapClusterRenderer(this, mMap, mMapCrimeClusterManager));
+			mMapCrimeClusterManager.setOnClusterClickListener(
+					new ClusterManager.OnClusterClickListener<CrimeClusterItem>() {
+
+						@Override
+						public boolean onClusterClick(Cluster<CrimeClusterItem> cluster) {
+							//returning true means it has to be declustered
+							if (focusOnCluster(cluster)) {
+								declusterCrimeCluster(cluster);
+							}
+							return true;
+						}
+					});
 			mMapCrimeClusterManager.setOnClusterItemInfoWindowClickListener(
 					new ClusterManager.OnClusterItemInfoWindowClickListener<CrimeClusterItem>() {
 
 						@Override
 						public void onClusterItemInfoWindowClick(CrimeClusterItem item) {
-							Intent details = new Intent(MainActivity.this, ReportDetailsActivity.class);
-							details.putExtra(ReportDetailsActivity.EXTRA_REPORT_TYPE,
-									ReportDetailsActivity.TYPE_SPOTCRIME);
-							details.putExtra(ReportDetailsActivity.EXTRA_REPORT_ID,
-									item.getCrime().getId());
-							startActivity(details);
+							getCrimeDetails(item.getCrime());
 						}
 					});
 			
 			mMapSocialCrimeClusterManager = new ClusterManager<SocialCrimeClusterItem>(this, mMap);
 			mMapSocialCrimeClusterManager.setAlgorithm(
 					new PreCachingAlgorithmDecorator<SocialCrimeClusterItem>(
-							new GridBasedAlgorithm<SocialCrimeClusterItem>()));
+							new NonHierarchicalDistanceBasedAlgorithm<SocialCrimeClusterItem>()));
 			mMapSocialCrimeClusterManager.setRenderer(
 					new SocialCrimeMapClusterRenderer(this, mMap, mMapSocialCrimeClusterManager));
+			mMapSocialCrimeClusterManager.setOnClusterClickListener(
+					new ClusterManager.OnClusterClickListener<SocialCrimeClusterItem>() {
+
+						@Override
+						public boolean onClusterClick(Cluster<SocialCrimeClusterItem> cluster) {
+							//returning true means it has to be declustered
+							if (focusOnCluster(cluster)) {
+								declusterSocialCrimeCluster(cluster);
+							}
+							return true;
+						}
+					});
 			mMapSocialCrimeClusterManager.setOnClusterItemInfoWindowClickListener(
 					new ClusterManager.OnClusterItemInfoWindowClickListener<SocialCrimeClusterItem>() {
 
 						@Override
 						public void onClusterItemInfoWindowClick(SocialCrimeClusterItem item) {
-							Intent details = new Intent(MainActivity.this, ReportDetailsActivity.class);
-							details.putExtra(ReportDetailsActivity.EXTRA_REPORT_TYPE,
-									ReportDetailsActivity.TYPE_SOCIALCRIME);
-							details.putExtra(ReportDetailsActivity.EXTRA_REPORT_ID,
-									item.getSocialCrime().getUrl());
-							startActivity(details);
+							getSocialCrimeDetails(item.getSocialCrime());
 						}
 					});
 			
@@ -361,6 +420,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 				
 				@Override
 				public void onCameraChange(CameraPosition cameraPosition) {
+					removeDeclusteredGroup(cameraPosition);
 					mMapCrimeClusterManager.onCameraChange(cameraPosition);
 					mMapSocialCrimeClusterManager.onCameraChange(cameraPosition);
 				}
@@ -380,6 +440,13 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 				
 				@Override
 				public void onInfoWindowClick(Marker marker) {
+
+					if (mDeclusteredCrimeMap.containsKey(marker)) {
+						getCrimeDetails(mDeclusteredCrimeMap.get(marker));
+					} else if (mDeclusteredSocialCrimeMap.containsKey(marker)) {
+						getSocialCrimeDetails(mDeclusteredSocialCrimeMap.get(marker));
+					}
+					
 					mMapCrimeClusterManager.onInfoWindowClick(marker);
 					mMapSocialCrimeClusterManager.onInfoWindowClick(marker);
 				}
@@ -418,14 +485,17 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 	protected void onResume() {
 		super.onResume();
 		
+		mTalkOptionsDialog.addListener(mTalkOptionsListener);
+		
 		mConnectionMonitor.addListener(mConnectionMonitorListener);
 		
 		IntentFilter filter = new IntentFilter(JavelinUserManager.ACTION_AGENCY_LOGOS_UPDATED);
 		registerReceiver(mLogoUpdatedReceiver, filter);
 		
 		mYank.setListener(this);
+		setYankToggleIcon();
 		
-		JavelinUserManager userManager = mJavelin.getUserManager();
+		final JavelinUserManager userManager = mJavelin.getUserManager();
 		boolean userPresent = userManager.isPresent();
 		
 		if (!userPresent) {
@@ -437,34 +507,17 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 				UiUtils.startActivityNoStack(this, WelcomeActivity.class);
 			}
 		} else {
+			//at this point let the SessionManager class deal with what's missing
+			SessionManager.getInstance(this).check(this);
+			
 			mUserBelongsToAgency = userManager.getUser().belongsToAgency();
-
-			boolean verifyPhone  = mUserBelongsToAgency && !userManager.getUser().isPhoneNumberVerified();
-			boolean acceptedContidions = LocalTermConditionAgreement.getTermConditionsAccepted(this);
 			
-			if (!mUserBelongsToAgency) {
-				mChat.setEnabled(false);
-			}
+			//enable/disable chat button if part or not of an organzation
+			mTalkOptionsDialog.setOptionEnable(TalkOptionsDialog.OPTION_CHAT, mUserBelongsToAgency);
 			
-			if (verifyPhone || !acceptedContidions) {
-				Intent welcome = new Intent(this, WelcomeActivity.class);
-				Intent finishStep = new Intent(this, RegistrationActivity.class);
-				
-				if (verifyPhone) {
-					finishStep.putExtra(RegistrationActivity.EXTRA_SET_STEP,
-							RegistrationActivity.STEP_PHONEVERIFICATION);
-				} else if (!acceptedContidions) {
-					finishStep.putExtra(RegistrationActivity.EXTRA_SET_STEP,
-							RegistrationActivity.STEP_TERMSCONDITIONS);
-				}
-				
-				Intent[] stack = new Intent[]{welcome, finishStep};
-				startActivities(stack);
-			} else {
-				if (getIntent() != null && getIntent().getBooleanExtra(EXTRA_DISCONNECTED, false)) {
-					mDisconnectedDialog = getDisconnectedDialog();
-					mDisconnectedDialog.show();
-				}
+			if (getIntent() != null && getIntent().getBooleanExtra(EXTRA_DISCONNECTED, false)) {
+				mDisconnectedDialog = getDisconnectedDialog();
+				mDisconnectedDialog.show();
 			}
 		}
 		
@@ -480,7 +533,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		mCrimesHandler.post(mSpotCrimesUpdater);
 		mCrimesHandler.post(mSocialCrimesUpdater);
 		
-		if (mEmergencyManager.isRunning()) {
+		if (EmergencyManagerUtils.isRealEmergencyActive(mEmergencyManager)) {
 			Intent alert = new Intent(this, AlertActivity.class);
 			startActivity(alert);
 		}
@@ -490,6 +543,8 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 	protected void onPause() {
 		super.onPause();
 
+		mTalkOptionsDialog.removeListener(mTalkOptionsListener);
+		
 		mConnectionMonitor.removeListener(mConnectionMonitorListener);
 		
 		mCrimesHandler.removeCallbacks(mSpotCrimesUpdater);
@@ -515,8 +570,12 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		if (!mDrawerLayout.isDrawerOpen(mDrawer)) {
-			int yankMenu = mYank.isEnabled() ? R.menu.yank : R.menu.yank_disabled;
-			getMenuInflater().inflate(yankMenu, menu);
+			/*
+			 * placeholder for eventual entourage (people) menu item to display right-side drawer
+			 * 
+			int menuRes = R.menu.entourage_people_placeholder;
+			getMenuInflater().inflate(menuRes, menu);
+			*/
 		}
 		return true;
 	}
@@ -532,14 +591,35 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 				mDrawerLayout.openDrawer(mDrawer);
 			}
 			return true;
-		case R.id.action_yank:
-			mYank.setEnabled(false);
-			break;
-		case R.id.action_yank_disabled:
-			mYank.setEnabled(true);
-			break;
 		}
 		return false;
+	}
+	
+	@Override
+	public void onBackPressed() {
+		if (mDrawerLayout.isDrawerOpen(mDrawer)) {
+			mDrawerLayout.closeDrawer(mDrawer);
+		} else {
+			super.onBackPressed();
+		}
+	}
+	
+	private void setYankToggleIcon() {
+		int resId = mYank.isEnabled() ?
+				R.drawable.ic_actionbar_yank : R.drawable.ic_actionbar_yank_disabled;
+		mYankToggle.setImageResource(resId);
+	}
+	
+	private void setTrackUser(boolean enabled) {
+		mTrackUser = enabled;
+		int iconResource = mTrackUser ? R.drawable.ts_icon_locateme : R.drawable.ts_icon_locateme_disabled;
+		mLocateMe.setImageResource(iconResource);
+	}
+	
+	private void animateZoomInCameraTo(double latitude, double longitude, float newZoom) {
+		LatLng to = new LatLng(latitude, longitude);
+		CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(to, newZoom);
+		mMap.animateCamera(cameraUpdate, 500, null);
 	}
 	
 	private void moveCameraToUser(boolean animate) {
@@ -609,7 +689,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 			actionBar.setCustomView(entourageActionBarView);
 			
 			//allow entourage to handle the map, user can tap 'locate me' if needed
-			mTrackUser = false;
+			setTrackUser(false);
 			mEntourageManager.drawOnMap(mMap);
 		}
 	}
@@ -741,6 +821,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		}
 		
 		//remove old ones
+		/*
 		for (Crime crime : mSpotCrimeRecords.values()) {
 			boolean old = SpotCrimeUtils.getDateTimeFromCrime(crime).isBefore(limit);
 			
@@ -753,6 +834,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 				}
 			}
 		}
+		*/
 		
 		mMapCrimeClusterManager.cluster();
 	}
@@ -795,6 +877,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 				}
 
 				//remove old ones (markers and records)
+				/*
 				for (SocialCrime crime : mSocialCrimesRecords.values()) {
 					boolean old = crime.getDate().isBefore(limit);
 
@@ -807,12 +890,17 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 						}
 					}
 				}
+				*/
 				
 				mMapSocialCrimeClusterManager.cluster();
 			}
 
 			@Override
 			public void onDetails(boolean ok, int code, SocialCrime socialCrime,
+					String errorIfNotOk) {}
+
+			@Override
+			public void onDelete(boolean ok, int code, SocialCrime socialCrime,
 					String errorIfNotOk) {}
 		};
 		
@@ -831,8 +919,185 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		}
 	}
 	
+	private void getCrimeDetails(Crime crime) {
+		Intent details = new Intent(MainActivity.this, ReportDetailsActivity.class);
+		details.putExtra(ReportDetailsActivity.EXTRA_REPORT_TYPE,
+				ReportDetailsActivity.TYPE_SPOTCRIME);
+		details.putExtra(ReportDetailsActivity.EXTRA_REPORT_ID,
+				crime.getId());
+		startActivity(details);
+	}
+	
+	private void getSocialCrimeDetails(SocialCrime socialCrime) {
+		Intent details = new Intent(MainActivity.this, ReportDetailsActivity.class);
+		details.putExtra(ReportDetailsActivity.EXTRA_REPORT_TYPE,
+				ReportDetailsActivity.TYPE_SOCIALCRIME);
+		details.putExtra(ReportDetailsActivity.EXTRA_REPORT_ID,
+				socialCrime.getUrl());
+		startActivity(details);
+	}
+	
+	private boolean focusOnCluster(Cluster<? extends ClusterItem> cluster) {
+		
+		clearDecluster();
+		
+		//stop tracking user
+		setTrackUser(false);
+		
+		float zoom = mMap.getCameraPosition().zoom;
+		float zoomMax = mMap.getMaxZoomLevel();
+		
+		if (zoom >= zoomMax) {
+			//if max level, decluster group
+			return true;
+		} else {
+			//else:
+			// get the remaining zoom levels to reach max, get part of it (e.g. a fourth of it)
+			// increase to 1 of floored down to 0
+			// add remaining value to current zoom value
+			// exception: if zoom difference is about 'difToFullZoom' and
+			//   cluster contains items with the same position, then decluster
+			final float difToFullZoom = 3;
+			
+			float zoomDif = zoomMax - zoom;
+			float zoomNew;
+			
+			//exception
+			if (zoomDif <= difToFullZoom) {
+				zoomNew = zoomMax;
+			} else {
+			
+				int zoomDifPart = (int) (Math.floor(zoomDif) / 4f);
+				
+				if (zoomDifPart <= 0) {
+					zoomDifPart = 1;
+				}
+				zoomNew = zoom + zoomDifPart;
+			}
+			animateZoomInCameraTo(cluster.getPosition().latitude,
+					cluster.getPosition().longitude, zoomNew);
+		}
+		return false;
+	}
+	
+	private void removeDeclusteredGroup(final CameraPosition camera) {
+		if (!mDeclusteredGroup || mDeclusteredCameraPosition == null) {
+			return;
+		}
+		
+		Location clusterPosition = new Location("");
+		clusterPosition.setLatitude(mDeclusteredCameraPosition.target.latitude);
+		clusterPosition.setLongitude(mDeclusteredCameraPosition.target.longitude);
+		
+		Location cameraPosition = new Location("");
+		cameraPosition.setLatitude(camera.target.latitude);
+		cameraPosition.setLongitude(camera.target.longitude);
+		
+		boolean clusterFarFromCamera = clusterPosition.distanceTo(cameraPosition) >= 25;
+		
+		//remove declustered items if user wants to be tracked, zoom changed, or distance
+		//  of the cluster is over X amount
+		if (mTrackUser
+				|| camera.zoom != mDeclusteredCameraPosition.zoom
+				|| clusterFarFromCamera) {
+			clearDecluster();
+		}
+	}
+	
+	private void setDecluster(final int size) {
+		mDeclusteredGroup = true;
+		mDeclusteredCameraPosition = mMap.getCameraPosition();
+		mDeclusteredMarkers = new Marker[size];
+	}
+	
+	private void clearDecluster() {
+		mDeclusteredCameraPosition = null;
+		mDeclusteredGroup = false;
+		if (mDeclusteredMarkers != null) {
+			for (Marker m : mDeclusteredMarkers) {
+				m.remove();
+			}
+		}
+		
+		if (mDeclusteredCrimeMap != null) {
+			mDeclusteredCrimeMap.clear();
+		}
+		
+		if (mDeclusteredSocialCrimeMap != null) {
+			mDeclusteredSocialCrimeMap.clear();
+		}
+	}
+	
+	private void declusterSocialCrimeCluster(Cluster<SocialCrimeClusterItem> cluster) {
+		
+		//get size and pass all cluster items to array for iteration
+		final int size = cluster.getSize();
+		final SocialCrimeClusterItem[] items = new SocialCrimeClusterItem[size];
+		cluster.getItems().toArray(items);
+
+		//initialize decluster flags
+		setDecluster(size);
+		
+		//get final variables to be used
+		final float radius = DECLUSTER_RADIUS;
+		final float eachAngle = 360f/(float)size;
+		
+		
+		for (int i = 0; i < cluster.getSize(); i++) {
+			
+			//build marker options, set radial position, create marker via map and store reference
+			
+			MarkerOptions defaultOptions = SocialReportsUtils.getMarkerOptionsOf(this,
+					items[i].getSocialCrime(), false);
+			
+			defaultOptions.position(
+					getCircleLatLngWithAngle(eachAngle * i, cluster.getPosition(), radius));
+			
+			mDeclusteredMarkers[i] = mMap.addMarker(defaultOptions);
+			mDeclusteredSocialCrimeMap.put(mDeclusteredMarkers[i], items[i].getSocialCrime());
+		}
+	}
+	
+	private void declusterCrimeCluster(Cluster<CrimeClusterItem> cluster) {
+
+		//get size and pass all cluster items to array for iteration
+		final int size = cluster.getSize();
+		final CrimeClusterItem[] items = new CrimeClusterItem[size];
+		cluster.getItems().toArray(items);
+
+		//initialize decluster flags
+		setDecluster(size);
+		
+		//get final variables to be used
+		final float radius = DECLUSTER_RADIUS;
+		final float eachAngle = 360f/(float)size;
+
+		for (int i = 0; i < cluster.getSize(); i++) {
+
+			//build marker options, set radial position, create marker via map and store reference
+
+			MarkerOptions defaultOptions = SpotCrimeUtils.getMarkerOptionsOf(this,
+					items[i].getCrime(), false);
+
+			LatLng pos = getCircleLatLngWithAngle(eachAngle * i, cluster.getPosition(), radius);
+
+			defaultOptions.position(pos);
+
+			mDeclusteredMarkers[i] = mMap.addMarker(defaultOptions);
+			mDeclusteredCrimeMap.put(mDeclusteredMarkers[i], items[i].getCrime());
+		}
+	}
+	
+	private LatLng getCircleLatLngWithAngle(float angle, LatLng center, float radius) {
+		//lat:y, lon:x (y uses sin, x uses cos)
+		float radians = (float) (angle * Math.PI / 180f);
+		return new LatLng(
+				center.latitude + radius * Math.sin(radians),
+				center.longitude + radius * Math.cos(radians));
+	}
+	
 	private AlertDialog getYankDialog() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this)
+		return new AlertDialog.Builder(this)
 				.setCancelable(true)
 				.setTitle(R.string.ts_main_dialog_yank_title)
 				.setMessage(R.string.ts_main_dialog_yank_message)
@@ -840,10 +1105,17 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 					
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
+						mYankDialog.cancel();
+					}
+				})
+				.setOnCancelListener(new DialogInterface.OnCancelListener() {
+					
+					@Override
+					public void onCancel(DialogInterface dialog) {
 						mYank.setEnabled(false);
 					}
-				});
-		return builder.create();
+				})
+				.create();
 	}
 	
 	private AlertDialog getDisconnectedDialog() {
@@ -901,13 +1173,16 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 	@Override
 	public void onStatusChange(int newStatus) {
 		
-		invalidateOptionsMenu();
+		Log.i("tapshield", "Yank status=" + newStatus);
+		
+		setYankToggleIcon();
 		
 		switch (newStatus) {
 		case YankManager.Status.DISABLED:
 			UiUtils.toastShort(this, getString(R.string.ts_main_toast_yank_disabled));
 			break;
 		case YankManager.Status.WAITING_HEADSET:
+			mYankDialog.dismiss();
 			mYankDialog.show();
 			break;
 		case YankManager.Status.ENABLED:

@@ -3,10 +3,11 @@ package com.tapshield.android.ui.activity;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.List;
 import java.util.Locale;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,6 +15,7 @@ import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -30,6 +32,7 @@ import com.tapshield.android.api.JavelinClient;
 import com.tapshield.android.api.JavelinSocialReportingManager.SocialReportingListener;
 import com.tapshield.android.api.model.SocialCrime;
 import com.tapshield.android.api.model.SocialCrime.SocialCrimes;
+import com.tapshield.android.api.model.User;
 import com.tapshield.android.api.spotcrime.SpotCrimeClient;
 import com.tapshield.android.api.spotcrime.SpotCrimeClient.SpotCrimeCallback;
 import com.tapshield.android.api.spotcrime.model.Crime;
@@ -48,13 +51,21 @@ public class ReportDetailsActivity extends BaseFragmentActivity
 	public static final int TYPE_SPOTCRIME = 100;
 	public static final int TYPE_SOCIALCRIME = 200;
 	
+	private JavelinClient mJavelin;
 	private ImageView mTypeImage;
+	private TextView mViewed;
 	private TextView mTypeText;
 	private TextView mDateTime;
 	private TextView mPlace;
 	private TextView mDescription;
+	private TextView mYourReport;
 	private FrameLayout mMediaContainer;
 	private ProgressBar mMediaLoading;
+	private ProgressDialog mLoading;
+	private boolean mCurrentUserIsTheReporter;
+	private String mCurrentUserUrl;
+	private ProgressDialog mDeleting;
+	private SocialCrime mSocialCrime;
 	
 	@Override
 	protected void onCreate(Bundle savedInstance) {
@@ -63,13 +74,21 @@ public class ReportDetailsActivity extends BaseFragmentActivity
 		
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
+		mViewed = (TextView) findViewById(R.id.report_text_viewed);
 		mTypeImage = (ImageView) findViewById(R.id.report_image_type);
 		mTypeText = (TextView) findViewById(R.id.report_text_type);
 		mDateTime = (TextView) findViewById(R.id.report_text_datetime);
 		mPlace = (TextView) findViewById(R.id.report_text_location);
 		mDescription = (TextView) findViewById(R.id.report_text_description);
+		mYourReport = (TextView) findViewById(R.id.report_text_yourreport);
 		mMediaContainer = (FrameLayout) findViewById(R.id.report_media_container);
 		mMediaLoading = (ProgressBar) findViewById(R.id.report_media_loading);
+		
+		mJavelin = JavelinClient.getInstance(this, TapShieldApplication.JAVELIN_CONFIG);
+		mCurrentUserUrl = mJavelin.getUserManager().getUser().url;
+		mCurrentUserIsTheReporter = false;
+		
+		mLoading = getLoadingDialog();
 		
 		Intent intent;
 		Bundle extras;
@@ -77,6 +96,8 @@ public class ReportDetailsActivity extends BaseFragmentActivity
 				&& ((extras = intent.getExtras()) != null)
 				&& extras.containsKey(EXTRA_REPORT_TYPE)
 				&& extras.containsKey(EXTRA_REPORT_ID)) {
+			
+			mLoading.show();
 			
 			boolean isSpotCrime = extras.getInt(EXTRA_REPORT_TYPE) == TYPE_SPOTCRIME;
 			
@@ -88,8 +109,7 @@ public class ReportDetailsActivity extends BaseFragmentActivity
 						.details(crimeId, this);
 			} else {
 				String urlId = extras.getString(EXTRA_REPORT_ID);
-				JavelinClient
-						.getInstance(this, TapShieldApplication.JAVELIN_CONFIG)
+				mJavelin
 						.getSocialReportingManager()
 						.details(urlId, this);
 			}
@@ -97,13 +117,62 @@ public class ReportDetailsActivity extends BaseFragmentActivity
 	}
 	
 	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		
+		if (mCurrentUserIsTheReporter) {
+			getMenuInflater().inflate(R.menu.delete, menu);
+			return true;
+		}
+		
+		return false;
+	}
+	
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			UiUtils.startActivityNoStack(this, MainActivity.class);
+			done();
+			return true;
+		case R.id.action_delete:
+			if (mCurrentUserIsTheReporter && mSocialCrime != null) {
+				mDeleting = getDeletingDialog();
+				mDeleting.show();
+				mJavelin
+						.getSocialReportingManager()
+						.deleteReport(mSocialCrime, this);
+			}
 			return true;
 		}
 		return false;
+	}
+	
+	private ProgressDialog getLoadingDialog() {
+		ProgressDialog d = new ProgressDialog(this);
+		d.setMessage(getString(R.string.ts_reporting_dialog_loading_message));
+		d.setIndeterminate(true);
+		d.setOnCancelListener(new DialogInterface.OnCancelListener() {
+			
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				done();
+			}
+		});
+		return d;
+	} 
+	
+	private ProgressDialog getDeletingDialog() {
+		ProgressDialog d = new ProgressDialog(this);
+		d.setMessage(getString(R.string.ts_reporting_dialog_delete_message));
+		d.setIndeterminate(true);
+		d.setOnCancelListener(new DialogInterface.OnCancelListener() {
+			
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				error(null);
+				done();
+			}
+		});
+		return d;
 	}
 	
 	private void setDetails(final String type, final String dateTime, final String place,
@@ -130,6 +199,8 @@ public class ReportDetailsActivity extends BaseFragmentActivity
 			mPlace.setText(place);
 			mPlace.setVisibility(View.VISIBLE);
 		}
+		
+		mLoading.dismiss();
 	}
 
 	//method only for social crimes (spotcrime does not support media)
@@ -185,10 +256,15 @@ public class ReportDetailsActivity extends BaseFragmentActivity
 
 	@Override
 	public void onDetail(boolean ok, Crime crime, String errorIfNotOk) {
-		setDetails(crime.getType(),
-				DateTimeUtils.getTimeLabelFor(SpotCrimeUtils.getDateTimeFromCrime(crime)),
-				crime.getAddress(), crime.getDescription(),
-				TYPE_SPOTCRIME);
+		if (ok) {
+			setDetails(crime.getType(),
+					DateTimeUtils.getTimeLabelFor(SpotCrimeUtils.getDateTimeFromCrime(crime)),
+					crime.getAddress(), crime.getDescription(),
+					TYPE_SPOTCRIME);
+		} else {
+			error(errorIfNotOk);
+			done();
+		}
 	}
 
 	@Override
@@ -199,9 +275,53 @@ public class ReportDetailsActivity extends BaseFragmentActivity
 
 	@Override
 	public void onDetails(boolean ok, int code, SocialCrime socialCrime, String errorIfNotOk) {
-		setDetails(socialCrime.getTypeName(), DateTimeUtils.getTimeLabelFor(socialCrime.getDate()),
-				null, socialCrime.getBody(), TYPE_SOCIALCRIME);
-		setMedia(socialCrime);
+		
+		if (ok) {
+			
+			mSocialCrime = socialCrime;
+			
+			if (socialCrime.getReporter().equals(mCurrentUserUrl)) {
+				mCurrentUserIsTheReporter = true;
+				invalidateOptionsMenu();
+				mYourReport.setVisibility(View.VISIBLE);
+			}
+			
+			if (socialCrime.isViewed()) {
+				final String message = String.format("Viewed by dispatcher (%s).", socialCrime.getViewedByName());
+				mViewed.setText(message);
+				mViewed.setVisibility(View.VISIBLE);
+			}
+			
+			setDetails(socialCrime.getTypeName(), DateTimeUtils.getTimeLabelFor(socialCrime.getDate()),
+					null, socialCrime.getBody(), TYPE_SOCIALCRIME);
+			setMedia(socialCrime);
+		} else {
+			error(errorIfNotOk);
+			done();
+		}
+	}
+	
+	@Override
+	public void onDelete(boolean ok, int code, SocialCrime socialCrime,
+			String errorIfNotOk) {
+		if (mDeleting != null) {
+			mDeleting.dismiss();
+		}
+		
+		if (ok) {
+			UiUtils.toastShort(this, "Report deleted!");
+			UiUtils.startActivityNoStack(this, MainActivity.class);
+		}
+	}
+	
+	private void error(String message) {
+		if (message != null) {
+			UiUtils.toastShort(this, message);
+		}
+	}
+	
+	private void done() {
+		finish();
 	}
 	
 	private class ImageDownloader extends AsyncTask<String, Void, Bitmap> {
@@ -241,6 +361,10 @@ public class ReportDetailsActivity extends BaseFragmentActivity
 		@Override
 		protected void onPostExecute(Bitmap result) {
 			super.onPostExecute(result);
+			if (isFinishing()) {
+				return;
+			}
+			
 			if (result == null) {
 				UiUtils.toastLong(ReportDetailsActivity.this, "Error downloading media. Try again later.");
 			} else {

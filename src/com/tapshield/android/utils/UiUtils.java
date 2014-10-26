@@ -1,5 +1,8 @@
 package com.tapshield.android.utils;
 
+import java.lang.reflect.Field;
+
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -19,9 +22,34 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tapshield.android.R;
+import com.tapshield.android.api.JavelinClient;
+import com.tapshield.android.api.JavelinUserManager;
+import com.tapshield.android.app.TapShieldApplication;
+import com.tapshield.android.ui.view.StepIndicator;
 
 public class UiUtils {
 
+	public static final void setDefaultFont(Context context,
+            String staticTypefaceFieldName, String fontAssetName) {
+        final Typeface regular = Typeface.createFromAsset(context.getAssets(),
+                fontAssetName);
+        replaceFont(staticTypefaceFieldName, regular);
+    }
+
+    protected static void replaceFont(String staticTypefaceFieldName,
+            final Typeface newTypeface) {
+        try {
+            final Field staticField = Typeface.class
+                    .getDeclaredField(staticTypefaceFieldName);
+            staticField.setAccessible(true);
+            staticField.set(null, newTypeface);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+	
 	public static final void toastShort(Context context, String message) {
 		toast(context, message, Toast.LENGTH_SHORT);
 	}
@@ -160,5 +188,54 @@ public class UiUtils {
 					.create()
 					.show();
 		}
+	}
+	
+	public static void setStepIndicatorInActionBar(final Activity activity, final int stepCurrent,
+			final int stepCount, final int titleResourceId) {
+		setStepIndicatorInActionBar(activity, stepCurrent, stepCount,
+				activity.getString(titleResourceId));
+	}
+	
+	public static void setStepIndicatorInActionBar(final Activity activity, final int stepCurrent,
+			final int stepCount, final String title) {
+		
+		View actionBarCustomView = activity.getLayoutInflater().inflate(R.layout.actionbar_steps, null);
+		actionBarCustomView.setLayoutParams(new ActionBar.LayoutParams(
+				ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT));
+		
+		TextView stepTitle = (TextView) actionBarCustomView.findViewById(R.id.actionbar_steps_text);
+		StepIndicator stepIndicator = (StepIndicator)
+				actionBarCustomView.findViewById(R.id.actionbar_steps_stepindicator);
+		
+		ActionBar actionBar = activity.getActionBar();
+		actionBar.setDisplayShowTitleEnabled(false);
+		actionBar.setDisplayShowCustomEnabled(true);
+		actionBar.setCustomView(actionBarCustomView);
+		
+		stepIndicator.setCurrentStep(stepCurrent);
+		stepIndicator.setNumSteps(stepCount);
+		stepTitle.setText(title);
+	}
+	
+	public static void welcomeUser(Context context) {
+		
+		JavelinUserManager userManager = JavelinClient
+				.getInstance(context, TapShieldApplication.JAVELIN_CONFIG)
+				.getUserManager();
+		
+		if (!userManager.isPresent()) {
+			return;
+		}
+		
+		String userFirstName = null;
+		try {
+			userFirstName = userManager.getUser().firstName;
+		} catch (Exception e) {
+			return;
+		}
+		
+		String welcome = context.getString(R.string.ts_misc_welcome_name_prefix) + " "
+				+ userFirstName + context.getString(R.string.ts_misc_welcome_name_suffix);
+		toastLong(context, welcome);
 	}
 }

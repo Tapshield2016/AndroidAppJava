@@ -87,27 +87,43 @@
         android:id="@id/fragment_login_linear_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true"
-        style="?android:attr/buttonBarStyle">
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true">
         
-        <Button
-            android:id="@+id/fragment_login_button_login"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="@string/ts_common_login"
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal"
+	        style="?android:attr/buttonBarStyle">
+	        
+	        <Button
+	            android:id="@+id/fragment_login_button_login"
+	            android:layout_width="0dp"
+	            android:layout_height="match_parent"
+	            android:layout_weight="1"
+	            android:text="@string/ts_common_login"
+	            android:textColor="@android:color/white"
+	            style="?android:attr/buttonBarButtonStyle"/>
+	        <Button
+	            android:id="@+id/fragment_login_button_signup"
+	            android:layout_width="0dp"
+	            android:layout_height="match_parent"
+	            android:layout_weight="1"
+	            android:text="@string/ts_common_signup"
+	            android:textColor="@android:color/white"
+	            style="?android:attr/buttonBarButtonStyle"/>
+	        
+	    </LinearLayout>
+	    
+	    <TextView
+            android:id="@+id/fragment_login_text_disclaimer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/ts_common_spacing_m"
+            android:gravity="center"
+            android:text="@string/ts_fragment_semiprofile_text_disclaimer"
+            android:textSize="@dimen/ts_common_text_s"
             android:textColor="@android:color/white"
-            style="?android:attr/buttonBarButtonStyle"/>
-        <Button
-            android:id="@+id/fragment_login_button_signup"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="@string/ts_common_signup"
-            android:textColor="@android:color/white"
-            style="?android:attr/buttonBarButtonStyle"/>
-        
+            android:textColorLink="@color/ts_brand_dark"/>
     </LinearLayout>
-
 </RelativeLayout>

@@ -1,10 +1,14 @@
 package com.tapshield.android.utils;
 
+import java.io.IOException;
 import java.util.List;
 
 import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.tapshield.android.api.model.Agency;
@@ -239,5 +243,87 @@ public class GeoUtils {
 	
 	private static double getLineMagnitude(double x1, double y1, double x2, double y2) {
 		return Math.sqrt(Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2));
+	}
+	
+	public static class GeocoderAsync {
+		public static void fromLocationName(Context context, String locationName, int maxResults,
+				GeocoderAsyncListener l) {
+			new GeocoderAsyncTask(context, locationName, maxResults, l).execute();
+		}
+		
+		private static class GeocoderAsyncTask extends AsyncTask<Void, Void, List<Address>> {
+
+			private Context mContext;
+			private String mLocationName;
+			private int mMaxResults;
+			private GeocoderAsyncListener mListener;
+			
+			public GeocoderAsyncTask(Context context, String locationName, int maxResults,
+					GeocoderAsyncListener l) {
+				mContext = context;
+				mLocationName =  locationName;
+				mMaxResults = maxResults;
+				mListener = l;
+			}
+			
+			@Override
+			protected List<Address> doInBackground(Void... params) {
+				List<Address> results = null;
+				try {
+					results = new Geocoder(mContext).getFromLocationName(mLocationName, mMaxResults);
+				} catch (IOException e) {
+					results = null;
+				}
+				return results;
+			}
+			
+			@Override
+			protected void onPostExecute(List<Address> results) {
+				super.onPostExecute(results);
+				if (mListener != null) {
+					
+					//check for present coordinates via recursive calls, returning null if 
+					//  all results are missing them (removing ones without them)
+					results = validateAddresses(results, 0);
+					boolean hasResults = results != null && !results.isEmpty();
+					
+					mListener.onGeocoderAsyncFinish(hasResults, results);
+				}
+			}
+			
+			private List<Address> validateAddresses(List<Address> addresses, int indexToCheck) {
+				if (addresses == null || addresses.isEmpty()) {
+					return null;
+				}
+				
+				 if (indexToCheck >= addresses.size()) {
+					 return addresses;
+				 }
+				
+				//recursively check for missing coordinates
+				
+				Address address = null;
+				for (int i = indexToCheck; i < addresses.size(); i++) {
+					address = addresses.get(i);
+					if (!address.hasLatitude() || !address.hasLongitude()) {
+						//if missing coordinates, remove result off the list, and stop loop
+						addresses.remove(i);
+						indexToCheck = i;
+						break;
+					} else if (i >= addresses.size() - 1) {
+						//if by the last result none are missing, return this object
+						return addresses;
+					}
+				}
+				
+				//getting here means the loop noticed missing coodinates and removed the result
+				//  check again
+				return validateAddresses(addresses, indexToCheck);
+			}
+		}
+	}
+	
+	public interface GeocoderAsyncListener {
+		void onGeocoderAsyncFinish(boolean hasResults, List<Address> results);
 	}
 }

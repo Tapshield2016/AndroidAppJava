@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.tapshield.android"
-    android:versionCode="127"
-    android:versionName="2.0.5.2" >
+    android:versionCode="131"
+    android:versionName="2.0.7" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -27,6 +27,11 @@
     <uses-permission android:name="android.permission.FLASHLIGHT" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    
+    <!-- to detect and keep track to 911 calls to notify authorities -->
+    
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
 
     <!-- extra permissions required by twilio -->
 
@@ -81,6 +86,11 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyCOLa7om8_AGznekq6jV6pNrCXTCj_JM3E" />
 
+        <!-- tag required by facebook sdk for fb signin -->
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/ts_social_facebook_app_id"/>
+        
         <!-- ACTIVITIES -->
 
 
@@ -205,7 +215,35 @@
             android:label="@string/ts_screen_security"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"/>
-
+        <activity
+            android:name="com.tapshield.android.ui.activity.GooglePlusLoginActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
+        <!-- activity required by facebook sdk for fb signin -->
+        <activity android:name="com.facebook.LoginActivity"/>
+        <activity
+            android:name="com.tapshield.android.ui.activity.FacebookLoginActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.tapshield.android.ui.activity.AddEmailActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.tapshield.android.ui.activity.VerifyPhoneActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.tapshield.android.ui.activity.SetOrganizationActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:uiOptions="splitActionBarWhenNarrow"
+            android:exported="true"/>
+        <activity
+            android:name="com.tapshield.android.ui.activity.EntourageDestinationActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
+        
         <!-- SERVICES -->
         <service
             android:name="com.twilio.client.TwilioClientService"
@@ -256,6 +294,14 @@
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
                 <category android:name="com.tapshield.android" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.tapshield.android.receiver.PhoneCallReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
             </intent-filter>
         </receiver>
     </application>

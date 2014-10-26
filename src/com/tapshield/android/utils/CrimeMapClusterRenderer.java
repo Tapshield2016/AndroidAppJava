@@ -1,7 +1,5 @@
 package com.tapshield.android.utils;
 
-import org.joda.time.DateTime;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
@@ -16,9 +14,7 @@ import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import com.google.maps.android.ui.IconGenerator;
 import com.tapshield.android.R;
-import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.model.CrimeClusterItem;
-import com.tapshield.android.ui.adapter.CrimeInfoWindowAdapter;
 
 public class CrimeMapClusterRenderer extends DefaultClusterRenderer<CrimeClusterItem> {
 
@@ -43,30 +39,17 @@ public class CrimeMapClusterRenderer extends DefaultClusterRenderer<CrimeCluster
 	
 	@Override
 	protected void onBeforeClusterItemRendered(CrimeClusterItem item, MarkerOptions markerOptions) {
-		final DateTime crimeDateTime = SpotCrimeUtils.getDateTimeFromCrime(item.getCrime());
-		final String type = item.getCrime().getType();
-		final int markerDrawableResource = SpotCrimeUtils.getDrawableOfType(type, true);
-		final String timeDifference = DateTimeUtils.getTimeLabelFor(crimeDateTime);
-
-		//set snippet with mandatory time label and source (optional address if not null)
-		final String source = mContext.getString(R.string.ts_misc_credits_spotcrime);
-		final String address = item.getCrime().getAddress() != null
-				? item.getCrime().getAddress() : new String();
-		final String snippet = timeDifference
-						+ CrimeInfoWindowAdapter.SEPARATOR + source
-						+ CrimeInfoWindowAdapter.SEPARATOR + address;
-
+		
+		MarkerOptions defaultOptions = SpotCrimeUtils.getMarkerOptionsOf(mContext,
+				item.getCrime(), false);
+		
 		markerOptions
-				.draggable(false)
-				.icon(BitmapDescriptorFactory.fromResource(markerDrawableResource))
-				.anchor(0.5f, 1.0f)
-				.alpha(
-						MapUtils.getOpacityOffTimeframeAt(
-								crimeDateTime.getMillis(),
-								new DateTime().minusHours(TapShieldApplication.CRIMES_PERIOD_HOURS).getMillis(),
-								TapShieldApplication.CRIMES_MARKER_OPACITY_MINIMUM))
-				.title(type)
-				.snippet(snippet);
+				.draggable(defaultOptions.isDraggable())
+				.icon(defaultOptions.getIcon())
+				.anchor(defaultOptions.getAnchorU(), defaultOptions.getAnchorV())
+				.alpha(defaultOptions.getAlpha())
+				.title(defaultOptions.getTitle())
+				.snippet(defaultOptions.getSnippet());
 	}
 	
 	@Override

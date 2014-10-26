@@ -2,8 +2,18 @@ package com.tapshield.android.utils;
 
 import java.util.Locale;
 
+import org.joda.time.DateTime;
+
+import android.content.Context;
+
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.tapshield.android.R;
 import com.tapshield.android.api.JavelinSocialReportingManager;
+import com.tapshield.android.api.model.SocialCrime;
+import com.tapshield.android.app.TapShieldApplication;
+import com.tapshield.android.ui.adapter.CrimeInfoWindowAdapter;
 
 
 public class SocialReportsUtils {
@@ -54,5 +64,39 @@ public class SocialReportsUtils {
 		}
 		
 		return resource;
+	}
+	
+	public final static MarkerOptions getMarkerOptionsOf(Context context, SocialCrime socialCrime,
+			boolean attachPosition) {
+		final String type = socialCrime.getTypeName();
+		final int markerDrawableResource = SocialReportsUtils.getDrawableOfType(type, true);
+		final String timeLabel = DateTimeUtils.getTimeLabelFor(socialCrime.getDate());
+
+		//set snippet with mandatory time label and source
+		final String source = context.getString(R.string.ts_misc_credits_socialcrimes);
+		final String snippet = socialCrime.isViewed()
+				+ CrimeInfoWindowAdapter.SEPARATOR + timeLabel
+				+ CrimeInfoWindowAdapter.SEPARATOR + source;
+		
+		final float alpha = MapUtils.getOpacityOffTimeframeAt(
+				socialCrime.getDate().getMillis(),
+				new DateTime()
+						.minusHours(TapShieldApplication.CRIMES_PERIOD_HOURS)
+						.getMillis(),
+				TapShieldApplication.CRIMES_MARKER_OPACITY_MINIMUM);
+		
+		MarkerOptions options = new MarkerOptions()
+				.draggable(false)
+				.icon(BitmapDescriptorFactory.fromResource(markerDrawableResource))
+				.anchor(0.5f, 1.0f)
+				.alpha(alpha)
+				.title(type)
+				.snippet(snippet);
+		
+		if (attachPosition) {
+			options.position(new LatLng(socialCrime.getLatitude(), socialCrime.getLongitude()));
+		}
+		
+		return options;
 	}
 }

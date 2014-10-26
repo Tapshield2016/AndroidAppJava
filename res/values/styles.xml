@@ -6,6 +6,7 @@
         <item name="android:actionBarStyle">@style/TapShieldActionBar</item>
         <item name="android:actionMenuTextColor">@color/ts_brand_light</item>
         <item name="android:windowBackground">@color/ts_activity_background</item>
+        <item name="android:typeface">normal</item>
         <!-- <item name="android:homeAsUpIndicator">@drawable/ic_up</item> -->
     </style>
     
@@ -27,6 +28,11 @@
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:drawableBottom">@drawable/ts_header</item>
+    </style>
+    
+    <style name="TapShieldButton" parent="@android:style/Widget.Holo.Light.Button">
+        <item name="android:background">@drawable/ts_background_button</item>
+        <item name="android:textColor">@color/ts_textcolor_button</item>
     </style>
     
     <style name="TapShieldHoloLightTheme.Trasparent">

@@ -16,6 +16,7 @@
             android:layout_width="@dimen/actionbar_steps_content_width"
             android:layout_height="0dp"
             android:layout_weight="0.5"
+            android:layout_gravity="center"
             android:gravity="center"
             android:textColor="@color/ts_brand_light"
             android:textStyle="bold"/>
@@ -26,8 +27,11 @@
             android:layout_width="@dimen/actionbar_steps_content_width"
             android:layout_height="0dp"
             android:layout_weight="0.5"
+            android:layout_gravity="center"
             android:paddingLeft="@dimen/actionbar_steps_stepindicator_horizontal_padding"
             android:paddingRight="@dimen/actionbar_steps_stepindicator_horizontal_padding"
+            android:paddingTop="@dimen/ts_common_spacing_xxs"
+            android:paddingBottom="@dimen/ts_common_spacing_xxs"
             pi:colorIncomplete="@color/ts_gray_light"
             pi:colorComplete="@color/ts_brand_light"/>
         

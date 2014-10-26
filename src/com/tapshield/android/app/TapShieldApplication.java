@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import android.app.Application;
+import android.content.Intent;
+import android.os.Bundle;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
@@ -13,16 +15,18 @@ import com.tapshield.android.api.JavelinChatManager.OnNewIncomingChatMessagesLis
 import com.tapshield.android.api.JavelinClient;
 import com.tapshield.android.api.JavelinConfig;
 import com.tapshield.android.api.JavelinMassAlertManager.OnNewMassAlertListener;
+import com.tapshield.android.api.JavelinSocialReportingManager.SocialReportingMessageListener;
 import com.tapshield.android.api.JavelinUserManager;
 import com.tapshield.android.api.googledirections.GoogleDirectionsConfig;
 import com.tapshield.android.api.googleplaces.GooglePlacesConfig;
 import com.tapshield.android.api.spotcrime.SpotCrimeConfig;
+import com.tapshield.android.manager.EmergencyManager;
 import com.tapshield.android.manager.Notifier;
+import com.tapshield.android.ui.activity.ChatActivity;
+import com.tapshield.android.utils.UiUtils;
 
 public class TapShieldApplication extends Application {
 
-	public static final String GOOGLE_PLUS_CLIENT_ID = "825930152848.apps.googleusercontent.com";
-	
 	public static JavelinConfig JAVELIN_CONFIG =
 			new JavelinConfig.Builder()
 			.baseUrl("https://demo.tapshield.com/")
@@ -87,6 +91,11 @@ public class TapShieldApplication extends Application {
 	public void onCreate() {
 		super.onCreate();
 		
+		final String fontAssetName = "Roboto-Light.ttf";
+		UiUtils.setDefaultFont(this, "DEFAULT", fontAssetName);
+		UiUtils.setDefaultFont(this, "MONOSPACE", fontAssetName);
+		UiUtils.setDefaultFont(this, "SANS_SERIF", fontAssetName);
+		
 		JavelinClient javelin = JavelinClient.getInstance(this, JAVELIN_CONFIG);
 		JavelinUserManager userManager = javelin.getUserManager();
 		
@@ -100,7 +109,7 @@ public class TapShieldApplication extends Application {
 	}
 	
 	private void registerListeners() {
-		JavelinClient javelin = JavelinClient.getInstance(this, JAVELIN_CONFIG);
+		final JavelinClient javelin = JavelinClient.getInstance(this, JAVELIN_CONFIG);
 		
 		javelin.getAlertManager().setAlertListener(new AlertListener() {
 			
@@ -144,6 +153,14 @@ public class TapShieldApplication extends Application {
 			@Override
 			public void onNewMassAlert() {
 				Notifier.getInstance(TapShieldApplication.this).notify(Notifier.NOTIFICATION_MASS);
+			}
+		});
+		
+		javelin.getSocialReportingManager().addMessageListener(new SocialReportingMessageListener() {
+			
+			@Override
+			public void onMessageReceive(String message, String id, Bundle extras) {
+				Notifier.getInstance(TapShieldApplication.this).notifyCrimeReport(message, id, extras);
 			}
 		});
 	}

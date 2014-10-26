@@ -89,10 +89,11 @@
         <!-- media -->
         
         <TextView
+            android:id="@+id/report_text_header_media"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/ts_common_spacing_m"
-            android:text="@string/ts_reporting_media_header"
+            android:text="@string/ts_reporting_media_header_add"
             style="@style/TapShieldHeader"/>
         
         <LinearLayout
@@ -110,13 +111,19 @@
                     android:id="@+id/report_button_media_existing"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Pick Existing..."/>
+                    android:text="Pick Existing..."
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    style="@style/TapShieldButton"/>
                 
                 <Button
                     android:id="@+id/report_button_media_new"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Create..."/>
+                    android:text="Create..."
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    style="@style/TapShieldButton"/>
             </LinearLayout>
             
             <FrameLayout
@@ -146,7 +153,7 @@
                     android:id="@+id/report_button_media_remove"
                     android:layout_width="52dp"
                     android:layout_height="52dp"
-                    android:src="@android:drawable/ic_menu_delete"
+                    android:src="@drawable/ic_actionbar_discard"
                     android:background="@drawable/ts_background_card"
                     android:layout_gravity="top|right"/>
             </FrameLayout>

@@ -10,7 +10,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,7 +24,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.gson.Gson;
 import com.tapshield.android.R;
 import com.tapshield.android.api.googledirections.GoogleDirections;
 import com.tapshield.android.api.googledirections.GoogleDirections.GoogleDirectionsListener;
@@ -131,12 +129,31 @@ public class PickRouteActivity extends BaseFragmentActivity
 		});
 		
 		mPager.setOnPageChangeListener(this);
-		
+
 		UiUtils.showTutorialTipDialog(
 				this,
 				R.string.ts_entourage_tutorial_route_title,
 				R.string.ts_entourage_tutorial_route_message,
 				"entourage.route");
+	}
+	
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+		
+		if (mMap != null) {
+			mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+				
+				@Override
+				public void onMapClick(LatLng location) {
+					int selectedRoute = getCloserRouteTo(location);
+					if (selectedRoute >= 0) {
+						mSelectedRoute = selectedRoute;
+						mPager.setCurrentItem(mSelectedRoute, true);
+					}
+				}
+			});
+		}
 	}
 	
 	@Override
@@ -287,9 +304,68 @@ public class PickRouteActivity extends BaseFragmentActivity
 			mRoutes = response.routes();
 			mPagerAdapter.setRoutes(mRoutes);
 			onPageSelected(0);
+			
+			//optimize processing time when tapping on the map for picking a route
+			mComparisonIncrease = new int[mRoutes.size()];
+			for (int i = 0; i < mRoutes.size(); i++) {
+				Route r = mRoutes.get(i);
+				mComparisonIncrease[i] = (int)
+						Math.ceil(Math.sqrt(r.decodedOverviewPolyline().size()));
+			}
+			
 		} else {
 			UiUtils.toastShort(this, response.status());
 		}
+	}
+	
+	//member variables to optimize processing time by storing route increase values on retrieval
+	private int[] mComparisonIncrease;
+	
+	private int getCloserRouteTo(LatLng pos) {
+		int route = -1;
+		
+		if (mRoutes != null && !mRoutes.isEmpty()) {
+			
+			float[] minDistances = new float[mRoutes.size()];
+			float[] distance = new float[1];
+			
+			//initialize minDistances with max values
+			for (int i = 0; i < minDistances.length; i++) {
+				minDistances[i] = Float.MAX_VALUE;
+			}
+			
+			//inspect each route
+			for (int i = 0; i < mRoutes.size(); i++) {
+				Route r = mRoutes.get(i);
+				
+				//get minimum distance off each route with the set increase 
+				for (int j = 0; j < r.decodedOverviewPolyline().size(); j += mComparisonIncrease[i]) {
+					Location.distanceBetween(
+							pos.latitude,
+							pos.longitude,
+							r.decodedOverviewPolyline().get(j).getLatitude(),
+							r.decodedOverviewPolyline().get(j).getLongitude(),
+							distance);
+					
+					//set new min distance for this route if new value is indeed the lowest yet
+					if (distance[0] < minDistances[i]) {
+						minDistances[i] = distance[0];
+					}
+				}
+			}
+			
+			route = 0;
+			
+			//return route with min distance
+			//default is 0, start from 1
+			for (int i = 1; i < minDistances.length; i++) {
+				if (minDistances[i] < minDistances[route]) {
+					route = i;
+				}
+			}
+		}
+		
+		return route;
 	}
 	
 	private void updateRoutesUi() {

@@ -13,7 +13,6 @@ import android.widget.EditText;
 import com.tapshield.android.R;
 import com.tapshield.android.api.JavelinClient;
 import com.tapshield.android.api.JavelinUserManager;
-import com.tapshield.android.api.model.User;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.manager.EmergencyManager;
 import com.tapshield.android.manager.TwilioManager;
