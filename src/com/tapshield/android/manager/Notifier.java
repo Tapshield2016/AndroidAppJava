@@ -129,7 +129,7 @@ public class Notifier {
 				.setPriority(NotificationCompat.PRIORITY_MAX)
 				.setContentTitle(title)
 				.setContentText(content)
-				//.setContentIntent(getPendingIntentWithBackStack(MainActivity.class, AlertActivity.class, ChatActivity.class))
+				.setContentIntent(getPendingIntentWithBackStack(MainActivity.class, ChatActivity.class))
 				.setContentIntent(pendingIntent)
 				.setAutoCancel(true);
 

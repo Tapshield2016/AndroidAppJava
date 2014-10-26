@@ -46,6 +46,7 @@ public class EmergencyManager implements LocationListener, OnStatusChangeListene
 	public static final int TYPE_START_REQUESTED = 3;
 	public static final int TYPE_HEADSET_UNPLUGGED = 4;
 	public static final int TYPE_CHAT = 5;
+	public static final int TYPE_911 = 6;
 	
 	private static enum InternalStatus {
 		INITIALIZED,
@@ -414,7 +415,7 @@ public class EmergencyManager implements LocationListener, OnStatusChangeListene
 			// 1. far enough of the boundaries (greater than cutoff distance), OR
 			// 2. if within cutoff distance of the boundaries, with good accuracy
 			if (inside && insideForCutoff) {
-				callIfNotChat();
+				callOnProperTypes();
 				mJavelinAlert.create(getType(), mLatestLocation);
 			} else {
 				cancelAndWarn();
@@ -440,9 +441,10 @@ public class EmergencyManager implements LocationListener, OnStatusChangeListene
 		return mType;
 	}
 	
-	private void callIfNotChat() {
+	//certain types need the call not to be made
+	private void callOnProperTypes() {
 		//start twilio if an emergency other than chat
-		if (getType() != TYPE_CHAT) {
+		if (getType() != TYPE_CHAT && getType() != TYPE_911) {
 			call();
 		}
 	}
@@ -507,6 +509,17 @@ public class EmergencyManager implements LocationListener, OnStatusChangeListene
 				Log.i("twilio", "requesting redial");
 				requestRedial();
 			}
+		}
+	}
+
+	/**
+	 * Utility method that notifies back-end of the duration of an emergency call if an
+	 * alert has been created
+	 * @param seconds back-end accepts an integer value to set number of seconds the call lasted
+	 */
+	public void updateCallDuration(int seconds) {
+		if (isRunning() && mAlerted && getType() == TYPE_911) {
+			mJavelinAlert.setEmergencyCallDuration(seconds);
 		}
 	}
 	
