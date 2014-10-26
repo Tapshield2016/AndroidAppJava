@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/ts_entourage_destination_pager_place_height"
+    android:orientation="horizontal"
+    android:weightSum="1"
+    android:padding="@dimen/ts_common_spacing_xs"
+    android:background="@drawable/ts_background_card">
+
+    <ImageView
+        android:id="@+id/entourage_destination_pager_place_image"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.3"
+        android:padding="@dimen/ts_common_spacing_xs"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_launcher"/>
+    
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.7"
+        android:orientation="vertical">
+        
+        <TextView
+            android:id="@+id/entourage_destination_pager_place_text_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:text="Washington Monument on Washington DC"
+            android:textSize="@dimen/ts_common_text_m"
+            android:ellipsize="marquee"/>
+        
+        <TextView
+            android:id="@+id/entourage_destination_pager_place_text_description"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:maxLines="2"
+            android:gravity="center_vertical"
+            android:text="descrip description"
+            android:textSize="@dimen/ts_common_text_s"/>
+        
+    </LinearLayout>
+    
+</LinearLayout>

@@ -272,10 +272,16 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 			@Override
 			public void onClick(View v) {
 				//Skip selection activities if Entourage is already set (running)
+				
+				/*
 				Class<? extends Activity> clss = EntourageManager.get(MainActivity.this).isSet() ?
 						PickArrivalContacts.class : PickDestinationActivity.class;
 				Intent activity = new Intent(MainActivity.this, clss);
 				startActivity(activity);
+				*/
+				
+				startActivity(
+						new Intent(MainActivity.this, EntourageDestinationActivity.class));
 			}
 		});
 		
