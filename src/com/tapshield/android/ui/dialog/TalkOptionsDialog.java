@@ -5,18 +5,20 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 
 import com.tapshield.android.R;
 import com.tapshield.android.api.JavelinClient;
 import com.tapshield.android.api.JavelinUserManager;
-import com.tapshield.android.api.model.User;
 import com.tapshield.android.app.TapShieldApplication;
 
 public class TalkOptionsDialog extends DialogFragment implements OnClickListener {
@@ -30,17 +32,21 @@ public class TalkOptionsDialog extends DialogFragment implements OnClickListener
 	private Button mChat;
 	private List<TalkOptionsListener> mListeners = new ArrayList<TalkOptionsListener>();
 	
+	private View[] mAnimatingViews;
+	
 	public TalkOptionsDialog() {
-		setStyle(STYLE_NORMAL, android.R.style.Theme_DeviceDefault_Dialog);
+		setStyle(STYLE_NO_FRAME, android.R.style.Theme_DeviceDefault_Light_Dialog);
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		getDialog().setTitle("Talk Options");
-		getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-		getDialog().getWindow().setBackgroundDrawable(null);
+		setupDialog();
 		return inflater.inflate(R.layout.dialog_talk_options, container);
+	}
+	
+	private void setupDialog() {
+		getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(0, 0, 0, 0)));
 	}
 	
 	@Override
@@ -48,6 +54,10 @@ public class TalkOptionsDialog extends DialogFragment implements OnClickListener
 		mOrg = (Button) view.findViewById(R.id.dialog_talk_options_org);
 		m911 = (Button) view.findViewById(R.id.dialog_talk_options_911);
 		mChat = (Button) view.findViewById(R.id.dialog_talk_options_chat);
+		
+		mOrg.setVisibility(View.INVISIBLE);
+		m911.setVisibility(View.INVISIBLE);
+		mChat.setVisibility(View.INVISIBLE);
 		
 		mOrg.setOnClickListener(this);
 		m911.setOnClickListener(this);
@@ -70,8 +80,19 @@ public class TalkOptionsDialog extends DialogFragment implements OnClickListener
 				mOrg.setText(alertMode);
 			}
 		}
+		
+		mAnimatingViews = new View[3];
+		mAnimatingViews[0] = mOrg;
+		mAnimatingViews[1] = m911;
+		mAnimatingViews[2] = mChat;
 	}
-
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		animateViews();
+	}
+	
 	@Override
 	public void onClick(View v) {
 		
@@ -92,6 +113,22 @@ public class TalkOptionsDialog extends DialogFragment implements OnClickListener
 
 	public void show(Activity activity) {
 		show(activity.getFragmentManager(), TalkOptionsDialog.class.getSimpleName());
+	}
+	
+	private void animateViews() {
+		
+		Animation anim = null;
+		
+		for (int i = 0; i < mAnimatingViews.length; i++) {
+			
+			anim = AnimationUtils.loadAnimation(getActivity(), R.anim.slide_in_up);
+			anim.setFillAfter(true);
+			anim.setStartOffset((i * anim.getDuration())/4l);
+			
+			if (mAnimatingViews[i] != null) {
+				mAnimatingViews[i].startAnimation(anim);
+			}
+		}
 	}
 	
 	public void setOptionEnable(int option, boolean enable) {

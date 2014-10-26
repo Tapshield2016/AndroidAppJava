@@ -23,7 +23,7 @@
                 <shape
                     android:shape="rectangle">
                     <solid
-                        android:color="@color/ts_brand_light"/>
+                        android:color="@color/ts_alert_red"/>
                 </shape>
             </item>
         </layer-list>
@@ -36,7 +36,7 @@
                 <shape
                     android:shape="rectangle">
                     <solid
-                        android:color="@color/ts_brand_dark"/>
+                        android:color="@color/ts_alert_authorities_text_color"/>
                 </shape>
             </item>
         </layer-list>

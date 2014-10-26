@@ -198,20 +198,16 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 				case TalkOptionsDialog.OPTION_ORG:
 					
 					if (mUserBelongsToAgency) {
-						
-						long duration = (long)
-								getResources().getInteger(R.integer.timer_emergency_requested_millis);
-						mEmergencyManager.start(duration, EmergencyManager.TYPE_START_REQUESTED);
+						mEmergencyManager.startNow(EmergencyManager.TYPE_START_REQUESTED);
 						UiUtils.startActivityNoStack(MainActivity.this, AlertActivity.class);
 					} else {
-						
-						String defaultEmergencyNumber = getString(R.string.ts_no_org_emergency_number);
-						UiUtils.MakePhoneCall(MainActivity.this, defaultEmergencyNumber);
+						UiUtils.MakePhoneCall(MainActivity.this,
+								EmergencyManagerUtils.getEmergencyNumber(MainActivity.this));
 					}
 					break;
 				case TalkOptionsDialog.OPTION_911:
 					UiUtils.MakePhoneCall(MainActivity.this,
-							getString(R.string.ts_no_org_emergency_number));
+							EmergencyManagerUtils.getEmergencyNumber(MainActivity.this));
 					break;
 				case TalkOptionsDialog.OPTION_CHAT:
 					UiUtils.startActivityNoStack(MainActivity.this, ChatActivity.class);
@@ -301,20 +297,6 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 				if (!mTalkOptionsDialog.isVisible()) {
 					mTalkOptionsDialog.show(MainActivity.this);
 				}
-				
-				/*
-				if (mUserBelongsToAgency) {
-				
-					long duration = (long)
-							getResources().getInteger(R.integer.timer_emergency_requested_millis);
-					mEmergencyManager.start(duration, EmergencyManager.TYPE_START_REQUESTED);
-					UiUtils.startActivityNoStack(MainActivity.this, AlertActivity.class);
-				} else {
-					
-					String defaultEmergencyNumber = getString(R.string.ts_no_org_emergency_number);
-					UiUtils.MakePhoneCall(MainActivity.this, defaultEmergencyNumber);
-				}
-				*/
 			}
 		});
 		
