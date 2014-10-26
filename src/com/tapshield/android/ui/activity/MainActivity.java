@@ -23,6 +23,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -70,6 +71,8 @@ import com.tapshield.android.model.CrimeClusterItem;
 import com.tapshield.android.model.SocialCrimeClusterItem;
 import com.tapshield.android.ui.adapter.CrimeInfoWindowAdapter;
 import com.tapshield.android.ui.adapter.NavigationListAdapter.NavigationItem;
+import com.tapshield.android.ui.dialog.TalkOptionsDialog;
+import com.tapshield.android.ui.dialog.TalkOptionsDialog.TalkOptionsListener;
 import com.tapshield.android.ui.fragment.NavigationFragment;
 import com.tapshield.android.ui.fragment.NavigationFragment.OnNavigationItemClickListener;
 import com.tapshield.android.ui.view.CircleButton;
@@ -77,6 +80,7 @@ import com.tapshield.android.ui.view.TickerTextSwitcher;
 import com.tapshield.android.utils.ConnectivityMonitor;
 import com.tapshield.android.utils.ConnectivityMonitor.ConnectivityMonitorListener;
 import com.tapshield.android.utils.CrimeMapClusterRenderer;
+import com.tapshield.android.utils.EmergencyManagerUtils;
 import com.tapshield.android.utils.MapUtils;
 import com.tapshield.android.utils.SocialCrimeMapClusterRenderer;
 import com.tapshield.android.utils.SocialReportsUtils;
@@ -96,12 +100,14 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 	private FrameLayout mDrawer;
 	private Location mUserLocation;
 	private GoogleMap mMap;
-	private ImageButton mEntourage;
+	private ImageButton mYankToggle;
 	private ImageButton mLocateMe;
-	private CircleButton mEmergency;
-	private CircleButton mChat;
+	private CircleButton mTalk;
+	private CircleButton mTrack;
 	private CircleButton mReport;
 	private TickerTextSwitcher mConnectionTicker;
+	private TalkOptionsDialog mTalkOptionsDialog;
+	private TalkOptionsListener mTalkOptionsListener;
 	
 	private EmergencyManager mEmergencyManager;
 	private JavelinClient mJavelin;
@@ -177,12 +183,38 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		
 		mDrawer = (FrameLayout) findViewById(R.id.main_drawer);
 		
-		mEntourage = (ImageButton) findViewById(R.id.main_imagebutton_entourage);
 		mLocateMe = (ImageButton) findViewById(R.id.main_imagebutton_locateuser);
-		mEmergency = (CircleButton) findViewById(R.id.main_circlebutton_alert);
-		mChat = (CircleButton) findViewById(R.id.main_circlebutton_chat);
+		mYankToggle = (ImageButton) findViewById(R.id.main_imagebutton_yank);
+		mTalk = (CircleButton) findViewById(R.id.main_circlebutton_alert);
+		mTrack = (CircleButton) findViewById(R.id.main_circlebutton_track);
 		mReport = (CircleButton) findViewById(R.id.main_circlebutton_report);
 		mConnectionTicker = (TickerTextSwitcher) findViewById(R.id.main_ticker);
+		mTalkOptionsDialog = new TalkOptionsDialog();
+		mTalkOptionsListener = new TalkOptionsListener() {
+			
+			@Override
+			public void onOptionSelect(int option) {
+				switch (option) {
+				case TalkOptionsDialog.OPTION_ORG:
+					
+					if (mUserBelongsToAgency) {
+						mEmergencyManager.startNow(EmergencyManager.TYPE_START_REQUESTED);
+						UiUtils.startActivityNoStack(MainActivity.this, AlertActivity.class);
+					} else {
+						UiUtils.MakePhoneCall(MainActivity.this,
+								EmergencyManagerUtils.getEmergencyNumber(MainActivity.this));
+					}
+					break;
+				case TalkOptionsDialog.OPTION_911:
+					UiUtils.MakePhoneCall(MainActivity.this,
+							EmergencyManagerUtils.getEmergencyNumber(MainActivity.this));
+					break;
+				case TalkOptionsDialog.OPTION_CHAT:
+					UiUtils.startActivityNoStack(MainActivity.this, ChatActivity.class);
+					break;
+				}
+			}
+		};
 		
 		mEmergencyManager = EmergencyManager.getInstance(this);
 		mJavelin = JavelinClient.getInstance(this, TapShieldApplication.JAVELIN_CONFIG);
@@ -223,10 +255,19 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 				loadAgencyLogo();
 			}
 		};
-		
+
 		mYankDialog = getYankDialog();
 		
-		mEntourage.setOnClickListener(new OnClickListener() {
+		mYankToggle.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				//toggle yank, i.e. set enable if disabled
+				mYank.setEnabled(mYank.isDisabled());
+			}
+		});
+		
+		mTrack.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -248,30 +289,14 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 			}
 		});
 		
-		mEmergency.setOnClickListener(new OnClickListener() {
+		mTalk.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				
-				if (mUserBelongsToAgency) {
-				
-					long duration = (long)
-							getResources().getInteger(R.integer.timer_emergency_requested_millis);
-					mEmergencyManager.start(duration, EmergencyManager.TYPE_START_REQUESTED);
-					UiUtils.startActivityNoStack(MainActivity.this, AlertActivity.class);
-				} else {
-					
-					String defaultEmergencyNumber = getString(R.string.ts_no_org_emergency_number);
-					UiUtils.MakePhoneCall(MainActivity.this, defaultEmergencyNumber);
+				if (!mTalkOptionsDialog.isVisible()) {
+					mTalkOptionsDialog.show(MainActivity.this);
 				}
-			}
-		});
-		
-		mChat.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				UiUtils.startActivityNoStack(MainActivity.this, ChatActivity.class);
 			}
 		});
 		
@@ -454,12 +479,15 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 	protected void onResume() {
 		super.onResume();
 		
+		mTalkOptionsDialog.addListener(mTalkOptionsListener);
+		
 		mConnectionMonitor.addListener(mConnectionMonitorListener);
 		
 		IntentFilter filter = new IntentFilter(JavelinUserManager.ACTION_AGENCY_LOGOS_UPDATED);
 		registerReceiver(mLogoUpdatedReceiver, filter);
 		
 		mYank.setListener(this);
+		setYankToggleIcon();
 		
 		final JavelinUserManager userManager = mJavelin.getUserManager();
 		boolean userPresent = userManager.isPresent();
@@ -479,7 +507,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 			mUserBelongsToAgency = userManager.getUser().belongsToAgency();
 			
 			//enable/disable chat button if part or not of an organzation
-			mChat.setEnabled(mUserBelongsToAgency);
+			mTalkOptionsDialog.setOptionEnable(TalkOptionsDialog.OPTION_CHAT, mUserBelongsToAgency);
 			
 			if (getIntent() != null && getIntent().getBooleanExtra(EXTRA_DISCONNECTED, false)) {
 				mDisconnectedDialog = getDisconnectedDialog();
@@ -499,7 +527,7 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		mCrimesHandler.post(mSpotCrimesUpdater);
 		mCrimesHandler.post(mSocialCrimesUpdater);
 		
-		if (mEmergencyManager.isRunning()) {
+		if (EmergencyManagerUtils.isRealEmergencyActive(mEmergencyManager)) {
 			Intent alert = new Intent(this, AlertActivity.class);
 			startActivity(alert);
 		}
@@ -509,6 +537,8 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 	protected void onPause() {
 		super.onPause();
 
+		mTalkOptionsDialog.removeListener(mTalkOptionsListener);
+		
 		mConnectionMonitor.removeListener(mConnectionMonitorListener);
 		
 		mCrimesHandler.removeCallbacks(mSpotCrimesUpdater);
@@ -534,8 +564,12 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		if (!mDrawerLayout.isDrawerOpen(mDrawer)) {
-			int yankMenu = mYank.isEnabled() ? R.menu.yank : R.menu.yank_disabled;
-			getMenuInflater().inflate(yankMenu, menu);
+			/*
+			 * placeholder for eventual entourage (people) menu item to display right-side drawer
+			 * 
+			int menuRes = R.menu.entourage_people_placeholder;
+			getMenuInflater().inflate(menuRes, menu);
+			*/
 		}
 		return true;
 	}
@@ -551,12 +585,6 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 				mDrawerLayout.openDrawer(mDrawer);
 			}
 			return true;
-		case R.id.action_yank:
-			mYank.setEnabled(false);
-			break;
-		case R.id.action_yank_disabled:
-			mYank.setEnabled(true);
-			break;
 		}
 		return false;
 	}
@@ -568,6 +596,12 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 		} else {
 			super.onBackPressed();
 		}
+	}
+	
+	private void setYankToggleIcon() {
+		int resId = mYank.isEnabled() ?
+				R.drawable.ic_actionbar_yank : R.drawable.ic_actionbar_yank_disabled;
+		mYankToggle.setImageResource(resId);
 	}
 	
 	private void setTrackUser(boolean enabled) {
@@ -1132,13 +1166,16 @@ public class MainActivity extends BaseFragmentActivity implements OnNavigationIt
 	@Override
 	public void onStatusChange(int newStatus) {
 		
-		invalidateOptionsMenu();
+		Log.i("tapshield", "Yank status=" + newStatus);
+		
+		setYankToggleIcon();
 		
 		switch (newStatus) {
 		case YankManager.Status.DISABLED:
 			UiUtils.toastShort(this, getString(R.string.ts_main_toast_yank_disabled));
 			break;
 		case YankManager.Status.WAITING_HEADSET:
+			mYankDialog.dismiss();
 			mYankDialog.show();
 			break;
 		case YankManager.Status.ENABLED:

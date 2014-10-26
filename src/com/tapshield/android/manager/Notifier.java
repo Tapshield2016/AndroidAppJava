@@ -74,7 +74,7 @@ public class Notifier {
 	private Notification buildConnecting() {
 		return getCommonBuilder()
 				.setContentText(mContext.getString(R.string.ts_notification_message_alert_connecting))
-				.setContentIntent(getPendingIntentWithBackStack(MainActivity.class, AlertActivity.class))
+				.setContentIntent(getPendingIntentWithBackStack(MainActivity.class))
 				.setAutoCancel(false)
 				.setOngoing(true)
 				.build();
@@ -83,7 +83,7 @@ public class Notifier {
 	private Notification buildEstablished() {
 		return getCommonBuilder()
 				.setContentText(mContext.getString(R.string.ts_notification_message_alert_established))
-				.setContentIntent(getPendingIntentWithBackStack(MainActivity.class, AlertActivity.class))
+				.setContentIntent(getPendingIntentWithBackStack(MainActivity.class))
 				.setAutoCancel(false)
 				.setOngoing(true)
 				.setOnlyAlertOnce(true)
@@ -93,9 +93,8 @@ public class Notifier {
 	private Notification buildCompleted() {
 		return getCommonBuilder()
 				.setContentText(mContext.getString(R.string.ts_notification_message_alert_completed))
-				.setContentIntent(getPendingIntentWithBackStack(MainActivity.class, AlertActivity.class))
-				.setAutoCancel(false)
-				.setOngoing(true)
+				.setAutoCancel(true)
+				.setOngoing(false)
 				.build();
 	}
 	
@@ -130,7 +129,7 @@ public class Notifier {
 				.setPriority(NotificationCompat.PRIORITY_MAX)
 				.setContentTitle(title)
 				.setContentText(content)
-				//.setContentIntent(getPendingIntentWithBackStack(MainActivity.class, AlertActivity.class, ChatActivity.class))
+				.setContentIntent(getPendingIntentWithBackStack(MainActivity.class, ChatActivity.class))
 				.setContentIntent(pendingIntent)
 				.setAutoCancel(true);
 

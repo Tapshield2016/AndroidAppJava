@@ -55,6 +55,8 @@ public class YankManager {
 				}
 			}
 		};
+		
+		notifyListener();
 	}
 	
 	public static YankManager get(Context c) {
@@ -67,12 +69,12 @@ public class YankManager {
 	}
 	
 	public void setEnabled(boolean toEnabled) {
-		if ((toEnabled && isEnabled())
-				|| (!toEnabled && isDisabled())) {
+		
+		if ((toEnabled && isEnabled()) || (!toEnabled && isDisabled())) {
 			notifyListener();
 			return;
 		}
-		
+
 		if (toEnabled) {
 			mEnabledRecently = true;
 			mContext.startService(mService);
@@ -126,7 +128,7 @@ public class YankManager {
 				.commit();
 	}
 	
-	//public static method to be accessed by the service
+	//public method to be accessed by the service
 	// which will keep it alive or recreate it if destroyed at any time
 	public void register() {
 		IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);

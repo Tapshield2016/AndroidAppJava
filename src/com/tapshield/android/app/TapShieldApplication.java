@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import android.app.Application;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -19,7 +20,9 @@ import com.tapshield.android.api.JavelinUserManager;
 import com.tapshield.android.api.googledirections.GoogleDirectionsConfig;
 import com.tapshield.android.api.googleplaces.GooglePlacesConfig;
 import com.tapshield.android.api.spotcrime.SpotCrimeConfig;
+import com.tapshield.android.manager.EmergencyManager;
 import com.tapshield.android.manager.Notifier;
+import com.tapshield.android.ui.activity.ChatActivity;
 import com.tapshield.android.utils.UiUtils;
 
 public class TapShieldApplication extends Application {
@@ -106,7 +109,7 @@ public class TapShieldApplication extends Application {
 	}
 	
 	private void registerListeners() {
-		JavelinClient javelin = JavelinClient.getInstance(this, JAVELIN_CONFIG);
+		final JavelinClient javelin = JavelinClient.getInstance(this, JAVELIN_CONFIG);
 		
 		javelin.getAlertManager().setAlertListener(new AlertListener() {
 			
