@@ -30,6 +30,11 @@
         <item name="android:drawableBottom">@drawable/ts_header</item>
     </style>
     
+    <style name="TapShieldButton" parent="@android:style/Widget.Holo.Light.Button">
+        <item name="android:background">@drawable/ts_background_button</item>
+        <item name="android:textColor">@color/ts_textcolor_button</item>
+    </style>
+    
     <style name="TapShieldHoloLightTheme.Trasparent">
         <item name="android:windowIsTranslucent">true</item>
 	    <item name="android:windowBackground">@android:color/transparent</item>

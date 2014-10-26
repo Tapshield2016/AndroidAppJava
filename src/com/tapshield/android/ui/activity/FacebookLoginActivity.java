@@ -2,6 +2,7 @@ package com.tapshield.android.ui.activity;
 
 import java.security.MessageDigest;
 import java.util.List;
+import java.util.Locale;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -14,18 +15,23 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.facebook.Request;
+import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.Session.NewPermissionsRequest;
 import com.facebook.Session.OpenRequest;
 import com.facebook.Session.StatusCallback;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
+import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import com.tapshield.android.R;
 import com.tapshield.android.api.JavelinClient;
 import com.tapshield.android.api.JavelinUserManager;
 import com.tapshield.android.api.JavelinUserManager.OnUserLogInListener;
+import com.tapshield.android.api.JavelinUtils.AsyncImageDownloaderToFile;
 import com.tapshield.android.api.model.User;
+import com.tapshield.android.api.model.UserProfile;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.utils.UiUtils;
 
@@ -41,6 +47,7 @@ public class FacebookLoginActivity extends Activity
 	private ImageView mImage;
 	private LoginButton mSignIn;
 	private UiLifecycleHelper mUiHelper;
+	private boolean mJavelinLoggingIn = false;
 	private boolean mRequestedLogOut;
 	private boolean mSecondChance;
 	private int mNewPermissionRetry;
@@ -173,7 +180,10 @@ public class FacebookLoginActivity extends Activity
 			} else {
 				final String accessToken = session.getAccessToken();
 		        Log.i(TAG, "Facebook access token retrieved.");
-				mUserManager.logInWithFacebook(accessToken, this);
+		        if (!mJavelinLoggingIn) {
+		        	mJavelinLoggingIn = true;
+		        	mUserManager.logInWithFacebook(accessToken, this);
+		        }
 			}
 	    } else if (state.isClosed()) {
 	        Log.i(TAG, "Logged out..." + state.toString());
@@ -192,19 +202,81 @@ public class FacebookLoginActivity extends Activity
 
 	@Override
 	public void onUserLogIn(boolean successful, User user, int errorCode, Throwable e) {
-		
 		if (successful) {
-			UiUtils.welcomeUser(this);
-			Session session = Session.getActiveSession();
-			if (session != null && session.isOpened()) {
-				mRequestedLogOut = true;
-				session.closeAndClearTokenInformation();
-			}
+			attachProfileToUser(user);
 		} else {
-			UiUtils.toastShort(this, "Error: " + e.getMessage());
+			error("Error: " + e.getMessage());
 		}
+	}
+	
+	private void signOut() {
+		Session session = Session.getActiveSession();
+		if (session != null && session.isOpened()) {
+			mRequestedLogOut = true;
+			session.closeAndClearTokenInformation();
+		}
+	}
+	
+	private void attachProfileToUser(final User user) {
 		
-		Class<? extends Activity> clss = successful ? MainActivity.class : WelcomeActivity.class;
-		UiUtils.startActivityNoStack(this, clss);
+		Request.newMeRequest(Session.getActiveSession(), new Request.GraphUserCallback() {
+			
+			@Override
+			public void onCompleted(GraphUser graphUser, Response response) {
+
+				if (graphUser == null) {
+					Log.d(TAG, "Error fetching 'me' request. Response=" + response);
+					done();
+					return;
+				}
+				
+				
+				final String birthdayRegex = "\\d{2}/\\d{2}/\\d{4}";
+				String birthday = graphUser.getBirthday();
+				if (birthday != null && !birthday.isEmpty() && birthday.matches(birthdayRegex)) {
+					user.profile.setDateOfBirth(birthday);
+				}
+				
+				String gender = graphUser.getProperty("gender").toString();
+				if (gender != null && !gender.isEmpty()) {
+					
+					gender = gender.toLowerCase(Locale.getDefault());
+					
+					if (gender.equals(UserProfile.GENDER_MALE.toLowerCase(Locale.getDefault()))) {
+						user.profile.setGender(UserProfile.GENDER_MALE);
+					} else if (gender.equals(UserProfile.GENDER_FEMALE.toLowerCase(Locale.getDefault()))) {
+						user.profile.setGender(UserProfile.GENDER_FEMALE);
+					}
+				}
+				
+				String userId = graphUser.getId();
+				if (userId != null && !userId.isEmpty()) {
+					final int size = 300;
+					final String pictureUrl = 
+							String.format("https://graph.facebook.com/%s/picture?height=%d&width=%d",
+									userId, size, size);
+					new AsyncImageDownloaderToFile(FacebookLoginActivity.this, pictureUrl,
+							UserProfile.getPictureFile(FacebookLoginActivity.this),
+							UserProfile.ACTION_USER_PICTURE_UPDATED, false)
+							.execute();
+				}
+				
+				mUserManager.setUser(user);
+				done();
+			}
+		}).executeAsync();
+	}
+	
+	private void done() {
+		UiUtils.welcomeUser(FacebookLoginActivity.this);
+		UiUtils.startActivityNoStack(FacebookLoginActivity.this, MainActivity.class);
+		signOut();
+	}
+	
+	private void error(final String errorMessage) {
+		if (errorMessage != null) {
+			UiUtils.toastShort(this, errorMessage);
+		}
+		UiUtils.startActivityNoStack(this, WelcomeActivity.class);
 	}
 }

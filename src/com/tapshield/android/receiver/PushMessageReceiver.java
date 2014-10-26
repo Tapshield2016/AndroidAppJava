@@ -6,23 +6,30 @@ import android.os.Bundle;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
+import com.tapshield.android.R;
 import com.tapshield.android.api.JavelinAlertManager;
 import com.tapshield.android.api.JavelinChatManager;
 import com.tapshield.android.api.JavelinClient;
 import com.tapshield.android.api.JavelinMassAlertManager;
+import com.tapshield.android.api.JavelinSocialReportingManager;
 import com.tapshield.android.api.JavelinUserManager;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.manager.EmergencyManager;
+import com.tapshield.android.ui.activity.MainActivity;
+import com.tapshield.android.utils.UiUtils;
 
 public class PushMessageReceiver extends WakefulBroadcastReceiver {
 
 	private static final String EXTRA_TYPE = "alert_type"; 
 	private static final String EXTRA_ALERT_ID = "alert_id";
 	private static final String EXTRA_MESSAGE = "message";
+	private static final String EXTRA_TITLE = "title";
 	
 	private static final String TYPE_ALERT_RECEIVED = "alert-received";
+	private static final String TYPE_COMPLETED = "alert-completed";
 	private static final String TYPE_MESSAGE_AVAILABLE = "chat-message-available";
 	private static final String TYPE_MASS_ALERT = "mass-alert";
+	private static final String TYPE_CRIME_TIP = "crime-report";
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -46,6 +53,21 @@ public class PushMessageReceiver extends WakefulBroadcastReceiver {
 			Log.i("javelin", "Alert acknowledged - id available (" + alertId + ")");
 			JavelinAlertManager alertManager = javelin.getAlertManager();
 			alertManager.notifyId(alertId);
+		} else if (type.equals(TYPE_COMPLETED)) {
+			Log.i("javelin", "Alert completed - id=" + alertId);
+			
+			String title = extras.getString(EXTRA_TITLE,
+					context.getString(R.string.ts_notification_message_alert_completed));
+
+			JavelinAlertManager alertManager = javelin.getAlertManager();
+			alertManager.notifyCompletion(alertId);
+			
+			//force-disarm
+			EmergencyManager.getInstance(context).cancel();
+			
+			//notify via broadcast interested parties
+			Intent broadcast = new Intent(EmergencyManager.ACTION_EMERGENCY_COMPLETE);
+			context.sendBroadcast(broadcast);
 		} else if (type.equals(TYPE_MESSAGE_AVAILABLE)) {
 			JavelinUserManager userManager = javelin.getUserManager();
 			JavelinAlertManager alertManager = javelin.getAlertManager();
@@ -62,7 +84,7 @@ public class PushMessageReceiver extends WakefulBroadcastReceiver {
 			
 			if (complete) {
 				Log.i("javelin", "Complete message received");
-				emergencyManager.notifyCompletion();
+				//emergencyManager.notifyCompletion();
 			}
 			
 			Log.i("javelin", "Message(s) available");
@@ -74,6 +96,10 @@ public class PushMessageReceiver extends WakefulBroadcastReceiver {
 			Log.i("javelin", "Mass alert available");
 			JavelinMassAlertManager massAlertManager = javelin.getMassAlertManager();
 			massAlertManager.fetch();
+		} else if (type.equals(TYPE_CRIME_TIP)) {
+			Log.i("javelin", "Tip-related message received");
+			JavelinSocialReportingManager socialReporting = javelin.getSocialReportingManager();
+			socialReporting.notifyMessage(message, alertId, extras);
 		}
 	}
 }

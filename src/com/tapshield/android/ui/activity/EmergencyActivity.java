@@ -113,6 +113,14 @@ public class EmergencyActivity extends BaseFragmentActivity {
 				promptUserForTwilioFailure();
 			}
 		};
+		
+		mCompletionReceiver = new BroadcastReceiver() {
+			
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				UiUtils.startActivityNoStack(EmergencyActivity.this, MainActivity.class);
+			}
+		};
 
 		mTwilioFailureDialog = getTwilioFailureDialog();
 	}
@@ -125,6 +133,9 @@ public class EmergencyActivity extends BaseFragmentActivity {
 		promptUserForTwilioFailure();
 		IntentFilter twilioFailureFilter = new IntentFilter(EmergencyManager.ACTION_TWILIO_FAILED);
 		registerReceiver(mTwilioFailureReceiver, twilioFailureFilter);
+		
+		IntentFilter completionFilter=  new IntentFilter(EmergencyManager.ACTION_EMERGENCY_COMPLETE);
+		registerReceiver(mCompletionReceiver, completionFilter);
 	}
 	
 	@Override
@@ -133,6 +144,7 @@ public class EmergencyActivity extends BaseFragmentActivity {
 		mProgressAnimator.cancel();
 		
 		unregisterReceiver(mTwilioFailureReceiver);
+		unregisterReceiver(mCompletionReceiver);
 	}
 	
 	@Override

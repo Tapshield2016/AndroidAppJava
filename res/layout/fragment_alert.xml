@@ -10,9 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginLeft="@dimen/ts_common_spacing_xxs"
-        android:layout_marginRight="@dimen/ts_common_spacing_xxs"
-        android:padding="@dimen/ts_common_spacing_xxs"
+        android:layout_marginLeft="@dimen/ts_common_spacing_s"
+        android:layout_marginRight="@dimen/ts_common_spacing_s"
+        android:padding="@dimen/ts_common_spacing_s"
         android:background="@drawable/ts_background_card">
         
         <TextView
@@ -56,7 +56,11 @@
                 android:text="@string/ts_fragment_alert_card_button_speaker"
                 android:textColor="@color/ts_gray_dark"
                 android:textSize="15sp"
-                style="?android:attr/buttonBarButtonStyle"/>
+                style="?android:attr/buttonBarButtonStyle"
+                android:background="@drawable/ts_background_button"
+                android:layout_marginLeft="@dimen/ts_common_spacing_m"
+                android:layout_marginRight="@dimen/ts_common_spacing_m"
+                android:paddingLeft="@dimen/ts_common_spacing_m"/>
         </LinearLayout>
     </LinearLayout>
     

@@ -19,11 +19,14 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.plus.Plus;
+import com.google.android.gms.plus.model.people.Person;
 import com.tapshield.android.R;
 import com.tapshield.android.api.JavelinClient;
 import com.tapshield.android.api.JavelinUserManager;
 import com.tapshield.android.api.JavelinUserManager.OnUserLogInListener;
+import com.tapshield.android.api.JavelinUtils.AsyncImageDownloaderToFile;
 import com.tapshield.android.api.model.User;
+import com.tapshield.android.api.model.UserProfile;
 import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.utils.UiUtils;
 
@@ -150,7 +153,6 @@ public class GooglePlusLoginActivity extends Activity
 		
 		@Override
 		protected void onPostExecute(String token) {
-			signOut();
 			if (token != null) {
 				Log.i(TAG, "G+ token retrieved=" + token);
 				mUserManager.logInWithGooglePlus(token, GooglePlusLoginActivity.this);
@@ -195,6 +197,8 @@ public class GooglePlusLoginActivity extends Activity
 	public void onUserLogIn(boolean successful, User user, int errorCode, Throwable e) {
 		
 		if (successful) {
+			attachProfileToUser(user);
+			signOut();
 			UiUtils.welcomeUser(this);
 		} else {
 			UiUtils.toastShort(this, "Error: " + e.getMessage());
@@ -202,5 +206,45 @@ public class GooglePlusLoginActivity extends Activity
 		
 		Class<? extends Activity> clss = successful ? MainActivity.class : WelcomeActivity.class;
 		UiUtils.startActivityNoStack(this, clss);
+	}
+	
+	private void attachProfileToUser(final User user) {
+		if (Plus.PeopleApi.getCurrentPerson(mClient) != null) {
+			Person currentPerson = Plus.PeopleApi.getCurrentPerson(mClient);
+
+			//given format: YYYY-MM-DD
+			if (currentPerson.hasBirthday()) {
+				String birthday = currentPerson.getBirthday();
+				String[] birthdayParts = birthday.split("-");
+				String backendBirthday =
+						birthdayParts[1] + "/" + birthdayParts[2] + "/" + birthdayParts[0];
+				user.profile.setDateOfBirth(backendBirthday);
+			}
+			
+			if (currentPerson.hasGender()) {
+				int gender = currentPerson.getGender();
+				if (gender == Person.Gender.MALE) {
+					user.profile.setGender(UserProfile.GENDER_MALE);
+				} else if (gender == Person.Gender.FEMALE) {
+					user.profile.setGender(UserProfile.GENDER_FEMALE);
+				}
+			}
+			
+			if (currentPerson.hasImage() && currentPerson.getImage().hasUrl()) {
+				String pictureUrl = currentPerson.getImage().getUrl();
+				final String sizeVar = "sz";
+				final String sizeRegex = sizeVar + "=\\d+";
+				final int newSize = 300;
+				
+				pictureUrl = pictureUrl.replaceAll(sizeRegex, sizeVar + "=" + newSize);
+				
+				new AsyncImageDownloaderToFile(GooglePlusLoginActivity.this, pictureUrl,
+						UserProfile.getPictureFile(GooglePlusLoginActivity.this),
+						UserProfile.ACTION_USER_PICTURE_UPDATED, false)
+						.execute();
+			}
+			
+			mUserManager.setUser(user);
+		}
 	}
 }

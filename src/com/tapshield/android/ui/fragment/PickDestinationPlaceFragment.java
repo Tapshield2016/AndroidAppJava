@@ -5,7 +5,6 @@ import java.util.List;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,15 +18,11 @@ import android.widget.SearchView.OnQueryTextListener;
 import android.widget.TextView;
 
 import com.tapshield.android.R;
-import com.tapshield.android.api.googleplaces.GooglePlacesClient;
-import com.tapshield.android.api.googleplaces.GooglePlacesClient.GooglePlacesListener;
-import com.tapshield.android.api.googleplaces.GooglePlacesRequest;
+import com.tapshield.android.api.googleplaces.GooglePlaces.GooglePlacesListener;
 import com.tapshield.android.api.googleplaces.model.Place;
-import com.tapshield.android.app.TapShieldApplication;
 import com.tapshield.android.utils.UiUtils;
 
-public class PickDestinationPlaceFragment extends BasePickDestinationFragment
-		implements GooglePlacesListener {
+public class PickDestinationPlaceFragment extends BasePickDestinationFragment {
 
 	private List<Place> mPlaces = new ArrayList<Place>();
 	private PlaceAdapter mAdapter;
@@ -94,13 +89,16 @@ public class PickDestinationPlaceFragment extends BasePickDestinationFragment
 	
 	private void searchPlacesFor(String query) {
 		setListShown(false);
+		/*
 		GooglePlacesRequest r =
 				new GooglePlacesRequest(TapShieldApplication.GOOGLEPLACES_CONFIG, query);
 		GooglePlacesClient
 				.get(TapShieldApplication.GOOGLEPLACES_CONFIG)
 				.request(r, this);
+		 */
 	}
 	
+	/*
 	@Override
 	public void onFinish(boolean ok, List<Place> places, String errorIfNotOk) {
 		setListShown(true);
@@ -113,6 +111,7 @@ public class PickDestinationPlaceFragment extends BasePickDestinationFragment
 			Log.e("aaa", "error loading places results=" + errorIfNotOk);
 		}
 	}
+	*/
 	
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {

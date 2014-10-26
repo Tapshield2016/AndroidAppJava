@@ -1,5 +1,9 @@
 package com.tapshield.android.ui.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -23,6 +27,7 @@ import com.tapshield.android.ui.adapter.AlertFragmentPagerAdapter;
 import com.tapshield.android.ui.fragment.DialpadFragment;
 import com.tapshield.android.ui.view.AnimatedVerticalColorProgress;
 import com.tapshield.android.utils.MapUtils;
+import com.tapshield.android.utils.UiUtils;
 
 public class AlertActivity extends BaseFragmentActivity
 		implements AnimatedVerticalColorProgress.Listener, OnPageChangeListener, LocationListener {
@@ -33,6 +38,7 @@ public class AlertActivity extends BaseFragmentActivity
 	private ViewPager mPager;
 	private AlertFragmentPagerAdapter mAdapter;
 	private LocationTracker mTracker;
+	private BroadcastReceiver mCompletionReceiver;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +74,14 @@ public class AlertActivity extends BaseFragmentActivity
 		mPager.setOnPageChangeListener(this);
 		
 		mTracker = LocationTracker.getInstance(this);
+		
+		mCompletionReceiver = new BroadcastReceiver() {
+			
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				UiUtils.startActivityNoStack(AlertActivity.this, MainActivity.class);
+			}
+		};
 	}
 	
 	@Override
@@ -110,10 +124,15 @@ public class AlertActivity extends BaseFragmentActivity
 		super.onResume();
 		mTracker.addLocationListener(this);
 		mTracker.start();
+		
+		IntentFilter completionFilter=  new IntentFilter(EmergencyManager.ACTION_EMERGENCY_COMPLETE);
+		registerReceiver(mCompletionReceiver, completionFilter);
 	}
 	
 	@Override
 	protected void onPause() {
+		unregisterReceiver(mCompletionReceiver);
+		
 		mTracker.removeLocationListener(this);
 		mTracker.stop();
 		super.onPause();

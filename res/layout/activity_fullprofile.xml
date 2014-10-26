@@ -42,12 +42,12 @@
                     <Button
                         android:id="@+id/fullprofile_button_picture"
                         android:layout_width="wrap_content"
-                        android:layout_height="18dp"
+                        android:layout_height="24dp"
                         android:text="Change"
                         android:textSize="12sp"
-                        android:textColor="@android:color/white"
-                        android:background="@color/ts_brand_light"
-                        android:layout_gravity="bottom|center_horizontal"/>
+                        android:textStyle="bold"
+                        android:layout_gravity="bottom|center_horizontal"
+                        style="@style/TapShieldButton"/>
                 </FrameLayout>
 
                 <TextView
@@ -98,7 +98,7 @@
 	        <Button
                 android:id="@+id/fullprofile_button_emergency"
                 android:text="@string/ts_fullprofile_button_emergency"
-                android:drawableLeft="@drawable/ts_profile_emerencycontact"
+                android:drawableLeft="@drawable/ts_profile_emergencycontact"
                 style="@style/TapShieldProfileButton"/>
 	    </LinearLayout>
 	    

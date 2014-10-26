@@ -81,11 +81,12 @@ public class SessionManager implements LocationListener, OnAgenciesFetchListener
 	@Override
 	public void onAgenciesFetch(boolean successful, List<Agency> agencies, Throwable exception) {
 		if (successful && !agencies.isEmpty()) {
+			
 			final int num = agencies.size();
-			String title = "Organization(s) Nearby";
-			String messagePrefix = num == 1 ? agencies.get(0).name + " is" : Integer.toString(num);
-			String messageSuffix = " nearby. Tap to " + (num == 1 ? "join" : "pick") + ".";
-			String message = messagePrefix + messageSuffix;
+			final boolean single = num == 1;
+			
+			String title = (single ? "Organization" : num + " Organizations") + " Nearby";
+			String message = single ? "Tap to join " + agencies.get(0).name : "Tap to pick"; 
 			
 			Intent parent = new Intent(mContext, MainActivity.class);
 			parent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

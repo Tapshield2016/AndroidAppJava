@@ -27,6 +27,11 @@
     <uses-permission android:name="android.permission.FLASHLIGHT" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    
+    <!-- to detect and keep track to 911 calls to notify authorities -->
+    
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
 
     <!-- extra permissions required by twilio -->
 
@@ -234,6 +239,10 @@
             android:screenOrientation="portrait"
             android:uiOptions="splitActionBarWhenNarrow"
             android:exported="true"/>
+        <activity
+            android:name="com.tapshield.android.ui.activity.EntourageDestinationActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
         
         <!-- SERVICES -->
         <service
@@ -285,6 +294,14 @@
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
                 <category android:name="com.tapshield.android" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.tapshield.android.receiver.PhoneCallReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
             </intent-filter>
         </receiver>
     </application>

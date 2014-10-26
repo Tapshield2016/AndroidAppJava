@@ -261,6 +261,9 @@ public class SocialReportingService extends Service implements SocialReportingLi
 
 	@Override
 	public void onDetails(boolean ok, int code, SocialCrime socialCrime, String errorIfNotOk) {}
+
+	@Override
+	public void onDelete(boolean ok, int code, SocialCrime socialCrime, String errorIfNotOk) {}
 	
 	private void reportError() {
 		
