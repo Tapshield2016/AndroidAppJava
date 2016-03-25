@@ -1,0 +1,26 @@
+[
+    {
+        "merged": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/res/merged/debug/xml/settings.xml",
+        "source": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/src/main/res/xml/settings.xml"
+    },
+    {
+        "merged": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/res/merged/debug/xml/settings.xml",
+        "source": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/src/main/res/xml/settings.xml"
+    },
+    {
+        "merged": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/res/merged/debug/xml/googleanalytics.xml",
+        "source": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/src/main/res/xml/googleanalytics.xml"
+    },
+    {
+        "merged": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/res/merged/debug/xml/googleanalytics.xml",
+        "source": "/Users/AdamShare/code/TapShield/AndroidAS/android/src/main/res/xml/googleanalytics.xml"
+    },
+    {
+        "merged": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/res/merged/debug/xml/googleanalytics.xml",
+        "source": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/src/main/res/xml/googleanalytics.xml"
+    },
+    {
+        "merged": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/res/merged/debug/xml/settings.xml",
+        "source": "/Users/AdamShare/code/TapShield/AndroidAS/android/src/main/res/xml/settings.xml"
+    }
+]

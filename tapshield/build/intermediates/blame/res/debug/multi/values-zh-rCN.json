@@ -1,0 +1,4501 @@
+[
+    {
+        "outputFile": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/res/merged/debug/values-zh-rCN/values-zh-rCN.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 105,
+                    "endColumn": 95,
+                    "endOffset": 196
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 280,
+                        "endColumn": 95,
+                        "endOffset": 371
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 3,
+                    "startColumn": 4,
+                    "startOffset": 201,
+                    "endColumn": 106,
+                    "endOffset": 303
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 5,
+                        "startColumn": 4,
+                        "startOffset": 376,
+                        "endColumn": 106,
+                        "endOffset": 478
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 4,
+                    "startColumn": 4,
+                    "startOffset": 308,
+                    "endColumn": 122,
+                    "endOffset": 426
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 6,
+                        "startColumn": 4,
+                        "startOffset": 483,
+                        "endColumn": 122,
+                        "endOffset": 601
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 5,
+                    "startColumn": 4,
+                    "startOffset": 431,
+                    "endColumn": 94,
+                    "endOffset": 521
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 7,
+                        "startColumn": 4,
+                        "startOffset": 606,
+                        "endColumn": 94,
+                        "endOffset": 696
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 6,
+                    "startColumn": 4,
+                    "startOffset": 526,
+                    "endColumn": 99,
+                    "endOffset": 621
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 8,
+                        "startColumn": 4,
+                        "startOffset": 701,
+                        "endColumn": 99,
+                        "endOffset": 796
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 7,
+                    "startColumn": 4,
+                    "startOffset": 626,
+                    "endColumn": 81,
+                    "endOffset": 703
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 9,
+                        "startColumn": 4,
+                        "startOffset": 801,
+                        "endColumn": 81,
+                        "endOffset": 878
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 8,
+                    "startColumn": 4,
+                    "startOffset": 708,
+                    "endColumn": 96,
+                    "endOffset": 800
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 10,
+                        "startColumn": 4,
+                        "startOffset": 883,
+                        "endColumn": 96,
+                        "endOffset": 975
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 9,
+                    "startColumn": 4,
+                    "startOffset": 805,
+                    "endColumn": 105,
+                    "endOffset": 906
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 11,
+                        "startColumn": 4,
+                        "startOffset": 980,
+                        "endColumn": 105,
+                        "endOffset": 1081
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 10,
+                    "startColumn": 4,
+                    "startOffset": 911,
+                    "endColumn": 77,
+                    "endOffset": 984
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 12,
+                        "startColumn": 4,
+                        "startOffset": 1086,
+                        "endColumn": 77,
+                        "endOffset": 1159
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 11,
+                    "startColumn": 4,
+                    "startOffset": 989,
+                    "endColumn": 95,
+                    "endOffset": 1080
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 13,
+                        "startColumn": 4,
+                        "startOffset": 1164,
+                        "endColumn": 95,
+                        "endOffset": 1255
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 12,
+                    "startColumn": 4,
+                    "startOffset": 1085,
+                    "endColumn": 95,
+                    "endOffset": 1176
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 14,
+                        "startColumn": 4,
+                        "startOffset": 1260,
+                        "endColumn": 95,
+                        "endOffset": 1351
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 13,
+                    "startColumn": 4,
+                    "startOffset": 1181,
+                    "endColumn": 94,
+                    "endOffset": 1271
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 15,
+                        "startColumn": 4,
+                        "startOffset": 1356,
+                        "endColumn": 94,
+                        "endOffset": 1446
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 14,
+                    "startColumn": 4,
+                    "startOffset": 1276,
+                    "endColumn": 96,
+                    "endOffset": 1368
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 16,
+                        "startColumn": 4,
+                        "startOffset": 1451,
+                        "endColumn": 96,
+                        "endOffset": 1543
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 15,
+                    "startColumn": 4,
+                    "startOffset": 1373,
+                    "endColumn": 94,
+                    "endOffset": 1463
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 17,
+                        "startColumn": 4,
+                        "startOffset": 1548,
+                        "endColumn": 94,
+                        "endOffset": 1638
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 16,
+                    "startColumn": 4,
+                    "startOffset": 1468,
+                    "endColumn": 97,
+                    "endOffset": 1561
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 18,
+                        "startColumn": 4,
+                        "startOffset": 1643,
+                        "endColumn": 97,
+                        "endOffset": 1736
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 17,
+                    "startColumn": 4,
+                    "startOffset": 1566,
+                    "endColumn": 111,
+                    "endOffset": 1673
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 19,
+                        "startColumn": 4,
+                        "startOffset": 1741,
+                        "endColumn": 111,
+                        "endOffset": 1848
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 18,
+                    "startColumn": 4,
+                    "startOffset": 1678,
+                    "endColumn": 93,
+                    "endOffset": 1767
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 20,
+                        "startColumn": 4,
+                        "startOffset": 1853,
+                        "endColumn": 93,
+                        "endOffset": 1942
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 19,
+                    "startColumn": 4,
+                    "startOffset": 1772,
+                    "endColumn": 82,
+                    "endOffset": 1850
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 168,
+                        "endColumn": 82,
+                        "endOffset": 246
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 20,
+                    "startColumn": 4,
+                    "startOffset": 1855,
+                    "endColumn": 88,
+                    "endOffset": 1939
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 5,
+                        "startColumn": 4,
+                        "startOffset": 251,
+                        "endColumn": 88,
+                        "endOffset": 335
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 21,
+                    "startColumn": 4,
+                    "startOffset": 1944,
+                    "endColumn": 91,
+                    "endOffset": 2031
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 6,
+                        "startColumn": 4,
+                        "startOffset": 340,
+                        "endColumn": 91,
+                        "endOffset": 427
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 22,
+                    "startColumn": 4,
+                    "startOffset": 2036,
+                    "endColumn": 61,
+                    "endOffset": 2093
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 7,
+                        "startColumn": 4,
+                        "startOffset": 432,
+                        "endColumn": 61,
+                        "endOffset": 489
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 23,
+                    "startColumn": 4,
+                    "startOffset": 2098,
+                    "endColumn": 64,
+                    "endOffset": 2158
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 8,
+                        "startColumn": 4,
+                        "startOffset": 494,
+                        "endColumn": 64,
+                        "endOffset": 554
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 24,
+                    "startColumn": 4,
+                    "startOffset": 2163,
+                    "endColumn": 56,
+                    "endOffset": 2215
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 9,
+                        "startColumn": 4,
+                        "startOffset": 559,
+                        "endColumn": 56,
+                        "endOffset": 611
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 25,
+                    "startColumn": 4,
+                    "startOffset": 2220,
+                    "endColumn": 67,
+                    "endOffset": 2283
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 10,
+                        "startColumn": 4,
+                        "startOffset": 616,
+                        "endColumn": 67,
+                        "endOffset": 679
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 26,
+                    "startColumn": 4,
+                    "startOffset": 2288,
+                    "endColumn": 67,
+                    "endOffset": 2351
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 11,
+                        "startColumn": 4,
+                        "startOffset": 684,
+                        "endColumn": 67,
+                        "endOffset": 747
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 27,
+                    "startColumn": 4,
+                    "startOffset": 2356,
+                    "endColumn": 84,
+                    "endOffset": 2436
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 12,
+                        "startColumn": 4,
+                        "startOffset": 752,
+                        "endColumn": 84,
+                        "endOffset": 832
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 28,
+                    "startColumn": 4,
+                    "startOffset": 2441,
+                    "endColumn": 68,
+                    "endOffset": 2505
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 13,
+                        "startColumn": 4,
+                        "startOffset": 837,
+                        "endColumn": 68,
+                        "endOffset": 901
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 29,
+                    "startColumn": 4,
+                    "startOffset": 2510,
+                    "endColumn": 68,
+                    "endOffset": 2574
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 14,
+                        "startColumn": 4,
+                        "startOffset": 906,
+                        "endColumn": 68,
+                        "endOffset": 970
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 30,
+                    "startColumn": 4,
+                    "startOffset": 2579,
+                    "endColumn": 75,
+                    "endOffset": 2650
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 15,
+                        "startColumn": 4,
+                        "startOffset": 975,
+                        "endColumn": 75,
+                        "endOffset": 1046
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 31,
+                    "startColumn": 4,
+                    "startOffset": 2655,
+                    "endColumn": 91,
+                    "endOffset": 2742
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 16,
+                        "startColumn": 4,
+                        "startOffset": 1051,
+                        "endColumn": 91,
+                        "endOffset": 1138
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 32,
+                    "startColumn": 4,
+                    "startOffset": 2747,
+                    "endColumn": 60,
+                    "endOffset": 2803
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 17,
+                        "startColumn": 4,
+                        "startOffset": 1143,
+                        "endColumn": 60,
+                        "endOffset": 1199
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 33,
+                    "startColumn": 4,
+                    "startOffset": 2808,
+                    "endColumn": 61,
+                    "endOffset": 2865
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 18,
+                        "startColumn": 4,
+                        "startOffset": 1204,
+                        "endColumn": 61,
+                        "endOffset": 1261
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 34,
+                    "startColumn": 4,
+                    "startOffset": 2870,
+                    "endColumn": 85,
+                    "endOffset": 2951
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 19,
+                        "startColumn": 4,
+                        "startOffset": 1266,
+                        "endColumn": 85,
+                        "endOffset": 1347
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 35,
+                    "startColumn": 4,
+                    "startOffset": 2956,
+                    "endColumn": 188,
+                    "endOffset": 3140
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 24,
+                        "startColumn": 4,
+                        "startOffset": 2974,
+                        "endColumn": 192,
+                        "endOffset": 3162
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 36,
+                    "startColumn": 4,
+                    "startOffset": 3145,
+                    "endColumn": 117,
+                    "endOffset": 3258
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 10,
+                        "startColumn": 4,
+                        "startOffset": 1163,
+                        "endColumn": 117,
+                        "endOffset": 1276
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 37,
+                    "startColumn": 4,
+                    "startOffset": 3263,
+                    "endColumn": 160,
+                    "endOffset": 3419
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 9,
+                        "startColumn": 4,
+                        "startOffset": 998,
+                        "endColumn": 164,
+                        "endOffset": 1158
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 38,
+                    "startColumn": 4,
+                    "startOffset": 3424,
+                    "endColumn": 116,
+                    "endOffset": 3536
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 8,
+                        "startColumn": 4,
+                        "startOffset": 881,
+                        "endColumn": 116,
+                        "endOffset": 993
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 39,
+                    "startColumn": 4,
+                    "startOffset": 3541,
+                    "endColumn": 118,
+                    "endOffset": 3655
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 7,
+                        "startColumn": 4,
+                        "startOffset": 762,
+                        "endColumn": 118,
+                        "endOffset": 876
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 40,
+                    "startColumn": 4,
+                    "startOffset": 3660,
+                    "endColumn": 169,
+                    "endOffset": 3825
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 5,
+                        "startColumn": 4,
+                        "startOffset": 411,
+                        "endColumn": 173,
+                        "endOffset": 580
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 41,
+                    "startColumn": 4,
+                    "startOffset": 3830,
+                    "endColumn": 172,
+                    "endOffset": 3998
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 6,
+                        "startColumn": 4,
+                        "startOffset": 585,
+                        "endColumn": 176,
+                        "endOffset": 757
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 42,
+                    "startColumn": 4,
+                    "startOffset": 4003,
+                    "endColumn": 117,
+                    "endOffset": 4116
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 293,
+                        "endColumn": 117,
+                        "endOffset": 406
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 43,
+                    "startColumn": 4,
+                    "startOffset": 4121,
+                    "endColumn": 128,
+                    "endOffset": 4245
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 19,
+                        "startColumn": 4,
+                        "startOffset": 2345,
+                        "endColumn": 128,
+                        "endOffset": 2469
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 44,
+                    "startColumn": 4,
+                    "startOffset": 4250,
+                    "endColumn": 109,
+                    "endOffset": 4355
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 18,
+                        "startColumn": 4,
+                        "startOffset": 2235,
+                        "endColumn": 109,
+                        "endOffset": 2340
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 45,
+                    "startColumn": 4,
+                    "startOffset": 4360,
+                    "endColumn": 135,
+                    "endOffset": 4491
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 17,
+                        "startColumn": 4,
+                        "startOffset": 2099,
+                        "endColumn": 135,
+                        "endOffset": 2230
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 46,
+                    "startColumn": 4,
+                    "startOffset": 4496,
+                    "endColumn": 110,
+                    "endOffset": 4602
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 16,
+                        "startColumn": 4,
+                        "startOffset": 1988,
+                        "endColumn": 110,
+                        "endOffset": 2094
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 47,
+                    "startColumn": 4,
+                    "startOffset": 4607,
+                    "endColumn": 122,
+                    "endOffset": 4725
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 3,
+                        "startColumn": 4,
+                        "startOffset": 170,
+                        "endColumn": 122,
+                        "endOffset": 288
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 48,
+                    "startColumn": 4,
+                    "startOffset": 4730,
+                    "endColumn": 128,
+                    "endOffset": 4854
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 28,
+                        "startColumn": 4,
+                        "startOffset": 3520,
+                        "endColumn": 128,
+                        "endOffset": 3644
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 49,
+                    "startColumn": 4,
+                    "startOffset": 4859,
+                    "endColumn": 117,
+                    "endOffset": 4972
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 27,
+                        "startColumn": 4,
+                        "startOffset": 3402,
+                        "endColumn": 117,
+                        "endOffset": 3515
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 50,
+                    "startColumn": 4,
+                    "startOffset": 4977,
+                    "endColumn": 122,
+                    "endOffset": 5095
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 26,
+                        "startColumn": 4,
+                        "startOffset": 3279,
+                        "endColumn": 122,
+                        "endOffset": 3397
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 51,
+                    "startColumn": 4,
+                    "startOffset": 5100,
+                    "endColumn": 111,
+                    "endOffset": 5207
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 25,
+                        "startColumn": 4,
+                        "startOffset": 3167,
+                        "endColumn": 111,
+                        "endOffset": 3274
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 52,
+                    "startColumn": 4,
+                    "startOffset": 5212,
+                    "endColumn": 175,
+                    "endOffset": 5383
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/8.4.0/res/values-zh-rCN/common_strings.xml",
+                    "position": {
+                        "startLine": 3,
+                        "startColumn": 4,
+                        "startOffset": 170,
+                        "endColumn": 179,
+                        "endOffset": 345
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 53,
+                    "startColumn": 4,
+                    "startOffset": 5388,
+                    "endColumn": 189,
+                    "endOffset": 5573
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 21,
+                        "startColumn": 4,
+                        "startOffset": 2592,
+                        "endColumn": 193,
+                        "endOffset": 2781
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 54,
+                    "startColumn": 4,
+                    "startOffset": 5578,
+                    "endColumn": 117,
+                    "endOffset": 5691
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 20,
+                        "startColumn": 4,
+                        "startOffset": 2474,
+                        "endColumn": 117,
+                        "endOffset": 2587
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 55,
+                    "startColumn": 4,
+                    "startOffset": 5696,
+                    "endColumn": 102,
+                    "endOffset": 5794
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 22,
+                        "startColumn": 4,
+                        "startOffset": 2786,
+                        "endColumn": 102,
+                        "endOffset": 2884
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 56,
+                    "startColumn": 4,
+                    "startOffset": 5799,
+                    "endColumn": 160,
+                    "endOffset": 5955
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 12,
+                        "startColumn": 4,
+                        "startOffset": 1398,
+                        "endColumn": 164,
+                        "endOffset": 1558
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 57,
+                    "startColumn": 4,
+                    "startOffset": 5960,
+                    "endColumn": 116,
+                    "endOffset": 6072
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 11,
+                        "startColumn": 4,
+                        "startOffset": 1281,
+                        "endColumn": 116,
+                        "endOffset": 1393
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 58,
+                    "startColumn": 4,
+                    "startOffset": 6077,
+                    "endColumn": 162,
+                    "endOffset": 6235
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 15,
+                        "startColumn": 4,
+                        "startOffset": 1821,
+                        "endColumn": 166,
+                        "endOffset": 1983
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 59,
+                    "startColumn": 4,
+                    "startOffset": 6240,
+                    "endColumn": 119,
+                    "endOffset": 6355
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 14,
+                        "startColumn": 4,
+                        "startOffset": 1701,
+                        "endColumn": 119,
+                        "endOffset": 1816
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 60,
+                    "startColumn": 4,
+                    "startOffset": 6360,
+                    "endColumn": 137,
+                    "endOffset": 6493
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 13,
+                        "startColumn": 4,
+                        "startOffset": 1563,
+                        "endColumn": 137,
+                        "endOffset": 1696
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 61,
+                    "startColumn": 4,
+                    "startOffset": 6498,
+                    "endColumn": 84,
+                    "endOffset": 6578
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 23,
+                        "startColumn": 4,
+                        "startOffset": 2889,
+                        "endColumn": 84,
+                        "endOffset": 2969
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 62,
+                    "startColumn": 4,
+                    "startOffset": 6583,
+                    "endColumn": 86,
+                    "endOffset": 6665
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 29,
+                        "startColumn": 4,
+                        "startOffset": 3649,
+                        "endColumn": 86,
+                        "endOffset": 3731
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 63,
+                    "startColumn": 4,
+                    "startOffset": 6670,
+                    "endColumn": 103,
+                    "endOffset": 6769
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 30,
+                        "startColumn": 4,
+                        "startOffset": 3736,
+                        "endColumn": 103,
+                        "endOffset": 3835
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 64,
+                    "startColumn": 4,
+                    "startOffset": 6774,
+                    "endColumn": 57,
+                    "endOffset": 6827
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 22,
+                        "startColumn": 4,
+                        "startOffset": 1482,
+                        "endColumn": 57,
+                        "endOffset": 1535
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 65,
+                    "startColumn": 4,
+                    "startOffset": 6832,
+                    "endColumn": 102,
+                    "endOffset": 6930
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 282,
+                        "endColumn": 102,
+                        "endOffset": 380
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 66,
+                    "startColumn": 4,
+                    "startOffset": 6935,
+                    "endColumn": 98,
+                    "endOffset": 7029
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 5,
+                        "startColumn": 4,
+                        "startOffset": 385,
+                        "endColumn": 98,
+                        "endOffset": 479
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 67,
+                    "startColumn": 4,
+                    "startOffset": 7034,
+                    "endColumn": 92,
+                    "endOffset": 7122
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 6,
+                        "startColumn": 4,
+                        "startOffset": 484,
+                        "endColumn": 92,
+                        "endOffset": 572
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 68,
+                    "startColumn": 4,
+                    "startOffset": 7127,
+                    "endColumn": 98,
+                    "endOffset": 7221
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 7,
+                        "startColumn": 4,
+                        "startOffset": 577,
+                        "endColumn": 98,
+                        "endOffset": 671
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 69,
+                    "startColumn": 4,
+                    "startOffset": 7226,
+                    "endColumn": 110,
+                    "endOffset": 7332
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 8,
+                        "startColumn": 4,
+                        "startOffset": 676,
+                        "endColumn": 110,
+                        "endOffset": 782
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 70,
+                    "startColumn": 4,
+                    "startOffset": 7337,
+                    "endColumn": 92,
+                    "endOffset": 7425
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 9,
+                        "startColumn": 4,
+                        "startOffset": 787,
+                        "endColumn": 92,
+                        "endOffset": 875
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 71,
+                    "startColumn": 4,
+                    "startOffset": 7430,
+                    "endColumn": 91,
+                    "endOffset": 7517
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 10,
+                        "startColumn": 4,
+                        "startOffset": 880,
+                        "endColumn": 91,
+                        "endOffset": 967
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 72,
+                    "startColumn": 4,
+                    "startOffset": 7522,
+                    "endColumn": 108,
+                    "endOffset": 7626
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 11,
+                        "startColumn": 4,
+                        "startOffset": 972,
+                        "endColumn": 108,
+                        "endOffset": 1076
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 73,
+                    "startColumn": 4,
+                    "startOffset": 7631,
+                    "endColumn": 93,
+                    "endOffset": 7720
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 12,
+                        "startColumn": 4,
+                        "startOffset": 1081,
+                        "endColumn": 93,
+                        "endOffset": 1170
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 74,
+                    "startColumn": 4,
+                    "startOffset": 7725,
+                    "endColumn": 81,
+                    "endOffset": 7802
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 13,
+                        "startColumn": 4,
+                        "startOffset": 1175,
+                        "endColumn": 81,
+                        "endOffset": 1252
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 75,
+                    "startColumn": 4,
+                    "startOffset": 7807,
+                    "endColumn": 88,
+                    "endOffset": 7891
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 14,
+                        "startColumn": 4,
+                        "startOffset": 1257,
+                        "endColumn": 88,
+                        "endOffset": 1341
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 76,
+                    "startColumn": 4,
+                    "startOffset": 7896,
+                    "endColumn": 96,
+                    "endOffset": 7988
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.google.android.gms/play-services-location/8.4.0/res/values-zh-rCN/location_strings.xml",
+                    "position": {
+                        "startLine": 6,
+                        "startColumn": 4,
+                        "startOffset": 322,
+                        "endColumn": 96,
+                        "endOffset": 414
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 77,
+                    "startColumn": 4,
+                    "startOffset": 7993,
+                    "endColumn": 91,
+                    "endOffset": 8080
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.google.android.gms/play-services-location/8.4.0/res/values-zh-rCN/location_strings.xml",
+                    "position": {
+                        "startLine": 5,
+                        "startColumn": 4,
+                        "startOffset": 230,
+                        "endColumn": 91,
+                        "endOffset": 317
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 78,
+                    "startColumn": 4,
+                    "startOffset": 8085,
+                    "endColumn": 100,
+                    "endOffset": 8181
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 21,
+                        "startColumn": 4,
+                        "startOffset": 1947,
+                        "endColumn": 100,
+                        "endOffset": 2043
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 79,
+                    "startColumn": 4,
+                    "startOffset": 8186,
+                    "endColumn": 101,
+                    "endOffset": 8283
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield-android/build/intermediates/exploded-aar/com.google.android.gms/play-services-wallet/8.4.0/res/values-zh-rCN/wallet_strings.xml",
+                    "position": {
+                        "startLine": 5,
+                        "startColumn": 4,
+                        "startOffset": 230,
+                        "endColumn": 101,
+                        "endOffset": 327
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "outputFile": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/res/merged/debug/values-zh-rCN/values-zh-rCN.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 105,
+                    "endColumn": 95,
+                    "endOffset": 196
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 280,
+                        "endColumn": 95,
+                        "endOffset": 371
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 3,
+                    "startColumn": 4,
+                    "startOffset": 201,
+                    "endColumn": 106,
+                    "endOffset": 303
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 5,
+                        "startColumn": 4,
+                        "startOffset": 376,
+                        "endColumn": 106,
+                        "endOffset": 478
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 4,
+                    "startColumn": 4,
+                    "startOffset": 308,
+                    "endColumn": 122,
+                    "endOffset": 426
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 6,
+                        "startColumn": 4,
+                        "startOffset": 483,
+                        "endColumn": 122,
+                        "endOffset": 601
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 5,
+                    "startColumn": 4,
+                    "startOffset": 431,
+                    "endColumn": 94,
+                    "endOffset": 521
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 7,
+                        "startColumn": 4,
+                        "startOffset": 606,
+                        "endColumn": 94,
+                        "endOffset": 696
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 6,
+                    "startColumn": 4,
+                    "startOffset": 526,
+                    "endColumn": 99,
+                    "endOffset": 621
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 8,
+                        "startColumn": 4,
+                        "startOffset": 701,
+                        "endColumn": 99,
+                        "endOffset": 796
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 7,
+                    "startColumn": 4,
+                    "startOffset": 626,
+                    "endColumn": 81,
+                    "endOffset": 703
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 9,
+                        "startColumn": 4,
+                        "startOffset": 801,
+                        "endColumn": 81,
+                        "endOffset": 878
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 8,
+                    "startColumn": 4,
+                    "startOffset": 708,
+                    "endColumn": 96,
+                    "endOffset": 800
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 10,
+                        "startColumn": 4,
+                        "startOffset": 883,
+                        "endColumn": 96,
+                        "endOffset": 975
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 9,
+                    "startColumn": 4,
+                    "startOffset": 805,
+                    "endColumn": 105,
+                    "endOffset": 906
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 11,
+                        "startColumn": 4,
+                        "startOffset": 980,
+                        "endColumn": 105,
+                        "endOffset": 1081
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 10,
+                    "startColumn": 4,
+                    "startOffset": 911,
+                    "endColumn": 77,
+                    "endOffset": 984
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 12,
+                        "startColumn": 4,
+                        "startOffset": 1086,
+                        "endColumn": 77,
+                        "endOffset": 1159
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 11,
+                    "startColumn": 4,
+                    "startOffset": 989,
+                    "endColumn": 95,
+                    "endOffset": 1080
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 13,
+                        "startColumn": 4,
+                        "startOffset": 1164,
+                        "endColumn": 95,
+                        "endOffset": 1255
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 12,
+                    "startColumn": 4,
+                    "startOffset": 1085,
+                    "endColumn": 95,
+                    "endOffset": 1176
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 14,
+                        "startColumn": 4,
+                        "startOffset": 1260,
+                        "endColumn": 95,
+                        "endOffset": 1351
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 13,
+                    "startColumn": 4,
+                    "startOffset": 1181,
+                    "endColumn": 94,
+                    "endOffset": 1271
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 15,
+                        "startColumn": 4,
+                        "startOffset": 1356,
+                        "endColumn": 94,
+                        "endOffset": 1446
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 14,
+                    "startColumn": 4,
+                    "startOffset": 1276,
+                    "endColumn": 96,
+                    "endOffset": 1368
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 16,
+                        "startColumn": 4,
+                        "startOffset": 1451,
+                        "endColumn": 96,
+                        "endOffset": 1543
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 15,
+                    "startColumn": 4,
+                    "startOffset": 1373,
+                    "endColumn": 94,
+                    "endOffset": 1463
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 17,
+                        "startColumn": 4,
+                        "startOffset": 1548,
+                        "endColumn": 94,
+                        "endOffset": 1638
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 16,
+                    "startColumn": 4,
+                    "startOffset": 1468,
+                    "endColumn": 97,
+                    "endOffset": 1561
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 18,
+                        "startColumn": 4,
+                        "startOffset": 1643,
+                        "endColumn": 97,
+                        "endOffset": 1736
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 17,
+                    "startColumn": 4,
+                    "startOffset": 1566,
+                    "endColumn": 111,
+                    "endOffset": 1673
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 19,
+                        "startColumn": 4,
+                        "startOffset": 1741,
+                        "endColumn": 111,
+                        "endOffset": 1848
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 18,
+                    "startColumn": 4,
+                    "startOffset": 1678,
+                    "endColumn": 93,
+                    "endOffset": 1767
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 20,
+                        "startColumn": 4,
+                        "startOffset": 1853,
+                        "endColumn": 93,
+                        "endOffset": 1942
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 19,
+                    "startColumn": 4,
+                    "startOffset": 1772,
+                    "endColumn": 82,
+                    "endOffset": 1850
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 168,
+                        "endColumn": 82,
+                        "endOffset": 246
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 20,
+                    "startColumn": 4,
+                    "startOffset": 1855,
+                    "endColumn": 88,
+                    "endOffset": 1939
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 5,
+                        "startColumn": 4,
+                        "startOffset": 251,
+                        "endColumn": 88,
+                        "endOffset": 335
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 21,
+                    "startColumn": 4,
+                    "startOffset": 1944,
+                    "endColumn": 91,
+                    "endOffset": 2031
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 6,
+                        "startColumn": 4,
+                        "startOffset": 340,
+                        "endColumn": 91,
+                        "endOffset": 427
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 22,
+                    "startColumn": 4,
+                    "startOffset": 2036,
+                    "endColumn": 61,
+                    "endOffset": 2093
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 7,
+                        "startColumn": 4,
+                        "startOffset": 432,
+                        "endColumn": 61,
+                        "endOffset": 489
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 23,
+                    "startColumn": 4,
+                    "startOffset": 2098,
+                    "endColumn": 64,
+                    "endOffset": 2158
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 8,
+                        "startColumn": 4,
+                        "startOffset": 494,
+                        "endColumn": 64,
+                        "endOffset": 554
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 24,
+                    "startColumn": 4,
+                    "startOffset": 2163,
+                    "endColumn": 56,
+                    "endOffset": 2215
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 9,
+                        "startColumn": 4,
+                        "startOffset": 559,
+                        "endColumn": 56,
+                        "endOffset": 611
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 25,
+                    "startColumn": 4,
+                    "startOffset": 2220,
+                    "endColumn": 67,
+                    "endOffset": 2283
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 10,
+                        "startColumn": 4,
+                        "startOffset": 616,
+                        "endColumn": 67,
+                        "endOffset": 679
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 26,
+                    "startColumn": 4,
+                    "startOffset": 2288,
+                    "endColumn": 67,
+                    "endOffset": 2351
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 11,
+                        "startColumn": 4,
+                        "startOffset": 684,
+                        "endColumn": 67,
+                        "endOffset": 747
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 27,
+                    "startColumn": 4,
+                    "startOffset": 2356,
+                    "endColumn": 84,
+                    "endOffset": 2436
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 12,
+                        "startColumn": 4,
+                        "startOffset": 752,
+                        "endColumn": 84,
+                        "endOffset": 832
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 28,
+                    "startColumn": 4,
+                    "startOffset": 2441,
+                    "endColumn": 68,
+                    "endOffset": 2505
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 13,
+                        "startColumn": 4,
+                        "startOffset": 837,
+                        "endColumn": 68,
+                        "endOffset": 901
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 29,
+                    "startColumn": 4,
+                    "startOffset": 2510,
+                    "endColumn": 68,
+                    "endOffset": 2574
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 14,
+                        "startColumn": 4,
+                        "startOffset": 906,
+                        "endColumn": 68,
+                        "endOffset": 970
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 30,
+                    "startColumn": 4,
+                    "startOffset": 2579,
+                    "endColumn": 75,
+                    "endOffset": 2650
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 15,
+                        "startColumn": 4,
+                        "startOffset": 975,
+                        "endColumn": 75,
+                        "endOffset": 1046
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 31,
+                    "startColumn": 4,
+                    "startOffset": 2655,
+                    "endColumn": 91,
+                    "endOffset": 2742
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 16,
+                        "startColumn": 4,
+                        "startOffset": 1051,
+                        "endColumn": 91,
+                        "endOffset": 1138
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 32,
+                    "startColumn": 4,
+                    "startOffset": 2747,
+                    "endColumn": 60,
+                    "endOffset": 2803
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 17,
+                        "startColumn": 4,
+                        "startOffset": 1143,
+                        "endColumn": 60,
+                        "endOffset": 1199
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 33,
+                    "startColumn": 4,
+                    "startOffset": 2808,
+                    "endColumn": 61,
+                    "endOffset": 2865
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 18,
+                        "startColumn": 4,
+                        "startOffset": 1204,
+                        "endColumn": 61,
+                        "endOffset": 1261
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 34,
+                    "startColumn": 4,
+                    "startOffset": 2870,
+                    "endColumn": 85,
+                    "endOffset": 2951
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 19,
+                        "startColumn": 4,
+                        "startOffset": 1266,
+                        "endColumn": 85,
+                        "endOffset": 1347
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 35,
+                    "startColumn": 4,
+                    "startOffset": 2956,
+                    "endColumn": 188,
+                    "endOffset": 3140
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 24,
+                        "startColumn": 4,
+                        "startOffset": 2974,
+                        "endColumn": 192,
+                        "endOffset": 3162
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 36,
+                    "startColumn": 4,
+                    "startOffset": 3145,
+                    "endColumn": 117,
+                    "endOffset": 3258
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 10,
+                        "startColumn": 4,
+                        "startOffset": 1163,
+                        "endColumn": 117,
+                        "endOffset": 1276
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 37,
+                    "startColumn": 4,
+                    "startOffset": 3263,
+                    "endColumn": 160,
+                    "endOffset": 3419
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 9,
+                        "startColumn": 4,
+                        "startOffset": 998,
+                        "endColumn": 164,
+                        "endOffset": 1158
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 38,
+                    "startColumn": 4,
+                    "startOffset": 3424,
+                    "endColumn": 116,
+                    "endOffset": 3536
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 8,
+                        "startColumn": 4,
+                        "startOffset": 881,
+                        "endColumn": 116,
+                        "endOffset": 993
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 39,
+                    "startColumn": 4,
+                    "startOffset": 3541,
+                    "endColumn": 118,
+                    "endOffset": 3655
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 7,
+                        "startColumn": 4,
+                        "startOffset": 762,
+                        "endColumn": 118,
+                        "endOffset": 876
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 40,
+                    "startColumn": 4,
+                    "startOffset": 3660,
+                    "endColumn": 169,
+                    "endOffset": 3825
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 5,
+                        "startColumn": 4,
+                        "startOffset": 411,
+                        "endColumn": 173,
+                        "endOffset": 580
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 41,
+                    "startColumn": 4,
+                    "startOffset": 3830,
+                    "endColumn": 172,
+                    "endOffset": 3998
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 6,
+                        "startColumn": 4,
+                        "startOffset": 585,
+                        "endColumn": 176,
+                        "endOffset": 757
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 42,
+                    "startColumn": 4,
+                    "startOffset": 4003,
+                    "endColumn": 117,
+                    "endOffset": 4116
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 293,
+                        "endColumn": 117,
+                        "endOffset": 406
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 43,
+                    "startColumn": 4,
+                    "startOffset": 4121,
+                    "endColumn": 128,
+                    "endOffset": 4245
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 19,
+                        "startColumn": 4,
+                        "startOffset": 2345,
+                        "endColumn": 128,
+                        "endOffset": 2469
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 44,
+                    "startColumn": 4,
+                    "startOffset": 4250,
+                    "endColumn": 109,
+                    "endOffset": 4355
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 18,
+                        "startColumn": 4,
+                        "startOffset": 2235,
+                        "endColumn": 109,
+                        "endOffset": 2340
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 45,
+                    "startColumn": 4,
+                    "startOffset": 4360,
+                    "endColumn": 135,
+                    "endOffset": 4491
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 17,
+                        "startColumn": 4,
+                        "startOffset": 2099,
+                        "endColumn": 135,
+                        "endOffset": 2230
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 46,
+                    "startColumn": 4,
+                    "startOffset": 4496,
+                    "endColumn": 110,
+                    "endOffset": 4602
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 16,
+                        "startColumn": 4,
+                        "startOffset": 1988,
+                        "endColumn": 110,
+                        "endOffset": 2094
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 47,
+                    "startColumn": 4,
+                    "startOffset": 4607,
+                    "endColumn": 122,
+                    "endOffset": 4725
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 3,
+                        "startColumn": 4,
+                        "startOffset": 170,
+                        "endColumn": 122,
+                        "endOffset": 288
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 48,
+                    "startColumn": 4,
+                    "startOffset": 4730,
+                    "endColumn": 128,
+                    "endOffset": 4854
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 28,
+                        "startColumn": 4,
+                        "startOffset": 3520,
+                        "endColumn": 128,
+                        "endOffset": 3644
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 49,
+                    "startColumn": 4,
+                    "startOffset": 4859,
+                    "endColumn": 117,
+                    "endOffset": 4972
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 27,
+                        "startColumn": 4,
+                        "startOffset": 3402,
+                        "endColumn": 117,
+                        "endOffset": 3515
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 50,
+                    "startColumn": 4,
+                    "startOffset": 4977,
+                    "endColumn": 122,
+                    "endOffset": 5095
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 26,
+                        "startColumn": 4,
+                        "startOffset": 3279,
+                        "endColumn": 122,
+                        "endOffset": 3397
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 51,
+                    "startColumn": 4,
+                    "startOffset": 5100,
+                    "endColumn": 111,
+                    "endOffset": 5207
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 25,
+                        "startColumn": 4,
+                        "startOffset": 3167,
+                        "endColumn": 111,
+                        "endOffset": 3274
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 52,
+                    "startColumn": 4,
+                    "startOffset": 5212,
+                    "endColumn": 175,
+                    "endOffset": 5383
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/8.4.0/res/values-zh-rCN/common_strings.xml",
+                    "position": {
+                        "startLine": 3,
+                        "startColumn": 4,
+                        "startOffset": 170,
+                        "endColumn": 179,
+                        "endOffset": 345
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 53,
+                    "startColumn": 4,
+                    "startOffset": 5388,
+                    "endColumn": 189,
+                    "endOffset": 5573
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 21,
+                        "startColumn": 4,
+                        "startOffset": 2592,
+                        "endColumn": 193,
+                        "endOffset": 2781
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 54,
+                    "startColumn": 4,
+                    "startOffset": 5578,
+                    "endColumn": 117,
+                    "endOffset": 5691
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 20,
+                        "startColumn": 4,
+                        "startOffset": 2474,
+                        "endColumn": 117,
+                        "endOffset": 2587
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 55,
+                    "startColumn": 4,
+                    "startOffset": 5696,
+                    "endColumn": 102,
+                    "endOffset": 5794
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 22,
+                        "startColumn": 4,
+                        "startOffset": 2786,
+                        "endColumn": 102,
+                        "endOffset": 2884
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 56,
+                    "startColumn": 4,
+                    "startOffset": 5799,
+                    "endColumn": 160,
+                    "endOffset": 5955
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 12,
+                        "startColumn": 4,
+                        "startOffset": 1398,
+                        "endColumn": 164,
+                        "endOffset": 1558
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 57,
+                    "startColumn": 4,
+                    "startOffset": 5960,
+                    "endColumn": 116,
+                    "endOffset": 6072
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 11,
+                        "startColumn": 4,
+                        "startOffset": 1281,
+                        "endColumn": 116,
+                        "endOffset": 1393
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 58,
+                    "startColumn": 4,
+                    "startOffset": 6077,
+                    "endColumn": 162,
+                    "endOffset": 6235
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 15,
+                        "startColumn": 4,
+                        "startOffset": 1821,
+                        "endColumn": 166,
+                        "endOffset": 1983
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 59,
+                    "startColumn": 4,
+                    "startOffset": 6240,
+                    "endColumn": 119,
+                    "endOffset": 6355
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 14,
+                        "startColumn": 4,
+                        "startOffset": 1701,
+                        "endColumn": 119,
+                        "endOffset": 1816
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 60,
+                    "startColumn": 4,
+                    "startOffset": 6360,
+                    "endColumn": 137,
+                    "endOffset": 6493
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 13,
+                        "startColumn": 4,
+                        "startOffset": 1563,
+                        "endColumn": 137,
+                        "endOffset": 1696
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 61,
+                    "startColumn": 4,
+                    "startOffset": 6498,
+                    "endColumn": 84,
+                    "endOffset": 6578
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 23,
+                        "startColumn": 4,
+                        "startOffset": 2889,
+                        "endColumn": 84,
+                        "endOffset": 2969
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 62,
+                    "startColumn": 4,
+                    "startOffset": 6583,
+                    "endColumn": 86,
+                    "endOffset": 6665
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 29,
+                        "startColumn": 4,
+                        "startOffset": 3649,
+                        "endColumn": 86,
+                        "endOffset": 3731
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 63,
+                    "startColumn": 4,
+                    "startOffset": 6670,
+                    "endColumn": 103,
+                    "endOffset": 6769
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 30,
+                        "startColumn": 4,
+                        "startOffset": 3736,
+                        "endColumn": 103,
+                        "endOffset": 3835
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 64,
+                    "startColumn": 4,
+                    "startOffset": 6774,
+                    "endColumn": 57,
+                    "endOffset": 6827
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 22,
+                        "startColumn": 4,
+                        "startOffset": 1482,
+                        "endColumn": 57,
+                        "endOffset": 1535
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 65,
+                    "startColumn": 4,
+                    "startOffset": 6832,
+                    "endColumn": 102,
+                    "endOffset": 6930
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 282,
+                        "endColumn": 102,
+                        "endOffset": 380
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 66,
+                    "startColumn": 4,
+                    "startOffset": 6935,
+                    "endColumn": 98,
+                    "endOffset": 7029
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 5,
+                        "startColumn": 4,
+                        "startOffset": 385,
+                        "endColumn": 98,
+                        "endOffset": 479
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 67,
+                    "startColumn": 4,
+                    "startOffset": 7034,
+                    "endColumn": 92,
+                    "endOffset": 7122
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 6,
+                        "startColumn": 4,
+                        "startOffset": 484,
+                        "endColumn": 92,
+                        "endOffset": 572
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 68,
+                    "startColumn": 4,
+                    "startOffset": 7127,
+                    "endColumn": 98,
+                    "endOffset": 7221
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 7,
+                        "startColumn": 4,
+                        "startOffset": 577,
+                        "endColumn": 98,
+                        "endOffset": 671
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 69,
+                    "startColumn": 4,
+                    "startOffset": 7226,
+                    "endColumn": 110,
+                    "endOffset": 7332
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 8,
+                        "startColumn": 4,
+                        "startOffset": 676,
+                        "endColumn": 110,
+                        "endOffset": 782
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 70,
+                    "startColumn": 4,
+                    "startOffset": 7337,
+                    "endColumn": 92,
+                    "endOffset": 7425
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 9,
+                        "startColumn": 4,
+                        "startOffset": 787,
+                        "endColumn": 92,
+                        "endOffset": 875
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 71,
+                    "startColumn": 4,
+                    "startOffset": 7430,
+                    "endColumn": 91,
+                    "endOffset": 7517
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 10,
+                        "startColumn": 4,
+                        "startOffset": 880,
+                        "endColumn": 91,
+                        "endOffset": 967
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 72,
+                    "startColumn": 4,
+                    "startOffset": 7522,
+                    "endColumn": 108,
+                    "endOffset": 7626
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 11,
+                        "startColumn": 4,
+                        "startOffset": 972,
+                        "endColumn": 108,
+                        "endOffset": 1076
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 73,
+                    "startColumn": 4,
+                    "startOffset": 7631,
+                    "endColumn": 93,
+                    "endOffset": 7720
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 12,
+                        "startColumn": 4,
+                        "startOffset": 1081,
+                        "endColumn": 93,
+                        "endOffset": 1170
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 74,
+                    "startColumn": 4,
+                    "startOffset": 7725,
+                    "endColumn": 81,
+                    "endOffset": 7802
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 13,
+                        "startColumn": 4,
+                        "startOffset": 1175,
+                        "endColumn": 81,
+                        "endOffset": 1252
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 75,
+                    "startColumn": 4,
+                    "startOffset": 7807,
+                    "endColumn": 88,
+                    "endOffset": 7891
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 14,
+                        "startColumn": 4,
+                        "startOffset": 1257,
+                        "endColumn": 88,
+                        "endOffset": 1341
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 76,
+                    "startColumn": 4,
+                    "startOffset": 7896,
+                    "endColumn": 96,
+                    "endOffset": 7988
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.google.android.gms/play-services-location/8.4.0/res/values-zh-rCN/location_strings.xml",
+                    "position": {
+                        "startLine": 6,
+                        "startColumn": 4,
+                        "startOffset": 322,
+                        "endColumn": 96,
+                        "endOffset": 414
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 77,
+                    "startColumn": 4,
+                    "startOffset": 7993,
+                    "endColumn": 91,
+                    "endOffset": 8080
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.google.android.gms/play-services-location/8.4.0/res/values-zh-rCN/location_strings.xml",
+                    "position": {
+                        "startLine": 5,
+                        "startColumn": 4,
+                        "startOffset": 230,
+                        "endColumn": 91,
+                        "endOffset": 317
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 78,
+                    "startColumn": 4,
+                    "startOffset": 8085,
+                    "endColumn": 100,
+                    "endOffset": 8181
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 21,
+                        "startColumn": 4,
+                        "startOffset": 1947,
+                        "endColumn": 100,
+                        "endOffset": 2043
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 79,
+                    "startColumn": 4,
+                    "startOffset": 8186,
+                    "endColumn": 101,
+                    "endOffset": 8283
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/android/build/intermediates/exploded-aar/com.google.android.gms/play-services-wallet/8.4.0/res/values-zh-rCN/wallet_strings.xml",
+                    "position": {
+                        "startLine": 5,
+                        "startColumn": 4,
+                        "startOffset": 230,
+                        "endColumn": 101,
+                        "endOffset": 327
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "outputFile": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/res/merged/debug/values-zh-rCN/values-zh-rCN.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 105,
+                    "endColumn": 95,
+                    "endOffset": 196
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.1/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 2,
+                        "startColumn": 4,
+                        "startOffset": 55,
+                        "endColumn": 95,
+                        "endOffset": 146
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 3,
+                    "startColumn": 4,
+                    "startOffset": 201,
+                    "endColumn": 106,
+                    "endOffset": 303
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.1/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 3,
+                        "startColumn": 4,
+                        "startOffset": 151,
+                        "endColumn": 106,
+                        "endOffset": 253
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 4,
+                    "startColumn": 4,
+                    "startOffset": 308,
+                    "endColumn": 122,
+                    "endOffset": 426
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.1/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 258,
+                        "endColumn": 122,
+                        "endOffset": 376
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 5,
+                    "startColumn": 4,
+                    "startOffset": 431,
+                    "endColumn": 94,
+                    "endOffset": 521
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.1/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 5,
+                        "startColumn": 4,
+                        "startOffset": 381,
+                        "endColumn": 94,
+                        "endOffset": 471
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 6,
+                    "startColumn": 4,
+                    "startOffset": 526,
+                    "endColumn": 99,
+                    "endOffset": 621
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.1/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 6,
+                        "startColumn": 4,
+                        "startOffset": 476,
+                        "endColumn": 99,
+                        "endOffset": 571
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 7,
+                    "startColumn": 4,
+                    "startOffset": 626,
+                    "endColumn": 81,
+                    "endOffset": 703
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.1/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 7,
+                        "startColumn": 4,
+                        "startOffset": 576,
+                        "endColumn": 81,
+                        "endOffset": 653
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 8,
+                    "startColumn": 4,
+                    "startOffset": 708,
+                    "endColumn": 96,
+                    "endOffset": 800
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.1/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 8,
+                        "startColumn": 4,
+                        "startOffset": 658,
+                        "endColumn": 96,
+                        "endOffset": 750
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 9,
+                    "startColumn": 4,
+                    "startOffset": 805,
+                    "endColumn": 105,
+                    "endOffset": 906
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.1/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 9,
+                        "startColumn": 4,
+                        "startOffset": 755,
+                        "endColumn": 105,
+                        "endOffset": 856
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 10,
+                    "startColumn": 4,
+                    "startOffset": 911,
+                    "endColumn": 75,
+                    "endOffset": 982
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.1/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 10,
+                        "startColumn": 4,
+                        "startOffset": 861,
+                        "endColumn": 75,
+                        "endOffset": 932
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 11,
+                    "startColumn": 4,
+                    "startOffset": 987,
+                    "endColumn": 75,
+                    "endOffset": 1058
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.1/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 11,
+                        "startColumn": 4,
+                        "startOffset": 937,
+                        "endColumn": 75,
+                        "endOffset": 1008
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 12,
+                    "startColumn": 4,
+                    "startOffset": 1063,
+                    "endColumn": 77,
+                    "endOffset": 1136
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.1/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 12,
+                        "startColumn": 4,
+                        "startOffset": 1013,
+                        "endColumn": 77,
+                        "endOffset": 1086
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 13,
+                    "startColumn": 4,
+                    "startOffset": 1141,
+                    "endColumn": 95,
+                    "endOffset": 1232
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.1/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 13,
+                        "startColumn": 4,
+                        "startOffset": 1091,
+                        "endColumn": 95,
+                        "endOffset": 1182
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 14,
+                    "startColumn": 4,
+                    "startOffset": 1237,
+                    "endColumn": 95,
+                    "endOffset": 1328
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.1/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 14,
+                        "startColumn": 4,
+                        "startOffset": 1187,
+                        "endColumn": 95,
+                        "endOffset": 1278
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 15,
+                    "startColumn": 4,
+                    "startOffset": 1333,
+                    "endColumn": 94,
+                    "endOffset": 1423
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.1/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 15,
+                        "startColumn": 4,
+                        "startOffset": 1283,
+                        "endColumn": 94,
+                        "endOffset": 1373
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 16,
+                    "startColumn": 4,
+                    "startOffset": 1428,
+                    "endColumn": 96,
+                    "endOffset": 1520
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.1/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 16,
+                        "startColumn": 4,
+                        "startOffset": 1378,
+                        "endColumn": 96,
+                        "endOffset": 1470
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 17,
+                    "startColumn": 4,
+                    "startOffset": 1525,
+                    "endColumn": 94,
+                    "endOffset": 1615
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.1/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 17,
+                        "startColumn": 4,
+                        "startOffset": 1475,
+                        "endColumn": 94,
+                        "endOffset": 1565
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 18,
+                    "startColumn": 4,
+                    "startOffset": 1620,
+                    "endColumn": 97,
+                    "endOffset": 1713
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.1/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 18,
+                        "startColumn": 4,
+                        "startOffset": 1570,
+                        "endColumn": 97,
+                        "endOffset": 1663
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 19,
+                    "startColumn": 4,
+                    "startOffset": 1718,
+                    "endColumn": 111,
+                    "endOffset": 1825
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.1/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 19,
+                        "startColumn": 4,
+                        "startOffset": 1668,
+                        "endColumn": 111,
+                        "endOffset": 1775
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 20,
+                    "startColumn": 4,
+                    "startOffset": 1830,
+                    "endColumn": 93,
+                    "endOffset": 1919
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.1/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 20,
+                        "startColumn": 4,
+                        "startOffset": 1780,
+                        "endColumn": 93,
+                        "endOffset": 1869
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 21,
+                    "startColumn": 4,
+                    "startOffset": 1924,
+                    "endColumn": 82,
+                    "endOffset": 2002
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 168,
+                        "endColumn": 82,
+                        "endOffset": 246
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 22,
+                    "startColumn": 4,
+                    "startOffset": 2007,
+                    "endColumn": 88,
+                    "endOffset": 2091
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 5,
+                        "startColumn": 4,
+                        "startOffset": 251,
+                        "endColumn": 88,
+                        "endOffset": 335
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 23,
+                    "startColumn": 4,
+                    "startOffset": 2096,
+                    "endColumn": 91,
+                    "endOffset": 2183
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 6,
+                        "startColumn": 4,
+                        "startOffset": 340,
+                        "endColumn": 91,
+                        "endOffset": 427
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 24,
+                    "startColumn": 4,
+                    "startOffset": 2188,
+                    "endColumn": 61,
+                    "endOffset": 2245
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 7,
+                        "startColumn": 4,
+                        "startOffset": 432,
+                        "endColumn": 61,
+                        "endOffset": 489
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 25,
+                    "startColumn": 4,
+                    "startOffset": 2250,
+                    "endColumn": 64,
+                    "endOffset": 2310
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 8,
+                        "startColumn": 4,
+                        "startOffset": 494,
+                        "endColumn": 64,
+                        "endOffset": 554
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 26,
+                    "startColumn": 4,
+                    "startOffset": 2315,
+                    "endColumn": 56,
+                    "endOffset": 2367
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 9,
+                        "startColumn": 4,
+                        "startOffset": 559,
+                        "endColumn": 56,
+                        "endOffset": 611
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 27,
+                    "startColumn": 4,
+                    "startOffset": 2372,
+                    "endColumn": 67,
+                    "endOffset": 2435
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 10,
+                        "startColumn": 4,
+                        "startOffset": 616,
+                        "endColumn": 67,
+                        "endOffset": 679
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 28,
+                    "startColumn": 4,
+                    "startOffset": 2440,
+                    "endColumn": 67,
+                    "endOffset": 2503
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 11,
+                        "startColumn": 4,
+                        "startOffset": 684,
+                        "endColumn": 67,
+                        "endOffset": 747
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 29,
+                    "startColumn": 4,
+                    "startOffset": 2508,
+                    "endColumn": 84,
+                    "endOffset": 2588
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 12,
+                        "startColumn": 4,
+                        "startOffset": 752,
+                        "endColumn": 84,
+                        "endOffset": 832
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 30,
+                    "startColumn": 4,
+                    "startOffset": 2593,
+                    "endColumn": 68,
+                    "endOffset": 2657
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 13,
+                        "startColumn": 4,
+                        "startOffset": 837,
+                        "endColumn": 68,
+                        "endOffset": 901
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 31,
+                    "startColumn": 4,
+                    "startOffset": 2662,
+                    "endColumn": 68,
+                    "endOffset": 2726
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 14,
+                        "startColumn": 4,
+                        "startOffset": 906,
+                        "endColumn": 68,
+                        "endOffset": 970
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 32,
+                    "startColumn": 4,
+                    "startOffset": 2731,
+                    "endColumn": 75,
+                    "endOffset": 2802
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 15,
+                        "startColumn": 4,
+                        "startOffset": 975,
+                        "endColumn": 75,
+                        "endOffset": 1046
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 33,
+                    "startColumn": 4,
+                    "startOffset": 2807,
+                    "endColumn": 91,
+                    "endOffset": 2894
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 16,
+                        "startColumn": 4,
+                        "startOffset": 1051,
+                        "endColumn": 91,
+                        "endOffset": 1138
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 34,
+                    "startColumn": 4,
+                    "startOffset": 2899,
+                    "endColumn": 60,
+                    "endOffset": 2955
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 17,
+                        "startColumn": 4,
+                        "startOffset": 1143,
+                        "endColumn": 60,
+                        "endOffset": 1199
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 35,
+                    "startColumn": 4,
+                    "startOffset": 2960,
+                    "endColumn": 61,
+                    "endOffset": 3017
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 18,
+                        "startColumn": 4,
+                        "startOffset": 1204,
+                        "endColumn": 61,
+                        "endOffset": 1261
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 36,
+                    "startColumn": 4,
+                    "startOffset": 3022,
+                    "endColumn": 85,
+                    "endOffset": 3103
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 19,
+                        "startColumn": 4,
+                        "startOffset": 1266,
+                        "endColumn": 85,
+                        "endOffset": 1347
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 37,
+                    "startColumn": 4,
+                    "startOffset": 3108,
+                    "endColumn": 188,
+                    "endOffset": 3292
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 24,
+                        "startColumn": 4,
+                        "startOffset": 2974,
+                        "endColumn": 192,
+                        "endOffset": 3162
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 38,
+                    "startColumn": 4,
+                    "startOffset": 3297,
+                    "endColumn": 117,
+                    "endOffset": 3410
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 10,
+                        "startColumn": 4,
+                        "startOffset": 1163,
+                        "endColumn": 117,
+                        "endOffset": 1276
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 39,
+                    "startColumn": 4,
+                    "startOffset": 3415,
+                    "endColumn": 160,
+                    "endOffset": 3571
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 9,
+                        "startColumn": 4,
+                        "startOffset": 998,
+                        "endColumn": 164,
+                        "endOffset": 1158
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 40,
+                    "startColumn": 4,
+                    "startOffset": 3576,
+                    "endColumn": 116,
+                    "endOffset": 3688
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 8,
+                        "startColumn": 4,
+                        "startOffset": 881,
+                        "endColumn": 116,
+                        "endOffset": 993
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 41,
+                    "startColumn": 4,
+                    "startOffset": 3693,
+                    "endColumn": 118,
+                    "endOffset": 3807
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 7,
+                        "startColumn": 4,
+                        "startOffset": 762,
+                        "endColumn": 118,
+                        "endOffset": 876
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 42,
+                    "startColumn": 4,
+                    "startOffset": 3812,
+                    "endColumn": 169,
+                    "endOffset": 3977
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 5,
+                        "startColumn": 4,
+                        "startOffset": 411,
+                        "endColumn": 173,
+                        "endOffset": 580
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 43,
+                    "startColumn": 4,
+                    "startOffset": 3982,
+                    "endColumn": 172,
+                    "endOffset": 4150
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 6,
+                        "startColumn": 4,
+                        "startOffset": 585,
+                        "endColumn": 176,
+                        "endOffset": 757
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 44,
+                    "startColumn": 4,
+                    "startOffset": 4155,
+                    "endColumn": 117,
+                    "endOffset": 4268
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 293,
+                        "endColumn": 117,
+                        "endOffset": 406
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 45,
+                    "startColumn": 4,
+                    "startOffset": 4273,
+                    "endColumn": 128,
+                    "endOffset": 4397
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 19,
+                        "startColumn": 4,
+                        "startOffset": 2345,
+                        "endColumn": 128,
+                        "endOffset": 2469
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 46,
+                    "startColumn": 4,
+                    "startOffset": 4402,
+                    "endColumn": 109,
+                    "endOffset": 4507
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 18,
+                        "startColumn": 4,
+                        "startOffset": 2235,
+                        "endColumn": 109,
+                        "endOffset": 2340
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 47,
+                    "startColumn": 4,
+                    "startOffset": 4512,
+                    "endColumn": 135,
+                    "endOffset": 4643
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 17,
+                        "startColumn": 4,
+                        "startOffset": 2099,
+                        "endColumn": 135,
+                        "endOffset": 2230
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 48,
+                    "startColumn": 4,
+                    "startOffset": 4648,
+                    "endColumn": 110,
+                    "endOffset": 4754
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 16,
+                        "startColumn": 4,
+                        "startOffset": 1988,
+                        "endColumn": 110,
+                        "endOffset": 2094
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 49,
+                    "startColumn": 4,
+                    "startOffset": 4759,
+                    "endColumn": 122,
+                    "endOffset": 4877
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 3,
+                        "startColumn": 4,
+                        "startOffset": 170,
+                        "endColumn": 122,
+                        "endOffset": 288
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 50,
+                    "startColumn": 4,
+                    "startOffset": 4882,
+                    "endColumn": 128,
+                    "endOffset": 5006
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 28,
+                        "startColumn": 4,
+                        "startOffset": 3520,
+                        "endColumn": 128,
+                        "endOffset": 3644
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 51,
+                    "startColumn": 4,
+                    "startOffset": 5011,
+                    "endColumn": 117,
+                    "endOffset": 5124
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 27,
+                        "startColumn": 4,
+                        "startOffset": 3402,
+                        "endColumn": 117,
+                        "endOffset": 3515
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 52,
+                    "startColumn": 4,
+                    "startOffset": 5129,
+                    "endColumn": 122,
+                    "endOffset": 5247
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 26,
+                        "startColumn": 4,
+                        "startOffset": 3279,
+                        "endColumn": 122,
+                        "endOffset": 3397
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 53,
+                    "startColumn": 4,
+                    "startOffset": 5252,
+                    "endColumn": 111,
+                    "endOffset": 5359
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 25,
+                        "startColumn": 4,
+                        "startOffset": 3167,
+                        "endColumn": 111,
+                        "endOffset": 3274
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 54,
+                    "startColumn": 4,
+                    "startOffset": 5364,
+                    "endColumn": 175,
+                    "endOffset": 5535
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/8.4.0/res/values-zh-rCN/common_strings.xml",
+                    "position": {
+                        "startLine": 3,
+                        "startColumn": 4,
+                        "startOffset": 170,
+                        "endColumn": 179,
+                        "endOffset": 345
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 55,
+                    "startColumn": 4,
+                    "startOffset": 5540,
+                    "endColumn": 189,
+                    "endOffset": 5725
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 21,
+                        "startColumn": 4,
+                        "startOffset": 2592,
+                        "endColumn": 193,
+                        "endOffset": 2781
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 56,
+                    "startColumn": 4,
+                    "startOffset": 5730,
+                    "endColumn": 117,
+                    "endOffset": 5843
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 20,
+                        "startColumn": 4,
+                        "startOffset": 2474,
+                        "endColumn": 117,
+                        "endOffset": 2587
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 57,
+                    "startColumn": 4,
+                    "startOffset": 5848,
+                    "endColumn": 102,
+                    "endOffset": 5946
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 22,
+                        "startColumn": 4,
+                        "startOffset": 2786,
+                        "endColumn": 102,
+                        "endOffset": 2884
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 58,
+                    "startColumn": 4,
+                    "startOffset": 5951,
+                    "endColumn": 160,
+                    "endOffset": 6107
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 12,
+                        "startColumn": 4,
+                        "startOffset": 1398,
+                        "endColumn": 164,
+                        "endOffset": 1558
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 59,
+                    "startColumn": 4,
+                    "startOffset": 6112,
+                    "endColumn": 116,
+                    "endOffset": 6224
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 11,
+                        "startColumn": 4,
+                        "startOffset": 1281,
+                        "endColumn": 116,
+                        "endOffset": 1393
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 60,
+                    "startColumn": 4,
+                    "startOffset": 6229,
+                    "endColumn": 162,
+                    "endOffset": 6387
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 15,
+                        "startColumn": 4,
+                        "startOffset": 1821,
+                        "endColumn": 166,
+                        "endOffset": 1983
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 61,
+                    "startColumn": 4,
+                    "startOffset": 6392,
+                    "endColumn": 119,
+                    "endOffset": 6507
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 14,
+                        "startColumn": 4,
+                        "startOffset": 1701,
+                        "endColumn": 119,
+                        "endOffset": 1816
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 62,
+                    "startColumn": 4,
+                    "startOffset": 6512,
+                    "endColumn": 137,
+                    "endOffset": 6645
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 13,
+                        "startColumn": 4,
+                        "startOffset": 1563,
+                        "endColumn": 137,
+                        "endOffset": 1696
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 63,
+                    "startColumn": 4,
+                    "startOffset": 6650,
+                    "endColumn": 84,
+                    "endOffset": 6730
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 23,
+                        "startColumn": 4,
+                        "startOffset": 2889,
+                        "endColumn": 84,
+                        "endOffset": 2969
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 64,
+                    "startColumn": 4,
+                    "startOffset": 6735,
+                    "endColumn": 86,
+                    "endOffset": 6817
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 29,
+                        "startColumn": 4,
+                        "startOffset": 3649,
+                        "endColumn": 86,
+                        "endOffset": 3731
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 65,
+                    "startColumn": 4,
+                    "startOffset": 6822,
+                    "endColumn": 103,
+                    "endOffset": 6921
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-zh-rCN/base_strings.xml",
+                    "position": {
+                        "startLine": 30,
+                        "startColumn": 4,
+                        "startOffset": 3736,
+                        "endColumn": 103,
+                        "endOffset": 3835
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 66,
+                    "startColumn": 4,
+                    "startOffset": 6926,
+                    "endColumn": 57,
+                    "endOffset": 6979
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.5.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 22,
+                        "startColumn": 4,
+                        "startOffset": 1482,
+                        "endColumn": 57,
+                        "endOffset": 1535
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 67,
+                    "startColumn": 4,
+                    "startOffset": 6984,
+                    "endColumn": 102,
+                    "endOffset": 7082
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 282,
+                        "endColumn": 102,
+                        "endOffset": 380
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 68,
+                    "startColumn": 4,
+                    "startOffset": 7087,
+                    "endColumn": 98,
+                    "endOffset": 7181
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 5,
+                        "startColumn": 4,
+                        "startOffset": 385,
+                        "endColumn": 98,
+                        "endOffset": 479
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 69,
+                    "startColumn": 4,
+                    "startOffset": 7186,
+                    "endColumn": 92,
+                    "endOffset": 7274
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 6,
+                        "startColumn": 4,
+                        "startOffset": 484,
+                        "endColumn": 92,
+                        "endOffset": 572
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 70,
+                    "startColumn": 4,
+                    "startOffset": 7279,
+                    "endColumn": 98,
+                    "endOffset": 7373
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 7,
+                        "startColumn": 4,
+                        "startOffset": 577,
+                        "endColumn": 98,
+                        "endOffset": 671
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 71,
+                    "startColumn": 4,
+                    "startOffset": 7378,
+                    "endColumn": 110,
+                    "endOffset": 7484
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 8,
+                        "startColumn": 4,
+                        "startOffset": 676,
+                        "endColumn": 110,
+                        "endOffset": 782
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 72,
+                    "startColumn": 4,
+                    "startOffset": 7489,
+                    "endColumn": 92,
+                    "endOffset": 7577
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 9,
+                        "startColumn": 4,
+                        "startOffset": 787,
+                        "endColumn": 92,
+                        "endOffset": 875
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 73,
+                    "startColumn": 4,
+                    "startOffset": 7582,
+                    "endColumn": 91,
+                    "endOffset": 7669
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 10,
+                        "startColumn": 4,
+                        "startOffset": 880,
+                        "endColumn": 91,
+                        "endOffset": 967
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 74,
+                    "startColumn": 4,
+                    "startOffset": 7674,
+                    "endColumn": 108,
+                    "endOffset": 7778
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 11,
+                        "startColumn": 4,
+                        "startOffset": 972,
+                        "endColumn": 108,
+                        "endOffset": 1076
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 75,
+                    "startColumn": 4,
+                    "startOffset": 7783,
+                    "endColumn": 93,
+                    "endOffset": 7872
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 12,
+                        "startColumn": 4,
+                        "startOffset": 1081,
+                        "endColumn": 93,
+                        "endOffset": 1170
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 76,
+                    "startColumn": 4,
+                    "startOffset": 7877,
+                    "endColumn": 81,
+                    "endOffset": 7954
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 13,
+                        "startColumn": 4,
+                        "startOffset": 1175,
+                        "endColumn": 81,
+                        "endOffset": 1252
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 77,
+                    "startColumn": 4,
+                    "startOffset": 7959,
+                    "endColumn": 88,
+                    "endOffset": 8043
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/23.0.0/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 14,
+                        "startColumn": 4,
+                        "startOffset": 1257,
+                        "endColumn": 88,
+                        "endOffset": 1341
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 78,
+                    "startColumn": 4,
+                    "startOffset": 8048,
+                    "endColumn": 96,
+                    "endOffset": 8140
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.google.android.gms/play-services-location/8.4.0/res/values-zh-rCN/location_strings.xml",
+                    "position": {
+                        "startLine": 6,
+                        "startColumn": 4,
+                        "startOffset": 322,
+                        "endColumn": 96,
+                        "endOffset": 414
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 79,
+                    "startColumn": 4,
+                    "startOffset": 8145,
+                    "endColumn": 91,
+                    "endOffset": 8232
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.google.android.gms/play-services-location/8.4.0/res/values-zh-rCN/location_strings.xml",
+                    "position": {
+                        "startLine": 5,
+                        "startColumn": 4,
+                        "startOffset": 230,
+                        "endColumn": 91,
+                        "endOffset": 317
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 80,
+                    "startColumn": 4,
+                    "startOffset": 8237,
+                    "endColumn": 100,
+                    "endOffset": 8333
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.1/res/values-zh-rCN/values-zh-rCN.xml",
+                    "position": {
+                        "startLine": 21,
+                        "startColumn": 4,
+                        "startOffset": 1874,
+                        "endColumn": 100,
+                        "endOffset": 1970
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 81,
+                    "startColumn": 4,
+                    "startOffset": 8338,
+                    "endColumn": 101,
+                    "endOffset": 8435
+                },
+                "from": {
+                    "file": "/Users/AdamShare/code/TapShield/AndroidAS/tapshield/build/intermediates/exploded-aar/com.google.android.gms/play-services-wallet/8.4.0/res/values-zh-rCN/wallet_strings.xml",
+                    "position": {
+                        "startLine": 5,
+                        "startColumn": 4,
+                        "startOffset": 230,
+                        "endColumn": 101,
+                        "endOffset": 327
+                    }
+                }
+            }
+        ]
+    }
+]

@@ -1,2 +1,2 @@
 include ':javelinandroid'
-include ':android'
+include ':tapshield'
