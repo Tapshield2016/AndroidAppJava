@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/chat_item_margin">
+
+    <ImageButton
+        android:id="@+id/item_chat_message_image"
+        android:layout_width="@dimen/chat_item_image"
+        android:layout_height="@dimen/chat_item_image"
+        android:layout_alignParentRight="true"
+        android:scaleType="centerInside"
+        android:background="@null"/>
+    
+    <TextView
+		android:id="@+id/item_chat_message_text_message"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_toLeftOf="@id/item_chat_message_image"
+		android:padding="@dimen/item_chat_message_text_padding"
+		android:textColor="@color/ts_chat_user_text"
+		android:background="@drawable/ts_chat_background_box_user"/>
+   
+    <View
+		android:layout_width="@dimen/chat_item_arrow"
+		android:layout_height="@dimen/chat_item_arrow"
+		android:layout_alignLeft="@id/item_chat_message_image"
+        android:layout_alignTop="@id/item_chat_message_image"
+		android:background="@drawable/ts_chat_background_arrow_user"/>
+
+    <TextView
+        android:id="@+id/item_chat_message_text_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/item_chat_message_text_message"
+        android:gravity="center"
+        android:textColor="@color/ts_chat_status"/>
+</RelativeLayout>

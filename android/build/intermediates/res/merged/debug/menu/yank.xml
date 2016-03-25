@@ -1,0 +1,8 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/action_yank"
+        android:icon="@drawable/ic_actionbar_yank"
+        android:title="@string/ts_menu_yank_enabled"
+        android:showAsAction="always"/>
+</menu>

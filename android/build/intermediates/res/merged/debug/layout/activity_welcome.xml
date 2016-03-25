@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ts_welcome_background"/>
+    
+    <android.support.v4.view.ViewPager
+        android:id="@+id/welcome_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <LinearLayout
+        android:id="@+id/welcome_linear_indicatorskip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+        <com.tapshield.android.ui.view.PageIndicator
+            xmlns:tapshield="http://schemas.android.com/apk/res/com.tapshield.android"
+            android:id="@+id/welcome_pageindicator"
+            android:layout_gravity="center"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:padding="5dp"
+            tapshield:color="@android:color/white"
+            tapshield:strokePercentOfDiameter="14"/>
+
+        <TextView
+            android:id="@+id/welcome_text_skip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:text="@string/ts_welcome_skip"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/ts_welcome_skip_text"
+            android:padding="@dimen/ts_common_spacing_m"/>
+    </LinearLayout>
+    
+    <ImageView
+        android:id="@+id/welcome_image_swipe"
+        android:layout_width="@dimen/ts_welcome_swipe_size"
+        android:layout_height="@dimen/ts_welcome_swipe_size"
+        android:layout_centerInParent="true"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ts_icon_swipe_left"
+        android:visibility="invisible"/>
+</RelativeLayout>

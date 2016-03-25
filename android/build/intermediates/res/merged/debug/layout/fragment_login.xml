@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    <!-- logo -->
+    
+    <ImageView
+        android:id="@+id/fragment_login_image"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/fragment_login_linear_form"
+        android:src="@drawable/ts_logo_white"
+        android:scaleType="fitCenter"
+        android:padding="20dp"/>
+    
+    <!-- form -->
+    
+    <LinearLayout
+        android:id="@id/fragment_login_linear_form"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/fragment_login_linear_bottom"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:visibility="invisible">
+        
+        <EditText
+            android:id="@+id/fragment_login_form_edit_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:inputType="textEmailAddress"
+            android:hint="@string/ts_welcome_fragment_login_edit_email_hint"
+            android:textColorHint="@color/ts_welcome_loginform_edittext_hint"/>
+        
+        <EditText
+            android:id="@+id/fragment_login_form_edit_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:inputType="textPassword"
+            android:hint="@string/ts_welcome_fragment_login_edit_password_hint"
+            android:textColorHint="@color/ts_welcome_loginform_edittext_hint"/>
+        
+        <Button
+            android:id="@+id/fragment_login_form_button_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="45dp"
+            android:layout_marginRight="45dp"
+            android:text="@string/ts_common_login"/>
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp">
+            <TextView
+                android:id="@+id/fragment_login_form_text_noaccount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="@string/ts_welcome_noaccount"
+                android:gravity="center"
+                />
+            <TextView
+                android:id="@+id/fragment_login_form_text_forgotpassword"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="@string/ts_welcome_forgotpassword"
+                android:gravity="center"
+                />
+        </LinearLayout>
+    </LinearLayout>
+    
+    <!-- bottom options -->
+    
+    <LinearLayout
+        android:id="@id/fragment_login_linear_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true">
+        
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal"
+	        style="?android:attr/buttonBarStyle">
+	        
+	        <Button
+	            android:id="@+id/fragment_login_button_login"
+	            android:layout_width="0dp"
+	            android:layout_height="match_parent"
+	            android:layout_weight="1"
+	            android:text="@string/ts_common_login"
+	            android:textColor="@android:color/white"
+	            style="?android:attr/buttonBarButtonStyle"/>
+	        <Button
+	            android:id="@+id/fragment_login_button_signup"
+	            android:layout_width="0dp"
+	            android:layout_height="match_parent"
+	            android:layout_weight="1"
+	            android:text="@string/ts_common_signup"
+	            android:textColor="@android:color/white"
+	            style="?android:attr/buttonBarButtonStyle"/>
+	        
+	    </LinearLayout>
+	    
+	    <TextView
+            android:id="@+id/fragment_login_text_disclaimer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/ts_common_spacing_m"
+            android:gravity="center"
+            android:text="@string/ts_fragment_semiprofile_text_disclaimer"
+            android:textSize="@dimen/ts_common_text_s"
+            android:textColor="@android:color/white"
+            android:textColorLink="@color/ts_brand_dark"/>
+    </LinearLayout>
+</RelativeLayout>

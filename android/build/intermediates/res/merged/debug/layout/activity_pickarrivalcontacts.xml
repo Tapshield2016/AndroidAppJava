@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:csb="http://schemas.android.com/apk/res/com.tapshield.android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/ts_background_gradient">
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        
+        <TextView
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:padding="@dimen/ts_common_spacing_xs"
+	        android:gravity="center"
+	        android:textColor="@android:color/white"
+	        android:text="@string/ts_pickarrivalcontacts_text_arrivaltime"
+	        android:textSize="@dimen/ts_entourage_pickarrivalcontacts_text"/>
+	    
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.4">
+            
+            <com.tapshield.android.ui.view.CircleSeekBar
+	            android:id="@+id/pickarrivalcontacts_circleseekbar"
+	            android:layout_width="match_parent"
+	            android:layout_height="match_parent"
+	            android:padding="@dimen/ts_common_spacing_m"
+	            android:max="21"
+	            android:progress="10"
+	            csb:colorBar="@color/ts_brand_dark"
+	            csb:colorHandle="@android:color/white"
+	            csb:colorProgress="@color/ts_brand_light"
+	            csb:sizeBar="14dp"
+	            csb:sizeProgress="17dp"
+	            csb:sizeHandle="20dp"/>
+            
+            <TextView
+                android:id="@+id/pickarrivalcontacts_text_eta"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textSize="@dimen/ts_common_text_l"
+                android:textColor="@android:color/white"/>
+        </FrameLayout>
+	    
+	    <TextView
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:padding="@dimen/ts_common_spacing_xs"
+	        android:gravity="center"
+	        android:textColor="@android:color/white"
+	        android:text="@string/ts_pickarrivalcontacts_text_notifycontacts"
+	        android:textSize="@dimen/ts_entourage_pickarrivalcontacts_text"/>
+	    
+	    <FrameLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="0dp"
+            android:layout_weight="0.6">
+	        
+	        <GridView
+	            android:id="@+id/pickarrivalcontacts_grid"
+	            android:layout_width="match_parent"
+	            android:layout_height="match_parent"
+	            android:numColumns="auto_fit"
+	            android:gravity="center"
+	            android:columnWidth="@dimen/ts_entourage_pickarrivalcontacts_image"
+	            android:stretchMode="columnWidth"/>
+	        
+	    </FrameLayout>
+    </LinearLayout>
+    
+    <FrameLayout
+        android:id="@+id/pickarrivalcontacts_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    
+    <TextView
+		android:id="@+id/pickarrivalcontacts_text_busy"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:gravity="center"
+		android:text="Entourage is running."
+		android:textColor="@color/ts_gray_light"
+		android:textSize="@dimen/ts_common_text_m"
+		android:background="#aa000000"
+		android:clickable="true"/>
+</RelativeLayout>

@@ -1,0 +1,36 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.3"
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 23
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+
+    useLibrary  'org.apache.http.legacy'
+}
+
+dependencies {
+    compile 'com.google.android.gms:play-services:8.4.0'
+//    compile 'com.google.code.gson:gson:2.2.4'
+    compile "org.apache.httpcomponents:httpmime:4.2.3"
+    compile 'com.google.code.gson:gson:2.6.2'
+    compile 'joda-time:joda-time:2.2'
+    compile files('libs/aws-android-sdk-1.7.1.1-core.jar')
+    compile files('libs/aws-android-sdk-1.7.1.1-ddb.jar')
+    compile files('libs/aws-android-sdk-1.7.1.1-s3.jar')
+    compile files('libs/aws-android-sdk-1.7.1.1-sns.jar')
+    compile files('libs/aws-android-sdk-1.7.1.1-sqs.jar')
+    compile files('libs/commons-io-2.4.jar')
+    compile files('libs/okhttp-2.0.0.jar')
+    compile files('libs/okio-1.0.1.jar')
+}

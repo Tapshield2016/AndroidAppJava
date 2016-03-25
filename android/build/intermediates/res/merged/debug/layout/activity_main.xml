@@ -1,0 +1,125 @@
+<android.support.v4.widget.DrawerLayout
+    xmlns:map="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cb="http://schemas.android.com/apk/res/com.tapshield.android"
+    android:id="@+id/main_drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    <!-- The main content view -->
+    <RelativeLayout
+        android:id="@+id/main_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        
+        <fragment
+            android:id="@+id/main_fragment_map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            class="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            map:cameraTargetLat="38.479395"
+            map:cameraTargetLng="-97.485353"
+            map:cameraZoom="3" />
+        
+        <!-- top left corner button -->
+        <ImageButton
+            android:id="@+id/main_imagebutton_locateuser"
+            android:layout_width="@dimen/main_top_corner_buttons"
+            android:layout_height="@dimen/main_top_corner_buttons"
+            android:layout_margin="@dimen/activity_main_circlebutton_margin"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/ts_icon_locateme"
+            android:scaleType="fitCenter"
+            android:background="@drawable/ts_background_card"
+            android:contentDescription="@string/ts_access_main_button_locateme"/>
+        
+        <!-- top right corner button -->
+        <ImageButton
+            android:id="@+id/main_imagebutton_yank"
+            android:layout_width="@dimen/main_top_corner_buttons"
+            android:layout_height="@dimen/main_top_corner_buttons"
+            android:layout_margin="@dimen/activity_main_circlebutton_margin"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_actionbar_yank"
+            android:scaleType="fitCenter"
+            android:background="@drawable/ts_background_card"
+            android:contentDescription="@string/ts_main_dialog_yank_title"/>        
+        
+        <!-- have the automatictextswitcher widget show above top buttons -->
+        <com.tapshield.android.ui.view.TickerTextSwitcher
+            android:id="@+id/main_ticker"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/activity_main_circlebutton_margin"
+            android:inAnimation="@anim/slide_in_up"
+            android:outAnimation="@anim/slide_out_up"/>
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="bottom"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="@dimen/activity_main_circlebutton_margin">
+            
+            <com.tapshield.android.ui.view.CircleButton
+                android:id="@+id/main_circlebutton_report"
+                android:layout_width="@dimen/circlebutton_secondary_size"
+                android:layout_height="@dimen/circlebutton_secondary_size"
+                android:layout_weight="0.3"
+                cb:background="@drawable/ts_background_circlebutton"
+                cb:icon="@drawable/ts_icon_report"
+                cb:iconPaddingTop="@dimen/ts_common_spacing_m"
+                cb:text="@string/ts_main_circlebutton_report"
+                cb:textColor="#fff"
+                cb:textColorStateList="@color/ts_circlebutton_text"
+                cb:textSize="@dimen/circlebutton_secondary_text_size"
+                android:contentDescription="@string/ts_access_main_button_report" />
+            
+            <com.tapshield.android.ui.view.CircleButton
+                android:id="@+id/main_circlebutton_alert"
+                android:layout_width="@dimen/circlebutton_primary_size"
+                android:layout_height="@dimen/circlebutton_primary_size"
+                android:layout_weight="0.4"
+                cb:background="@drawable/ts_background_circlebutton"
+                cb:icon="@drawable/ts_icon_talk"
+                cb:iconPaddingTop="@dimen/ts_common_spacing_m"
+                cb:text="@string/ts_main_circlebutton_alert"
+                cb:textColor="#fff"
+                cb:textColorStateList="@color/ts_circlebutton_text"
+                cb:textSize="@dimen/circlebutton_primary_text_size"
+                android:contentDescription="@string/ts_access_main_button_alert" />
+            
+            <com.tapshield.android.ui.view.CircleButton
+                android:id="@+id/main_circlebutton_track"
+                android:layout_width="@dimen/circlebutton_secondary_size"
+                android:layout_height="@dimen/circlebutton_secondary_size"
+                android:layout_weight="0.3"
+                cb:background="@drawable/ts_background_circlebutton"
+                cb:icon="@drawable/ts_icon_entourage_white"
+                cb:iconPaddingTop="@dimen/ts_common_spacing_s"
+                cb:text="@string/ts_main_circlebutton_track"
+                cb:textColor="#fff"
+                cb:textColorStateList="@color/ts_circlebutton_text"
+                cb:textSize="@dimen/circlebutton_secondary_text_size"
+                android:contentDescription="@string/ts_access_main_button_chat" />
+        </LinearLayout>
+    </RelativeLayout>
+    
+    <!-- The navigation drawer -->
+    <FrameLayout
+        android:id="@+id/main_drawer"
+        android:layout_width="280dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start">
+    
+        <fragment
+            android:id="@+id/main_fragment_navigation"
+            android:name="com.tapshield.android.ui.fragment.NavigationFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        
+    </FrameLayout>
+</android.support.v4.widget.DrawerLayout>

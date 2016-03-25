@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.tapshield.android"
+    android:versionCode="100"
+    android:versionName="2.0" >
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="23" />
+
+    <!-- opengl required by google maps for android -->
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
+    
+    <!-- Google Analytics Version v4 needs this value for easy tracking -->
+	<meta-data
+        android:name="com.google.android.gms.analytics.globalConfigResource"
+        android:resource="@xml/googleanalytics" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    
+    <!-- to detect and keep track to 911 calls to notify authorities -->
+    
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
+
+    <!-- extra permissions required by twilio -->
+
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
+    <!-- permission required by google maps for android -->
+
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+
+    <!-- permissions for optimized gcm functionality -->
+
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
+    <permission
+        android:name="com.tapshield.android.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.tapshield.android.permission.C2D_MESSAGE" />
+
+    <!-- forcing the usage of a smart phone via telephony service -->
+    <!-- warning: is already implicitly required by permission CALL_PHONE -->
+    <uses-feature android:name="android.hardware.telephony" />
+
+    <!-- required set to false to avoid implicit filtering via permission CAMERA -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
+    <!--
+         permission ACCESS_FINE_LOCATION implicitly
+            required hardware.location and hardware.location.gps
+    -->
+
+    <application
+        android:name="com.tapshield.android.app.TapShieldApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/TapShieldHoloLightTheme" >
+
+        <!-- google play services -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <!-- tag required by google maps for android -->
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyCOLa7om8_AGznekq6jV6pNrCXTCj_JM3E" />
+
+        <!-- tag required by facebook sdk for fb signin -->
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/ts_social_facebook_app_id"/>
+        
+        <!-- ACTIVITIES -->
+
+
+        <!-- library application to handle image cropping -->
+        <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
+
+        <activity
+            android:name="com.tapshield.android.ui.activity.MainActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.tapshield.android.ui.activity.WelcomeActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo" />
+        <activity
+            android:name="com.tapshield.android.ui.activity.RegistrationActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.tapshield.android.ui.activity.FullProfileActivity"
+            android:label="@string/ts_screen_profile"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.tapshield.android.ui.activity.OrganizationSelectionActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.tapshield.android.ui.activity.ChatActivity"
+            android:label="@string/ts_screen_chat"/>
+        <activity
+            android:name="com.tapshield.android.ui.activity.MassAlertsActivity"
+            android:label="@string/ts_screen_notifications"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.tapshield.android.ui.activity.AlertActivity"
+            android:label="@string/ts_screen_alert"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.tapshield.android.ui.activity.PickDestinationActivity"
+            android:label="@string/ts_screen_entourage_destination"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.tapshield.android.ui.activity.PickRouteActivity"
+            android:label="@string/ts_screen_entourage_route"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.tapshield.android.ui.activity.PickArrivalContacts"
+            android:label="@string/ts_screen_entourage_etacontacts"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.tapshield.android.ui.activity.ReportListActivity"
+            android:label="@string/ts_screen_report_list"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.tapshield.android.ui.activity.ReportActivity"
+            android:label="@string/ts_screen_report"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.tapshield.android.ui.activity.ReportDetailsActivity"
+            android:label="@string/ts_screen_report_details"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.tapshield.android.ui.activity.BasicInfoActivity"
+            android:label="@string/ts_screen_profile_basic"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.tapshield.android.ui.activity.AppearanceActivity"
+            android:label="@string/ts_screen_profile_appearance"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.tapshield.android.ui.activity.MedicalActivity"
+            android:label="@string/ts_screen_profile_medical"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.tapshield.android.ui.activity.EmergencyContactActivity"
+            android:label="@string/ts_screen_profile_emergency"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.tapshield.android.ui.activity.SettingsActivity"
+            android:label="@string/ts_screen_settings"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.tapshield.android.ui.activity.AboutActivity"
+            android:label="@string/ts_screen_about"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.tapshield.android.ui.activity.OutOfBoundsActivity"
+            android:label="@string/ts_screen_oob"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.tapshield.android.ui.activity.WebHelpActivity"
+            android:label="@string/app_name"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.tapshield.android.ui.activity.ResetPasscodePasswordActivity"
+            android:label="@string/ts_screen_security"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.tapshield.android.ui.activity.GooglePlusLoginActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
+        <!-- activity required by facebook sdk for fb signin -->
+        <activity android:name="com.facebook.LoginActivity"/>
+        <activity
+            android:name="com.tapshield.android.ui.activity.FacebookLoginActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.tapshield.android.ui.activity.AddEmailActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.tapshield.android.ui.activity.VerifyPhoneActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.tapshield.android.ui.activity.SetOrganizationActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:uiOptions="splitActionBarWhenNarrow"
+            android:exported="true"/>
+        <activity
+            android:name="com.tapshield.android.ui.activity.EntourageDestinationActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
+        
+        <!-- SERVICES -->
+        <service
+            android:name="com.twilio.client.TwilioClientService"
+            android:exported="false" />
+        <service
+            android:name="com.tapshield.android.service.ChatUpdateService"
+            android:exported="false" />
+        <service
+            android:name="com.tapshield.android.service.AlertIdUpdateService"
+            android:exported="false" />
+        <service
+            android:name="com.tapshield.android.service.YankService"
+            android:exported="false" />
+        <service
+            android:name="com.tapshield.android.service.EntourageArrivalCheckService"
+            android:exported="false" />
+        <service
+            android:name="com.tapshield.android.service.SocialReportingService"
+            android:exported="false" />
+        <service
+            android:name="com.tapshield.android.service.EntourageTtsTimeNotificationService"
+            android:exported="false"/>
+
+        <!-- BROADCAST RECEIVERS -->
+        <receiver
+            android:name="com.tapshield.android.receiver.EntourageArrivalCheckReceiver"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.tapshield.android.action.ENTOURAGE_ARRIVAL_CHECK" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.tapshield.android.receiver.EmergencyReceiver"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.tapshield.android.action.EMERGENCY" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.tapshield.android.receiver.PushMessageReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+
+                <category android:name="com.tapshield.android" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
+                <category android:name="com.tapshield.android" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.tapshield.android.receiver.PhoneCallReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
+            </intent-filter>
+        </receiver>
+    </application>
+</manifest>

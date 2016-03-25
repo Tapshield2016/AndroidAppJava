@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/menu_googleplus"
+        android:title="@string/ts_menu_login_signup_googleplus"/>
+    
+    <item
+        android:id="@+id/menu_facebook"
+        android:title="@string/ts_menu_login_signup_facebook"/>
+    
+    <item
+        android:id="@+id/menu_email"
+        android:title="@string/ts_menu_login_signup_email"/>
+</menu>

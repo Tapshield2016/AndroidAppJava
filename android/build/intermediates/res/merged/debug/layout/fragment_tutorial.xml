@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/ts_common_spacing_s"
+    android:paddingTop="@dimen/ts_common_spacing_s"
+    android:paddingRight="@dimen/ts_common_spacing_s"
+    android:paddingBottom="120dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/fragment_tutorial_text">
+    
+	    <ImageView
+	        android:layout_width="match_parent"
+	        android:layout_height="0dp"
+	        android:layout_weight="0.4"
+	        android:layout_margin="@dimen/ts_common_spacing_xxs"
+	        android:scaleType="fitCenter"
+	        android:src="@drawable/ts_logo_white"/>
+	    
+	    <ImageView
+	        android:id="@+id/fragment_tutorial_image"
+	        android:layout_width="match_parent"
+	        android:layout_height="0dp"
+            android:layout_weight="0.6"
+	        android:layout_margin="@dimen/ts_common_spacing_xxs"
+            android:scaleType="fitCenter"/>
+    </LinearLayout>
+    
+    <TextView
+        android:id="@id/fragment_tutorial_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/ts_common_text_s"/>
+    
+</RelativeLayout>

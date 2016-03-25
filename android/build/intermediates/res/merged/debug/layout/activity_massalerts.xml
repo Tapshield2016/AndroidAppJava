@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <ListView
+        android:id="@+id/massalerts_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:scrollbarStyle="outsideOverlay"
+        android:divider="@null"/>
+    
+    <TextView
+        android:id="@+id/massalerts_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/ts_massalerts_empty"
+        android:textColor="@color/ts_gray_dark"
+        android:textSize="@dimen/ts_common_text_l"
+        android:gravity="center"/>
+
+</FrameLayout>

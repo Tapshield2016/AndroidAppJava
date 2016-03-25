@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/ts_background_gradient">
+    
+    <com.tapshield.android.ui.view.AnimatedVerticalColorProgress
+        android:id="@+id/fragment_dialpad_progress"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <com.tapshield.android.ui.view.Dialpad
+        android:id="@+id/fragment_dialpad_dialpad"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/ts_common_spacing_m"/>
+</RelativeLayout>
